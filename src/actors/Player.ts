@@ -34,7 +34,8 @@ export class Player {
   readonly sprite: Phaser.Physics.Arcade.Sprite;
   readonly gun: Phaser.GameObjects.Image;
 
-  hp = PLAYER.maxHp;
+  // Explicit annotation: PLAYER is `as const`, so inference would pin this to 100.
+  hp: number = PLAYER.maxHp;
   crouched = false;
   sprinting = false;
   aim = 0;

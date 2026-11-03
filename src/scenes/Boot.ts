@@ -7,11 +7,11 @@ export class Boot extends Phaser.Scene {
     super('Boot');
   }
 
-  override preload(): void {
+  preload(): void {
     this.load.tilemapTiledJSON('village', 'maps/village.json');
   }
 
-  override create(): void {
+  create(): void {
     buildAllArt(this);
     this.registerWalkAnims(PLAYER_KEY, 8);
     this.registerWalkAnims('enemy_lookout', 4);

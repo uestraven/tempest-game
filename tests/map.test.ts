@@ -50,7 +50,7 @@ function buildGrid(): Grid {
   const tileset = map.tilesets[0];
   const flagsById = new Map<number, Partial<TileFlags>>();
   for (const tile of tileset.tiles ?? [])
-    flagsById.set(tile.id, props(tile.properties) as Partial<TileFlags>);
+    flagsById.set(tile.id, props(tile.properties) as unknown as Partial<TileFlags>);
 
   for (const layer of map.layers) {
     if (layer.type !== 'tilelayer' || !layer.data) continue;

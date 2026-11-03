@@ -50,7 +50,6 @@ export class Village extends Phaser.Scene {
   private crosshair!: Phaser.GameObjects.Image;
   private glintGfx!: Phaser.GameObjects.Graphics;
 
-  private spawnPoint: Vec2 = { x: 0, y: 0 };
   private exitZone!: Phaser.Geom.Rectangle;
   private exitRequires = '';
   private checkpointZones: { id: string; x: number; y: number; taken: boolean }[] = [];
@@ -69,7 +68,7 @@ export class Village extends Phaser.Scene {
     super('Village');
   }
 
-  override create(): void {
+  create(): void {
     this.cameras.main.setBackgroundColor(0x0b0d12);
     this.level = loadLevel(this, LEVEL_ID);
     this.physics.world.setBounds(0, 0, this.level.widthPx, this.level.heightPx);
@@ -133,7 +132,6 @@ export class Village extends Phaser.Scene {
   private spawnFromMap(): void {
     const objects = this.level.objects;
     const spawn = requireObject(objects, 'spawn');
-    this.spawnPoint = { x: spawn.x, y: spawn.y };
     this.player = new Player(this, spawn.x, spawn.y, this.hearing);
 
     const routes = new Map<string, Vec2[]>();
@@ -265,6 +263,8 @@ export class Village extends Phaser.Scene {
 
   // -------------------------------------------------------------------- update
 
+  // `update` is declared on Phaser.Scene, so it needs `override`;
+  // `preload` and `create` are not, so they must not have it.
   override update(_time: number, delta: number): void {
     const frameDt = Math.min(delta / 1000, MAX_FRAME_DT);
     this.elapsed += frameDt;

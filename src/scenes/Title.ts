@@ -8,7 +8,7 @@ export class Title extends Phaser.Scene {
     super('Title');
   }
 
-  override create(): void {
+  create(): void {
     this.cameras.main.setBackgroundColor(0x0b0d12);
     const hasSave = readSave() !== null;
 
