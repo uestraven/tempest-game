@@ -54,13 +54,34 @@ export const VISION = {
   investigateTimeout: 8,
 } as const;
 
+/**
+ * Torso hurtbox used for bullets, for both the player and enemies. This is NOT
+ * the movement collision body (12x10 at the feet) and NOT the sight origin - see
+ * core/hitbox.ts for why the three are kept separate.
+ *
+ * Anchored at the feet: spans y - topOffset to y - (topOffset - height), i.e.
+ * y - 24 to y - 6 with the values below, centred on x.
+ */
+export const HURTBOX = {
+  width: 12,
+  height: 18,
+  topOffset: 24,
+} as const;
+
 export const COMBAT = {
   /** Visible windup before a guard's first shot. */
   aimWindup: 0.45,
   enemyBulletSpeed: 400,
   tracerLifetime: 0.06,
-  hitFlashDuration: 0.12,
-  stumbleDuration: 0.18,
+  hitFlashDuration: 0.16,
+  stumbleDuration: 0.22,
+  /** Small positional nudge away from the shooter, in pixels. Readable, not a launch. */
+  hitKnockback: 3,
+  /** Lifetime of impact sparks and of the on-crosshair hit marker. */
+  impactLifetime: 0.22,
+  hitMarkerLifetime: 0.18,
+  /** How long debug rays linger when the F3 overlay is on. */
+  debugRayLifetime: 1.5,
 } as const;
 
 export const MEDKIT_HEAL = 40;

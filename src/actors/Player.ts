@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { AMMO_CAP, AMMO_FLOOR, MEDKIT_HEAL, PLAYER, SOUND_RADIUS } from '../core/constants';
+import { hurtboxAt, type Rect } from '../core/hitbox';
 import { CHAR_H, CHAR_W, FRAME_COLS, GUN_KEY, PLAYER_KEY } from '../art/textures';
 import { WEAPONS, type WeaponId } from '../data/weapons';
 import type { Stance } from '../systems/Vision';
@@ -89,6 +90,17 @@ export class Player {
    */
   get sightPoint(): { x: number; y: number } {
     return { x: this.sprite.x, y: this.sprite.y - 6 };
+  }
+
+  /** Torso rectangle that enemy rounds must cross. Not the movement body. */
+  get hurtbox(): Rect {
+    return hurtboxAt(this.sprite.x, this.sprite.y);
+  }
+
+  /** Movement collision body in world space, for the debug overlay. */
+  get feetBox(): Rect {
+    const body = this.sprite.body as Phaser.Physics.Arcade.Body;
+    return { x: body.x, y: body.y, width: body.width, height: body.height };
   }
 
   get stance(): Stance {

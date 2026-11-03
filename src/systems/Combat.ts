@@ -1,14 +1,30 @@
 import Phaser from 'phaser';
 import { Grid, type Vec2 } from '../core/Grid';
-import { COMBAT, PLAYER } from '../core/constants';
+import { COMBAT } from '../core/constants';
+import { rayRectEntry, rectContains } from '../core/hitbox';
 import type { Player } from '../actors/Player';
-import { Enemy, ENEMY_HIT_RADIUS } from '../actors/Enemy';
+import type { Enemy } from '../actors/Enemy';
 import type { Hearing } from './Hearing';
 
 interface Tracer {
   from: Vec2;
   to: Vec2;
   life: number;
+}
+
+interface Impact {
+  x: number;
+  y: number;
+  life: number;
+  flesh: boolean;
+}
+
+/** A player shot ray, retained longer than a tracer for the F3 overlay. */
+export interface DebugRay {
+  from: Vec2;
+  to: Vec2;
+  life: number;
+  hit: boolean;
 }
 
 interface Projectile {
@@ -23,17 +39,27 @@ interface Projectile {
 export interface ShotReport {
   fired: boolean;
   hits: { enemy: Enemy; damage: number }[];
+  /** Impact points, so the caller can drive feedback without re-deriving them. */
+  impacts: { x: number; y: number; flesh: boolean }[];
 }
 
+const MAX_DEBUG_RAYS = 32;
+
 /**
- * Player hitscan, visible enemy projectiles and tracer rendering.
+ * Player hitscan, visible enemy projectiles, tracers and impact feedback.
  *
  * Player rounds are deterministic: the crosshair is where they hit unless solid
- * cover intervenes. There are no random criticals and no headshots.
+ * cover intervenes. No random criticals, no headshots.
+ *
+ * Hits are resolved against each actor's torso hurtbox (core/hitbox.ts), never
+ * against the small feet collision body and never against a single point plus a
+ * radius - a point/radius approximation is what made hits feel imprecise.
  */
 export class Combat {
   private readonly tracerGfx: Phaser.GameObjects.Graphics;
   private readonly tracers: Tracer[] = [];
+  private readonly impacts: Impact[] = [];
+  private readonly debugRaysList: DebugRay[] = [];
   private readonly projectiles: Projectile[] = [];
   private enemies: Enemy[] = [];
 
@@ -49,12 +75,17 @@ export class Combat {
     this.enemies = enemies;
   }
 
+  get debugRays(): readonly DebugRay[] {
+    return this.debugRaysList;
+  }
+
   /** Fires the player's current weapon. Returns what was hit, for feedback. */
   playerFire(player: Player): ShotReport {
-    if (!player.consumeRound()) return { fired: false, hits: [] };
+    if (!player.consumeRound()) return { fired: false, hits: [], impacts: [] };
     const def = player.weaponDef;
     const origin = player.sightPoint;
     const hits = new Map<Enemy, number>();
+    const impacts: { x: number; y: number; flesh: boolean }[] = [];
 
     for (let i = 0; i < def.rays; i++) {
       const offset = def.rays === 1 ? 0 : (i / (def.rays - 1) - 0.5) * def.spread;
@@ -62,29 +93,34 @@ export class Combat {
       const wall = this.grid.raycastShot(origin, angle, def.range);
       const victim = this.firstEnemyAlongRay(origin, angle, wall.distance);
 
+      const end = victim ? victim.point : { x: wall.x, y: wall.y };
+      const flesh = victim !== null;
+
       if (victim) {
         const falloff = Phaser.Math.Linear(
           1,
           def.falloffAtMaxRange,
           Phaser.Math.Clamp(victim.distance / def.range, 0, 1)
         );
-        const damage = def.damagePerRay * falloff;
-        hits.set(victim.enemy, (hits.get(victim.enemy) ?? 0) + damage);
-        this.tracers.push({
-          from: origin,
-          to: { x: victim.point.x, y: victim.point.y },
-          life: COMBAT.tracerLifetime,
-        });
-      } else {
-        this.tracers.push({
-          from: origin,
-          to: { x: wall.x, y: wall.y },
-          life: COMBAT.tracerLifetime,
-        });
+        hits.set(victim.enemy, (hits.get(victim.enemy) ?? 0) + def.damagePerRay * falloff);
       }
-    }
 
-    for (const [enemy, damage] of hits) enemy.takeDamage(Math.round(damage));
+      this.tracers.push({ from: origin, to: end, life: COMBAT.tracerLifetime });
+      // Sparks only where something was actually struck, not at max range in air.
+      if (flesh || wall.blocked) {
+        this.impacts.push({ x: end.x, y: end.y, life: COMBAT.impactLifetime, flesh });
+        impacts.push({ x: end.x, y: end.y, flesh });
+      }
+      this.debugRaysList.push({
+        from: { ...origin },
+        to: { ...end },
+        life: COMBAT.debugRayLifetime,
+        hit: flesh,
+      });
+    }
+    while (this.debugRaysList.length > MAX_DEBUG_RAYS) this.debugRaysList.shift();
+
+    for (const [enemy, damage] of hits) enemy.takeDamage(Math.round(damage), player.aim);
 
     this.hearing.emit({
       x: player.x,
@@ -97,12 +133,14 @@ export class Combat {
     return {
       fired: true,
       hits: [...hits].map(([enemy, damage]) => ({ enemy, damage: Math.round(damage) })),
+      impacts,
     };
   }
 
   /**
-   * Nearest live enemy whose torso the ray crosses before the wall impact.
-   * Capsule test against the ray, so cover geometry and hits agree.
+   * Nearest live enemy whose torso hurtbox the ray enters before the wall impact.
+   * Exact ray/rectangle intersection, so what the player sees as the body is what
+   * the bullet has to cross.
    */
   private firstEnemyAlongRay(
     origin: Vec2,
@@ -115,18 +153,13 @@ export class Combat {
 
     for (const enemy of this.enemies) {
       if (enemy.dead) continue;
-      const target = enemy.sightPoint;
-      const ox = target.x - origin.x;
-      const oy = target.y - origin.y;
-      const along = ox * dx + oy * dy;
-      if (along <= 0 || along > maxDistance) continue;
-      const perpendicular = Math.abs(-ox * dy + oy * dx);
-      if (perpendicular > ENEMY_HIT_RADIUS) continue;
-      if (best && along >= best.distance) continue;
+      const entry = rayRectEntry(origin.x, origin.y, dx, dy, enemy.hurtbox, maxDistance);
+      if (entry === null) continue;
+      if (best && entry >= best.distance) continue;
       best = {
         enemy,
-        distance: along,
-        point: { x: origin.x + dx * along, y: origin.y + dy * along },
+        distance: entry,
+        point: { x: origin.x + dx * entry, y: origin.y + dy * entry },
       };
     }
     return best;
@@ -153,12 +186,9 @@ export class Combat {
   }
 
   private stepProjectiles(dt: number, player: Player): void {
-    const playerBox = new Phaser.Geom.Rectangle(
-      player.x - PLAYER.bodyWidth / 2,
-      player.y - 26,
-      PLAYER.bodyWidth,
-      26
-    );
+    // Same torso hurtbox the player's shots use against enemies, so incoming and
+    // outgoing fire are judged by the same rule.
+    const playerBox = player.hurtbox;
 
     for (let i = this.projectiles.length - 1; i >= 0; i--) {
       const p = this.projectiles[i];
@@ -168,9 +198,22 @@ export class Combat {
       for (let s = 0; s < steps && !consumed; s++) {
         p.sprite.x += (p.vx * dt) / steps;
         p.sprite.y += (p.vy * dt) / steps;
-        if (this.grid.isSolidWorld(p.sprite.x, p.sprite.y)) consumed = true;
-        else if (playerBox.contains(p.sprite.x, p.sprite.y)) {
-          player.takeDamage(p.damage);
+        if (this.grid.isSolidWorld(p.sprite.x, p.sprite.y)) {
+          this.impacts.push({
+            x: p.sprite.x,
+            y: p.sprite.y,
+            life: COMBAT.impactLifetime,
+            flesh: false,
+          });
+          consumed = true;
+        } else if (rectContains(playerBox, p.sprite.x, p.sprite.y)) {
+          if (player.takeDamage(p.damage))
+            this.impacts.push({
+              x: p.sprite.x,
+              y: p.sprite.y,
+              life: COMBAT.impactLifetime,
+              flesh: true,
+            });
           consumed = true;
         }
       }
@@ -185,6 +228,7 @@ export class Combat {
   private drawTracers(dt: number): void {
     const g = this.tracerGfx;
     g.clear();
+
     for (let i = this.tracers.length - 1; i >= 0; i--) {
       const t = this.tracers[i];
       t.life -= dt;
@@ -201,6 +245,31 @@ export class Combat {
         Math.round(t.to.y)
       );
     }
+
+    // Impact sparks: four fixed-direction pixels, so a landed shot is unmistakable.
+    for (let i = this.impacts.length - 1; i >= 0; i--) {
+      const s = this.impacts[i];
+      s.life -= dt;
+      if (s.life <= 0) {
+        this.impacts.splice(i, 1);
+        continue;
+      }
+      const t = s.life / COMBAT.impactLifetime;
+      const spread = Math.round((1 - t) * 4) + 1;
+      g.fillStyle(s.flesh ? 0xb03a30 : 0xd8cdb4, Phaser.Math.Clamp(t, 0, 1));
+      const cx = Math.round(s.x);
+      const cy = Math.round(s.y);
+      g.fillRect(cx, cy, 1, 1);
+      g.fillRect(cx - spread, cy - spread, 1, 1);
+      g.fillRect(cx + spread, cy - spread, 1, 1);
+      g.fillRect(cx - spread, cy + spread, 1, 1);
+      g.fillRect(cx + spread, cy + spread, 1, 1);
+    }
+
+    for (let i = this.debugRaysList.length - 1; i >= 0; i--) {
+      this.debugRaysList[i].life -= dt;
+      if (this.debugRaysList[i].life <= 0) this.debugRaysList.splice(i, 1);
+    }
   }
 
   /** Clears transient combat state on a checkpoint reload. */
@@ -208,6 +277,8 @@ export class Combat {
     for (const p of this.projectiles) p.sprite.destroy();
     this.projectiles.length = 0;
     this.tracers.length = 0;
+    this.impacts.length = 0;
+    this.debugRaysList.length = 0;
     this.tracerGfx.clear();
   }
 }

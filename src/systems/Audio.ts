@@ -1,6 +1,15 @@
 import Phaser from 'phaser';
 
-type Cue = 'pistol' | 'hit' | 'pickup' | 'alert' | 'takedown' | 'radio' | 'ui';
+type Cue =
+  | 'pistol'
+  | 'hit'
+  | 'flesh'
+  | 'ricochet'
+  | 'pickup'
+  | 'alert'
+  | 'takedown'
+  | 'radio'
+  | 'ui';
 
 interface CueSpec {
   duration: number;
@@ -15,6 +24,9 @@ interface CueSpec {
 const CUES: Record<Cue, CueSpec> = {
   pistol: { duration: 0.1, frequency: 180, noise: 0.7, volume: 0.35, sweep: 0.3 },
   hit: { duration: 0.08, frequency: 90, noise: 0.5, volume: 0.3, sweep: 0.5 },
+  // Distinct, low and short: the player should hear a landed hit, not infer it.
+  flesh: { duration: 0.11, frequency: 120, noise: 0.75, volume: 0.42, sweep: 0.35 },
+  ricochet: { duration: 0.07, frequency: 900, noise: 0.35, volume: 0.22, sweep: 0.45 },
   pickup: { duration: 0.12, frequency: 620, noise: 0.05, volume: 0.25, sweep: 1.7 },
   alert: { duration: 0.22, frequency: 330, noise: 0.1, volume: 0.3, sweep: 1.5 },
   takedown: { duration: 0.14, frequency: 140, noise: 0.6, volume: 0.28, sweep: 0.6 },

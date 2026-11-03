@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { Grid, angleDelta, type Vec2 } from '../core/Grid';
-import { COMBAT, PLAYER, SOUND_RADIUS, TILE, VISION } from '../core/constants';
+import { hurtboxAt, type Rect } from '../core/hitbox';
+import { COMBAT, PLAYER, SOUND_RADIUS, VISION } from '../core/constants';
 import { CHAR_H, CHAR_W, FRAME_COLS } from '../art/textures';
 import { ENEMIES, type EnemyDef, type EnemyKind } from '../data/enemies';
 import { alertLevelFor, canSee, stepSuspicion, type AlertLevel } from '../systems/Vision';
@@ -13,8 +14,10 @@ export type EnemyState = 'patrol' | 'investigate' | 'search' | 'combat' | 'dead'
 /** What an enemy is allowed to ask of the world. Keeps AI free of scene internals. */
 export interface EnemyWorld {
   grid: Grid;
-  /** Torso point used for sight tests and bullet origins. */
+  /** Eye/chest point used for sight tests. Not a hurtbox. */
   playerSight(): Vec2;
+  /** Centre of the player's torso hurtbox: what a shot should be aimed at. */
+  playerAimPoint(): Vec2;
   playerFeet(): Vec2;
   playerStance(): 'standing' | 'crouching' | 'sprinting';
   playerInShadow(): boolean;
@@ -98,9 +101,22 @@ export class Enemy {
   get dead(): boolean {
     return this.state === 'dead';
   }
-  /** Kept inside the feet collision body for the same reason as the player's. */
+  /**
+   * Eye/chest point for AI vision and as the muzzle position. Kept inside the
+   * feet collision body so it can never sit in a wall tile the enemy is hugging,
+   * which would blind it and block its own shots. Not a hurtbox.
+   */
   get sightPoint(): Vec2 {
     return { x: this.sprite.x, y: this.sprite.y - 6 };
+  }
+  /** Torso rectangle that player bullets must cross. Not the movement body. */
+  get hurtbox(): Rect {
+    return hurtboxAt(this.sprite.x, this.sprite.y);
+  }
+  /** Movement collision body in world space, for the debug overlay. */
+  get feetBox(): Rect {
+    const body = this.sprite.body as Phaser.Physics.Arcade.Body;
+    return { x: body.x, y: body.y, width: body.width, height: body.height };
   }
   get alertLevel(): AlertLevel {
     return this.state === 'combat' ? 'combat' : alertLevelFor(this.suspicion);
@@ -348,8 +364,10 @@ export class Enemy {
       }
       if (this.attackTimer <= 0 && dist <= this.def.engageRange + 40) {
         const from = this.sightPoint;
-        const playerSight = this.world.playerSight();
-        const angle = Math.atan2(playerSight.y - from.y, playerSight.x - from.x);
+        // Aim at the centre of the torso hurtbox, not the sight origin: the sight
+        // origin sits on the hurtbox's bottom edge, so aiming there would graze.
+        const aimAt = this.world.playerAimPoint();
+        const angle = Math.atan2(aimAt.y - from.y, aimAt.x - from.x);
         this.world.fireProjectile(from, angle, this.def.damage, this);
         this.attackTimer = this.def.attackInterval;
       }
@@ -417,14 +435,34 @@ export class Enemy {
 
   // ------------------------------------------------------------------- damage
 
-  takeDamage(amount: number): void {
+  /** `fromAngle` is the direction the round was travelling, used for the stumble. */
+  takeDamage(amount: number, fromAngle?: number): void {
     if (this.dead) return;
     this.hp -= amount;
     this.stumbleTimer = COMBAT.stumbleDuration;
+
+    // Two-stage flash: a bright fill, then a red cast as it fades. Reads clearly
+    // at 480x270 without a long stun lock.
     this.sprite.setTintFill(0xffffff);
+    this.scene.time.delayedCall(COMBAT.hitFlashDuration * 500, () => {
+      if (!this.dead) this.sprite.setTint(0xff9a86);
+    });
     this.scene.time.delayedCall(COMBAT.hitFlashDuration * 1000, () => {
       if (!this.dead) this.sprite.clearTint();
     });
+
+    // Subtle knockback along the shot direction. Nudges the sprite rather than
+    // applying velocity, so it cannot shove an enemy through geometry.
+    if (fromAngle !== undefined) {
+      const body = this.sprite.body as Phaser.Physics.Arcade.Body;
+      const nx = this.sprite.x + Math.cos(fromAngle) * COMBAT.hitKnockback;
+      const ny = this.sprite.y + Math.sin(fromAngle) * COMBAT.hitKnockback;
+      if (!this.world.grid.isSolidWorld(nx, ny)) {
+        this.sprite.setPosition(nx, ny);
+        body.reset(nx, ny);
+      }
+    }
+
     if (this.hp <= 0) {
       this.kill();
       return;
@@ -563,4 +601,3 @@ export class Enemy {
 
 /** Shout radius helper so the scene and AI agree on acoustic reach. */
 export const SHOUT_RADIUS = SOUND_RADIUS.shout;
-export const ENEMY_HIT_RADIUS = Math.round(TILE * 0.45);

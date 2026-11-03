@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import {
+  COMBAT,
   FIXED_DT,
   MAX_FRAME_DT,
   PICKUP_AMOUNT,
@@ -8,6 +9,7 @@ import {
 } from '../core/constants';
 import { loadLevel, objectsOfType, requireObject, type LoadedMap, type MapObject } from '../core/MapLoader';
 import type { Vec2 } from '../core/Grid';
+import { rectCenter } from '../core/hitbox';
 import { NEUTRAL_INPUT, Player, type InputState } from '../actors/Player';
 import { Enemy, SHOUT_RADIUS, type EnemySpawn, type EnemyWorld } from '../actors/Enemy';
 import type { EnemyKind } from '../data/enemies';
@@ -49,6 +51,10 @@ export class Village extends Phaser.Scene {
   private keys!: Keys;
   private crosshair!: Phaser.GameObjects.Image;
   private glintGfx!: Phaser.GameObjects.Graphics;
+  private hitMarkerGfx!: Phaser.GameObjects.Graphics;
+  private debugGfx!: Phaser.GameObjects.Graphics;
+  private hitMarkerTimer = 0;
+  private debugHitboxes = false;
 
   private exitZone!: Phaser.Geom.Rectangle;
   private exitRequires = '';
@@ -110,6 +116,8 @@ export class Village extends Phaser.Scene {
 
     this.glintGfx = this.add.graphics().setDepth(19);
     this.crosshair = this.add.image(0, 0, 'crosshair').setDepth(60);
+    this.hitMarkerGfx = this.add.graphics().setDepth(61);
+    this.debugGfx = this.add.graphics().setDepth(70);
     this.input.setDefaultCursor('none');
     this.input.mouse?.disableContextMenu();
 
@@ -214,6 +222,7 @@ export class Village extends Phaser.Scene {
     return {
       grid: this.level.grid,
       playerSight: () => this.player.sightPoint,
+      playerAimPoint: () => rectCenter(this.player.hurtbox),
       playerFeet: () => ({ x: this.player.x, y: this.player.y }),
       playerStance: () => this.player.stance,
       playerInShadow: () => this.level.grid.isShadowWorld(this.player.x, this.player.y),
@@ -248,8 +257,18 @@ export class Village extends Phaser.Scene {
     this.keys = keyboard.addKeys(
       'W,A,S,D,R,C,E,K,Q,N,SHIFT,ESC,SPACE,ONE,TWO'
     ) as Keys;
+    // Keep F3 out of the browser's own shortcut handling.
+    keyboard.addCapture('F3');
 
     keyboard.on('keydown', (event: KeyboardEvent) => {
+      if (event.code === 'F3') {
+        this.debugHitboxes = !this.debugHitboxes;
+        this.hud.showSubtitle(
+          this.debugHitboxes ? 'Hitbox overlay ON' : 'Hitbox overlay OFF',
+          1.4
+        );
+        return;
+      }
       if (this.pause.handleKey(event.code)) return;
       if (event.code === 'Escape') {
         this.setPaused(!this.paused);
@@ -292,6 +311,8 @@ export class Village extends Phaser.Scene {
       : this.interaction.resolve(this.player, this.enemies, (id) => this.objectives.isComplete(id));
     this.hud.update(frameDt, this.player, this.objectives.activeText(), target?.prompt ?? null);
     this.drawGlints();
+    this.drawHitMarker(frameDt);
+    this.drawDebugHitboxes();
     this.sortDepths();
   }
 
@@ -335,7 +356,14 @@ export class Village extends Phaser.Scene {
       const report = this.combat.playerFire(this.player);
       if (report.fired) {
         this.audio.play(this.player.weapon === 'pistol' ? 'pistol' : 'hit');
-        if (report.hits.length > 0) this.audio.play('hit', 0.6);
+        if (report.hits.length > 0) {
+          // One clear hit cue per enemy struck, plus the on-crosshair marker.
+          this.audio.play('flesh', 0.9);
+          this.hitMarkerTimer = COMBAT.hitMarkerLifetime;
+          this.hud.showSubtitle('[hit]', 0.6);
+        } else if (report.impacts.length > 0) {
+          this.audio.play('ricochet', 0.5);
+        }
       }
     }
 
@@ -514,6 +542,7 @@ export class Village extends Phaser.Scene {
     this.takedownTarget = null;
     this.combat.reset();
     this.accumulator = 0;
+    this.hitMarkerTimer = 0;
 
     if (!checkpoint) {
       // No checkpoint recorded: restart the level cleanly from the spawn point.
@@ -574,6 +603,70 @@ export class Village extends Phaser.Scene {
       g.fillStyle(0xf4e9c0, pulse);
       g.fillRect(Math.round(prop.x), Math.round(prop.y) - 14, 1, 3);
       g.fillRect(Math.round(prop.x) - 1, Math.round(prop.y) - 13, 3, 1);
+    }
+  }
+
+  /** Brief ticks around the crosshair the moment a shot lands. */
+  private drawHitMarker(dt: number): void {
+    const g = this.hitMarkerGfx;
+    g.clear();
+    this.hitMarkerTimer = Math.max(0, this.hitMarkerTimer - dt);
+    if (this.hitMarkerTimer <= 0) return;
+    const alpha = Phaser.Math.Clamp(this.hitMarkerTimer / COMBAT.hitMarkerLifetime, 0, 1);
+    const x = Math.round(this.crosshair.x);
+    const y = Math.round(this.crosshair.y);
+    g.fillStyle(0xff5a3c, alpha);
+    for (const [sx, sy] of [
+      [-1, -1],
+      [1, -1],
+      [-1, 1],
+      [1, 1],
+    ]) {
+      for (let d = 3; d <= 5; d++) g.fillRect(x + sx * d, y + sy * d, 1, 1);
+    }
+  }
+
+  /**
+   * F3 overlay. Draws the three concepts separately so a mismatch between them
+   * is visible rather than inferred: feet colliders (movement), torso hurtboxes
+   * (bullets), sight origins (AI vision), and the retained player shot rays.
+   */
+  private drawDebugHitboxes(): void {
+    const g = this.debugGfx;
+    g.clear();
+    if (!this.debugHitboxes) return;
+
+    const cross = (x: number, y: number, color: number) => {
+      g.fillStyle(color, 1);
+      g.fillRect(Math.round(x) - 2, Math.round(y), 5, 1);
+      g.fillRect(Math.round(x), Math.round(y) - 2, 1, 5);
+    };
+    const box = (r: { x: number; y: number; width: number; height: number }, color: number) => {
+      g.lineStyle(1, color, 0.95);
+      g.strokeRect(Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height));
+    };
+
+    // Player: cyan feet collider, green hurtbox, white sight origin.
+    box(this.player.feetBox, 0x3fd0d8);
+    box(this.player.hurtbox, 0x6ee06e);
+    cross(this.player.sightPoint.x, this.player.sightPoint.y, 0xffffff);
+
+    for (const enemy of this.enemies) {
+      if (enemy.dead) continue;
+      // Enemies: blue feet collider, magenta hurtbox, yellow sight origin.
+      box(enemy.feetBox, 0x4a7cd8);
+      box(enemy.hurtbox, 0xff5ad0);
+      cross(enemy.sightPoint.x, enemy.sightPoint.y, 0xffe066);
+    }
+
+    for (const ray of this.combat.debugRays) {
+      g.lineStyle(1, ray.hit ? 0xff5a3c : 0x9aa4b2, Phaser.Math.Clamp(ray.life, 0.15, 0.85));
+      g.lineBetween(
+        Math.round(ray.from.x),
+        Math.round(ray.from.y),
+        Math.round(ray.to.x),
+        Math.round(ray.to.y)
+      );
     }
   }
 

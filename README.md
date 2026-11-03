@@ -37,6 +37,18 @@ Refresh the registry token, then install. Nothing in the source needs changing.
 | E | Interact / silent takedown |
 | 1 / 2 | Pistol / shotgun (shotgun unlocks in Level 2, not in this slice) |
 | Esc | Pause — objective recap, controls, K restart checkpoint, Q quit to title |
+| F3 | Toggle the hitbox debug overlay |
+
+### Hitbox debug overlay (F3)
+
+| Drawn | Meaning |
+| --- | --- |
+| Cyan box | Player movement collider (12×10, at the feet) |
+| Green box | Player torso hurtbox (12×18, y−24 to y−6) |
+| Blue box | Enemy movement collider |
+| Magenta box | Enemy torso hurtbox |
+| White / yellow cross | Player / enemy sight origin (AI vision, muzzle) |
+| Grey / red line | Last player shot rays — red when the ray hit a hurtbox |
 
 ## Testing both routes
 
@@ -62,6 +74,7 @@ src/
   core/
     constants.ts          Every tuning value from the locked spec, in one place
     Grid.ts               Occlusion, line of sight, hitscan, bounded A* (Phaser-free)
+    hitbox.ts             Torso hurtbox + ray/rect intersection (Phaser-free)
     MapLoader.ts          Tiled layers -> gameplay Grid via per-tile properties
   art/textures.ts         Deterministic placeholder pixel art (16px tiles, 24x32 chars)
   actors/{Player,Enemy}.ts
@@ -91,6 +104,14 @@ tests/                    Grid, Vision, Objectives and map-contract tests
 - **Map geometry is authored, not generated.** `tools/build-map.mjs` writes the Tiled
   JSON from hand-written region, cover, waypoint and object tables, and fails the build
   if any object anchor or walkable tile is unreachable from the spawn point.
+- **Three separate collision concepts.** Movement collision is the small 12×10 box at
+  the feet, so walking through doorways feels right. Bullets are judged against a
+  dedicated 12×18 torso hurtbox (`core/hitbox.ts`) by exact ray/rectangle
+  intersection — what you read as the body is what a shot has to cross. AI vision
+  and muzzle positions use a third, separate sight origin, kept low inside the feet
+  body so it can never land in a wall tile an actor is hugging. Shooters aim at the
+  hurtbox centre rather than the sight origin, which sits on its bottom edge. Press
+  F3 to see all three at once.
 - **Occlusion has one source of truth.** The gameplay `Grid` is derived from the same
   tile properties the renderer draws, so cover you can see always matches cover that
   blocks. High cover blocks all sight; low cover blocks bullets always and sight only
