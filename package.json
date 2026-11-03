@@ -1,0 +1,23 @@
+{
+  "name": "tempest-game",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "TEMPEST - top-down tactical stealth shooter (Phase A vertical slice)",
+  "scripts": {
+    "map": "node tools/build-map.mjs",
+    "dev": "npm run map && vite",
+    "build": "npm run map && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "phaser": "^3.80.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2",
+    "vitest": "^2.0.5"
+  }
+}
