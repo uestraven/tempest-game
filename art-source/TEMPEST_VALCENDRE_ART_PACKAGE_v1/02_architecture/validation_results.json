@@ -1,0 +1,296 @@
+{
+ "dimensions_and_grid": {
+  "pass": true,
+  "files": {
+   "valcendre_proof_cobble_16x16.png": [
+    64,
+    16
+   ],
+   "valcendre_proof_architecture_16x16.png": [
+    128,
+    64
+   ],
+   "valcendre_proof_window_32x32.png": [
+    32,
+    32
+   ],
+   "valcendre_proof_door_16x32.png": [
+    16,
+    32
+   ]
+  }
+ },
+ "palette_membership": {
+  "pass": true,
+  "palette_version": "2.0",
+  "palette_size": 53,
+  "unique_ids_used_total": [
+   "iron_0",
+   "iron_1",
+   "iron_2",
+   "limestone_0",
+   "limestone_1",
+   "limestone_2",
+   "limestone_3",
+   "limestone_4",
+   "outline_soft",
+   "paving_0",
+   "paving_1",
+   "paving_2",
+   "paving_3",
+   "plaster_1",
+   "plaster_2",
+   "shutter_0",
+   "shutter_1",
+   "shutter_2",
+   "shutter_3",
+   "slate_0",
+   "slate_1",
+   "slate_2",
+   "slate_3",
+   "slate_4",
+   "wood_0",
+   "wood_2",
+   "wood_3"
+  ],
+  "off_palette_colours": []
+ },
+ "binary_alpha": {
+  "pass": true,
+  "partial_alpha_px": {
+   "valcendre_proof_cobble_16x16.png": 0,
+   "valcendre_proof_architecture_16x16.png": 0,
+   "valcendre_proof_window_32x32.png": 0,
+   "valcendre_proof_door_16x32.png": 0
+  },
+  "transparent_px": {
+   "valcendre_proof_cobble_16x16.png": 0,
+   "valcendre_proof_architecture_16x16.png": 640,
+   "valcendre_proof_window_32x32.png": 0,
+   "valcendre_proof_door_16x32.png": 0
+  }
+ },
+ "per_file": {
+  "valcendre_proof_cobble_16x16.png": {
+   "dimensions": [
+    64,
+    16
+   ],
+   "expected": [
+    64,
+    16
+   ],
+   "grid_aligned": true,
+   "palette_ids_used": [
+    "paving_0",
+    "paving_1",
+    "paving_2",
+    "paving_3"
+   ],
+   "off_palette": [],
+   "partial_alpha_px": 0,
+   "transparent_px": 0
+  },
+  "valcendre_proof_architecture_16x16.png": {
+   "dimensions": [
+    128,
+    64
+   ],
+   "expected": [
+    128,
+    64
+   ],
+   "grid_aligned": true,
+   "palette_ids_used": [
+    "limestone_0",
+    "limestone_1",
+    "limestone_2",
+    "limestone_3",
+    "limestone_4",
+    "outline_soft",
+    "paving_0",
+    "paving_1",
+    "paving_2",
+    "plaster_1",
+    "plaster_2",
+    "slate_0",
+    "slate_1",
+    "slate_2",
+    "slate_3",
+    "slate_4"
+   ],
+   "off_palette": [],
+   "partial_alpha_px": 0,
+   "transparent_px": 640
+  },
+  "valcendre_proof_window_32x32.png": {
+   "dimensions": [
+    32,
+    32
+   ],
+   "expected": [
+    32,
+    32
+   ],
+   "grid_aligned": true,
+   "palette_ids_used": [
+    "iron_0",
+    "limestone_0",
+    "limestone_3",
+    "limestone_4",
+    "outline_soft",
+    "plaster_2",
+    "shutter_0",
+    "shutter_1",
+    "shutter_2",
+    "shutter_3",
+    "slate_0",
+    "slate_2"
+   ],
+   "off_palette": [],
+   "partial_alpha_px": 0,
+   "transparent_px": 0
+  },
+  "valcendre_proof_door_16x32.png": {
+   "dimensions": [
+    16,
+    32
+   ],
+   "expected": [
+    16,
+    32
+   ],
+   "grid_aligned": true,
+   "palette_ids_used": [
+    "iron_1",
+    "iron_2",
+    "limestone_0",
+    "limestone_1",
+    "limestone_3",
+    "outline_soft",
+    "plaster_2",
+    "wood_0",
+    "wood_2",
+    "wood_3"
+   ],
+   "off_palette": [],
+   "partial_alpha_px": 0,
+   "transparent_px": 0
+  }
+ },
+ "cobble_seams": {
+  "pass": true,
+  "horizontal_mismatches": 0,
+  "vertical_mismatches": 0,
+  "note": "every ordered pair of the 4 variants tested in both directions",
+  "sample_failures": []
+ },
+ "cobble_distinctness": {
+  "pass": true,
+  "pixels_differing_per_pair": {
+   "0-1": 67,
+   "0-2": 57,
+   "0-3": 60,
+   "1-2": 61,
+   "1-3": 61,
+   "2-3": 67
+  },
+  "min_pair_difference": 57
+ },
+ "wall_seams_horizontal": {
+  "pass": true,
+  "joint_rows_checked": [
+   0,
+   8
+  ],
+  "pairs": {
+   "wall_limestone_a|wall_limestone_b": true,
+   "wall_limestone_b|wall_limestone_a": true,
+   "wall_limestone_a|wall_limestone_a": true,
+   "wall_plaster|wall_plaster": true
+  }
+ },
+ "wall_seams_vertical": {
+  "pass": true,
+  "tiles": {
+   "wall_limestone_a": true,
+   "wall_limestone_b": true,
+   "wall_plinth": true
+  }
+ },
+ "wall_corners": {
+  "pass": true,
+  "checks": {
+   "wall_corner_tl": {
+    "distinct_from_fill": true,
+    "has_return_face": true,
+    "has_cap_or_footing": true
+   },
+   "wall_corner_tr": {
+    "distinct_from_fill": true,
+    "has_return_face": true,
+    "has_cap_or_footing": true
+   },
+   "wall_corner_bl": {
+    "distinct_from_fill": true,
+    "has_return_face": true,
+    "has_cap_or_footing": true
+   },
+   "wall_corner_br": {
+    "distinct_from_fill": true,
+    "has_return_face": true,
+    "has_cap_or_footing": true
+   }
+  }
+ },
+ "roof_assembly": {
+  "pass": true,
+  "checks": {
+   "ridge_lighter_than_plane": true,
+   "eave_has_dark_underside": true,
+   "left_verge_distinct": true,
+   "right_verge_distinct": true,
+   "plane_variants_differ": true,
+   "corners_distinct_from_plane": true,
+   "courses_align_horizontally": true
+  }
+ },
+ "assembly_from_exports_only": {
+  "pass": true,
+  "distinct_colours_in_scene": 27,
+  "colours_not_present_in_any_exported_tile": [],
+  "building_footprint_tiles": [
+   8,
+   6
+  ],
+  "scene_px": [
+   480,
+   270
+  ]
+ },
+ "native_readability": {
+  "pass": true,
+  "mean_luma_roof": 61.7,
+  "mean_luma_adjacent_paving": 161.9,
+  "separation": 100.2,
+  "note": "slate roof against the paving it stands on, measured on the native scene"
+ },
+ "pixel_integrity_3x": {
+  "pass": true,
+  "note": "3x nearest-neighbour introduces no new colour values"
+ },
+ "ground_distribution_tests": {
+  "pass": true,
+  "area_tiles": [
+   12,
+   8
+  ],
+  "distributions": [
+   "uniform_cycle",
+   "row_major_cycle",
+   "heavy_variant_0_87pct",
+   "only_variant_2"
+  ],
+  "note": "includes a run dominated by one variant and a single-variant field, because real levels do not distribute variants equally"
+ }
+}

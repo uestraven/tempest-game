@@ -16,6 +16,8 @@ import { TORSO_OFFSET_Y } from '../core/hitbox';
 import { STAGE_TILESETS, TILE_NAMES } from '../art/TilesetRegistry';
 import { textureKey, type PropArea } from '../art/AssetRegistry';
 import { CHAR_FRAME_HEIGHT } from '../art/CharacterDefinitions';
+import { ART_MODE } from '../art/ValcendreV2';
+import { ValcendreV2Presentation } from '../art/ValcendreV2Scene';
 import {
   PROP_DEPTH,
   PROPS,
@@ -76,6 +78,8 @@ export class Village extends Phaser.Scene {
   private visionGfx!: Phaser.GameObjects.Graphics;
   private guardLabels: PixelText[] = [];
   private debugStanceLabel: PixelText | null = null;
+  /** Phase B.2-04 proof presentation; null in legacy art mode. */
+  private artV2: ValcendreV2Presentation | null = null;
   private hitMarkerTimer = 0;
   private debugHitboxes = false;
   /** Props that are y-sorted with characters, re-depthed every frame. */
@@ -118,6 +122,19 @@ export class Village extends Phaser.Scene {
     this.hearing = new Hearing(this.level.grid);
     this.mission = new Mission();
     this.audio = new Audio(this);
+
+    // Built before the actors so the prop spawner can swap the fountain
+    // texture as it creates it. Purely additive: in legacy mode this stays null
+    // and not one display object is created.
+    if (ART_MODE === 'valcendre_v2_proof') {
+      this.artV2 = new ValcendreV2Presentation(this, this.level.map);
+      const report = this.artV2.build();
+      console.info(
+        `[art] valcendre_v2_proof: ${report.pavingTiles} paving tiles, ` +
+          `${report.buildings.map((b) => `${b.name}(${b.tiles})`).join(' ')}, ` +
+          `stall=${report.stallDrawn}`
+      );
+    }
 
     this.spawnFromMap();
 
@@ -315,7 +332,7 @@ export class Village extends Phaser.Scene {
       }
       // Overhead props are lifted clear of head height; the depth sort still
       // uses the anchor y so ordering matches the prop's ground position.
-      this.addPropSprite(
+      const sprite = this.addPropSprite(
         def.texture,
         obj.x,
         propDrawY(def, obj.y),
@@ -323,6 +340,10 @@ export class Village extends Phaser.Scene {
         propFixedDepth(def),
         obj.y
       );
+      // The approved fountain replaces the legacy TEXTURE at the object's
+      // existing authored position. The map object, its tile, its prop
+      // footprint and its cover are all untouched.
+      if (sprite && name === 'fountain') this.artV2?.applyFountain(sprite);
     }
 
     for (const obj of objectsOfType(objects, 'decor')) {
@@ -343,7 +364,7 @@ export class Village extends Phaser.Scene {
     origin: { x: number; y: number },
     fixedDepth: number | null,
     sortY = y
-  ): void {
+  ): Phaser.GameObjects.Image {
     const image = this.add.image(Math.round(x), Math.round(y), texture);
     image.setOrigin(origin.x, origin.y);
     if (fixedDepth === null) {
@@ -354,6 +375,7 @@ export class Village extends Phaser.Scene {
     } else {
       image.setDepth(fixedDepth);
     }
+    return image;
   }
 
   private makeEnemyWorld(): EnemyWorld {
@@ -1410,6 +1432,8 @@ export class Village extends Phaser.Scene {
     this.input.setDefaultCursor('default');
     // PixelText allocates a canvas texture per instance, so the debug labels
     // must be released with the scene.
+    this.artV2?.destroy();
+    this.artV2 = null;
     for (const label of this.guardLabels) label.destroy();
     this.guardLabels = [];
     this.debugStanceLabel?.destroy();

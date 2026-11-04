@@ -1,0 +1,1628 @@
+{
+  "schema": "tempest.character_sprite.v1",
+  "task": "B.2-03C-2R",
+  "role": "ART_AGENT",
+  "character": "Lookout Guard",
+  "style_baseline": "TEMPEST_ART_BIBLE_v2.md",
+  "reference_character": "tempest_24x32_dir.png \u2014 immutable / unmodified",
+  "technical": {
+    "frame_size_px": [
+      24,
+      32
+    ],
+    "native_resolution_px": [
+      480,
+      270
+    ],
+    "origin": "per frame upper-left (0,0)",
+    "feet_anchor_local_px": [
+      12,
+      30
+    ],
+    "row_31": "transparent",
+    "alpha": "RGBA binary; alpha in {0,255}",
+    "baked_shadows": false,
+    "baked_background": false,
+    "left_direction": "engine horizontal mirror of right-facing side frames"
+  },
+  "sheets": [
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "size": [
+        144,
+        160
+      ],
+      "grid": [
+        6,
+        5
+      ],
+      "rows": [
+        {
+          "index": 0,
+          "name": "idle_down",
+          "facing": "down",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_poses": 2
+        },
+        {
+          "index": 1,
+          "name": "idle_up",
+          "facing": "up",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_poses": 2
+        },
+        {
+          "index": 2,
+          "name": "idle_side",
+          "facing": "right (+X)",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_poses": 2
+        },
+        {
+          "index": 3,
+          "name": "walk_down",
+          "facing": "down",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_poses": 6
+        },
+        {
+          "index": 4,
+          "name": "walk_up",
+          "facing": "up",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_poses": 6
+        }
+      ]
+    },
+    {
+      "file": "lookout_guard_24x32_dir_b.png",
+      "size": [
+        144,
+        160
+      ],
+      "grid": [
+        6,
+        5
+      ],
+      "rows": [
+        {
+          "index": 0,
+          "name": "walk_side",
+          "facing": "right (+X)",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_poses": 6
+        },
+        {
+          "index": 1,
+          "name": "aim_side",
+          "facing": "right (+X)",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_poses": 1
+        },
+        {
+          "index": 2,
+          "name": "aim_down",
+          "facing": "down (front)",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_poses": 1
+        },
+        {
+          "index": 3,
+          "name": "aim_up",
+          "facing": "up (back)",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_poses": 1
+        },
+        {
+          "index": 4,
+          "name": "fire_side",
+          "facing": "right (+X)",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_poses": 3
+        }
+      ]
+    }
+  ],
+  "palette": {
+    "source": "valcendre_palette.json",
+    "maximum_allowed": 24,
+    "count": 16,
+    "used_colors": [
+      {
+        "id": "ink",
+        "hex": "#292E32",
+        "rgb": [
+          41,
+          46,
+          50
+        ],
+        "material": "Shared"
+      },
+      {
+        "id": "slate_0",
+        "hex": "#343F4D",
+        "rgb": [
+          52,
+          63,
+          77
+        ],
+        "material": "Slate"
+      },
+      {
+        "id": "slate_1",
+        "hex": "#526171",
+        "rgb": [
+          82,
+          97,
+          113
+        ],
+        "material": "Slate"
+      },
+      {
+        "id": "wood_0",
+        "hex": "#503B34",
+        "rgb": [
+          80,
+          59,
+          52
+        ],
+        "material": "Wood"
+      },
+      {
+        "id": "wood_1",
+        "hex": "#735244",
+        "rgb": [
+          115,
+          82,
+          68
+        ],
+        "material": "Wood"
+      },
+      {
+        "id": "iron_0",
+        "hex": "#30363A",
+        "rgb": [
+          48,
+          54,
+          58
+        ],
+        "material": "Iron"
+      },
+      {
+        "id": "iron_1",
+        "hex": "#596367",
+        "rgb": [
+          89,
+          99,
+          103
+        ],
+        "material": "Iron"
+      },
+      {
+        "id": "skin_0",
+        "hex": "#815D4C",
+        "rgb": [
+          129,
+          93,
+          76
+        ],
+        "material": "Skin"
+      },
+      {
+        "id": "skin_1",
+        "hex": "#B58B70",
+        "rgb": [
+          181,
+          139,
+          112
+        ],
+        "material": "Skin"
+      },
+      {
+        "id": "skin_2",
+        "hex": "#D8B095",
+        "rgb": [
+          216,
+          176,
+          149
+        ],
+        "material": "Skin"
+      },
+      {
+        "id": "skin_3",
+        "hex": "#E4C7A6",
+        "rgb": [
+          228,
+          199,
+          166
+        ],
+        "material": "Skin"
+      },
+      {
+        "id": "uniform_0",
+        "hex": "#2B3B48",
+        "rgb": [
+          43,
+          59,
+          72
+        ],
+        "material": "Clothing"
+      },
+      {
+        "id": "uniform_1",
+        "hex": "#3B5567",
+        "rgb": [
+          59,
+          85,
+          103
+        ],
+        "material": "Clothing"
+      },
+      {
+        "id": "uniform_2",
+        "hex": "#567489",
+        "rgb": [
+          86,
+          116,
+          137
+        ],
+        "material": "Clothing"
+      },
+      {
+        "id": "uniform_3",
+        "hex": "#758A8C",
+        "rgb": [
+          117,
+          138,
+          140
+        ],
+        "material": "Clothing"
+      },
+      {
+        "id": "accent_brass",
+        "hex": "#C7A16C",
+        "rgb": [
+          199,
+          161,
+          108
+        ],
+        "material": "Accent"
+      }
+    ],
+    "primary_unique_count": 16,
+    "secondary_unique_count": 15
+  },
+  "animation": {
+    "idle_down": {
+      "sheet": "lookout_guard_24x32_dir.png",
+      "row": 0,
+      "sequence": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "distinct_poses": 2
+    },
+    "idle_up": {
+      "sheet": "lookout_guard_24x32_dir.png",
+      "row": 1,
+      "sequence": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "distinct_poses": 2
+    },
+    "idle_side": {
+      "sheet": "lookout_guard_24x32_dir.png",
+      "row": 2,
+      "sequence": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "distinct_poses": 2,
+      "mirrored_for_left": true
+    },
+    "walk_down": {
+      "sheet": "lookout_guard_24x32_dir.png",
+      "row": 3,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "distinct_poses": 6
+    },
+    "walk_up": {
+      "sheet": "lookout_guard_24x32_dir.png",
+      "row": 4,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "distinct_poses": 6
+    },
+    "walk_side": {
+      "sheet": "lookout_guard_24x32_dir_b.png",
+      "row": 0,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "distinct_poses": 6,
+      "mirrored_for_left": true
+    },
+    "aim_side": {
+      "sheet": "lookout_guard_24x32_dir_b.png",
+      "row": 1,
+      "sequence": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "distinct_poses": 1,
+      "mirrored_for_left": true
+    },
+    "aim_down": {
+      "sheet": "lookout_guard_24x32_dir_b.png",
+      "row": 2,
+      "sequence": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "distinct_poses": 1,
+      "mirrored_for_left": false
+    },
+    "aim_up": {
+      "sheet": "lookout_guard_24x32_dir_b.png",
+      "row": 3,
+      "sequence": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "distinct_poses": 1,
+      "mirrored_for_left": false
+    },
+    "fire_side": {
+      "sheet": "lookout_guard_24x32_dir_b.png",
+      "row": 4,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "poses": [
+        "ready",
+        "recoil",
+        "recovery",
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "distinct_poses": 3,
+      "mirrored_for_left": true
+    }
+  },
+  "secondary_sheet_compatibility": {
+    "status": "complete",
+    "file": "lookout_guard_24x32_dir_b.png",
+    "size_px": [
+      144,
+      160
+    ],
+    "target": "Tempest 6-column x 5-row secondary directional animation contract",
+    "rows_by_index": [
+      "walk_side",
+      "aim_side",
+      "aim_down",
+      "aim_up",
+      "fire_side"
+    ],
+    "walk_row_index": 0,
+    "walk_source_pixel_identical": true,
+    "number_of_columns": 6,
+    "note": "Secondary sheet exists and is complete; row 0 copied exactly from B.2-03C-1 approved side-walk strip."
+  },
+  "source_availability": {
+    "art_bible_v2": "available",
+    "valcendre_palette": "available",
+    "market_master": "available",
+    "approved_tempest": "available",
+    "original_lookout": "available in TEMPEST_pixel_art_v1.zip",
+    "approved_fountain": "available",
+    "approved_market_stall": "available",
+    "B_2_03A_architecture_proof": "not accessible for exact comparison \u2014 unchanged C-1 environment reviewed",
+    "B_2_03A_cobblestone": "not accessible \u2014 substituted approved B2-02 reference paving for contrast preview"
+  },
+  "preview_disclaimer": "All preview compositions are offline art-review renders and NOT engine screenshots.",
+  "integration": "Coding agent must not display duplicate pistol overlays in aim/fire; no code, geometry, original art or public/assets has been modified.",
+  "pixel_analysis": [
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 0,
+      "column": 0,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 0,
+      "column": 1,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 0,
+      "column": 2,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 0,
+      "column": 3,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 0,
+      "column": 4,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 0,
+      "column": 5,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 1,
+      "column": 0,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 1,
+      "column": 1,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 1,
+      "column": 2,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 1,
+      "column": 3,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 1,
+      "column": 4,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 1,
+      "column": 5,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 2,
+      "column": 0,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 2,
+      "column": 1,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 2,
+      "column": 2,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 2,
+      "column": 3,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 2,
+      "column": 4,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 2,
+      "column": 5,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 3,
+      "column": 0,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 3,
+      "column": 1,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 3,
+      "column": 2,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 3,
+      "column": 3,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 3,
+      "column": 4,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 3,
+      "column": 5,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 4,
+      "column": 0,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 4,
+      "column": 1,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 4,
+      "column": 2,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 4,
+      "column": 3,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 4,
+      "column": 4,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_24x32_dir.png",
+      "row": 4,
+      "column": 5,
+      "bbox": [
+        5,
+        5,
+        20,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_walk_side_24x32.png",
+      "row": 0,
+      "column": 0,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_walk_side_24x32.png",
+      "row": 0,
+      "column": 1,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_walk_side_24x32.png",
+      "row": 0,
+      "column": 2,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_walk_side_24x32.png",
+      "row": 0,
+      "column": 3,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_walk_side_24x32.png",
+      "row": 0,
+      "column": 4,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    },
+    {
+      "file": "lookout_guard_walk_side_24x32.png",
+      "row": 0,
+      "column": 5,
+      "bbox": [
+        7,
+        5,
+        22,
+        31
+      ],
+      "feet_y": 30,
+      "enclosed_holes": 0
+    }
+  ],
+  "version": "2.0.1",
+  "previous_task": "B.2-03C-1",
+  "approved_side_walk_source": {
+    "file": "lookout_guard_walk_side_24x32.png",
+    "size": [
+      144,
+      32
+    ],
+    "frames": 6,
+    "sha256": "ffaed216839a90b3826bc3933da9a21fbb8000e0cb3fc1510225c9034b4b992b",
+    "secondary_sheet_row": 0,
+    "pixel_identical": true,
+    "comparison_method": "exact RGBA byte equality of all 144*32 pixels"
+  },
+  "immutability": {
+    "primary_sheet_sha256": "898b3df1a437c827b412ef24a217790a6d419514a6e2dd5947be695a518827af",
+    "tempest_secondary_sha256": "c5ec68eeb0e3284d222a46ae0515c244aa922c9ca9ec228da1c5357b87cc30da",
+    "source_files_modified": false,
+    "walk_side_source_sha256": "ffaed216839a90b3826bc3933da9a21fbb8000e0cb3fc1510225c9034b4b992b",
+    "original_B_2_03C_2_secondary_sha256": "39bb84215f3ab39d6140fd8c502f3458eeaa617f9f82ca225a1275157034c1c0",
+    "unmodified_secondary_rows": [
+      0,
+      2,
+      3
+    ]
+  },
+  "weapon": {
+    "type": "compact service pistol",
+    "appearance": "horizontal four-pixel dark-iron slide pointed +X with short grip; subtle iron highlight; no flash/projectile",
+    "baked_into_aim_and_fire_frames": true,
+    "overlay_guidance": "DO NOT render any additional gun or handgun overlay for aim_side, aim_down, aim_up, or fire_side; pistol pixels are baked into each. Only separate runtime muzzle flash/projectile if needed.",
+    "ready_recoil_recovery": "fire_side slots 0,1,2 are ready, 2px rearward recoil on the firing axis, and intermediate recovery respectively; 3,4,5 repeat ready."
+  },
+  "muzzle_origin_local_px": {
+    "aim_side_right": [
+      23,
+      18
+    ],
+    "aim_side_left_mirrored": [
+      0,
+      18
+    ],
+    "aim_down": [
+      12,
+      24
+    ],
+    "aim_up": [
+      19,
+      10
+    ],
+    "fire_side_ready": [
+      23,
+      18
+    ],
+    "fire_side_recoil": [
+      21,
+      18
+    ],
+    "fire_side_recovery": [
+      22,
+      19
+    ],
+    "fire_side_ready_left_mirrored": [
+      0,
+      18
+    ],
+    "fire_side_recoil_left_mirrored": [
+      2,
+      18
+    ],
+    "fire_side_recovery_left_mirrored": [
+      1,
+      19
+    ]
+  },
+  "mirroring": {
+    "left": "mirror side-facing frames horizontally around 24px frame center",
+    "right": "source positive X",
+    "up_down": "no mirroring between up and down"
+  },
+  "frame_metadata": {
+    "local_origin": [
+      0,
+      0
+    ],
+    "anchor": [
+      12,
+      30
+    ],
+    "row_31_alpha": 0,
+    "padding": "all weapons and anatomy clipped inside frame; no ground shadows",
+    "footing": "unchanged between aiming and firing poses",
+    "row_boundaries": [
+      0,
+      32,
+      64,
+      96,
+      128,
+      160
+    ]
+  },
+  "validation": {
+    "frames_checked": 30,
+    "per_row": [
+      {
+        "row": 0,
+        "name": "walk_side",
+        "distinct_poses": 6,
+        "widths_px": [
+          15,
+          15,
+          15,
+          15,
+          15,
+          15
+        ],
+        "heights_px": [
+          26,
+          26,
+          26,
+          26,
+          26,
+          26
+        ]
+      },
+      {
+        "row": 1,
+        "name": "aim_side",
+        "distinct_poses": 1,
+        "widths_px": [
+          17,
+          17,
+          17,
+          17,
+          17,
+          17
+        ],
+        "heights_px": [
+          26,
+          26,
+          26,
+          26,
+          26,
+          26
+        ]
+      },
+      {
+        "row": 2,
+        "name": "aim_down",
+        "distinct_poses": 1,
+        "widths_px": [
+          15,
+          15,
+          15,
+          15,
+          15,
+          15
+        ],
+        "heights_px": [
+          26,
+          26,
+          26,
+          26,
+          26,
+          26
+        ]
+      },
+      {
+        "row": 3,
+        "name": "aim_up",
+        "distinct_poses": 1,
+        "widths_px": [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ],
+        "heights_px": [
+          26,
+          26,
+          26,
+          26,
+          26,
+          26
+        ]
+      },
+      {
+        "row": 4,
+        "name": "fire_side",
+        "distinct_poses": 3,
+        "widths_px": [
+          17,
+          15,
+          16,
+          17,
+          17,
+          17
+        ],
+        "heights_px": [
+          26,
+          26,
+          26,
+          26,
+          26,
+          26
+        ]
+      }
+    ],
+    "pixel_samples": [
+      {
+        "row": 0,
+        "column": 0,
+        "bbox": [
+          7,
+          5,
+          22,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 0,
+        "column": 1,
+        "bbox": [
+          7,
+          5,
+          22,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 0,
+        "column": 2,
+        "bbox": [
+          7,
+          5,
+          22,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 0,
+        "column": 3,
+        "bbox": [
+          7,
+          5,
+          22,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 0,
+        "column": 4,
+        "bbox": [
+          7,
+          5,
+          22,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 0,
+        "column": 5,
+        "bbox": [
+          7,
+          5,
+          22,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 1,
+        "column": 0,
+        "bbox": [
+          7,
+          5,
+          24,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 1,
+        "column": 1,
+        "bbox": [
+          7,
+          5,
+          24,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 1,
+        "column": 2,
+        "bbox": [
+          7,
+          5,
+          24,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 1,
+        "column": 3,
+        "bbox": [
+          7,
+          5,
+          24,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 1,
+        "column": 4,
+        "bbox": [
+          7,
+          5,
+          24,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 1,
+        "column": 5,
+        "bbox": [
+          7,
+          5,
+          24,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 2,
+        "column": 0,
+        "bbox": [
+          5,
+          5,
+          20,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 2,
+        "column": 1,
+        "bbox": [
+          5,
+          5,
+          20,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 2,
+        "column": 2,
+        "bbox": [
+          5,
+          5,
+          20,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 2,
+        "column": 3,
+        "bbox": [
+          5,
+          5,
+          20,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 2,
+        "column": 4,
+        "bbox": [
+          5,
+          5,
+          20,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 2,
+        "column": 5,
+        "bbox": [
+          5,
+          5,
+          20,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 3,
+        "column": 0,
+        "bbox": [
+          5,
+          5,
+          21,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 3,
+        "column": 1,
+        "bbox": [
+          5,
+          5,
+          21,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 3,
+        "column": 2,
+        "bbox": [
+          5,
+          5,
+          21,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 3,
+        "column": 3,
+        "bbox": [
+          5,
+          5,
+          21,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 3,
+        "column": 4,
+        "bbox": [
+          5,
+          5,
+          21,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 3,
+        "column": 5,
+        "bbox": [
+          5,
+          5,
+          21,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 4,
+        "column": 0,
+        "bbox": [
+          7,
+          5,
+          24,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 4,
+        "column": 1,
+        "bbox": [
+          7,
+          5,
+          22,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 4,
+        "column": 2,
+        "bbox": [
+          7,
+          5,
+          23,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 4,
+        "column": 3,
+        "bbox": [
+          7,
+          5,
+          24,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 4,
+        "column": 4,
+        "bbox": [
+          7,
+          5,
+          24,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      },
+      {
+        "row": 4,
+        "column": 5,
+        "bbox": [
+          7,
+          5,
+          24,
+          31
+        ],
+        "local_feet_y": 30,
+        "enclosed_holes": 0
+      }
+    ],
+    "source_row0_exact": true,
+    "binary_alpha": true,
+    "enclosed_holes": 0,
+    "color_count_combined": 16,
+    "all_allowed_palette": true,
+    "row_31_transparent": true,
+    "feet_anchor": [
+      12,
+      30
+    ],
+    "size": [
+      144,
+      160
+    ],
+    "primary_untouched": true,
+    "old_C2_untouched": true,
+    "down_up_unchanged": true,
+    "alpha_values": [
+      0,
+      255
+    ],
+    "fire_ready_equal_aim_side": true,
+    "fire_ready_repeat_cells": [
+      3,
+      4,
+      5
+    ],
+    "changes_confined_to_local_rect": {
+      "min_xy": [
+        16,
+        15
+      ],
+      "max_xy_inclusive": [
+        23,
+        22
+      ]
+    }
+  },
+  "revises_task": "B.2-03C-2",
+  "revision_scope": "Arm and pistol pixels of side-facing aim and firing only; primary, walk row, aim_down and aim_up unchanged.",
+  "muzzle_origin_definition": "Coordinates address the last opaque iron muzzle pixel inside a single 24x32 frame (local zero-indexed). Mirrored x = 23 - source x. These are NOT a separate visual weapon overlay and do not change firing/gameplay logic.",
+  "revised_secondary_sha256": "14f164185bb330d7102f41c36c230e9be029449017fe03bec20a006699e88385"
+}

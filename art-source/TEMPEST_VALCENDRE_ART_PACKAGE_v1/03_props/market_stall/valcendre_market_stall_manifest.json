@@ -1,0 +1,291 @@
+{
+  "schema_version": "1.0.0",
+  "production_task": "TEMPEST B.2-03B-2",
+  "asset": "valcendre_market_stall_layered",
+  "status": "pixel_art_complete_pending_B2-03A_crosscheck_and_engine_occlusion_review",
+  "source_direction": "TEMPEST_ART_BIBLE_v2.md / Valcendre 53-color palette",
+  "shared_envelope": {
+    "width": 80,
+    "height": 48,
+    "unit": "native_world_pixels",
+    "tile_alignment": {
+      "width": 5,
+      "height": 3,
+      "tile_px": 16
+    },
+    "origin": [
+      0,
+      0
+    ],
+    "coordinate_system": "zero_based_top_left; x right; y down"
+  },
+  "files": [
+    {
+      "filename": "valcendre_market_stall_base_80x48.png",
+      "role": "structural_base",
+      "w": 80,
+      "h": 48,
+      "origin_px": [
+        0,
+        0
+      ],
+      "bounds_exclusive": [
+        3,
+        19,
+        78,
+        47
+      ],
+      "alpha": "binary_0_or_255",
+      "palette_ids": [
+        "wood_0",
+        "wood_1",
+        "wood_2",
+        "wood_3"
+      ]
+    },
+    {
+      "filename": "valcendre_market_stall_canopy_80x48.png",
+      "role": "raised_canopy",
+      "w": 80,
+      "h": 48,
+      "origin_px": [
+        0,
+        0
+      ],
+      "bounds_exclusive": [
+        1,
+        5,
+        80,
+        26
+      ],
+      "alpha": "binary_0_or_255",
+      "palette_ids": [
+        "accent_paper",
+        "accent_rust",
+        "limestone_2",
+        "limestone_3",
+        "plaster_1",
+        "terracotta_0",
+        "terracotta_1",
+        "terracotta_2",
+        "terracotta_3",
+        "wood_0",
+        "wood_1",
+        "wood_2",
+        "wood_3"
+      ]
+    }
+  ],
+  "palette": {
+    "source": "valcendre_palette.json",
+    "source_palette_total": 53,
+    "approved_palette_ids": [
+      "accent_paper",
+      "accent_rust",
+      "limestone_2",
+      "limestone_3",
+      "plaster_1",
+      "terracotta_0",
+      "terracotta_1",
+      "terracotta_2",
+      "terracotta_3",
+      "wood_0",
+      "wood_1",
+      "wood_2",
+      "wood_3"
+    ],
+    "approved_palette_values_hex": {
+      "accent_paper": "#E3D7B9",
+      "accent_rust": "#9A5C50",
+      "limestone_2": "#B8AC98",
+      "limestone_3": "#D9C9AD",
+      "plaster_1": "#B1A38F",
+      "terracotta_0": "#784638",
+      "terracotta_1": "#9B5946",
+      "terracotta_2": "#BB7558",
+      "terracotta_3": "#D58D67",
+      "wood_0": "#503B34",
+      "wood_1": "#735244",
+      "wood_2": "#946E51",
+      "wood_3": "#B28A61"
+    },
+    "unique_opaque_rgb_total": 13,
+    "no_new_colors": true
+  },
+  "world_geometry": {
+    "reference_camera_top_left_px": [
+      152,
+      593
+    ],
+    "existing_cover": {
+      "world_tiles": {
+        "x_first": 29,
+        "x_last": 33,
+        "y": 49
+      },
+      "span_px": [
+        80,
+        16
+      ],
+      "world_rect_px": [
+        464,
+        784,
+        80,
+        16
+      ]
+    },
+    "recommended_visual_envelope_world_rect_px": [
+      464,
+      752,
+      80,
+      48
+    ],
+    "recommended_visual_local_origin_world_px": [
+      464,
+      752
+    ],
+    "existing_ransacked_stall_clue_tile": [
+      30,
+      47
+    ],
+    "clue_world_tile_bounds_px": [
+      480,
+      752,
+      16,
+      16
+    ],
+    "note": "World envelope is proposed for art registration to existing cover; coding agent must verify actual prop placement coordinates against current build before using."
+  },
+  "assembly": {
+    "step_1": "Draw structural base at shared origin with reference cover object (visual content chiefly y32..47).",
+    "step_2": "Draw actors according to existing gameplay/cover depth order.",
+    "step_3": "Draw raised canopy when actor world position dictates being behind it.",
+    "layer_order_for_front_actor": [
+      "ground",
+      "stall_base",
+      "stall_canopy",
+      "actor"
+    ],
+    "layer_order_for_behind_actor": [
+      "ground",
+      "actor",
+      "stall_base",
+      "stall_canopy"
+    ],
+    "layer_order_for_beside_actor": [
+      "ground",
+      "stall_base",
+      "actor",
+      "stall_canopy"
+    ],
+    "coding_agent_owns": "all Phaser display lists, depth logic, world origins, collision and interaction prioritization",
+    "no_new_collisions": true,
+    "no_new_concealment": true,
+    "no_baked_ground_or_shadows": true,
+    "canopy_visual_only": true,
+    "evidence_guide": "Mandatory V1 clue tile (30,47) is above cover and inside projected x-span. Preserve evidence readability and interaction independently of visual overhang. Prefer drawing evidence/interaction marker in a higher authored UI layer or temporarily revealing it when player nears; no new interaction proposed."
+  },
+  "art_features": {
+    "light": "northwest / upper-left",
+    "materials": [
+      "wood",
+      "weathered terracotta-red fabric",
+      "warm limestone/cream fabric"
+    ],
+    "upper_canopy_range_y": [
+      5,
+      25
+    ],
+    "low_cover_counter_range_y": [
+      32,
+      46
+    ],
+    "interpretation": "Canopy folds are shadow/midtone stripes in fabric, with discrete scrolled front valance; all colors from canonical material ramps."
+  },
+  "previews": {
+    "valcendre_market_stall_contact.png": "6x nearest-neighbor with layer separation and transparent checker, labeled as contact",
+    "valcendre_market_stall_context_480x270.png": "480x270 labeled art-review composition, not real engine screenshot; prior stall reference restored to cobble sample then layered PNGs composited at (312,159); small preview-only clue marker at (336,161)",
+    "valcendre_market_stall_occlusion.png": "Actor ordering triptych, approved Tempest frame copied without editing; not engine screenshots",
+    "valcendre_market_stall_material_comparison.png": "Comparative reference from approved B2-02 architecture/paving and B2-03B-1 fountain, no B2-03A source claimed"
+  },
+  "unresolved_engine_integration_questions": [
+    "Confirm actual world image origin / existing prop anchor; suggested world (464,752) places cover in the bottom band at row49, not a new hitbox.",
+    "Confirm how and when canopy should render above actor vs actor above canopy; triptych is only an art-layer ordering proof.",
+    "Confirm V1 mandatory ransacked-stall evidence remains visible/accessible independent of canopy; priority is existing evidence logic.",
+    "B.2-03A architecture proof and exact approved cobblestone tile unavailable; need cross-asset check against files on next review."
+  ],
+  "validation": {
+    "automated_checks": {
+      "base": {
+        "dimensions_exact": true,
+        "mode_RGBA": true,
+        "binary_alpha": true,
+        "all_opaque_rgb_approved": true,
+        "no_full_background_plate": true,
+        "opaque_colors": 4,
+        "opaque_pixels": 1396,
+        "bbox_exclusive": [
+          3,
+          19,
+          78,
+          47
+        ],
+        "used_palette_ids": [
+          "wood_0",
+          "wood_1",
+          "wood_2",
+          "wood_3"
+        ],
+        "unapproved_values": []
+      },
+      "canopy": {
+        "dimensions_exact": true,
+        "mode_RGBA": true,
+        "binary_alpha": true,
+        "all_opaque_rgb_approved": true,
+        "no_full_background_plate": true,
+        "opaque_colors": 13,
+        "opaque_pixels": 1389,
+        "bbox_exclusive": [
+          1,
+          5,
+          80,
+          26
+        ],
+        "used_palette_ids": [
+          "accent_paper",
+          "accent_rust",
+          "limestone_2",
+          "limestone_3",
+          "plaster_1",
+          "terracotta_0",
+          "terracotta_1",
+          "terracotta_2",
+          "terracotta_3",
+          "wood_0",
+          "wood_1",
+          "wood_2",
+          "wood_3"
+        ],
+        "unapproved_values": []
+      },
+      "assembly": {
+        "same_canvas_same_origin": true,
+        "vertical_frame_connected_left": true,
+        "vertical_frame_connected_right": true,
+        "counter_top_within_cover_band": true,
+        "main_counter_in_y32_to47": true,
+        "reference_fountain_unchanged": "4af7d8f4bc82d5a3617b35f0cee1c5faa3d3809cf45564c9f6684dc2ba9bc758",
+        "reference_tempest_unchanged": "10da3b44d66948d618146ce5c539e3a7e38c23695222aafe8b0f459ac127c7e7"
+      }
+    },
+    "dimensions": "PASS",
+    "binary_alpha": "PASS",
+    "palette": "PASS",
+    "layer_alignment": "PASS",
+    "unique_opaque_colors": 13,
+    "native_readability": "ART_REVIEW_ONLY",
+    "B2_03A_direct_comparison": "NOT_VERIFIED",
+    "scene_is_not_engine_screenshot": true
+  }
+}

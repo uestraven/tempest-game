@@ -1,0 +1,593 @@
+{
+  "task": "B.2-02",
+  "stage": "Valcendre",
+  "status": "ART_DIRECTION_NOT_IMPORT_READY",
+  "source_commit": "0f07efb",
+  "reference": "valcendre-visual-audit.md, colour-census.json, composition-report.json, 02-market-square.png",
+  "disposition_definitions": {
+    "KEEP": "Compliant, do not modify",
+    "REWORK": "Existing recognizable module or tile slot needing intentional targeted repaint",
+    "REPLACE": "Current artifact unusable as pixel art, reconstruct from native pixels",
+    "NEW": "Missing game art; proposed future asset only"
+  },
+  "items": [
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png",
+      "category": "environment_tilesheet",
+      "disposition": "REWORK",
+      "reason": "Only 28 of 48 tiles are visually unique; corners duplicate solid walls; missing visual architectural grammar.",
+      "recommended_output": "Preserve existing 8-column 6-row tile indices (128x96); per-tile 16x16, distinct surfaces, roof/eave/corner/foundation modules. Coding agent handles remapping."
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#0:floor_01",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_floor_pair cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 0; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#1:floor_02",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_floor cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 1; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#2:floor_03",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_floor cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 2; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#3:floor_04",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_floor cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 3; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#4:floor_05",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_floor_pair cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 4; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#5:floor_06",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 5; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#6:floor_07",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_floor cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 6; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#7:floor_08",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_floor cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 7; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#8:wall_solid",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_wall cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 8; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#9:wall_variant",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_wall cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 9; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#10:wall_top",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 10; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#11:wall_bottom",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 11; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#12:wall_left",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_wall cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 12; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#13:wall_right",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_wall cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 13; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#14:wall_corner_tl",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 14; use shared 53-color environment palette; binary opacity/transparent as needed. Explicit outside/inside corner edge; connect to horizontal and vertical neighbors.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#15:wall_corner_tr",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 15; use shared 53-color environment palette; binary opacity/transparent as needed. Explicit outside/inside corner edge; connect to horizontal and vertical neighbors.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#16:wall_corner_bl",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 16; use shared 53-color environment palette; binary opacity/transparent as needed. Explicit outside/inside corner edge; connect to horizontal and vertical neighbors.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#17:wall_corner_br",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 17; use shared 53-color environment palette; binary opacity/transparent as needed. Explicit outside/inside corner edge; connect to horizontal and vertical neighbors.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#18:door_closed",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 18; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#19:door_open",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 19; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#20:threshold",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 20; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#21:window",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 21; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#22:stairs_up",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_stairs cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 22; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#23:stairs_down",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_stairs cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 23; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#24:trim",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 24; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#25:floor_inlay",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 25; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#26:floor_crack",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 26; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#27:ground_debris",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_debris cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 27; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#28:floor_stain",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 28; use shared 53-color environment palette; binary opacity/transparent as needed. Nonidentical, restrained stone placement; avoid random dot texture.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#29:deep_shadow",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 29; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#30:cover_low",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 30; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#31:cover_high",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 31; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#32:grass",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 32; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#33:hedge",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 33; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#34:flowerbed",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 34; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#35:roof",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 35; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#36:roof_edge",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Tile slot exists, but the current art lacks a legible modular corner, roof, base, elevation or controlled shade transition.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 36; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#37:rubble",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_debris cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 37; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#38:cobble",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 38; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#39:brick",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 39; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#40:checker",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 40; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#41:carpet",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_carpet cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 41; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#42:carpet_edge",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_carpet cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 42; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#43:metal",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 43; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#44:pillar",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 44; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#45:grate",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Repaint or adjust to governed material and texture hierarchy while keeping existing tile ID / collision semantics.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 45; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#46:accent",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Part of pixel-identical duplicated_floor cluster; currently not visually distinct in actual map.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 46; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/environments/valcendre_tiles_16x16.png#47:ritual_mark",
+      "category": "tile_slot",
+      "disposition": "REWORK",
+      "reason": "Keep gameplay tile ID, but the 16px ritual mark cannot stand in for a full garage-wall BELIAL inscription; separate art needed.",
+      "recommended_output": "16x16 px, modular 16px grid; preserve tile index 47; use shared 53-color environment palette; binary opacity/transparent as needed.",
+      "source_available": "audit screenshot + enlarged contact sheet; original PNG not uploaded"
+    },
+    {
+      "asset": "public/assets/props/valcendre/barrels_32x24.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 233 colors in 233 opaque pixels (1000.0/1k); rebuild with authored clusters.",
+      "recommended_output": "32x24 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/flower_pot_16x16.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 76 colors in 76 opaque pixels (1000.0/1k); rebuild with authored clusters.",
+      "recommended_output": "16x16 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/french_flag_16x32.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 159 colors in 159 opaque pixels (1000.0/1k); rebuild with authored clusters.",
+      "recommended_output": "16x32 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/hay_cart_32x24.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 354 colors in 354 opaque pixels (1000.0/1k); rebuild with authored clusters.",
+      "recommended_output": "32x24 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/lamppost_16x32.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 90 colors in 90 opaque pixels (1000.0/1k); rebuild with authored clusters.",
+      "recommended_output": "16x32 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/stone_cover_32x16.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 105 colors in 105 opaque pixels (1000.0/1k); rebuild with authored clusters.",
+      "recommended_output": "32x16 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/village_cross_16x32.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 101 colors in 101 opaque pixels (1000.0/1k); rebuild with authored clusters.",
+      "recommended_output": "16x32 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/fountain_32x32.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 450 colors in 451 opaque pixels (997.8/1k); rebuild with authored clusters. Critical market landmark must become recognizable at 100%.",
+      "recommended_output": "32x32 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/flower_box_32x16.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 254 colors in 255 opaque pixels (996.1/1k); rebuild with authored clusters.",
+      "recommended_output": "32x16 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/bench_32x16.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 216 colors in 218 opaque pixels (990.8/1k); rebuild with authored clusters.",
+      "recommended_output": "32x16 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/clothesline_32x16.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 366 colors in 433 opaque pixels (845.3/1k); rebuild with authored clusters. Existing two orphan placements are map-authoring issues, not an excuse to change footprint.",
+      "recommended_output": "32x16 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/props/valcendre/tree_32x32.png",
+      "category": "legacy_prop",
+      "disposition": "REPLACE",
+      "reason": "Legacy per-pixel RGB noise: 578 colors in 743 opaque pixels (777.9/1k); rebuild with authored clusters. Preserve tree anchor and contact shadow; no black bounding background.",
+      "recommended_output": "32x32 native RGBA PNG, binary alpha, material palette subset generally 4\u201312 shades, deliberate contact-shadow policy, consistent fixed footprint; position remains owned by coding agent."
+    },
+    {
+      "asset": "public/assets/characters/tempest_24x32_dir.png",
+      "category": "approved_actor",
+      "disposition": "KEEP",
+      "reason": "Approved Task-02 directional art; 22 intentional color values, native cluster construction and stable feet anchor.",
+      "recommended_output": "UNCHANGED 144x160 6x5 x24x32 RGBA; original retained exactly."
+    },
+    {
+      "asset": "public/assets/characters/tempest_24x32_dir_b.png",
+      "category": "approved_actor",
+      "disposition": "KEEP",
+      "reason": "Approved alternate directional art; consistent locked character silhouette.",
+      "recommended_output": "UNCHANGED 144x160 6x5 x24x32 RGBA; original retained exactly."
+    },
+    {
+      "asset": "public/assets/characters/tempest_24x32_4x6.png",
+      "category": "deprecated_legacy_actor",
+      "disposition": "REPLACE",
+      "reason": "Old pose atlas is incompatible with approved directional sheet; 6635 unique colors/6871 opaque pixels.",
+      "recommended_output": "Deprecate in favor of approved 144x160 direction sheets; do not modify approved replacements."
+    },
+    {
+      "asset": "public/assets/characters/lookout_guard_24x32_4x6.png",
+      "category": "enemy",
+      "disposition": "REPLACE",
+      "reason": "5639 colors in 5827 opaque pixels; concept Lookout on master scene supplies direction, not a production sprite sheet.",
+      "recommended_output": "Future dedicated 24x32 directional RGBA sheet(s), \u226424 opaque colors and same (12,30) feet anchor as Tempest."
+    },
+    {
+      "asset": "public/assets/characters/portraits/lookout_guard_portrait.png",
+      "category": "portrait",
+      "disposition": "REPLACE",
+      "reason": "Legacy portrait retains excessive continuous-color illustration texture unlike native pixel-art actors.",
+      "recommended_output": "Future cropped pixel-authored portrait with defined palette and nearest-neighbor scaling; keep existing display aspect ratio."
+    },
+    {
+      "asset": "valcendre_market_renovation_modular_roofs",
+      "category": "proposed_missing_art",
+      "disposition": "NEW",
+      "reason": "Missing production visual component identified by attached coding-agent audit. Not produced during art-direction phase.",
+      "recommended_output": "16x16 modular roof plane + eaves + pitch apex + outside corner + roof-wall edge tiles; reproduce on known blocked footprint without topology edits."
+    },
+    {
+      "asset": "valcendre_limestone_facade_modules",
+      "category": "proposed_missing_art",
+      "disposition": "NEW",
+      "reason": "Missing production visual component identified by attached coding-agent audit. Not produced during art-direction phase.",
+      "recommended_output": "16x16 facade, window/shutter, sill, door, lintel, corner, plinth and shadow transition modules; no new collision."
+    },
+    {
+      "asset": "valcendre_cobble_variants",
+      "category": "proposed_missing_art",
+      "disposition": "NEW",
+      "reason": "Missing production visual component identified by attached coding-agent audit. Not produced during art-direction phase.",
+      "recommended_output": "16x16 cobble variants \u00d74 or more unique cluster patterns per material, all within palette."
+    },
+    {
+      "asset": "market_clue_tyre_tracks",
+      "category": "proposed_missing_art",
+      "disposition": "NEW",
+      "reason": "Missing production visual component identified by attached coding-agent audit. Not produced during art-direction phase.",
+      "recommended_output": "16x16 2-frame decal at existing (24,48), nonblocking; V1 clue."
+    },
+    {
+      "asset": "market_clue_ransacked_stall",
+      "category": "proposed_missing_art",
+      "disposition": "NEW",
+      "reason": "Missing production visual component identified by attached coding-agent audit. Not produced during art-direction phase.",
+      "recommended_output": "Conceptual cover-integrated visual at (30,47) plus existing (29\u201333,49) low-cover, no unauthorized collision edits."
+    },
+    {
+      "asset": "market_waybill",
+      "category": "proposed_missing_art",
+      "disposition": "NEW",
+      "reason": "Missing production visual component identified by attached coding-agent audit. Not produced during art-direction phase.",
+      "recommended_output": "16x16 readable document/glint artwork at (30,34), while retaining interactability."
+    },
+    {
+      "asset": "market_arcade_concealment_variant",
+      "category": "proposed_missing_art",
+      "disposition": "NEW",
+      "reason": "Missing production visual component identified by attached coding-agent audit. Not produced during art-direction phase.",
+      "recommended_output": "16x16 visually clear shade versions of limestone/cobble, preserve route x9\u201312/y40\u201349; renderer concealment is separate."
+    },
+    {
+      "asset": "material_specific_contact_shadow_decal",
+      "category": "proposed_missing_art",
+      "disposition": "NEW",
+      "reason": "Missing production visual component identified by attached coding-agent audit. Not produced during art-direction phase.",
+      "recommended_output": "16/32px reusable soft? NO: hard pixel shadow shape or runtime material-aware shadow under characters/props; no blur."
+    },
+    {
+      "asset": "depot_garage_floor_mega_pattern_reduction",
+      "category": "proposed_missing_art",
+      "disposition": "NEW",
+      "reason": "Missing production visual component identified by attached coding-agent audit. Not produced during art-direction phase.",
+      "recommended_output": "16x16 low-contrast metal floor variants replacing repeated high-contrast one-pixel vertical stripe; future Valcendre batch."
+    }
+  ],
+  "proposals_not_applied": [
+    "Mirror whole-stage art to approved pixel cluster language",
+    "Add modular facades and useful corners but keep current collision and mission positions",
+    "Do not place the concept stall as a new colliding object without coding-agent review"
+  ]
+}

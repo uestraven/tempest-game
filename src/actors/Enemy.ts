@@ -59,6 +59,8 @@ const REPATH_INTERVAL = 0.45;
 
 /** Pause before retrying a patrol route that is entirely cut off by a closed door. */
 const SEALED_ROUTE_RETRY = 0.75;
+/** How long the firing pose is held. Cosmetic; does not affect rate of fire. */
+const FIRE_POSE_SECONDS = 0.22;
 
 export class Enemy {
   readonly sprite: Phaser.Physics.Arcade.Sprite;
@@ -80,6 +82,14 @@ export class Enemy {
   private attackTimer = 0;
   private stumbleTimer = 0;
   private soundCooldown = 0;
+  /**
+   * Seconds remaining on the firing POSE. Purely cosmetic: it gates which clip
+   * plays and nothing else. Phase B.2-04 found that `updateAnimation` had no
+   * fire branch at all, so a sheet's fire row could never be shown - the player
+   * selects 'fire', enemies never did. Weapon timing, damage and hitscan are
+   * untouched; `attackTimer` still owns the rate of fire.
+   */
+  private fireAnimTimer = 0;
   private lastKnown: Vec2 | null = null;
   private scanAngle = 0;
   private seenBodies = new Set<string>();
@@ -311,6 +321,7 @@ export class Enemy {
     this.attackTimer = Math.max(0, this.attackTimer - dt);
     this.repathTimer = Math.max(0, this.repathTimer - dt);
     this.soundCooldown = Math.max(0, this.soundCooldown - dt);
+    this.fireAnimTimer = Math.max(0, this.fireAnimTimer - dt);
 
     const visible = this.perceive(dt);
     this.checkForBodies();
@@ -480,6 +491,9 @@ export class Enemy {
         const angle = Math.atan2(aimAt.y - from.y, aimAt.x - from.x);
         this.world.fireProjectile(from, angle, this.def.damage, this);
         this.attackTimer = this.def.attackInterval;
+        // Cosmetic only: hold the firing pose long enough to read, and never
+        // longer than the interval between shots.
+        this.fireAnimTimer = Math.min(FIRE_POSE_SECONDS, this.def.attackInterval);
       }
     }
   }
@@ -544,11 +558,13 @@ export class Enemy {
     const state: CharState =
       this.stumbleTimer > 0
         ? 'hit'
-        : this.state === 'combat' && speed <= 1
-          ? 'aim'
-          : speed > 1
-            ? 'walk'
-            : 'idle';
+        : this.fireAnimTimer > 0
+          ? 'fire'
+          : this.state === 'combat' && speed <= 1
+            ? 'aim'
+            : speed > 1
+              ? 'walk'
+              : 'idle';
     const clip = clipFor(this.def.sheet, state, facing);
     const key = animKey(this.def.sheet, state, facing);
 
@@ -709,6 +725,7 @@ export class Enemy {
     this.attackTimer = 0;
     this.stumbleTimer = 0;
     this.soundCooldown = 0;
+    this.fireAnimTimer = 0;
     this.alertGfx.clear();
     this.alertIcon.setVisible(false);
 

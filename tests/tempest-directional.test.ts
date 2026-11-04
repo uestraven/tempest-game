@@ -271,10 +271,16 @@ describe('Tempest gameplay alignment is unchanged', () => {
 });
 
 describe('legacy pose-atlas characters still work', () => {
-  const legacy = CHARACTER_KEYS.filter((k) => k !== 'tempest');
+  /**
+   * Phase B.2-04 moved lookout_guard onto the approved directional pair, so it
+   * is no longer a pose-atlas character. Its 4x6 atlas is still REGISTERED, so
+   * ART_MODE can flip back, but its clips now address the directional sheets.
+   * The other five characters are untouched and are what this block guards.
+   */
+  const legacy = CHARACTER_KEYS.filter((k) => k !== 'tempest' && k !== 'lookout_guard');
 
-  it('keeps all six on the 4x6 contract', () => {
-    expect(legacy).toHaveLength(6);
+  it('keeps the remaining five on the 4x6 contract', () => {
+    expect(legacy).toHaveLength(5);
     for (const name of legacy) {
       expect(sheetFormat(name), name).toBe('pose-atlas-4x6');
       const sheets = CHARACTER_SHEETS[name];
@@ -298,6 +304,15 @@ describe('legacy pose-atlas characters still work', () => {
         }
       }
     }
+  });
+
+  it('keeps the lookout 4x6 atlas registered so the proof is reversible', () => {
+    const sheets = CHARACTER_SHEETS.lookout_guard;
+    const atlas = sheets.find((s) => s.key === textureKey.character('lookout_guard'));
+    expect(atlas, 'the legacy lookout atlas must stay loadable').toBeDefined();
+    expect(atlas!.width).toBe(96);
+    expect(atlas!.height).toBe(192);
+    expect(ASSETS_BY_KEY.get(atlas!.key)!.frameCount).toBe(24);
   });
 
   it('leaves the lookout verified mapping untouched', () => {

@@ -1,0 +1,990 @@
+{
+  "schema": "tempest.valcendre.art_package.v1",
+  "package_name": "TEMPEST_VALCENDRE_ART_PACKAGE_v1",
+  "package_version": "1.0-incomplete",
+  "package_date": "2026-11-04",
+  "approved_source_tasks": [
+    "B.2-02",
+    "B.2-03A",
+    "B.2-03B-1",
+    "B.2-03B-2",
+    "B.2-03C-1",
+    "B.2-03C-2R"
+  ],
+  "expected_but_unavailable_tasks": [],
+  "overall_status": "COMPLETE_FOR_CONTROLLED_B2_04_ART_INTEGRATION_PROOF",
+  "production_art_is_unchanged": true,
+  "production_asset_contracts": [
+    {
+      "path": "03_props/fountain/valcendre_fountain_32x32.png",
+      "pixel_dimensions_px": [
+        32,
+        32
+      ],
+      "alpha": "RGBA; 0/255 only",
+      "colors": 9,
+      "palette_ids": [
+        "limestone_0",
+        "limestone_1",
+        "limestone_2",
+        "limestone_3",
+        "limestone_4",
+        "shutter_1",
+        "shutter_2",
+        "slate_0",
+        "slate_1"
+      ],
+      "status": "approved_production_standalone"
+    },
+    {
+      "path": "03_props/market_stall/valcendre_market_stall_base_80x48.png",
+      "pixel_dimensions_px": [
+        80,
+        48
+      ],
+      "alpha": "RGBA; 0/255 only",
+      "colors": 4,
+      "palette_ids": [
+        "wood_0",
+        "wood_1",
+        "wood_2",
+        "wood_3"
+      ],
+      "status": "approved_production_standalone"
+    },
+    {
+      "path": "03_props/market_stall/valcendre_market_stall_canopy_80x48.png",
+      "pixel_dimensions_px": [
+        80,
+        48
+      ],
+      "alpha": "RGBA; 0/255 only",
+      "colors": 13,
+      "palette_ids": [
+        "accent_paper",
+        "accent_rust",
+        "limestone_2",
+        "limestone_3",
+        "plaster_1",
+        "terracotta_0",
+        "terracotta_1",
+        "terracotta_2",
+        "terracotta_3",
+        "wood_0",
+        "wood_1",
+        "wood_2",
+        "wood_3"
+      ],
+      "status": "approved_production_standalone"
+    },
+    {
+      "path": "04_characters/lookout_guard/lookout_guard_24x32_dir.png",
+      "pixel_dimensions_px": [
+        144,
+        160
+      ],
+      "alpha": "RGBA; 0/255 only",
+      "colors": 16,
+      "palette_ids": [
+        "accent_brass",
+        "ink",
+        "iron_0",
+        "iron_1",
+        "skin_0",
+        "skin_1",
+        "skin_2",
+        "skin_3",
+        "slate_0",
+        "slate_1",
+        "uniform_0",
+        "uniform_1",
+        "uniform_2",
+        "uniform_3",
+        "wood_0",
+        "wood_1"
+      ],
+      "status": "approved_production_standalone"
+    },
+    {
+      "path": "04_characters/lookout_guard/lookout_guard_walk_side_24x32.png",
+      "pixel_dimensions_px": [
+        144,
+        32
+      ],
+      "alpha": "RGBA; 0/255 only",
+      "colors": 14,
+      "palette_ids": [
+        "accent_brass",
+        "ink",
+        "iron_0",
+        "iron_1",
+        "skin_0",
+        "skin_1",
+        "skin_2",
+        "skin_3",
+        "uniform_0",
+        "uniform_1",
+        "uniform_2",
+        "uniform_3",
+        "wood_0",
+        "wood_1"
+      ],
+      "status": "approved_production_standalone"
+    },
+    {
+      "path": "04_characters/lookout_guard/lookout_guard_24x32_dir_b.png",
+      "pixel_dimensions_px": [
+        144,
+        160
+      ],
+      "alpha": "RGBA; 0/255 only",
+      "colors": 15,
+      "palette_ids": [
+        "accent_brass",
+        "ink",
+        "iron_0",
+        "iron_1",
+        "skin_0",
+        "skin_1",
+        "skin_2",
+        "skin_3",
+        "slate_0",
+        "uniform_0",
+        "uniform_1",
+        "uniform_2",
+        "uniform_3",
+        "wood_0",
+        "wood_1"
+      ],
+      "status": "approved_production_standalone"
+    },
+    {
+      "path": "02_architecture/valcendre_proof_cobble_16x16.png",
+      "pixel_dimensions_px": [
+        64,
+        16
+      ],
+      "alpha": "RGBA; 0/255 only",
+      "colors": 4,
+      "palette": "01_palette/valcendre_palette.json",
+      "status": "approved_additive_proof_only",
+      "source": "Original B.2-03A uploaded source files; not redrawn or edited"
+    },
+    {
+      "path": "02_architecture/valcendre_proof_architecture_16x16.png",
+      "pixel_dimensions_px": [
+        128,
+        64
+      ],
+      "alpha": "RGBA; 0/255 only",
+      "colors": 16,
+      "palette": "01_palette/valcendre_palette.json",
+      "status": "approved_additive_proof_only",
+      "source": "Original B.2-03A uploaded source files; not redrawn or edited"
+    },
+    {
+      "path": "02_architecture/valcendre_proof_window_32x32.png",
+      "pixel_dimensions_px": [
+        32,
+        32
+      ],
+      "alpha": "RGBA; 0/255 only",
+      "colors": 12,
+      "palette": "01_palette/valcendre_palette.json",
+      "status": "approved_additive_proof_only",
+      "source": "Original B.2-03A uploaded source files; not redrawn or edited"
+    },
+    {
+      "path": "02_architecture/valcendre_proof_door_16x32.png",
+      "pixel_dimensions_px": [
+        16,
+        32
+      ],
+      "alpha": "RGBA; 0/255 only",
+      "colors": 10,
+      "palette": "01_palette/valcendre_palette.json",
+      "status": "approved_additive_proof_only",
+      "source": "Original B.2-03A uploaded source files; not redrawn or edited"
+    }
+  ],
+  "original_source_files_modified": false,
+  "important": "Original B.2-03A proof recovered and added. This is still an additive proof batch, NOT a full 48-tile Valcendre environment replacement and NOT an in-engine test.",
+  "canonical_environment_palette": "01_palette/valcendre_palette.json",
+  "canonical_style": "00_docs/TEMPEST_ART_BIBLE_v2.md",
+  "native_game_resolution_px": [
+    480,
+    270
+  ],
+  "tile_px": [
+    16,
+    16
+  ],
+  "character_frame_px": [
+    24,
+    32
+  ],
+  "palette_policy": {
+    "environment": "All approved production art RGB values must occur in 53-color Valcendre palette",
+    "lookout": "Lookout uses 16 approved palette colors, up to 24 allowed",
+    "tempest": "Locked Tempest reference palette; not included as active production asset in this Valcendre package"
+  },
+  "alpha_rules": {
+    "production_png_mode": "RGBA",
+    "allowed_alpha": [
+      0,
+      255
+    ],
+    "outside_sprite": "fully_transparent",
+    "baked_floor_background": false
+  },
+  "anchors": {
+    "lookout_guard": {
+      "px": [
+        12,
+        30
+      ],
+      "per_frame": "24x32",
+      "row31": "transparent"
+    },
+    "fountain": {
+      "px": [
+        16,
+        29
+      ],
+      "per_frame": "32x32",
+      "reason": "bottom center under basin; not character feet"
+    },
+    "market_stall": {
+      "shared_canvas_origin_px": [
+        0,
+        0
+      ],
+      "visual_envelope_px": [
+        80,
+        48
+      ],
+      "two_layers_same_origin": true
+    }
+  },
+  "layering": {
+    "market_stall": [
+      "base structural sprite",
+      "actors y-sorted by coding agent",
+      "canopy optionally over actors"
+    ],
+    "canopy_has_collision": false,
+    "collision_changes_proposed": false,
+    "lookout_weapon_overlay": "prohibited during aim and fire; pistol baked into sprite"
+  },
+  "geometry_references": {
+    "fountain_tile": [
+      24,
+      47
+    ],
+    "stall_existing_cover": {
+      "x_tiles_inclusive": [
+        29,
+        33
+      ],
+      "y_tile": 49
+    },
+    "ransacked_stall_evidence_tile": [
+      30,
+      47
+    ]
+  },
+  "animation_contract": {
+    "lookout_guard_primary": {
+      "file": "04_characters/lookout_guard/lookout_guard_24x32_dir.png",
+      "grid": [
+        6,
+        5
+      ],
+      "rows": [
+        "idle_down",
+        "idle_up",
+        "idle_side",
+        "walk_down",
+        "walk_up"
+      ]
+    },
+    "lookout_guard_side_walk_strip": {
+      "file": "04_characters/lookout_guard/lookout_guard_walk_side_24x32.png",
+      "grid": [
+        6,
+        1
+      ],
+      "row": "walk_side"
+    },
+    "lookout_guard_secondary": {
+      "file": "04_characters/lookout_guard/lookout_guard_24x32_dir_b.png",
+      "grid": [
+        6,
+        5
+      ],
+      "rows": [
+        "walk_side",
+        "aim_side",
+        "aim_down",
+        "aim_up",
+        "fire_side"
+      ],
+      "mirror_side_rows_for_left": true,
+      "side_walk_row_rgba_exact": true,
+      "aim_fire_pistol_baked": true
+    }
+  },
+  "dependencies": [
+    {
+      "asset": "03_props/fountain/valcendre_fountain_32x32.png",
+      "depends_on": [
+        "01_palette/valcendre_palette.json"
+      ]
+    },
+    {
+      "asset": "03_props/market_stall/valcendre_market_stall_base_80x48.png",
+      "depends_on": [
+        "03_props/market_stall/valcendre_market_stall_canopy_80x48.png",
+        "01_palette/valcendre_palette.json"
+      ],
+      "note": "same-envelope paired layer; not that a base alone is invalid"
+    },
+    {
+      "asset": "04_characters/lookout_guard/lookout_guard_24x32_dir_b.png",
+      "depends_on": [
+        "04_characters/lookout_guard/lookout_guard_walk_side_24x32.png",
+        "04_characters/lookout_guard/lookout_guard_24x32_dir.png"
+      ]
+    },
+    {
+      "asset": "02_architecture/valcendre_proof_cobble_16x16.png",
+      "depends_on": [
+        "01_palette/valcendre_palette.json",
+        "02_architecture/valcendre_proof_manifest.json"
+      ],
+      "status": "PRESENT"
+    },
+    {
+      "asset": "02_architecture/valcendre_proof_architecture_16x16.png",
+      "depends_on": [
+        "01_palette/valcendre_palette.json",
+        "02_architecture/valcendre_proof_manifest.json"
+      ],
+      "status": "PRESENT"
+    },
+    {
+      "asset": "02_architecture/valcendre_proof_window_32x32.png",
+      "depends_on": [
+        "01_palette/valcendre_palette.json",
+        "02_architecture/valcendre_proof_manifest.json"
+      ],
+      "status": "PRESENT"
+    },
+    {
+      "asset": "02_architecture/valcendre_proof_door_16x32.png",
+      "depends_on": [
+        "01_palette/valcendre_palette.json",
+        "02_architecture/valcendre_proof_manifest.json"
+      ],
+      "status": "PRESENT"
+    }
+  ],
+  "canonical_files": [
+    {
+      "path": "00_docs/TEMPEST_ART_BIBLE_v2.md",
+      "category": "00_docs",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "5c70cd2fcc504253449273ba40443c456fd515baf4f9c05a43175ab23be1853e",
+      "size_bytes": 22506,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "00_docs/valcendre_asset_disposition.json",
+      "category": "00_docs",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "f9b53ee347fc41c84c135bbe8705b310213e4cce6feed7a7b72e5e1c8a904f11",
+      "size_bytes": 40498,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "01_palette/valcendre_palette.json",
+      "category": "01_palette",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "971bb420afe6f0a92988de752d7aa04baa704720155ea1d2fc6d573d0d3fc7e8",
+      "size_bytes": 8470,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "02_architecture/author_proof.py",
+      "category": "02_architecture",
+      "file_type": "source_or_validation",
+      "status": "original_architecture_proof",
+      "sha256": "90054331c39093d207e661362a89532b8c55b372b61a4ee7f497a0a05c3fcc2b",
+      "size_bytes": 23817,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "02_architecture/make_manifest.py",
+      "category": "02_architecture",
+      "file_type": "source_or_validation",
+      "status": "original_architecture_proof",
+      "sha256": "48a53e3305c963b265ba18f3945e7b77b8b83acd5e92ee5359768387f926c31f",
+      "size_bytes": 11872,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "02_architecture/valcendre_proof_architecture_16x16.png",
+      "category": "02_architecture",
+      "file_type": "production_asset",
+      "status": "approved_proof_only",
+      "sha256": "3aca8feedaeb863922d629b920cd5f03fe18a56406e3905c7307dc1263db0bc5",
+      "size_bytes": 826,
+      "pixel_dimensions_px": [
+        128,
+        64
+      ]
+    },
+    {
+      "path": "02_architecture/valcendre_proof_assembly_3x.png",
+      "category": "02_architecture",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "845b52f68644102688be83a49640b1c12bbe1db59fba298b3cd221e2a7a0bb64",
+      "size_bytes": 30769,
+      "pixel_dimensions_px": [
+        1440,
+        810
+      ]
+    },
+    {
+      "path": "02_architecture/valcendre_proof_building_assembly.png",
+      "category": "02_architecture",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "4aa9181c8559aa6592474e3ad85020062abe1f989e5495619d91131275ef7bfd",
+      "size_bytes": 4558,
+      "pixel_dimensions_px": [
+        480,
+        270
+      ]
+    },
+    {
+      "path": "02_architecture/valcendre_proof_cobble_16x16.png",
+      "category": "02_architecture",
+      "file_type": "production_asset",
+      "status": "approved_proof_only",
+      "sha256": "14e9b5c58301f037b87573dbb77487f0ea906b952b015adc8255aeef3b4349ee",
+      "size_bytes": 217,
+      "pixel_dimensions_px": [
+        64,
+        16
+      ]
+    },
+    {
+      "path": "02_architecture/valcendre_proof_contact_sheet.png",
+      "category": "02_architecture",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "134c776c57dfb7be211cbb8590a9bd1be0a515453e5c86d53b909ac8141324bf",
+      "size_bytes": 9360,
+      "pixel_dimensions_px": [
+        786,
+        492
+      ]
+    },
+    {
+      "path": "02_architecture/valcendre_proof_door_16x32.png",
+      "category": "02_architecture",
+      "file_type": "production_asset",
+      "status": "approved_proof_only",
+      "sha256": "a0fec7bd798dfd8b4605b7380bde8068d68f9d831f20e886d948311c9d70c7f6",
+      "size_bytes": 171,
+      "pixel_dimensions_px": [
+        16,
+        32
+      ]
+    },
+    {
+      "path": "02_architecture/valcendre_proof_ground_tests.png",
+      "category": "02_architecture",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "1b03a676ec8d25f0e7f443372654b81691e738c4f7a8946cdc0cf5ae9069450a",
+      "size_bytes": 4389,
+      "pixel_dimensions_px": [
+        808,
+        144
+      ]
+    },
+    {
+      "path": "02_architecture/valcendre_proof_manifest.json",
+      "category": "02_architecture",
+      "file_type": "source_or_validation",
+      "status": "original_architecture_proof",
+      "sha256": "e8e497d0f93dd5e44908679e797e99b2c220a8a655a6daeedeb9eeb7d2256f45",
+      "size_bytes": 16775,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "02_architecture/valcendre_proof_seam_tests.png",
+      "category": "02_architecture",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "8cb1c7c3708737241b1906e6c9fce4b71a3359bfaa7f3068b056671be154d6a2",
+      "size_bytes": 866,
+      "pixel_dimensions_px": [
+        240,
+        112
+      ]
+    },
+    {
+      "path": "02_architecture/valcendre_proof_validation.md",
+      "category": "02_architecture",
+      "file_type": "source_or_validation",
+      "status": "original_architecture_proof",
+      "sha256": "685ddf688de5d5418f0eaf7b91b995a3252c4aafe4287cabae15cc9b3294d1d0",
+      "size_bytes": 13004,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "02_architecture/valcendre_proof_window_32x32.png",
+      "category": "02_architecture",
+      "file_type": "production_asset",
+      "status": "approved_proof_only",
+      "sha256": "8cf51be24646d2e3b31059c095514397b28333b3f0b69cf6572e20e272173766",
+      "size_bytes": 223,
+      "pixel_dimensions_px": [
+        32,
+        32
+      ]
+    },
+    {
+      "path": "02_architecture/validate_proof.py",
+      "category": "02_architecture",
+      "file_type": "source_or_validation",
+      "status": "original_architecture_proof",
+      "sha256": "e23a88cabc7d7ab3ec47c8788aef07927cdadd37d6f6879645a40528193ba0a9",
+      "size_bytes": 24962,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "02_architecture/validation_results.json",
+      "category": "02_architecture",
+      "file_type": "source_or_validation",
+      "status": "original_architecture_proof",
+      "sha256": "efb3c18318032c98e32be74d1d146fc3bf1556839887cdd4e37f0f6a5d22d317",
+      "size_bytes": 5604,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "03_props/fountain/valcendre_fountain_32x32.png",
+      "category": "03_props",
+      "file_type": "production_asset",
+      "status": "approved_proof_only",
+      "sha256": "4af7d8f4bc82d5a3617b35f0cee1c5faa3d3809cf45564c9f6684dc2ba9bc758",
+      "size_bytes": 684,
+      "pixel_dimensions_px": [
+        32,
+        32
+      ]
+    },
+    {
+      "path": "03_props/fountain/valcendre_fountain_manifest.json",
+      "category": "03_props",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "5b8fdb963c7740cef6ac1a7e951164b1edc798a8f78ef7dfbccad8f41edbfda9",
+      "size_bytes": 3392,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "03_props/fountain/valcendre_fountain_validation.md",
+      "category": "03_props",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "1719a117980c450386343a309562ebbe7fd0dd944dcc70448a4b0e8cb9e106d6",
+      "size_bytes": 2568,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "03_props/market_stall/valcendre_market_stall_base_80x48.png",
+      "category": "03_props",
+      "file_type": "production_asset",
+      "status": "approved_proof_only",
+      "sha256": "40299ffca78f01a294d8690ae273fd9f3296b4c78eb145f2ed611ce47e4c8346",
+      "size_bytes": 601,
+      "pixel_dimensions_px": [
+        80,
+        48
+      ]
+    },
+    {
+      "path": "03_props/market_stall/valcendre_market_stall_canopy_80x48.png",
+      "category": "03_props",
+      "file_type": "production_asset",
+      "status": "approved_proof_only",
+      "sha256": "3f878cd5582d66ecf28ba14a63a5c1b26e8d7a0a03f966af806cd364cc576493",
+      "size_bytes": 732,
+      "pixel_dimensions_px": [
+        80,
+        48
+      ]
+    },
+    {
+      "path": "03_props/market_stall/valcendre_market_stall_manifest.json",
+      "category": "03_props",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "4e435c19e94962f9785be9704242594847fbf0690ad00ae8eba87181fa25893d",
+      "size_bytes": 8405,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "03_props/market_stall/valcendre_market_stall_validation.md",
+      "category": "03_props",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "9fb0d09d32e3e44ca6f9b1a521c67308d90ead4f766b75e34b9f8ee1ec0a9f21",
+      "size_bytes": 3119,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "04_characters/lookout_guard/lookout_guard_24x32_dir.png",
+      "category": "04_characters",
+      "file_type": "production_asset",
+      "status": "approved_proof_only",
+      "sha256": "898b3df1a437c827b412ef24a217790a6d419514a6e2dd5947be695a518827af",
+      "size_bytes": 2811,
+      "pixel_dimensions_px": [
+        144,
+        160
+      ]
+    },
+    {
+      "path": "04_characters/lookout_guard/lookout_guard_24x32_dir_b.png",
+      "category": "04_characters",
+      "file_type": "production_asset",
+      "status": "approved_proof_only",
+      "sha256": "14f164185bb330d7102f41c36c230e9be029449017fe03bec20a006699e88385",
+      "size_bytes": 2808,
+      "pixel_dimensions_px": [
+        144,
+        160
+      ]
+    },
+    {
+      "path": "04_characters/lookout_guard/lookout_guard_manifest.json",
+      "category": "04_characters",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "3509ab471b734196cd4e507fc69ad51e5f249e44b03abaeabdd29e9ad4f1d1fb",
+      "size_bytes": 29418,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "04_characters/lookout_guard/lookout_guard_validation.md",
+      "category": "04_characters",
+      "file_type": "specification_or_source",
+      "status": "baseline",
+      "sha256": "aaaca815c1405f0e9f57df53dd1007c74191fc76a981a932e7acc5bb9677a361",
+      "size_bytes": 4173,
+      "pixel_dimensions_px": null
+    },
+    {
+      "path": "04_characters/lookout_guard/lookout_guard_walk_side_24x32.png",
+      "category": "04_characters",
+      "file_type": "production_asset",
+      "status": "approved_proof_only",
+      "sha256": "ffaed216839a90b3826bc3933da9a21fbb8000e0cb3fc1510225c9034b4b992b",
+      "size_bytes": 911,
+      "pixel_dimensions_px": [
+        144,
+        32
+      ]
+    },
+    {
+      "path": "05_previews/B2-02_REFERENCE_valcendre_architecture_study.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "19eabb9d5185dcfc740830fc5b407d8467ac84cc73b4025ed8aac816c60e5e2d",
+      "size_bytes": 21194,
+      "pixel_dimensions_px": [
+        800,
+        540
+      ]
+    },
+    {
+      "path": "05_previews/B2-02_REFERENCE_valcendre_before_after.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "8c1e884e8271efa6b238c1b9c278f5187e067b1cfe434f3e5a94115e2646d275",
+      "size_bytes": 46172,
+      "pixel_dimensions_px": [
+        960,
+        299
+      ]
+    },
+    {
+      "path": "05_previews/B2-02_REFERENCE_valcendre_market_master_480x270.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "4a292f8243805be23a5ed1221282b234efe5a7a715224110133201617e363379",
+      "size_bytes": 15313,
+      "pixel_dimensions_px": [
+        480,
+        270
+      ]
+    },
+    {
+      "path": "05_previews/B2-02_REFERENCE_valcendre_material_study.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "6581cfb40c878f2b14ac24fd1783dce4751add309a1e4181a7653fd828fa0b83",
+      "size_bytes": 13849,
+      "pixel_dimensions_px": [
+        756,
+        598
+      ]
+    },
+    {
+      "path": "05_previews/lookout_guard_animation_preview.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "bb28700adc843e45d1bf71f4210ffcf6c6cbfdaef2b717c9152ab084cc50f611",
+      "size_bytes": 26618,
+      "pixel_dimensions_px": [
+        1230,
+        750
+      ]
+    },
+    {
+      "path": "05_previews/lookout_guard_combat_before_after.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "7dc8c17abc0eb8ffc520690e1820561cf76ca29c871d87b911acd6098303764c",
+      "size_bytes": 41566,
+      "pixel_dimensions_px": [
+        1050,
+        1015
+      ]
+    },
+    {
+      "path": "05_previews/lookout_guard_combat_contact.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "ae5a18fad718d855f6a63b90702b2fbb9f1b09170e049805b6a7dc270f7777cd",
+      "size_bytes": 44263,
+      "pixel_dimensions_px": [
+        1200,
+        1260
+      ]
+    },
+    {
+      "path": "05_previews/lookout_guard_comparison_480x270.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "39584896dc117b9f09e93a93fee95dd482dcd77a1e79d28283a336ced5d5225b",
+      "size_bytes": 19215,
+      "pixel_dimensions_px": [
+        480,
+        270
+      ]
+    },
+    {
+      "path": "05_previews/lookout_guard_contrast.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "3c3d350e9e733402f96a22fc44cb3bcc18ddc888c2407b876b8a79c8ef88b258",
+      "size_bytes": 19594,
+      "pixel_dimensions_px": [
+        1120,
+        675
+      ]
+    },
+    {
+      "path": "05_previews/lookout_guard_directional_contact.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "ccbf063b3de9047f807bd2c828a3eb779ee9d0d611063b188825825b5c1d63c8",
+      "size_bytes": 39963,
+      "pixel_dimensions_px": [
+        1232,
+        1547
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_character_prop_environment_compatibility.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "853b47604d4ffe6510b5c84a5ebf90925bc3bcb6e4e676853f41ef96c15b9673",
+      "size_bytes": 54745,
+      "pixel_dimensions_px": [
+        1280,
+        730
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_fountain_contact.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "6410c72d6b838f6076a85328120902fe20face181076d092d88e532aa1668a95",
+      "size_bytes": 52241,
+      "pixel_dimensions_px": [
+        1008,
+        698
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_fountain_context_480x270.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "db8532aaf4f8a8f664684f651db990fbc364b5e6a549c73074c9fd625e8e3fbc",
+      "size_bytes": 15726,
+      "pixel_dimensions_px": [
+        480,
+        270
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_market_mock_480x270.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "39584896dc117b9f09e93a93fee95dd482dcd77a1e79d28283a336ced5d5225b",
+      "size_bytes": 19215,
+      "pixel_dimensions_px": [
+        480,
+        270
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_market_stall_contact.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "1a274edc88b666673faa0def2e31d5c23f8fe6e8455ede8b1c1509d42fc079e1",
+      "size_bytes": 17366,
+      "pixel_dimensions_px": [
+        1608,
+        430
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_market_stall_context_480x270.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "ec3c70219867969553d1b84cefaeeb9b73f840e0407b8b76a5ded0c63f259049",
+      "size_bytes": 18557,
+      "pixel_dimensions_px": [
+        480,
+        270
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_market_stall_material_comparison.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "91aa6abfcf1007b6a6c8477a1fc3a3b1973e055d85263835cd08e114cef22857",
+      "size_bytes": 25486,
+      "pixel_dimensions_px": [
+        1200,
+        490
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_market_stall_occlusion.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "d75cc3453fa7f7d055040d72191ff7d1f982c45d27eb103e31f2f100af758e7e",
+      "size_bytes": 19640,
+      "pixel_dimensions_px": [
+        1488,
+        458
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_package_compatibility_APPROVED_B203A_480x270.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "fe3d6c9de4da5c67d50fd834bba5afbb2846096cd5bda0522a0081caad91889a",
+      "size_bytes": 11963,
+      "pixel_dimensions_px": [
+        480,
+        270
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_package_overview.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "2c74f04488fe624ef3f5a7de7fc04f9f23f4685b5b0851b13f30e4d1e3930be0",
+      "size_bytes": 86745,
+      "pixel_dimensions_px": [
+        1460,
+        960
+      ]
+    },
+    {
+      "path": "05_previews/valcendre_package_overview_APPROVED_B203A.png",
+      "category": "05_previews",
+      "file_type": "art_review_composite",
+      "status": "reference_only_non_engine",
+      "sha256": "e3bc7f21f913fe67170a000d274013c9916d62cb9370880bce5a5c7c758700d9",
+      "size_bytes": 29321,
+      "pixel_dimensions_px": [
+        960,
+        690
+      ]
+    }
+  ],
+  "missing_required_files": [],
+  "no_superseded_as_active": true,
+  "source_manifest_discrepancies": [
+    {
+      "level": "metadata_notice",
+      "file": "01_palette/valcendre_palette.json",
+      "issue": "Source palette status remains PROPOSED_FOR_REVIEW; later approved assets and user task treat exact 53 entries as approved. Original JSON was not changed."
+    },
+    {
+      "level": "historical_notice",
+      "file": "03_props/market_stall/valcendre_market_stall_manifest.json",
+      "issue": "Original B.2-03B source manifest truthfully states B.2-03A was unavailable at authoring time; B.2-03D compatibility audit now resolves it, without editing the original."
+    },
+    {
+      "level": "historical_notice",
+      "file": "03_props/fountain/valcendre_fountain_manifest.json",
+      "issue": "Original B.2-03B source may refer to unavailable proof at authoring time. Original document is byte-preserved; cross-package verification performed in B.2-03D."
+    }
+  ],
+  "limitations_log": "KNOWN_LIMITATIONS.md",
+  "audit_file": "06_validation/CROSS_PACKAGE_AUDIT.json",
+  "ready_for_coding_agent": true,
+  "ready_for_coding_agent_note": "Package B.2-03D is complete for a controlled B.2-04 market-slice integration proof only; no full-stage replacement, collision remap or art modification is authorized.",
+  "package_revision": "v1-complete-B203A-recovery",
+  "production_asset_count": 10,
+  "architecture_source": "02_architecture/valcendre_proof_manifest.json",
+  "architecture_source_commit_claim": "e332a54 (reported upstream; commit provenance not independently verified in this filesystem)",
+  "review_preview": "05_previews/valcendre_package_compatibility_APPROVED_B203A_480x270.png",
+  "source_pixel_integrity": "All original production PNG byte streams preserved from supplied files. No recoloring, resampling, drawing or re-export of production art."
+}

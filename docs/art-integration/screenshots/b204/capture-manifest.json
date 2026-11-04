@@ -1,0 +1,140 @@
+{
+ "shots": [
+  {
+   "file": "01-legacy-market-baseline.png",
+   "kind": "STAGED",
+   "note": "Shipped look. Legacy 48-slot tiles, legacy fountain, legacy pose-atlas Lookout.",
+   "artMode": "legacy",
+   "lookoutTexture": "char.lookout_guard"
+  },
+  {
+   "file": "02-v2-market-same-frame.png",
+   "kind": "STAGED",
+   "note": "Identical camera and actor placement to shot 01. Direct A/B of the whole slice.",
+   "artMode": "valcendre_v2_proof",
+   "lookoutTexture": "char.lookout_guard.dir_a"
+  },
+  {
+   "file": "03-v2-paving.png",
+   "kind": "STAGED",
+   "note": "Approved cobblestone over the market approach. Checks seams and quietness."
+  },
+  {
+   "file": "04-v2-architecture-west-hall.png",
+   "kind": "STAGED",
+   "note": "West market hall, existing 4x4 footprint: ridge, eave, facade, plinth."
+  },
+  {
+   "file": "05-v2-architecture-east-hall.png",
+   "kind": "STAGED",
+   "note": "East market hall, existing 5x3 footprint, using roof_to_facade."
+  },
+  {
+   "file": "06-v2-fountain-player-north.png",
+   "kind": "STAGED",
+   "note": "Approved fountain at its existing tile (24,47); Tempest north of it."
+  },
+  {
+   "file": "06b-v2-fountain-player-south.png",
+   "kind": "STAGED",
+   "note": "Tempest south of the fountain: layering check."
+  },
+  {
+   "file": "07-v2-stall-player-in-front.png",
+   "kind": "STAGED",
+   "note": "Stall with Tempest south of the counter. Actor should be over both layers."
+  },
+  {
+   "file": "08-v2-stall-player-behind.png",
+   "kind": "STAGED",
+   "note": "Tempest at (31,48), under the canopy and north of the counter. Canopy should overlap the actor. (31,46) is inside the east hall footprint and is not standable."
+  },
+  {
+   "file": "08b-v2-stall-player-beside.png",
+   "kind": "STAGED",
+   "note": "Tempest level with the counter."
+  },
+  {
+   "file": "09-v2-lookout-idle.png",
+   "kind": "STAGED",
+   "note": "Lookout idle, facing down (front view)."
+  },
+  {
+   "file": "09b-v2-lookout-aim.png",
+   "kind": "STAGED",
+   "note": "Lookout aiming right. Pistol is baked in; no overlay is drawn."
+  },
+  {
+   "file": "09c-v2-lookout-aim-left.png",
+   "kind": "STAGED",
+   "note": "Lookout aiming left: mirrored side art."
+  },
+  {
+   "file": "10-v2-lookout-walking.png",
+   "kind": "STAGED",
+   "note": "Lookout mid-walk, camera on the guard."
+  },
+  {
+   "file": "11-v2-lookout-firing.png",
+   "kind": "STAGED",
+   "note": "Lookout firing animation (fire row reached: true)."
+  },
+  {
+   "file": "12-v2-lookout-and-tempest.png",
+   "kind": "STAGED",
+   "note": "Both characters at native scale: silhouette and style parity check."
+  },
+  {
+   "file": "13-played-entering-market.png",
+   "kind": "PLAYED",
+   "note": "Walked from the spawn into the market under real input."
+  },
+  {
+   "file": "14-played-around-fountain.png",
+   "kind": "PLAYED",
+   "note": "Walked a full circuit around the fountain: north, east, south, west."
+  },
+  {
+   "file": "15-played-past-architecture.png",
+   "kind": "PLAYED",
+   "note": "Walked the gap beside the west hall."
+  },
+  {
+   "file": "16-played-stall-evidence-prompt.png",
+   "kind": "PLAYED",
+   "note": "At the ransacked-stall evidence. Prompt: E - INVESTIGATE STALL"
+  },
+  {
+   "file": "17-played-stall-evidence-taken.png",
+   "kind": "PLAYED",
+   "note": "V1 granted by real E press: true; objectives V1"
+  },
+  {
+   "file": "18-played-market-radio.png",
+   "kind": "PLAYED",
+   "note": "Market radio switched on by real E press: true"
+  },
+  {
+   "file": "19-played-leaving-east-lane.png",
+   "kind": "PLAYED",
+   "note": "Left the market by the east lane: false"
+  },
+  {
+   "file": "20-v2-integrated-market.png",
+   "kind": "STAGED",
+   "note": "The completed integrated market slice."
+  }
+ ],
+ "playedResults": {
+  "enteredMarket": true,
+  "circledFountain": true,
+  "v1Prompt": "E - INVESTIGATE STALL",
+  "v1Granted": true,
+  "radioUsed": true,
+  "leftByEastLane": false
+ },
+ "problems": [
+  "legacy session errors: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "proof session errors: Failed to load resource: the server responded with a status of 404 (Not Found) | Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ]
+}

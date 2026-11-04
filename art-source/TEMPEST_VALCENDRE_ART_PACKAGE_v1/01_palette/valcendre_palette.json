@@ -1,0 +1,384 @@
+{
+  "schema_version": "2.0",
+  "stage": "Valcendre",
+  "status": "PROPOSED_FOR_REVIEW",
+  "pixel_grid": {
+    "environment": [
+      16,
+      16
+    ],
+    "human": [
+      24,
+      32
+    ],
+    "native_view": [
+      480,
+      270
+    ]
+  },
+  "environment_palette_budget": {
+    "count": 53,
+    "target_range": [
+      40,
+      56
+    ]
+  },
+  "light_direction": "upper-left / northwest",
+  "colors": [
+    {
+      "id": "ink",
+      "hex": "#292E32",
+      "material": "Shared",
+      "purpose": "deep ink / figure contour"
+    },
+    {
+      "id": "outline_soft",
+      "hex": "#414A4E",
+      "material": "Shared",
+      "purpose": "secondary line and architectural recess"
+    },
+    {
+      "id": "cast_neutral",
+      "hex": "#686A66",
+      "material": "Shadow",
+      "purpose": "hard-edged cast shadow on neutral surfaces"
+    },
+    {
+      "id": "limestone_0",
+      "hex": "#6A6861",
+      "material": "Limestone",
+      "purpose": "deep joints / face edges"
+    },
+    {
+      "id": "limestone_1",
+      "hex": "#918A7B",
+      "material": "Limestone",
+      "purpose": "recessed blocks"
+    },
+    {
+      "id": "limestone_2",
+      "hex": "#B8AC98",
+      "material": "Limestone",
+      "purpose": "main facade block"
+    },
+    {
+      "id": "limestone_3",
+      "hex": "#D9C9AD",
+      "material": "Limestone",
+      "purpose": "lit upper edge"
+    },
+    {
+      "id": "limestone_4",
+      "hex": "#E8DCC8",
+      "material": "Limestone",
+      "purpose": "sparingly used sunward highlight"
+    },
+    {
+      "id": "plaster_0",
+      "hex": "#8C8172",
+      "material": "Plaster",
+      "purpose": "worn lower surface"
+    },
+    {
+      "id": "plaster_1",
+      "hex": "#B1A38F",
+      "material": "Plaster",
+      "purpose": "midlit wall"
+    },
+    {
+      "id": "plaster_2",
+      "hex": "#D5C4AA",
+      "material": "Plaster",
+      "purpose": "sunlit smooth surface"
+    },
+    {
+      "id": "paving_0",
+      "hex": "#857F73",
+      "material": "Cobblestone",
+      "purpose": "recessed mortar"
+    },
+    {
+      "id": "paving_1",
+      "hex": "#A79C89",
+      "material": "Cobblestone",
+      "purpose": "dark stones"
+    },
+    {
+      "id": "paving_2",
+      "hex": "#BFB09A",
+      "material": "Cobblestone",
+      "purpose": "main stones"
+    },
+    {
+      "id": "paving_3",
+      "hex": "#D1C0A5",
+      "material": "Cobblestone",
+      "purpose": "rare upper-left stone faces"
+    },
+    {
+      "id": "slate_0",
+      "hex": "#343F4D",
+      "material": "Slate",
+      "purpose": "roof crevice"
+    },
+    {
+      "id": "slate_1",
+      "hex": "#526171",
+      "material": "Slate",
+      "purpose": "main cool dark planes"
+    },
+    {
+      "id": "slate_2",
+      "hex": "#74818A",
+      "material": "Slate",
+      "purpose": "shaded slate planes"
+    },
+    {
+      "id": "slate_3",
+      "hex": "#939B9B",
+      "material": "Slate",
+      "purpose": "upward edges"
+    },
+    {
+      "id": "slate_4",
+      "hex": "#B6B8AE",
+      "material": "Slate",
+      "purpose": "accent ridge highlight"
+    },
+    {
+      "id": "terracotta_0",
+      "hex": "#784638",
+      "material": "Terracotta",
+      "purpose": "under-eave recess"
+    },
+    {
+      "id": "terracotta_1",
+      "hex": "#9B5946",
+      "material": "Terracotta",
+      "purpose": "deep red clay"
+    },
+    {
+      "id": "terracotta_2",
+      "hex": "#BB7558",
+      "material": "Terracotta",
+      "purpose": "primary roof"
+    },
+    {
+      "id": "terracotta_3",
+      "hex": "#D58D67",
+      "material": "Terracotta",
+      "purpose": "lit tile strips"
+    },
+    {
+      "id": "terracotta_4",
+      "hex": "#E0AE87",
+      "material": "Terracotta",
+      "purpose": "sparingly used sunward edges"
+    },
+    {
+      "id": "wood_0",
+      "hex": "#503B34",
+      "material": "Wood",
+      "purpose": "plank joint / leg outline"
+    },
+    {
+      "id": "wood_1",
+      "hex": "#735244",
+      "material": "Wood",
+      "purpose": "shadow wood"
+    },
+    {
+      "id": "wood_2",
+      "hex": "#946E51",
+      "material": "Wood",
+      "purpose": "primary wood"
+    },
+    {
+      "id": "wood_3",
+      "hex": "#B28A61",
+      "material": "Wood",
+      "purpose": "lit wooden rim"
+    },
+    {
+      "id": "iron_0",
+      "hex": "#30363A",
+      "material": "Iron",
+      "purpose": "deep frame / silhouette"
+    },
+    {
+      "id": "iron_1",
+      "hex": "#596367",
+      "material": "Iron",
+      "purpose": "primary hardware"
+    },
+    {
+      "id": "iron_2",
+      "hex": "#879293",
+      "material": "Iron",
+      "purpose": "midlight edge"
+    },
+    {
+      "id": "iron_3",
+      "hex": "#ABB4AD",
+      "material": "Iron",
+      "purpose": "edge highlight"
+    },
+    {
+      "id": "leaf_0",
+      "hex": "#2C463D",
+      "material": "Vegetation",
+      "purpose": "recess between leaf masses"
+    },
+    {
+      "id": "leaf_1",
+      "hex": "#42634D",
+      "material": "Vegetation",
+      "purpose": "deep mass"
+    },
+    {
+      "id": "leaf_2",
+      "hex": "#638052",
+      "material": "Vegetation",
+      "purpose": "mid foliage"
+    },
+    {
+      "id": "leaf_3",
+      "hex": "#87A16A",
+      "material": "Vegetation",
+      "purpose": "sunward foliage"
+    },
+    {
+      "id": "leaf_4",
+      "hex": "#B7BF8C",
+      "material": "Vegetation",
+      "purpose": "rare leaf highlight"
+    },
+    {
+      "id": "shutter_0",
+      "hex": "#334F61",
+      "material": "Blue Shutters",
+      "purpose": "dark blue shutter recess"
+    },
+    {
+      "id": "shutter_1",
+      "hex": "#4D6A7B",
+      "material": "Blue Shutters",
+      "purpose": "main weathered blue"
+    },
+    {
+      "id": "shutter_2",
+      "hex": "#708C9C",
+      "material": "Blue Shutters",
+      "purpose": "weathered plane"
+    },
+    {
+      "id": "shutter_3",
+      "hex": "#99A9AC",
+      "material": "Blue Shutters",
+      "purpose": "sunlit rim"
+    },
+    {
+      "id": "skin_0",
+      "hex": "#815D4C",
+      "material": "Skin",
+      "purpose": "face contour"
+    },
+    {
+      "id": "skin_1",
+      "hex": "#B58B70",
+      "material": "Skin",
+      "purpose": "shadow plane"
+    },
+    {
+      "id": "skin_2",
+      "hex": "#D8B095",
+      "material": "Skin",
+      "purpose": "main face"
+    },
+    {
+      "id": "skin_3",
+      "hex": "#E4C7A6",
+      "material": "Skin",
+      "purpose": "nose / forehead accent"
+    },
+    {
+      "id": "uniform_0",
+      "hex": "#2B3B48",
+      "material": "Clothing",
+      "purpose": "lookout outline / uniform recess"
+    },
+    {
+      "id": "uniform_1",
+      "hex": "#3B5567",
+      "material": "Clothing",
+      "purpose": "lookout dark uniform"
+    },
+    {
+      "id": "uniform_2",
+      "hex": "#567489",
+      "material": "Clothing",
+      "purpose": "lookout cloth midtone"
+    },
+    {
+      "id": "uniform_3",
+      "hex": "#758A8C",
+      "material": "Clothing",
+      "purpose": "lookout lit cloth"
+    },
+    {
+      "id": "accent_rust",
+      "hex": "#9A5C50",
+      "material": "Accent",
+      "purpose": "controlled faded accent red"
+    },
+    {
+      "id": "accent_brass",
+      "hex": "#C7A16C",
+      "material": "Accent",
+      "purpose": "fountain / shop hardware"
+    },
+    {
+      "id": "accent_paper",
+      "hex": "#E3D7B9",
+      "material": "Accent",
+      "purpose": "clue / folded paper"
+    }
+  ],
+  "locked_approved_tempest_palette": {
+    "source_file": "tempest_24x32_dir.png",
+    "count": 22,
+    "hex_colors": [
+      "#24282B",
+      "#27333D",
+      "#302C2A",
+      "#343E44",
+      "#393733",
+      "#394B59",
+      "#493C34",
+      "#56463C",
+      "#565B5C",
+      "#576675",
+      "#5B6465",
+      "#665340",
+      "#727F80",
+      "#805D4C",
+      "#8A9191",
+      "#8D7355",
+      "#AC8F64",
+      "#B58B70",
+      "#C1C4B9",
+      "#C3A375",
+      "#D8B095",
+      "#E4C7A6"
+    ],
+    "immutability": "Do not recolor or modify approved character sheets"
+  },
+  "environment_palette_policy": "Use fixed semantic material ramps, reuse color IDs, never per-pixel photo quantization. Existing approved Tempest art may introduce its locked character colors.",
+  "shadow_policy": {
+    "material": "baked ramp transition on receiving material",
+    "cast": "hard geometric shape 2\u20135 px in material-specific dark ramps",
+    "concealment": "metadata-driven; requires engine-provided decal/tint only with approval",
+    "contact": "1\u20133 px darkest local ground shade at feet, not sprite-baked"
+  },
+  "example_reference_scene": "valcendre_market_master_480x270.png"
+}

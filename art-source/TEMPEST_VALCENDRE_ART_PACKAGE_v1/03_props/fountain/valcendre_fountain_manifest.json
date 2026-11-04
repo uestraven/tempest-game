@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0.0",
+  "asset": "valcendre_fountain_32x32.png",
+  "production_task": "TEMPEST B.2-03B-1",
+  "baseline_commit": "e332a54",
+  "production_status": "standalone_art_ready_pending_engine_verification",
+  "dimensions_px": {
+    "width": 32,
+    "height": 32
+  },
+  "color_mode": "RGBA",
+  "alpha": {
+    "transparent": 0,
+    "opaque": 255,
+    "other_values_allowed": false
+  },
+  "light_direction": "upper_left_northwest",
+  "palette": {
+    "source": "valcendre_palette.json",
+    "environment_palette_count": 53,
+    "used_opaque_color_count": 9,
+    "used_ids": [
+      "limestone_0",
+      "limestone_1",
+      "limestone_2",
+      "limestone_3",
+      "limestone_4",
+      "shutter_1",
+      "shutter_2",
+      "slate_0",
+      "slate_1"
+    ],
+    "used_colors": {
+      "limestone_0": "#6A6861",
+      "limestone_1": "#918A7B",
+      "limestone_2": "#B8AC98",
+      "limestone_3": "#D9C9AD",
+      "limestone_4": "#E8DCC8",
+      "shutter_1": "#4D6A7B",
+      "shutter_2": "#708C9C",
+      "slate_0": "#343F4D",
+      "slate_1": "#526171"
+    },
+    "locked": true
+  },
+  "geometry": {
+    "original_market_tile": {
+      "x": 24,
+      "y": 47
+    },
+    "existing_collision_and_footprint": "preserve_unchanged",
+    "standalone_sprite_footprint_px": [
+      32,
+      32
+    ],
+    "no_new_collision_rules": true
+  },
+  "anchor": {
+    "convention": "bottom_center",
+    "local_pixel": [
+      16,
+      29
+    ],
+    "coordinate_system": "top_left_origin_zero_based_x_right_y_down",
+    "opaque_extent_exclusive": [
+      2,
+      4,
+      31,
+      30
+    ],
+    "note": "Do not reinterpret existing object placement: this anchor is an authoring reference, not an instruction to replace coded origin coordinates."
+  },
+  "layers": {
+    "asset_planes": [
+      "central_riser",
+      "recessed_blue_gray_water",
+      "raised_limestone_rim",
+      "south_facing_stone_basin"
+    ],
+    "recommended_depth": "Use existing prop depth or y-sort behavior with base anchored at its existing market location; do not alter collision, object placement, or map layers.",
+    "water": "baked_inside_sprite_nonanimated",
+    "contact_shadow": "none_included",
+    "ground_shadow": "none_baked"
+  },
+  "preview_provenance": {
+    "contact": "isolated 8x, native cobble, Tempest scale, art-review context",
+    "context": "manual composite over approved B2-02 native market master; NOT a game screenshot",
+    "cobble_sample": "direct from valcendre_market_master_480x270.png; B2-03A proof tile unavailable in this workspace",
+    "tempest": "copied unchanged first idle_down frame from approved Tempest directional sheet"
+  },
+  "files": [
+    "valcendre_fountain_32x32.png",
+    "valcendre_fountain_contact.png",
+    "valcendre_fountain_context_480x270.png",
+    "valcendre_fountain_manifest.json",
+    "valcendre_fountain_validation.md"
+  ],
+  "validation": {
+    "checks": {
+      "canvas_32x32": true,
+      "mode_RGBA": true,
+      "binary_alpha_only": true,
+      "palette_subset_exact": true,
+      "no_enclosed_transparent_holes": true,
+      "unpainted_edges": true,
+      "no_opaque_ground_background": true,
+      "context_exact_480x270": true,
+      "no_unapproved_rgb_context": true
+    },
+    "all_automated_pass": true,
+    "opaque_bbox_exclusive": [
+      2,
+      4,
+      31,
+      30
+    ],
+    "opaque_pixels": 464,
+    "palette_colors_used": 9
+  }
+}

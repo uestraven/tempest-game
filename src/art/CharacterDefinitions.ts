@@ -40,6 +40,7 @@
  */
 
 import { textureKey, type CharacterKey } from './AssetRegistry';
+import { ART_MODE } from './ValcendreV2';
 
 export const CHAR_COLUMNS = 4;
 export const CHAR_ROWS = 6;
@@ -305,7 +306,13 @@ export const TEMPEST_MUZZLE_OFFSET: Record<Facing, { x: number; y: number }> = {
  * docs/diagnostics/transparency/lookout_guard_rows0-2_14x.png.
  * Its layout differs from tempest's: no back view, and the walk faces RIGHT.
  */
-const LOOKOUT: CharacterDef = (() => {
+/**
+ * lookout_guard — LEGACY pose atlas, kept so ART_MODE can flip back.
+ *
+ * Pixel-verified from docs/diagnostics/transparency/lookout_guard_rows0-2_14x.png.
+ * Its layout differs from tempest's: no back view, and the walk faces RIGHT.
+ */
+const LOOKOUT_LEGACY: CharacterDef = (() => {
   const clip = atlasClip('lookout_guard');
   return {
   key: 'lookout_guard',
@@ -355,6 +362,107 @@ const LOOKOUT: CharacterDef = (() => {
   },
   } satisfies CharacterDef;
 })();
+
+/**
+ * lookout_guard — B.2-03C-2R approved directional pair (Phase B.2-04).
+ *
+ * Row layout is IDENTICAL to Tempest's Art Task 01 format, which is why this
+ * reuses `dirClip` rather than introducing a second animation system:
+ *   sheet A rows 0-4  idle_down, idle_up, idle_side, walk_down, walk_up
+ *   sheet B rows 0-4  walk_side, aim_side, aim_down, aim_up, fire_side
+ *
+ * Distinct-pose counts come from lookout_guard_manifest.json's `animation`
+ * block and match DIR_DISTINCT_POSES exactly: idle 2, walk 6, aim 1, fire 3.
+ *
+ * DIRECTION RULES, from the manifest: down is the front, up is the back, side
+ * art faces +X and left is produced by horizontal mirroring. Up and down are
+ * NEVER mirrored into another direction.
+ *
+ * WEAPON RULE: the manifest states the pistol is baked into every aim and fire
+ * frame and says in as many words "DO NOT render any additional gun or handgun
+ * overlay". Those clips are therefore tagged `weapon: 'in-frame'`. The engine
+ * has no separate enemy weapon overlay to begin with, so exactly one pistol is
+ * visible; `tests/art-integration.test.ts` pins that.
+ *
+ * Unlike the legacy atlas this sheet HAS a real back view, so idle_up and
+ * walk_up are authored rather than falling back to the front pose.
+ */
+const LOOKOUT_V2: CharacterDef = (() => {
+  const c = dirClip('lookout_guard');
+  return {
+    key: 'lookout_guard',
+    verified: true,
+    observations: [
+      'Approved directional pair: two 144x160 sheets, 6 slots x 5 rows, 30 frames each.',
+      'Real back view present, so up is authored instead of reusing the front idle.',
+      'Side rows face +X and are mirrored for left; up and down are never mirrored.',
+      'Pistol is baked into aim and fire rows; no separate weapon overlay is drawn.',
+      'Feet anchor (12,30) with row 31 transparent, matching the existing actor contract.',
+    ],
+    clips: {
+      idle: {
+        down: c('idle_down', { fps: IDLE_FPS, loop: true }),
+        up: c('idle_up', { fps: IDLE_FPS, loop: true }),
+        right: c('idle_side', { fps: IDLE_FPS, loop: true }),
+        left: c('idle_side', { fps: IDLE_FPS, loop: true, flipX: true, source: 'mirrored' }),
+      },
+      walk: {
+        down: c('walk_down', { fps: WALK_FPS, loop: true }),
+        up: c('walk_up', { fps: WALK_FPS, loop: true }),
+        right: c('walk_side', { fps: WALK_FPS, loop: true }),
+        left: c('walk_side', { fps: WALK_FPS, loop: true, flipX: true, source: 'mirrored' }),
+      },
+      aim: {
+        down: c('aim_down', { weapon: 'in-frame' }),
+        up: c('aim_up', { weapon: 'in-frame' }),
+        right: c('aim_side', { weapon: 'in-frame' }),
+        left: c('aim_side', { weapon: 'in-frame', flipX: true, source: 'mirrored' }),
+      },
+      fire: {
+        // The sheet has no front or back firing row, exactly as Tempest's does
+        // not; the cardinal aim pose holds and the shot direction is unaffected.
+        down: c('aim_down', { weapon: 'in-frame', source: 'fallback', note: 'no fire_down row' }),
+        up: c('aim_up', { weapon: 'in-frame', source: 'fallback', note: 'no fire_up row' }),
+        right: c('fire_side', { fps: FIRE_FPS, weapon: 'in-frame' }),
+        left: c('fire_side', { fps: FIRE_FPS, weapon: 'in-frame', flipX: true, source: 'mirrored' }),
+      },
+      hit: {
+        down: c('idle_down', { source: 'fallback', note: 'no hit row in the directional format' }),
+        up: c('idle_up', { source: 'fallback' }),
+        right: c('idle_side', { source: 'fallback' }),
+        left: c('idle_side', { flipX: true, source: 'fallback' }),
+      },
+    },
+  } satisfies CharacterDef;
+})();
+
+/**
+ * Which Lookout appearance is active.
+ *
+ * SCOPE NOTE, reported rather than buried: the engine registers one definition
+ * per character key, so this switch changes ALL SEVEN Lookouts, not only the
+ * market guards. The brief prefers market-only, but per-instance sheet
+ * selection would mean threading a variant through CharacterDef, the animation
+ * registry and Enemy construction - a far larger change than this proof
+ * warrants. Flipping ART_MODE reverts every guard together.
+ */
+const LOOKOUT: CharacterDef = ART_MODE === 'valcendre_v2_proof' ? LOOKOUT_V2 : LOOKOUT_LEGACY;
+
+/**
+ * Muzzle origins for the Lookout's in-frame pistol, converted from
+ * lookout_guard_manifest.json `muzzle_origin_local_px` into offsets from the
+ * feet anchor (12,30) so they can be added to a world position directly.
+ *
+ * The manifest gives frame-local pixels; subtracting the anchor is the whole
+ * conversion. Mirrored x in the manifest is `23 - source x`, which lands at
+ * local 0 for the side pose, i.e. -12 from the anchor.
+ */
+export const LOOKOUT_MUZZLE_OFFSET: Record<Facing, { x: number; y: number }> = {
+  right: { x: 23 - 12, y: 18 - 30 },
+  left: { x: 0 - 12, y: 18 - 30 },
+  down: { x: 12 - 12, y: 24 - 30 },
+  up: { x: 19 - 12, y: 10 - 30 },
+};
 
 /**
  * Conservative definition for a sheet whose frame facings have NOT been

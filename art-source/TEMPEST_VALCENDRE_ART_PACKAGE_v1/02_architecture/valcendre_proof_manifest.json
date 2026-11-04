@@ -1,0 +1,648 @@
+{
+ "package": "TEMPEST_B2-03A_Architecture_Proof",
+ "task": "B.2-03A \u2014 Valcendre modular architecture and ground proof",
+ "palette": {
+  "source": "public/assets/tmp/valcendre_palette.json",
+  "schema_version": "2.0",
+  "environment_colours": 53,
+  "colours_used_by_this_package": 27,
+  "policy": "every opaque pixel is an exact approved palette hex; no new colours introduced"
+ },
+ "pixel_grid": {
+  "environment_tile": [
+   16,
+   16
+  ],
+  "native_view": [
+   480,
+   270
+  ]
+ },
+ "light_direction": "upper-left / northwest; cast shadow falls south and east",
+ "status": "PROOF \u2014 additive. Does NOT replace public/assets/environments/valcendre_tiles_16x16.png and makes no claim on its 48 indexed slots. Remapping and integration belong to the coding agent.",
+ "alpha": {
+  "rule": "binary only \u2014 alpha is 0 or 255, never between",
+  "verified_partial_alpha_pixels": 0,
+  "opaque_assets": [
+   "valcendre_proof_cobble_16x16.png",
+   "valcendre_proof_window_32x32.png",
+   "valcendre_proof_door_16x32.png"
+  ],
+  "assets_containing_transparency": {
+   "valcendre_proof_architecture_16x16.png": "only the three structural_shadow overlay tiles (indices 13, 14, 15) contain alpha-0 pixels; all 29 other tiles are fully opaque"
+  },
+  "no_baked_background": true
+ },
+ "files": [
+  {
+   "filename": "valcendre_proof_cobble_16x16.png",
+   "dimensions_px": [
+    64,
+    16
+   ],
+   "tile_px": [
+    16,
+    16
+   ],
+   "atlas": {
+    "columns": 4,
+    "rows": 1,
+    "tile_count": 4
+   },
+   "opaque": true,
+   "layer": "ground",
+   "tiles": [
+    {
+     "index": 0,
+     "name": "cobble_0",
+     "connection": "all four variants are freely interchangeable in any orientation of neighbour; no joint pixel lands on a tile boundary, so there is no 16px lattice"
+    },
+    {
+     "index": 1,
+     "name": "cobble_1",
+     "connection": "all four variants are freely interchangeable in any orientation of neighbour; no joint pixel lands on a tile boundary, so there is no 16px lattice"
+    },
+    {
+     "index": 2,
+     "name": "cobble_2",
+     "connection": "all four variants are freely interchangeable in any orientation of neighbour; no joint pixel lands on a tile boundary, so there is no 16px lattice"
+    },
+    {
+     "index": 3,
+     "name": "cobble_3",
+     "connection": "all four variants are freely interchangeable in any orientation of neighbour; no joint pixel lands on a tile boundary, so there is no 16px lattice"
+    }
+   ],
+   "notes": "coursed pav\u00e9. Horizontal joints at y2, y8, y13 give 6,5,5 spacing when stacked and never a joint on the 16px boundary. One wrap course is identical in all four variants, which is what makes them interchangeable."
+  },
+  {
+   "filename": "valcendre_proof_architecture_16x16.png",
+   "dimensions_px": [
+    128,
+    64
+   ],
+   "tile_px": [
+    16,
+    16
+   ],
+   "atlas": {
+    "columns": 8,
+    "rows": 4,
+    "tile_count": 32
+   },
+   "opaque": false,
+   "layer": "architecture, except indices 13-15 which are overlays",
+   "tiles": [
+    {
+     "index": 0,
+     "name": "wall_limestone_a",
+     "atlas_cell": {
+      "col": 0,
+      "row": 0
+     },
+     "pixel_origin": [
+      0,
+      0
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "fill. Tiles freely with wall_limestone_b; the two carry opposite bonds so neighbours never repeat. Joint rows at y0 and y8 align on every masonry tile."
+    },
+    {
+     "index": 1,
+     "name": "wall_limestone_b",
+     "atlas_cell": {
+      "col": 1,
+      "row": 0
+     },
+     "pixel_origin": [
+      16,
+      0
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "fill. Alternate bond for wall_limestone_a."
+    },
+    {
+     "index": 2,
+     "name": "wall_plaster",
+     "atlas_cell": {
+      "col": 2,
+      "row": 0
+     },
+     "pixel_origin": [
+      32,
+      0
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "fill. Quiet facade surface; no horizontal line of its own except a 2px worn band at y14-15."
+    },
+    {
+     "index": 3,
+     "name": "wall_plaster_course",
+     "atlas_cell": {
+      "col": 3,
+      "row": 0
+     },
+     "pixel_origin": [
+      48,
+      0
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "place as the TOP row of a 2-row facade; carries the single course line at y0-1."
+    },
+    {
+     "index": 4,
+     "name": "wall_edge_top",
+     "atlas_cell": {
+      "col": 4,
+      "row": 0
+     },
+     "pixel_origin": [
+      64,
+      0
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "top row of a wall run with no roof above it."
+    },
+    {
+     "index": 5,
+     "name": "wall_edge_bottom",
+     "atlas_cell": {
+      "col": 5,
+      "row": 0
+     },
+     "pixel_origin": [
+      80,
+      0
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "bottom row of a wall run meeting the ground."
+    },
+    {
+     "index": 6,
+     "name": "wall_edge_left",
+     "atlas_cell": {
+      "col": 6,
+      "row": 0
+     },
+     "pixel_origin": [
+      96,
+      0
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "west end of a wall run. Lit return face in column 0-1."
+    },
+    {
+     "index": 7,
+     "name": "wall_edge_right",
+     "atlas_cell": {
+      "col": 7,
+      "row": 0
+     },
+     "pixel_origin": [
+      112,
+      0
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "east end of a wall run. 1px recess at column 14, shaded return at 15."
+    },
+    {
+     "index": 8,
+     "name": "wall_corner_tl",
+     "atlas_cell": {
+      "col": 0,
+      "row": 1
+     },
+     "pixel_origin": [
+      0,
+      16
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "north-west outside corner. Carries both the lit return and the cap."
+    },
+    {
+     "index": 9,
+     "name": "wall_corner_tr",
+     "atlas_cell": {
+      "col": 1,
+      "row": 1
+     },
+     "pixel_origin": [
+      16,
+      16
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "north-east outside corner. Cap plus shaded return."
+    },
+    {
+     "index": 10,
+     "name": "wall_corner_bl",
+     "atlas_cell": {
+      "col": 2,
+      "row": 1
+     },
+     "pixel_origin": [
+      32,
+      16
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "south-west outside corner. Lit return plus footing."
+    },
+    {
+     "index": 11,
+     "name": "wall_corner_br",
+     "atlas_cell": {
+      "col": 3,
+      "row": 1
+     },
+     "pixel_origin": [
+      48,
+      16
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "south-east outside corner. Shaded return plus footing."
+    },
+    {
+     "index": 12,
+     "name": "wall_plinth",
+     "atlas_cell": {
+      "col": 4,
+      "row": 1
+     },
+     "pixel_origin": [
+      64,
+      16
+     ],
+     "family": "masonry",
+     "opacity": "opaque",
+     "connection": "bottom row of a building, between facade and paving."
+    },
+    {
+     "index": 13,
+     "name": "shade_footing",
+     "atlas_cell": {
+      "col": 5,
+      "row": 1
+     },
+     "pixel_origin": [
+      80,
+      16
+     ],
+     "family": "structural_shadow",
+     "opacity": "binary_alpha_overlay",
+     "connection": "OVERLAY on the paving row immediately south of a wall. Offset it 2-4px east for the north-west light."
+    },
+    {
+     "index": 14,
+     "name": "shade_under_eave",
+     "atlas_cell": {
+      "col": 6,
+      "row": 1
+     },
+     "pixel_origin": [
+      96,
+      16
+     ],
+     "family": "structural_shadow",
+     "opacity": "binary_alpha_overlay",
+     "connection": "OVERLAY on the facade row immediately below an eave."
+    },
+    {
+     "index": 15,
+     "name": "shade_corner",
+     "atlas_cell": {
+      "col": 7,
+      "row": 1
+     },
+     "pixel_origin": [
+      112,
+      16
+     ],
+     "family": "structural_shadow",
+     "opacity": "binary_alpha_overlay",
+     "connection": "OVERLAY on the paving column immediately east of a building."
+    },
+    {
+     "index": 16,
+     "name": "roof_slate_a",
+     "atlas_cell": {
+      "col": 0,
+      "row": 2
+     },
+     "pixel_origin": [
+      0,
+      32
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "roof plane fill. Alternate with roof_slate_b to break the 16px period."
+    },
+    {
+     "index": 17,
+     "name": "roof_slate_b",
+     "atlas_cell": {
+      "col": 1,
+      "row": 2
+     },
+     "pixel_origin": [
+      16,
+      32
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "roof plane fill, opposite bond, carries two sparse glints."
+    },
+    {
+     "index": 18,
+     "name": "roof_ridge",
+     "atlas_cell": {
+      "col": 2,
+      "row": 2
+     },
+     "pixel_origin": [
+      32,
+      32
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "top row of a roof. Lit cap at y0-1."
+    },
+    {
+     "index": 19,
+     "name": "roof_eave",
+     "atlas_cell": {
+      "col": 3,
+      "row": 2
+     },
+     "pixel_origin": [
+      48,
+      32
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "bottom row of a roof. 3px fascia at y11-14 and a recessed underside at y15."
+    },
+    {
+     "index": 20,
+     "name": "roof_edge_left",
+     "atlas_cell": {
+      "col": 4,
+      "row": 2
+     },
+     "pixel_origin": [
+      64,
+      32
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "west verge of a roof."
+    },
+    {
+     "index": 21,
+     "name": "roof_edge_right",
+     "atlas_cell": {
+      "col": 5,
+      "row": 2
+     },
+     "pixel_origin": [
+      80,
+      32
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "east verge of a roof."
+    },
+    {
+     "index": 22,
+     "name": "roof_corner_tl",
+     "atlas_cell": {
+      "col": 6,
+      "row": 2
+     },
+     "pixel_origin": [
+      96,
+      32
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "ridge meeting the west verge."
+    },
+    {
+     "index": 23,
+     "name": "roof_corner_tr",
+     "atlas_cell": {
+      "col": 7,
+      "row": 2
+     },
+     "pixel_origin": [
+      112,
+      32
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "ridge meeting the east verge."
+    },
+    {
+     "index": 24,
+     "name": "roof_corner_bl",
+     "atlas_cell": {
+      "col": 0,
+      "row": 3
+     },
+     "pixel_origin": [
+      0,
+      48
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "eave meeting the west verge (eave corner transition)."
+    },
+    {
+     "index": 25,
+     "name": "roof_corner_br",
+     "atlas_cell": {
+      "col": 1,
+      "row": 3
+     },
+     "pixel_origin": [
+      16,
+      48
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "eave meeting the east verge (eave corner transition)."
+    },
+    {
+     "index": 26,
+     "name": "roof_to_facade",
+     "atlas_cell": {
+      "col": 2,
+      "row": 3
+     },
+     "pixel_origin": [
+      32,
+      48
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "single-tile transition where an eave sits directly on plaster; use INSTEAD of roof_eave + wall_plaster when the building is only one roof row tall."
+    },
+    {
+     "index": 27,
+     "name": "roof_eave_corner_l",
+     "atlas_cell": {
+      "col": 3,
+      "row": 3
+     },
+     "pixel_origin": [
+      48,
+      48
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "eave underside wrapping onto a west masonry return."
+    },
+    {
+     "index": 28,
+     "name": "roof_eave_corner_r",
+     "atlas_cell": {
+      "col": 4,
+      "row": 3
+     },
+     "pixel_origin": [
+      64,
+      48
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "eave underside wrapping onto an east masonry return."
+    },
+    {
+     "index": 29,
+     "name": "roof_ridge_end_l",
+     "atlas_cell": {
+      "col": 5,
+      "row": 3
+     },
+     "pixel_origin": [
+      80,
+      48
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "ridge terminating at a west verge, bond B."
+    },
+    {
+     "index": 30,
+     "name": "roof_ridge_end_r",
+     "atlas_cell": {
+      "col": 6,
+      "row": 3
+     },
+     "pixel_origin": [
+      96,
+      48
+     ],
+     "family": "slate_roof",
+     "opacity": "opaque",
+     "connection": "ridge terminating at an east verge, bond B."
+    },
+    {
+     "index": 31,
+     "name": "threshold",
+     "atlas_cell": {
+      "col": 7,
+      "row": 3
+     },
+     "pixel_origin": [
+      112,
+      48
+     ],
+     "family": "ground_detail",
+     "opacity": "opaque",
+     "connection": "ground tile placed on the paving directly south of a door. Opaque; replaces the paving tile."
+    }
+   ]
+  },
+  {
+   "filename": "valcendre_proof_window_32x32.png",
+   "dimensions_px": [
+    32,
+    32
+   ],
+   "component": true,
+   "opaque": true,
+   "span_tiles": [
+    2,
+    2
+   ],
+   "anchor": {
+    "convention": "top-left, grid-aligned",
+    "note": "the 23x19 window motif sits at x4..x28, y2..y20 inside the 32x32 field; the rest is plaster_2 so the component drops onto a plaster facade with no halo. On a limestone facade the surrounding plaster must be masked or the component re-exported."
+   },
+   "layer": "architecture, same layer as the facade it replaces",
+   "notes": "shuttered limestone window. Weathered French blue shutters with louvre slats, dark aperture with mullion and transom, lit limestone sill with a recessed underside. Window openings do not imply passability."
+  },
+  {
+   "filename": "valcendre_proof_door_16x32.png",
+   "dimensions_px": [
+    16,
+    32
+   ],
+   "component": true,
+   "opaque": true,
+   "span_tiles": [
+    1,
+    2
+   ],
+   "anchor": {
+    "convention": "top-left, grid-aligned",
+    "note": "place so the lower tile coincides with the plinth row; the component's own base rows (y28-31) are the door's foot, and the separate `threshold` tile goes on the paving row below it."
+   },
+   "layer": "architecture",
+   "notes": "wooden doorway with limestone lintel, framed plank leaf, iron handle. DRAWN AS A COMPONENT ONLY \u2014 placement must not imply a traversable route where the engine has none."
+  }
+ ],
+ "suggested_assembly_order": [
+  "1. paving \u2014 fill the ground with the four cobble variants in any distribution",
+  "2. cast shadow \u2014 stamp shade_footing on the paving south of the building and shade_corner on the column east of it, offset 2-4px for the north-west light",
+  "3. threshold \u2014 place on the paving directly south of where the door will go",
+  "4. roof ridge row \u2014 roof_corner_tl, roof_ridge xN, roof_corner_tr",
+  "5. roof plane rows \u2014 roof_edge_left, alternating roof_slate_a / roof_slate_b, roof_edge_right",
+  "6. roof eave row \u2014 roof_corner_bl, roof_eave xN, roof_corner_br",
+  "7. facade upper row \u2014 wall_edge_left, wall_plaster_course xN, wall_edge_right",
+  "8. facade lower row \u2014 wall_edge_left, wall_plaster xN, wall_edge_right",
+  "9. plinth row \u2014 wall_corner_bl, wall_plinth xN, wall_corner_br",
+  "10. shade_under_eave overlay on the facade's top row",
+  "11. window and door components last, over the facade rows"
+ ],
+ "layering_requirements": {
+  "ground": "cobble and threshold are opaque ground; threshold replaces a paving tile rather than overlaying it",
+  "structural_shadow": "indices 13-15 are binary-alpha overlays and must draw ABOVE the ground and BELOW the building and any actor",
+  "architecture": "opaque; draws above the ground",
+  "components": "window and door draw at the same depth as the facade they sit in",
+  "actors": "unchanged; characters must still sort above ground and shadow and below nothing in this package"
+ },
+ "collision": {
+  "statement": "THIS PACKAGE MAKES NO COLLISION CLAIM. No footprint, cover definition, map coordinate or mission value is proposed or implied. Which of these tiles are solid is entirely the coding agent's decision.",
+  "art_side_observation": "the eave band is part of the building's solid visual footprint per art bible 5.2, but whether it collides is not an art decision"
+ },
+ "reference_images": [
+  "valcendre_proof_building_assembly.png \u2014 native 480x270, assembled from exported tiles only",
+  "valcendre_proof_assembly_3x.png \u2014 the same scene at integer 3x",
+  "valcendre_proof_contact_sheet.png \u2014 every tile at 6x with transparency checkered",
+  "valcendre_proof_ground_tests.png \u2014 four paving distributions over 12x8 tiles",
+  "valcendre_proof_seam_tests.png \u2014 masonry block with all four corners, and a roof with ridge and eave"
+ ]
+}

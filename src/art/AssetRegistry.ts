@@ -128,7 +128,23 @@ export const CHARACTER_SHEETS: Record<CharacterKey, CharacterSheetSpec[]> = {
       ...DIRECTIONAL,
     },
   ],
-  lookout_guard: [poseAtlas('lookout_guard')],
+  // B.2-04: the approved B.2-03C-2R directional pair is registered IN ADDITION
+  // to the pose atlas, not instead of it. Keeping the atlas loaded is what lets
+  // ART_MODE flip back to 'legacy' and lets the regression tests assert that
+  // the legacy asset is still available.
+  lookout_guard: [
+    poseAtlas('lookout_guard'),
+    {
+      key: textureKey.characterSheet('lookout_guard', 'dir_a'),
+      path: 'assets/characters/lookout_guard_24x32_dir.png',
+      ...DIRECTIONAL,
+    },
+    {
+      key: textureKey.characterSheet('lookout_guard', 'dir_b'),
+      path: 'assets/characters/lookout_guard_24x32_dir_b.png',
+      ...DIRECTIONAL,
+    },
+  ],
   enforcer: [poseAtlas('enforcer')],
   zealot_cultist: [poseAtlas('zealot_cultist')],
   ascendant_cultist: [poseAtlas('ascendant_cultist')],
@@ -336,6 +352,76 @@ const BOSS: AssetEntry[] = [
   },
 ];
 
+/**
+ * Valcendre v2 proof art (Phase B.2-04), from TEMPEST_VALCENDRE_ART_PACKAGE_v1.
+ *
+ * ADDITIVE. Every legacy entry above keeps its key and path; these are new keys
+ * pointing at newly copied files, so the 48-slot tilesheet and all 45 legacy
+ * props continue to load exactly as before.
+ *
+ * `lookout_guard_walk_side_24x32.png` is intentionally absent: the art manifest
+ * states it is byte-identical to row 0 of the secondary sheet, so registering it
+ * would give one animation two sources. The file is copied for provenance and
+ * tests assert it never becomes a texture.
+ */
+const VALCENDRE_V2: AssetEntry[] = [
+  {
+    key: 'tiles.valcendre.v2.cobble',
+    path: 'assets/environments/valcendre_proof_cobble_16x16.png',
+    kind: 'spritesheet',
+    width: 64,
+    height: 16,
+    frameWidth: 16,
+    frameHeight: 16,
+    frameCount: 4,
+  },
+  {
+    key: 'tiles.valcendre.v2.architecture',
+    path: 'assets/environments/valcendre_proof_architecture_16x16.png',
+    kind: 'spritesheet',
+    width: 128,
+    height: 64,
+    frameWidth: 16,
+    frameHeight: 16,
+    frameCount: 32,
+  },
+  {
+    key: 'tiles.valcendre.v2.window',
+    path: 'assets/environments/valcendre_proof_window_32x32.png',
+    kind: 'image',
+    width: 32,
+    height: 32,
+  },
+  {
+    key: 'tiles.valcendre.v2.door',
+    path: 'assets/environments/valcendre_proof_door_16x32.png',
+    kind: 'image',
+    width: 16,
+    height: 32,
+  },
+  {
+    key: textureKey.prop('valcendre', 'fountain_v2'),
+    path: 'assets/props/valcendre/valcendre_fountain_32x32.png',
+    kind: 'image',
+    width: 32,
+    height: 32,
+  },
+  {
+    key: textureKey.prop('valcendre', 'market_stall_base'),
+    path: 'assets/props/valcendre/valcendre_market_stall_base_80x48.png',
+    kind: 'image',
+    width: 80,
+    height: 48,
+  },
+  {
+    key: textureKey.prop('valcendre', 'market_stall_canopy'),
+    path: 'assets/props/valcendre/valcendre_market_stall_canopy_80x48.png',
+    kind: 'image',
+    width: 80,
+    height: 48,
+  },
+];
+
 export const ASSETS: AssetEntry[] = [
   ...CHARACTERS,
   ...PORTRAITS,
@@ -344,6 +430,7 @@ export const ASSETS: AssetEntry[] = [
   ...FX,
   ...UI,
   ...BOSS,
+  ...VALCENDRE_V2,
 ];
 
 export const ASSETS_BY_KEY: Map<string, AssetEntry> = new Map(ASSETS.map((a) => [a.key, a]));
