@@ -380,42 +380,136 @@ function route(id, points) {
 /**
  * Objects.
  *
- * TEMPORARY OBJECTIVE SET. Phase C.1B-01 is geometry only: the existing V1/V2/
- * V3/VX chain still has to be completable, so the van, log and inscription move
- * to sensible places in the new garage and nothing is gated behind anything new.
- *
- * Future objective sites are reserved as `reserved` objects. The scene asks for
- * specific object types and ignores unknown ones, so these carry position and
- * intent into C.1B-2 without creating a dependency or a lock today.
- *
- * Enemies stay at three Lookouts. The seven-guard encounter placement is
- * C.1B-3.
+ * The objective chain is the C.1B-02 one and is NOT touched here. Phase C.1B-03
+ * changes exactly one thing: the enemy roster goes from three Lookouts to seven,
+ * across three encounters.
  */
 export const OBJECTS = [
   pt('spawn', 'spawn', 10, 66, { facing: 0 }),
 
-  // --- patrol routes (three guards; C.1B-3 expands to seven) ---
+  // ====================================================================
+  // ENEMY ROSTER - seven Lookouts, three encounters (Phase C.1B-03)
+  //
+  // Facing is degrees, screen convention: 0 east, 90 SOUTH, 180 west, 270 north.
+  //
+  // Coverage comes from FACING AND POSITION, never from a wider cone: the 100
+  // degree cone, the 176 px range and the 170 px engagement range are global
+  // and untouched.
+  //
+  // L1, L3 and L5 are sentries with short authored position shifts. They are
+  // deliberately NOT given 450 px loops - a sentry that wanders is not watching
+  // anything. L2, L4, L6 and L7 are the mobile patrols and carry the distance.
+  // ====================================================================
+
+  // --- ENCOUNTER 1: market square (L1, L2, L3) ------------------------
+  // Waypoint 0 of every route is also the guard's spawn post, and each post was
+  // chosen by maximising how much of the critical path that guard's SPAWN cone
+  // covers (tools/post-optimise.ts), subject to keeping the guard inside its
+  // authored role area. That is the C.1A section 1.4 exposure measurement, so
+  // the placement is optimised against the metric the design target is stated in.
+
+  // L1: south-entrance sentry. Faces east-south-east ACROSS the approach the
+  // player must cross, not down it, so arriving from the alley neck is not an
+  // instant sighting - the player is seen only once they commit to crossing.
   ...route('l1', [
-    [13, 57],
-    [14, 53],
-    [19, 53],
+    [13, 54],
+    [18, 53],
   ]),
+  // L2: the mobile market patrol. Posted at the east-lane mouth looking back
+  // north-west over the square, then one full circuit past both market halls
+  // and both V1 evidence sites, so no single piece of cover is safe for long.
   ...route('l2', [
-    [17, 39],
-    [32, 40],
-    [32, 50],
-    [16, 49],
+    [34, 48],
+    [24, 50],
+    [15, 48],
+    [15, 41],
+    [24, 40],
+    [33, 44],
   ]),
+  // L3: covered-market sentry. Posted looking south-east into the square (the
+  // approach to the east lane), shifting west to the mouth of the north-west
+  // passage that is the garden branch. Two roles, one short authored shift.
+  //
+  // The west end of that shift is also the one place a market shout has clear
+  // line of sound through the passage to L4 in the bakery yard - the authored
+  // link that lets a market alert raise pressure on the garden route.
   ...route('l3', [
-    [60, 41],
-    [80, 40],
-    [76, 22],
-    [60, 23],
+    [26, 34],
+    [17, 32],
   ]),
 
-  pt('enemy_l1', 'enemy', 14, 53, { kind: 'lookout', route: 'l1', facing: 90 }),
-  pt('enemy_l2', 'enemy', 17, 39, { kind: 'lookout', route: 'l2', facing: 0 }),
-  pt('enemy_l3', 'enemy', 60, 41, { kind: 'lookout', route: 'l3', facing: 0 }),
+  // --- ENCOUNTER 2: bakery yard, on the garden route (L4) -------------
+  // The garden branch is almost entirely authored shadow; the bakery yard is
+  // the one lit space on it. L4 patrols the lit interior only, so the shadowed
+  // west strip (x6-10) stays a genuine bypass, and crouching in it holds
+  // detection at the 28/s shadow rate instead of 80/s.
+  //
+  // L4 contributes nothing to the MAIN critical path by design - it is the
+  // garden branch's obstacle, and the garden path is measured separately.
+  ...route('l4', [
+    [20, 20],
+    [12, 22],
+    [12, 29],
+    [17, 27],
+  ]),
+
+  // --- ENCOUNTER 3: depot courtyard and garage (L5, L6, L7) -----------
+  // L5: south-gate sentry, posted in the gate itself looking back west down
+  // main street - the one approach the short route must walk. Shifts north to
+  // glance across the courtyard's south lane.
+  ...route('l5', [
+    [78, 45],
+    [71, 41],
+  ]),
+  // L6: the long courtyard patrol. Posted at the south-west corner looking
+  // north-west up the sheltered garden-side approach to the office, then a
+  // full circuit of the office block. This is what stops the player sprinting
+  // the 36-tile yard unseen.
+  //
+  // The last waypoint is the dock ramp on the courtyard's north-east edge. The
+  // courtyard and the loading dock are open to each other there, so it is the
+  // one position with clear line of sound to L7 - the authored link that lets a
+  // courtyard alert raise pressure in the garage.
+  ...route('l6', [
+    [56, 42],
+    [61, 40],
+    [78, 40],
+    [84, 20],
+    [65, 23],
+    [52, 27],
+    [51, 36],
+  ]),
+  // L7: garage and loading-dock security, and the final security problem.
+  //
+  // DOOR-AWARE BY CONSTRUCTION, NOT BY SPECIAL CASE. L7 spawns INSIDE the
+  // garage. Waypoints 0-2 are in the garage; waypoints 3-4 are in the loading
+  // dock, which is on the far side of the shutter. While the doors are locked
+  // the dock waypoints have no path, so Enemy.selectReachableWaypoint skips
+  // them and L7 confines itself to the garage. The moment the ledger grants
+  // the key and both doors open, the dock joins its circuit. The guard never
+  // crosses a sealed door and never stalls against one, because the patrol
+  // reads the same door-aware Grid as line of sight, bullets and A*.
+  //
+  // Its post faces north-east over the transport bay. MEASURED consequence:
+  // both entrances sit beyond the 176 px sight range from that post (195 px at
+  // the courtyard door, 210 px at the shutter), so getting IN either way is
+  // free and neither door is a trap - but the transport bay (80 px) and the
+  // cultist (176 px) are inside the cone, so working the garage is the problem.
+  ...route('l7', [
+    [69, 16],
+    [76, 13],
+    [66, 9],
+    [87, 11],
+    [88, 17],
+  ]),
+
+  pt('enemy_l1', 'enemy', 13, 54, { kind: 'lookout', route: 'l1', facing: 23 }),
+  pt('enemy_l2', 'enemy', 34, 48, { kind: 'lookout', route: 'l2', facing: 315 }),
+  pt('enemy_l3', 'enemy', 26, 34, { kind: 'lookout', route: 'l3', facing: 45 }),
+  pt('enemy_l4', 'enemy', 20, 20, { kind: 'lookout', route: 'l4', facing: 180 }),
+  pt('enemy_l5', 'enemy', 78, 45, { kind: 'lookout', route: 'l5', facing: 202 }),
+  pt('enemy_l6', 'enemy', 56, 42, { kind: 'lookout', route: 'l6', facing: 293 }),
+  pt('enemy_l7', 'enemy', 69, 16, { kind: 'lookout', route: 'l7', facing: 315 }),
 
   // --- the market distraction (unchanged) ---
   pt('interact_radio', 'interactable', 31, 34, {

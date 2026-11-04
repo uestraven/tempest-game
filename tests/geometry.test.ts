@@ -470,9 +470,9 @@ describe('8-9. mission anchors and existing interactions', () => {
     }
   });
 
-  it('keeps the enemy system functional with the existing three lookouts', () => {
+  it('keeps the enemy system functional across all seven lookouts', () => {
     const enemies = byType('enemy');
-    expect(enemies).toHaveLength(3);
+    expect(enemies).toHaveLength(7);
     for (const e of enemies) {
       expect(e.props.kind).toBe('lookout');
       const route = byType('waypoint').filter((w) => w.props.route === e.props.route);

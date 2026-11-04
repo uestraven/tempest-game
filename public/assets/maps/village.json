@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 2,
- "nextobjectid": 101,
+ "nextobjectid": 122,
  "properties": [
   {
    "name": "level",
@@ -60083,7 +60083,7 @@
      "type": "waypoint",
      "class": "waypoint",
      "x": 216,
-     "y": 920,
+     "y": 872,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -60107,7 +60107,7 @@
      "name": "wp_l1_1",
      "type": "waypoint",
      "class": "waypoint",
-     "x": 232,
+     "x": 296,
      "y": 856,
      "width": 0,
      "height": 0,
@@ -60129,36 +60129,11 @@
     },
     {
      "id": 4,
-     "name": "wp_l1_2",
-     "type": "waypoint",
-     "class": "waypoint",
-     "x": 312,
-     "y": 856,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "route",
-       "type": "string",
-       "value": "l1"
-      },
-      {
-       "name": "index",
-       "type": "float",
-       "value": 2
-      }
-     ]
-    },
-    {
-     "id": 5,
      "name": "wp_l2_0",
      "type": "waypoint",
      "class": "waypoint",
-     "x": 280,
-     "y": 632,
+     "x": 552,
+     "y": 776,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -60178,36 +60153,11 @@
      ]
     },
     {
-     "id": 6,
+     "id": 5,
      "name": "wp_l2_1",
      "type": "waypoint",
      "class": "waypoint",
-     "x": 520,
-     "y": 648,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "route",
-       "type": "string",
-       "value": "l2"
-      },
-      {
-       "name": "index",
-       "type": "float",
-       "value": 1
-      }
-     ]
-    },
-    {
-     "id": 7,
-     "name": "wp_l2_2",
-     "type": "waypoint",
-     "class": "waypoint",
-     "x": 520,
+     "x": 392,
      "y": 808,
      "width": 0,
      "height": 0,
@@ -60223,17 +60173,42 @@
       {
        "name": "index",
        "type": "float",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": "wp_l2_2",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 248,
+     "y": 776,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l2"
+      },
+      {
+       "name": "index",
+       "type": "float",
        "value": 2
       }
      ]
     },
     {
-     "id": 8,
+     "id": 7,
      "name": "wp_l2_3",
      "type": "waypoint",
      "class": "waypoint",
-     "x": 264,
-     "y": 792,
+     "x": 248,
+     "y": 664,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -60253,12 +60228,62 @@
      ]
     },
     {
+     "id": 8,
+     "name": "wp_l2_4",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 392,
+     "y": 648,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l2"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 4
+      }
+     ]
+    },
+    {
      "id": 9,
+     "name": "wp_l2_5",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 536,
+     "y": 712,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l2"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 5
+      }
+     ]
+    },
+    {
+     "id": 10,
      "name": "wp_l3_0",
      "type": "waypoint",
      "class": "waypoint",
-     "x": 968,
-     "y": 664,
+     "x": 424,
+     "y": 552,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -60278,12 +60303,12 @@
      ]
     },
     {
-     "id": 10,
+     "id": 11,
      "name": "wp_l3_1",
      "type": "waypoint",
      "class": "waypoint",
-     "x": 1288,
-     "y": 648,
+     "x": 280,
+     "y": 520,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -60303,11 +60328,36 @@
      ]
     },
     {
-     "id": 11,
-     "name": "wp_l3_2",
+     "id": 12,
+     "name": "wp_l4_0",
      "type": "waypoint",
      "class": "waypoint",
-     "x": 1224,
+     "x": 328,
+     "y": 328,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l4"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "name": "wp_l4_1",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 200,
      "y": 360,
      "width": 0,
      "height": 0,
@@ -60318,7 +60368,32 @@
       {
        "name": "route",
        "type": "string",
-       "value": "l3"
+       "value": "l4"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "name": "wp_l4_2",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 200,
+     "y": 472,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l4"
       },
       {
        "name": "index",
@@ -60328,11 +60403,186 @@
      ]
     },
     {
-     "id": 12,
-     "name": "wp_l3_3",
+     "id": 15,
+     "name": "wp_l4_3",
      "type": "waypoint",
      "class": "waypoint",
-     "x": 968,
+     "x": 280,
+     "y": 440,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l4"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "name": "wp_l5_0",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 1256,
+     "y": 728,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l5"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "name": "wp_l5_1",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 1144,
+     "y": 664,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l5"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "name": "wp_l6_0",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 904,
+     "y": 680,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l6"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "name": "wp_l6_1",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 984,
+     "y": 648,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l6"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "name": "wp_l6_2",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 1256,
+     "y": 648,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l6"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "name": "wp_l6_3",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 1352,
+     "y": 328,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l6"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "name": "wp_l6_4",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 1048,
      "y": 376,
      "width": 0,
      "height": 0,
@@ -60343,7 +60593,157 @@
       {
        "name": "route",
        "type": "string",
-       "value": "l3"
+       "value": "l6"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "wp_l6_5",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 840,
+     "y": 440,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l6"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 5
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "wp_l6_6",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 824,
+     "y": 584,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l6"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "wp_l7_0",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 1112,
+     "y": 264,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l7"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "name": "wp_l7_1",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 1224,
+     "y": 216,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l7"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "name": "wp_l7_2",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 1064,
+     "y": 152,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l7"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "name": "wp_l7_3",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 1400,
+     "y": 184,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l7"
       },
       {
        "name": "index",
@@ -60353,12 +60753,37 @@
      ]
     },
     {
-     "id": 13,
+     "id": 29,
+     "name": "wp_l7_4",
+     "type": "waypoint",
+     "class": "waypoint",
+     "x": 1416,
+     "y": 280,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l7"
+      },
+      {
+       "name": "index",
+       "type": "float",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": 30,
      "name": "enemy_l1",
      "type": "enemy",
      "class": "enemy",
-     "x": 232,
-     "y": 856,
+     "x": 216,
+     "y": 872,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -60378,17 +60803,17 @@
       {
        "name": "facing",
        "type": "float",
-       "value": 90
+       "value": 23
       }
      ]
     },
     {
-     "id": 14,
+     "id": 31,
      "name": "enemy_l2",
      "type": "enemy",
      "class": "enemy",
-     "x": 280,
-     "y": 632,
+     "x": 552,
+     "y": 776,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -60408,17 +60833,17 @@
       {
        "name": "facing",
        "type": "float",
-       "value": 0
+       "value": 315
       }
      ]
     },
     {
-     "id": 15,
+     "id": 32,
      "name": "enemy_l3",
      "type": "enemy",
      "class": "enemy",
-     "x": 968,
-     "y": 664,
+     "x": 424,
+     "y": 552,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -60438,12 +60863,132 @@
       {
        "name": "facing",
        "type": "float",
-       "value": 0
+       "value": 45
       }
      ]
     },
     {
-     "id": 16,
+     "id": 33,
+     "name": "enemy_l4",
+     "type": "enemy",
+     "class": "enemy",
+     "x": 328,
+     "y": 328,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "lookout"
+      },
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l4"
+      },
+      {
+       "name": "facing",
+       "type": "float",
+       "value": 180
+      }
+     ]
+    },
+    {
+     "id": 34,
+     "name": "enemy_l5",
+     "type": "enemy",
+     "class": "enemy",
+     "x": 1256,
+     "y": 728,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "lookout"
+      },
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l5"
+      },
+      {
+       "name": "facing",
+       "type": "float",
+       "value": 202
+      }
+     ]
+    },
+    {
+     "id": 35,
+     "name": "enemy_l6",
+     "type": "enemy",
+     "class": "enemy",
+     "x": 904,
+     "y": 680,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "lookout"
+      },
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l6"
+      },
+      {
+       "name": "facing",
+       "type": "float",
+       "value": 293
+      }
+     ]
+    },
+    {
+     "id": 36,
+     "name": "enemy_l7",
+     "type": "enemy",
+     "class": "enemy",
+     "x": 1112,
+     "y": 264,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "lookout"
+      },
+      {
+       "name": "route",
+       "type": "string",
+       "value": "l7"
+      },
+      {
+       "name": "facing",
+       "type": "float",
+       "value": 315
+      }
+     ]
+    },
+    {
+     "id": 37,
      "name": "interact_radio",
      "type": "interactable",
      "class": "interactable",
@@ -60478,7 +61023,7 @@
      ]
     },
     {
-     "id": 17,
+     "id": 38,
      "name": "item_medkit_market",
      "type": "item",
      "class": "item",
@@ -60498,7 +61043,7 @@
      ]
     },
     {
-     "id": 18,
+     "id": 39,
      "name": "item_ammo_street",
      "type": "item",
      "class": "item",
@@ -60518,7 +61063,7 @@
      ]
     },
     {
-     "id": 19,
+     "id": 40,
      "name": "item_ammo_lane",
      "type": "item",
      "class": "item",
@@ -60538,7 +61083,7 @@
      ]
     },
     {
-     "id": 20,
+     "id": 41,
      "name": "item_medkit_courtyard",
      "type": "item",
      "class": "item",
@@ -60558,7 +61103,7 @@
      ]
     },
     {
-     "id": 21,
+     "id": 42,
      "name": "interact_tracks",
      "type": "interactable",
      "class": "interactable",
@@ -60593,7 +61138,7 @@
      ]
     },
     {
-     "id": 22,
+     "id": 43,
      "name": "interact_stall",
      "type": "interactable",
      "class": "interactable",
@@ -60628,7 +61173,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 44,
      "name": "interact_waybill",
      "type": "interactable",
      "class": "interactable",
@@ -60668,7 +61213,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 45,
      "name": "trigger_overheard",
      "type": "trigger",
      "class": "trigger",
@@ -60702,7 +61247,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 46,
      "name": "trigger_depot_street",
      "type": "trigger",
      "class": "trigger",
@@ -60731,7 +61276,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 47,
      "name": "trigger_depot_garden",
      "type": "trigger",
      "class": "trigger",
@@ -60760,7 +61305,7 @@
      ]
     },
     {
-     "id": 27,
+     "id": 48,
      "name": "interact_ledger",
      "type": "interactable",
      "class": "interactable",
@@ -60800,7 +61345,7 @@
      ]
     },
     {
-     "id": 28,
+     "id": 49,
      "name": "interact_van",
      "type": "interactable",
      "class": "interactable",
@@ -60840,7 +61385,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 50,
      "name": "actor_cultist",
      "type": "story",
      "class": "story",
@@ -60880,7 +61425,7 @@
      ]
     },
     {
-     "id": 30,
+     "id": 51,
      "name": "interact_inscription",
      "type": "interactable",
      "class": "interactable",
@@ -60920,7 +61465,7 @@
      ]
     },
     {
-     "id": 31,
+     "id": 52,
      "name": "interact_hymn",
      "type": "interactable",
      "class": "interactable",
@@ -60945,7 +61490,7 @@
      ]
     },
     {
-     "id": 32,
+     "id": 53,
      "name": "checkpoint_entry",
      "type": "checkpoint",
      "class": "checkpoint",
@@ -60965,7 +61510,7 @@
      ]
     },
     {
-     "id": 33,
+     "id": 54,
      "name": "checkpoint_market",
      "type": "checkpoint",
      "class": "checkpoint",
@@ -60985,7 +61530,7 @@
      ]
     },
     {
-     "id": 34,
+     "id": 55,
      "name": "checkpoint_office",
      "type": "checkpoint",
      "class": "checkpoint",
@@ -61005,7 +61550,7 @@
      ]
     },
     {
-     "id": 35,
+     "id": 56,
      "name": "checkpoint_belial",
      "type": "checkpoint",
      "class": "checkpoint",
@@ -61025,7 +61570,7 @@
      ]
     },
     {
-     "id": 36,
+     "id": 57,
      "name": "exit_north",
      "type": "exit",
      "class": "exit",
@@ -61049,7 +61594,7 @@
      ]
     },
     {
-     "id": 37,
+     "id": 58,
      "name": "decor_van",
      "type": "decor",
      "class": "decor",
@@ -61074,7 +61619,7 @@
      ]
     },
     {
-     "id": 38,
+     "id": 59,
      "name": "door_garage_courtyard",
      "type": "door",
      "class": "door",
@@ -61113,7 +61658,7 @@
      ]
     },
     {
-     "id": 39,
+     "id": 60,
      "name": "door_garage_dock",
      "type": "door",
      "class": "door",
@@ -61152,7 +61697,7 @@
      ]
     },
     {
-     "id": 40,
+     "id": 61,
      "name": "prop_lamppost_0",
      "type": "prop",
      "class": "prop",
@@ -61177,7 +61722,7 @@
      ]
     },
     {
-     "id": 41,
+     "id": 62,
      "name": "prop_barrels_1",
      "type": "prop",
      "class": "prop",
@@ -61202,7 +61747,7 @@
      ]
     },
     {
-     "id": 42,
+     "id": 63,
      "name": "prop_clothesline_2",
      "type": "prop",
      "class": "prop",
@@ -61227,7 +61772,7 @@
      ]
     },
     {
-     "id": 43,
+     "id": 64,
      "name": "prop_flower_pot_3",
      "type": "prop",
      "class": "prop",
@@ -61252,7 +61797,7 @@
      ]
     },
     {
-     "id": 44,
+     "id": 65,
      "name": "prop_bench_4",
      "type": "prop",
      "class": "prop",
@@ -61277,7 +61822,7 @@
      ]
     },
     {
-     "id": 45,
+     "id": 66,
      "name": "prop_fountain_5",
      "type": "prop",
      "class": "prop",
@@ -61302,7 +61847,7 @@
      ]
     },
     {
-     "id": 46,
+     "id": 67,
      "name": "prop_hay_cart_6",
      "type": "prop",
      "class": "prop",
@@ -61327,7 +61872,7 @@
      ]
     },
     {
-     "id": 47,
+     "id": 68,
      "name": "prop_tree_7",
      "type": "prop",
      "class": "prop",
@@ -61352,7 +61897,7 @@
      ]
     },
     {
-     "id": 48,
+     "id": 69,
      "name": "prop_tree_8",
      "type": "prop",
      "class": "prop",
@@ -61377,7 +61922,7 @@
      ]
     },
     {
-     "id": 49,
+     "id": 70,
      "name": "prop_bench_9",
      "type": "prop",
      "class": "prop",
@@ -61402,7 +61947,7 @@
      ]
     },
     {
-     "id": 50,
+     "id": 71,
      "name": "prop_bench_10",
      "type": "prop",
      "class": "prop",
@@ -61427,7 +61972,7 @@
      ]
     },
     {
-     "id": 51,
+     "id": 72,
      "name": "prop_barrels_11",
      "type": "prop",
      "class": "prop",
@@ -61452,7 +61997,7 @@
      ]
     },
     {
-     "id": 52,
+     "id": 73,
      "name": "prop_flower_box_12",
      "type": "prop",
      "class": "prop",
@@ -61477,7 +62022,7 @@
      ]
     },
     {
-     "id": 53,
+     "id": 74,
      "name": "prop_flower_pot_13",
      "type": "prop",
      "class": "prop",
@@ -61502,7 +62047,7 @@
      ]
     },
     {
-     "id": 54,
+     "id": 75,
      "name": "prop_lamppost_14",
      "type": "prop",
      "class": "prop",
@@ -61527,7 +62072,7 @@
      ]
     },
     {
-     "id": 55,
+     "id": 76,
      "name": "prop_lamppost_15",
      "type": "prop",
      "class": "prop",
@@ -61552,7 +62097,7 @@
      ]
     },
     {
-     "id": 56,
+     "id": 77,
      "name": "prop_clothesline_16",
      "type": "prop",
      "class": "prop",
@@ -61577,7 +62122,7 @@
      ]
     },
     {
-     "id": 57,
+     "id": 78,
      "name": "prop_french_flag_17",
      "type": "prop",
      "class": "prop",
@@ -61602,7 +62147,7 @@
      ]
     },
     {
-     "id": 58,
+     "id": 79,
      "name": "prop_village_cross_18",
      "type": "prop",
      "class": "prop",
@@ -61627,7 +62172,7 @@
      ]
     },
     {
-     "id": 59,
+     "id": 80,
      "name": "prop_stone_cover_19",
      "type": "prop",
      "class": "prop",
@@ -61652,7 +62197,7 @@
      ]
     },
     {
-     "id": 60,
+     "id": 81,
      "name": "prop_tree_20",
      "type": "prop",
      "class": "prop",
@@ -61677,7 +62222,7 @@
      ]
     },
     {
-     "id": 61,
+     "id": 82,
      "name": "prop_tree_21",
      "type": "prop",
      "class": "prop",
@@ -61702,7 +62247,7 @@
      ]
     },
     {
-     "id": 62,
+     "id": 83,
      "name": "prop_flower_box_22",
      "type": "prop",
      "class": "prop",
@@ -61727,7 +62272,7 @@
      ]
     },
     {
-     "id": 63,
+     "id": 84,
      "name": "prop_flower_box_23",
      "type": "prop",
      "class": "prop",
@@ -61752,7 +62297,7 @@
      ]
     },
     {
-     "id": 64,
+     "id": 85,
      "name": "prop_barrels_24",
      "type": "prop",
      "class": "prop",
@@ -61777,7 +62322,7 @@
      ]
     },
     {
-     "id": 65,
+     "id": 86,
      "name": "prop_hay_cart_25",
      "type": "prop",
      "class": "prop",
@@ -61802,7 +62347,7 @@
      ]
     },
     {
-     "id": 66,
+     "id": 87,
      "name": "prop_clothesline_26",
      "type": "prop",
      "class": "prop",
@@ -61827,7 +62372,7 @@
      ]
     },
     {
-     "id": 67,
+     "id": 88,
      "name": "prop_flower_pot_27",
      "type": "prop",
      "class": "prop",
@@ -61852,7 +62397,7 @@
      ]
     },
     {
-     "id": 68,
+     "id": 89,
      "name": "prop_village_cross_28",
      "type": "prop",
      "class": "prop",
@@ -61877,7 +62422,7 @@
      ]
     },
     {
-     "id": 69,
+     "id": 90,
      "name": "prop_barrels_29",
      "type": "prop",
      "class": "prop",
@@ -61902,7 +62447,7 @@
      ]
     },
     {
-     "id": 70,
+     "id": 91,
      "name": "prop_stone_cover_30",
      "type": "prop",
      "class": "prop",
@@ -61927,7 +62472,7 @@
      ]
     },
     {
-     "id": 71,
+     "id": 92,
      "name": "prop_clothesline_31",
      "type": "prop",
      "class": "prop",
@@ -61952,7 +62497,7 @@
      ]
     },
     {
-     "id": 72,
+     "id": 93,
      "name": "prop_lamppost_32",
      "type": "prop",
      "class": "prop",
@@ -61977,7 +62522,7 @@
      ]
     },
     {
-     "id": 73,
+     "id": 94,
      "name": "prop_lamppost_33",
      "type": "prop",
      "class": "prop",
@@ -62002,7 +62547,7 @@
      ]
     },
     {
-     "id": 74,
+     "id": 95,
      "name": "prop_lamppost_34",
      "type": "prop",
      "class": "prop",
@@ -62027,7 +62572,7 @@
      ]
     },
     {
-     "id": 75,
+     "id": 96,
      "name": "prop_flower_box_35",
      "type": "prop",
      "class": "prop",
@@ -62052,7 +62597,7 @@
      ]
     },
     {
-     "id": 76,
+     "id": 97,
      "name": "prop_barrels_36",
      "type": "prop",
      "class": "prop",
@@ -62077,7 +62622,7 @@
      ]
     },
     {
-     "id": 77,
+     "id": 98,
      "name": "prop_hay_cart_37",
      "type": "prop",
      "class": "prop",
@@ -62102,7 +62647,7 @@
      ]
     },
     {
-     "id": 78,
+     "id": 99,
      "name": "prop_bench_38",
      "type": "prop",
      "class": "prop",
@@ -62127,7 +62672,7 @@
      ]
     },
     {
-     "id": 79,
+     "id": 100,
      "name": "prop_stone_cover_39",
      "type": "prop",
      "class": "prop",
@@ -62152,7 +62697,7 @@
      ]
     },
     {
-     "id": 80,
+     "id": 101,
      "name": "prop_clothesline_40",
      "type": "prop",
      "class": "prop",
@@ -62177,7 +62722,7 @@
      ]
     },
     {
-     "id": 81,
+     "id": 102,
      "name": "prop_tree_41",
      "type": "prop",
      "class": "prop",
@@ -62202,7 +62747,7 @@
      ]
     },
     {
-     "id": 82,
+     "id": 103,
      "name": "prop_barrels_42",
      "type": "prop",
      "class": "prop",
@@ -62227,7 +62772,7 @@
      ]
     },
     {
-     "id": 83,
+     "id": 104,
      "name": "prop_lamppost_43",
      "type": "prop",
      "class": "prop",
@@ -62252,7 +62797,7 @@
      ]
     },
     {
-     "id": 84,
+     "id": 105,
      "name": "prop_barrels_44",
      "type": "prop",
      "class": "prop",
@@ -62277,7 +62822,7 @@
      ]
     },
     {
-     "id": 85,
+     "id": 106,
      "name": "prop_barrels_45",
      "type": "prop",
      "class": "prop",
@@ -62302,7 +62847,7 @@
      ]
     },
     {
-     "id": 86,
+     "id": 107,
      "name": "prop_barrels_46",
      "type": "prop",
      "class": "prop",
@@ -62327,7 +62872,7 @@
      ]
     },
     {
-     "id": 87,
+     "id": 108,
      "name": "prop_hay_cart_47",
      "type": "prop",
      "class": "prop",
@@ -62352,7 +62897,7 @@
      ]
     },
     {
-     "id": 88,
+     "id": 109,
      "name": "prop_stone_cover_48",
      "type": "prop",
      "class": "prop",
@@ -62377,7 +62922,7 @@
      ]
     },
     {
-     "id": 89,
+     "id": 110,
      "name": "prop_stone_cover_49",
      "type": "prop",
      "class": "prop",
@@ -62402,7 +62947,7 @@
      ]
     },
     {
-     "id": 90,
+     "id": 111,
      "name": "prop_lamppost_50",
      "type": "prop",
      "class": "prop",
@@ -62427,7 +62972,7 @@
      ]
     },
     {
-     "id": 91,
+     "id": 112,
      "name": "prop_lamppost_51",
      "type": "prop",
      "class": "prop",
@@ -62452,7 +62997,7 @@
      ]
     },
     {
-     "id": 92,
+     "id": 113,
      "name": "prop_lamppost_52",
      "type": "prop",
      "class": "prop",
@@ -62477,7 +63022,7 @@
      ]
     },
     {
-     "id": 93,
+     "id": 114,
      "name": "prop_barrels_53",
      "type": "prop",
      "class": "prop",
@@ -62502,7 +63047,7 @@
      ]
     },
     {
-     "id": 94,
+     "id": 115,
      "name": "prop_stone_cover_54",
      "type": "prop",
      "class": "prop",
@@ -62527,7 +63072,7 @@
      ]
     },
     {
-     "id": 95,
+     "id": 116,
      "name": "prop_barrels_55",
      "type": "prop",
      "class": "prop",
@@ -62552,7 +63097,7 @@
      ]
     },
     {
-     "id": 96,
+     "id": 117,
      "name": "prop_barrels_56",
      "type": "prop",
      "class": "prop",
@@ -62577,7 +63122,7 @@
      ]
     },
     {
-     "id": 97,
+     "id": 118,
      "name": "prop_stone_cover_57",
      "type": "prop",
      "class": "prop",
@@ -62602,7 +63147,7 @@
      ]
     },
     {
-     "id": 98,
+     "id": 119,
      "name": "prop_barrels_58",
      "type": "prop",
      "class": "prop",
@@ -62627,7 +63172,7 @@
      ]
     },
     {
-     "id": 99,
+     "id": 120,
      "name": "prop_lamppost_59",
      "type": "prop",
      "class": "prop",
@@ -62652,7 +63197,7 @@
      ]
     },
     {
-     "id": 100,
+     "id": 121,
      "name": "prop_village_cross_60",
      "type": "prop",
      "class": "prop",

@@ -19,6 +19,7 @@ import { staticFrame } from '../art/AnimationRegistry';
 import { ENEMIES, type EnemyDef, type EnemyKind } from '../data/enemies';
 import { alertLevelFor, canSee, stepSuspicion, type AlertLevel } from '../systems/Vision';
 import type { SoundEvent } from '../systems/Hearing';
+import { nextReachableWaypoint } from '../systems/Patrol';
 import type { EnemySnapshot } from '../systems/Save';
 
 
@@ -54,6 +55,8 @@ const TURN_RATE_PATROL = 3.0; // rad/s
 const TURN_RATE_ALERT = 6.0;
 const WAYPOINT_TOLERANCE = 5;
 const REPATH_INTERVAL = 0.45;
+/** Pause before retrying a patrol route that is entirely cut off by a closed door. */
+const SEALED_ROUTE_RETRY = 0.75;
 
 export class Enemy {
   readonly sprite: Phaser.Physics.Arcade.Sprite;
@@ -301,14 +304,49 @@ export class Enemy {
       return;
     }
     const target = this.route[this.routeIndex % this.route.length];
-    if (!this.pathTarget || Phaser.Math.Distance.BetweenPoints(this.pathTarget, target) > 2)
-      this.setDestination(target);
+    if (!this.pathTarget || Phaser.Math.Distance.BetweenPoints(this.pathTarget, target) > 2) {
+      // Re-planning only happens here, when the waypoint actually changes, so
+      // the skip scan costs no more A* calls per frame than before.
+      if (!this.selectReachableWaypoint()) {
+        // Every waypoint is cut off. Hold position rather than jittering; the
+        // next attempt resumes the patrol the moment a door opens.
+        this.pathTarget = null;
+        this.path = [];
+        this.stop();
+        this.waitTimer = SEALED_ROUTE_RETRY;
+        return;
+      }
+      this.setDestination(this.route[this.routeIndex % this.route.length]);
+    }
 
     if (this.followPath(dt, this.def.patrolSpeed, TURN_RATE_PATROL)) {
       this.routeIndex = (this.routeIndex + 1) % this.route.length;
       this.pathTarget = null;
       this.waitTimer = 1.1; // brief pause at each waypoint
     }
+  }
+
+  /**
+   * Picks the next waypoint this guard can actually walk to, skipping any that
+   * are currently cut off - a waypoint behind a closed door has no path, and
+   * treating that as "arrived" would stall the patrol. See systems/Patrol.ts for
+   * the rule and its regression tests.
+   *
+   * Sets `routeIndex` to the chosen waypoint and returns true; returns false
+   * when none of them can be reached from where the guard stands. Called only
+   * when the waypoint changes, so it adds no per-frame pathfinding.
+   */
+  private selectReachableWaypoint(): boolean {
+    const index = nextReachableWaypoint(
+      this.world.grid,
+      { x: this.sprite.x, y: this.sprite.y },
+      this.route,
+      this.routeIndex,
+      WAYPOINT_TOLERANCE
+    );
+    if (index === null) return false;
+    this.routeIndex = index;
+    return true;
   }
 
   private updateInvestigate(dt: number, visible: boolean): void {

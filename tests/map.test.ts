@@ -210,9 +210,9 @@ describe('village slice geometry', () => {
 });
 
 describe('village slice content', () => {
-  it('places exactly the three Phase A lookouts, each with a patrol route', () => {
+  it('places exactly the seven C.1B-03 lookouts, each with a patrol route', () => {
     const enemies = byType('enemy');
-    expect(enemies).toHaveLength(3);
+    expect(enemies).toHaveLength(7);
     for (const enemy of enemies) {
       expect(enemy.props.kind).toBe('lookout');
       const route = byType('waypoint').filter((w) => w.props.route === enemy.props.route);

@@ -36,7 +36,7 @@ import {
 import { Mission } from '../systems/Mission';
 import { EXIT_REQUIRES, FINAL_OBJECTIVE, OPTIONAL_CLUES } from '../data/objectives';
 import { DIALOGUE, type DialogueLine } from '../data/dialogue';
-import { readSave, writeSave, type Checkpoint } from '../systems/Save';
+import { enemyRosterMatches, readSave, writeSave, type Checkpoint } from '../systems/Save';
 import { Audio } from '../systems/Audio';
 import { setupCamera } from '../systems/Camera';
 import { HUD } from '../ui/HUD';
@@ -956,11 +956,20 @@ export class Village extends Phaser.Scene {
     }
     this.pendingScene = null;
 
-    const byName = new Map(checkpoint.enemies.map((e) => [e.name, e]));
-    for (const enemy of this.enemies) {
-      const snap = byName.get(enemy.name);
-      if (snap) enemy.restore(snap);
-      else enemy.resetToSpawn(this.enemySpawnFacing.get(enemy.name) ?? 0);
+    // The roster is checked as a whole: a save from an earlier guard layout
+    // resets every guard to its authored spawn rather than restoring any of
+    // them to a position that no longer means anything. See
+    // Save.enemyRosterMatches for why.
+    if (!enemyRosterMatches(checkpoint.enemies, this.enemies.map((e) => e.name))) {
+      for (const enemy of this.enemies)
+        enemy.resetToSpawn(this.enemySpawnFacing.get(enemy.name) ?? 0);
+    } else {
+      const byName = new Map(checkpoint.enemies.map((e) => [e.name, e]));
+      for (const enemy of this.enemies) {
+        const snap = byName.get(enemy.name);
+        if (snap) enemy.restore(snap);
+        else enemy.resetToSpawn(this.enemySpawnFacing.get(enemy.name) ?? 0);
+      }
     }
 
     for (const zone of this.checkpointZones)
