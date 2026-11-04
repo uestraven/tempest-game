@@ -2,6 +2,8 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { Grid, type TileFlags } from '../src/core/Grid';
 import { TILE } from '../src/core/constants';
+import { TILE_NAMES, TILE_ROLES, type TileRole } from '../src/art/TilesetRegistry';
+import { PROPS } from '../src/art/PropDefinitions';
 
 interface TiledProperty {
   name: string;
@@ -10,6 +12,7 @@ interface TiledProperty {
 interface TiledLayer {
   name: string;
   type: string;
+  visible: boolean;
   data?: number[];
   objects?: {
     name: string;
@@ -26,12 +29,20 @@ interface TiledMap {
   height: number;
   tilewidth: number;
   tileheight: number;
+  properties: TiledProperty[];
   layers: TiledLayer[];
-  tilesets: { firstgid: number; tiles?: { id: number; properties: TiledProperty[] }[] }[];
+  tilesets: {
+    firstgid: number;
+    name: string;
+    image: string;
+    tilecount: number;
+    columns: number;
+    tiles?: { id: number; properties: TiledProperty[] }[];
+  }[];
 }
 
 const map = JSON.parse(
-  readFileSync(new URL('../assets/maps/village.json', import.meta.url), 'utf8')
+  readFileSync(new URL('../public/assets/maps/village.json', import.meta.url), 'utf8')
 ) as TiledMap;
 
 const props = (list: TiledProperty[] | undefined): Record<string, string | number | boolean> =>
@@ -43,6 +54,7 @@ const objects = (map.layers.find((l) => l.type === 'objectgroup')?.objects ?? []
 }));
 const byType = (type: string) => objects.filter((o) => o.type === type);
 const byName = (name: string) => objects.find((o) => o.name === name);
+const layer = (name: string) => map.layers.find((l) => l.name === name);
 
 /** Rebuilds the gameplay grid from tile properties exactly as MapLoader does. */
 function buildGrid(): Grid {
@@ -52,10 +64,10 @@ function buildGrid(): Grid {
   for (const tile of tileset.tiles ?? [])
     flagsById.set(tile.id, props(tile.properties) as unknown as Partial<TileFlags>);
 
-  for (const layer of map.layers) {
-    if (layer.type !== 'tilelayer' || !layer.data) continue;
-    for (let i = 0; i < layer.data.length; i++) {
-      const gid = layer.data[i];
+  for (const l of map.layers) {
+    if (l.type !== 'tilelayer' || !l.data) continue;
+    for (let i = 0; i < l.data.length; i++) {
+      const gid = l.data[i];
       if (gid === 0) continue;
       const flags = flagsById.get(gid - tileset.firstgid);
       if (!flags) continue;
@@ -67,6 +79,7 @@ function buildGrid(): Grid {
 
 const grid = buildGrid();
 const walkable = (tx: number, ty: number) => !grid.solidAt(tx, ty);
+const roleGid = (role: TileRole) => TILE_NAMES.indexOf(TILE_ROLES[role].tile) + 1;
 
 describe('village slice geometry', () => {
   it('uses the 16 px environmental grid', () => {
@@ -81,6 +94,7 @@ describe('village slice geometry', () => {
       'decorBack',
       'collision',
       'cover',
+      'propCollision',
       'shadowZones',
       'decorFront',
       'objects',
@@ -88,18 +102,58 @@ describe('village slice geometry', () => {
       expect(names).toContain(required);
   });
 
+  it('keeps the gameplay-only layers invisible', () => {
+    expect(layer('propCollision')!.visible).toBe(false);
+    expect(layer('shadowZones')!.visible).toBe(false);
+  });
+
+  it('binds the production Valcendre tileset', () => {
+    const tileset = map.tilesets[0];
+    expect(tileset.name).toBe('valcendre_tiles');
+    expect(tileset.tilecount).toBe(48);
+    expect(tileset.columns).toBe(8);
+    expect(tileset.image).toContain('valcendre_tiles_16x16.png');
+    expect(props(map.properties).stage).toBe('valcendre');
+  });
+
+  it('only uses tile ids that exist in the 48-tile set', () => {
+    for (const l of map.layers) {
+      if (l.type !== 'tilelayer' || !l.data) continue;
+      for (const gid of l.data) {
+        if (gid === 0) continue;
+        expect(gid, `layer ${l.name}`).toBeGreaterThanOrEqual(1);
+        expect(gid, `layer ${l.name}`).toBeLessThanOrEqual(48);
+      }
+    }
+  });
+
   it('keeps authored openings at least two tiles wide', () => {
-    // Garage door row and the north road mouth: both must admit the player freely.
-    const doorRow = [45, 46, 47].filter((x) => walkable(x, 15));
-    expect(doorRow.length).toBeGreaterThanOrEqual(2);
-    const roadMouth = [46, 47, 48, 49].filter((x) => walkable(x, 4));
-    expect(roadMouth.length).toBeGreaterThanOrEqual(2);
+    expect([45, 46, 47].filter((x) => walkable(x, 15)).length).toBeGreaterThanOrEqual(2);
+    expect([46, 47, 48, 49].filter((x) => walkable(x, 4)).length).toBeGreaterThanOrEqual(2);
   });
 
   it('authors shadow zones for the stealth route', () => {
-    const shadowLayer = map.layers.find((l) => l.name === 'shadowZones');
-    const count = (shadowLayer?.data ?? []).filter((gid) => gid !== 0).length;
+    const count = (layer('shadowZones')?.data ?? []).filter((gid) => gid !== 0).length;
     expect(count).toBeGreaterThan(40);
+    // Shadow tiles must actually carry the shadow flag through to the grid.
+    expect(grid.at(2, 28).shadow).toBe(true);
+    expect(grid.at(26, 9).shadow).toBe(true);
+  });
+
+  it('preserves wall, high-cover and low-cover semantics', () => {
+    const cover = layer('cover')!.data!;
+    const idx = (x: number, y: number) => y * map.width + x;
+    // Market stall counter: low cover.
+    expect(cover[idx(8, 16)]).toBe(roleGid('barrierLow'));
+    expect(grid.at(8, 16).lowCover).toBe(true);
+    expect(grid.at(8, 16).collides).toBe(true);
+    expect(grid.at(8, 16).blocksSight).toBe(false);
+    // Yard crate: high cover.
+    expect(cover[idx(38, 28)]).toBe(roleGid('crateHigh'));
+    expect(grid.at(38, 28).blocksSight).toBe(true);
+    // Building wall.
+    expect(grid.at(0, 0).collides).toBe(true);
+    expect(grid.at(0, 0).blocksSight).toBe(true);
   });
 });
 
@@ -137,14 +191,73 @@ describe('village slice content', () => {
     expect(ids).toContain('cp_entry');
     expect(ids).toContain('cp_log');
   });
+
+  it('keeps the van object and its placeholder sprite', () => {
+    // Art package has no van; the gameplay object must survive regardless.
+    expect(byName('interact_van')).toBeDefined();
+    const decor = byName('decor_van');
+    expect(decor?.props.sprite).toBe('prop_van');
+  });
+});
+
+describe('props', () => {
+  const placed = byType('prop');
+
+  it('places Valcendre props from the production package', () => {
+    expect(placed.length).toBeGreaterThanOrEqual(12);
+    for (const obj of placed) {
+      const key = `${obj.props.area}.${obj.props.prop}`;
+      expect(PROPS.has(key), `map references unknown prop ${key}`).toBe(true);
+    }
+  });
+
+  it('uses most of the twelve Valcendre props at least once', () => {
+    const used = new Set(placed.map((o) => String(o.props.prop)));
+    const available = [...PROPS.values()].filter((p) => p.area === 'valcendre');
+    expect(available).toHaveLength(12);
+    expect(used.size).toBeGreaterThanOrEqual(10);
+  });
+
+  it('rasterises collision only for props that block movement', () => {
+    const propLayer = layer('propCollision')!.data!;
+    const claimed = propLayer.filter(Boolean).length;
+    expect(claimed).toBeGreaterThan(0);
+    // Every claimed tile must carry a cover role, never a bare decorative tile.
+    const allowed = new Set([roleGid('barrierLow'), roleGid('crateHigh'), roleGid('wall')]);
+    for (const gid of propLayer) {
+      if (gid === 0) continue;
+      expect(allowed.has(gid)).toBe(true);
+    }
+  });
+
+  it('never draws a cover tile under a prop that supplies its own collision', () => {
+    const cover = layer('cover')!.data!;
+    const propLayer = layer('propCollision')!.data!;
+    for (let i = 0; i < cover.length; i++) {
+      if (propLayer[i] !== 0) expect(cover[i], `tile ${i}`).toBe(0);
+    }
+  });
+
+  it('leaves the fountain and the hay cart as props, not duplicated cover tiles', () => {
+    const names = new Set(placed.map((o) => String(o.props.prop)));
+    expect(names.has('fountain')).toBe(true);
+    expect(names.has('hay_cart')).toBe(true);
+    // The old prototype's well/cart tiles are gone from the cover layer.
+    const cover = layer('cover')!.data!;
+    const idx = (x: number, y: number) => y * map.width + x;
+    expect(cover[idx(25, 18)]).toBe(0);
+    expect(cover[idx(7, 24)]).toBe(0);
+  });
 });
 
 describe('softlock resistance', () => {
   const spawn = byName('spawn')!;
 
-  it('anchors every object on walkable ground', () => {
+  it('anchors every gameplay object on walkable ground', () => {
     for (const obj of objects) {
-      if (obj.type === 'exit') continue;
+      // Exits are trigger rectangles; props legitimately stand in their own
+      // collision footprint.
+      if (obj.type === 'exit' || obj.type === 'prop' || obj.type === 'decor') continue;
       expect(
         walkable(Math.floor(obj.x / TILE), Math.floor(obj.y / TILE)),
         `${obj.name} sits on a solid tile`
@@ -152,25 +265,43 @@ describe('softlock resistance', () => {
     }
   });
 
-  it('can reach the van, the log and the exit from the spawn point', () => {
-    for (const name of ['interact_van', 'interact_log', 'checkpoint_log']) {
+  it('can reach every objective, supply and checkpoint from the spawn point', () => {
+    for (const name of [
+      'interact_van',
+      'interact_log',
+      'interact_sigil',
+      'interact_radio',
+      'interact_hymn',
+      'checkpoint_log',
+      'item_medkit_market',
+      'item_ammo_yard',
+      'item_ammo_rear',
+    ]) {
       const target = byName(name)!;
-      const path = grid.findPath({ x: spawn.x, y: spawn.y }, { x: target.x, y: target.y }, 6000);
+      const path = grid.findPath({ x: spawn.x, y: spawn.y }, { x: target.x, y: target.y }, 8000);
       expect(path, `no path from spawn to ${name}`).not.toBeNull();
     }
     const exit = byName('exit_north')!;
-    const exitCentre = { x: exit.x + exit.width / 2, y: exit.y + exit.height / 2 };
-    expect(grid.findPath({ x: spawn.x, y: spawn.y }, exitCentre, 6000)).not.toBeNull();
+    const centre = { x: exit.x + exit.width / 2, y: exit.y + exit.height / 2 };
+    expect(grid.findPath({ x: spawn.x, y: spawn.y }, centre, 8000)).not.toBeNull();
+  });
+
+  it('keeps patrol waypoints walkable after props are placed', () => {
+    for (const wp of byType('waypoint')) {
+      expect(
+        walkable(Math.floor(wp.x / TILE), Math.floor(wp.y / TILE)),
+        `${wp.name} blocked by a prop`
+      ).toBe(true);
+    }
   });
 
   it('offers a second approach: the rear service corridor reaches the garage', () => {
-    // The corridor tiles exist and connect the market's north edge to the garage.
     expect(walkable(26, 9)).toBe(true);
     expect(walkable(33, 7)).toBe(true);
     const path = grid.findPath(
       { x: 26 * TILE + 8, y: 9 * TILE + 8 },
       { x: 39 * TILE + 8, y: 7 * TILE + 8 },
-      6000
+      8000
     );
     expect(path).not.toBeNull();
   });

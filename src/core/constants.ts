@@ -55,12 +55,14 @@ export const VISION = {
 } as const;
 
 /**
- * Torso hurtbox used for bullets, for both the player and enemies. This is NOT
- * the movement collision body (12x10 at the feet) and NOT the sight origin - see
- * core/hitbox.ts for why the three are kept separate.
+ * Body box used for bullets, for both the player and enemies. NOT the movement
+ * collision body (12x10 at the feet).
  *
- * Anchored at the feet: spans y - topOffset to y - (topOffset - height), i.e.
- * y - 24 to y - 6 with the values below, centred on x.
+ * Two readings of the same 12x18 box, see core/hitbox.ts:
+ *  - GROUND PLANE (`bulletHitbox`): centred on the actor's position. All
+ *    collision and hit tests use this, in the tile grid's own space.
+ *  - SCREEN SPACE (`drawnTorso`): spans y - topOffset to y - (topOffset -
+ *    height), i.e. y - 24 to y - 6. What the player sees and aims at.
  */
 export const HURTBOX = {
   width: 12,

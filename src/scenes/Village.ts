@@ -9,13 +9,21 @@ import {
 } from '../core/constants';
 import { loadLevel, objectsOfType, requireObject, type LoadedMap, type MapObject } from '../core/MapLoader';
 import type { Vec2 } from '../core/Grid';
-import { rectCenter } from '../core/hitbox';
+import { TORSO_OFFSET_Y } from '../core/hitbox';
+import { textureKey, type PropArea } from '../art/AssetRegistry';
+import { PROP_DEPTH, PROPS, propFixedDepth, propOrigin } from '../art/PropDefinitions';
+import { FX_ANIM } from '../art/AnimationRegistry';
 import { NEUTRAL_INPUT, Player, type InputState } from '../actors/Player';
 import { Enemy, SHOUT_RADIUS, type EnemySpawn, type EnemyWorld } from '../actors/Enemy';
 import type { EnemyKind } from '../data/enemies';
 import { Hearing } from '../systems/Hearing';
 import { Combat } from '../systems/Combat';
-import { Interaction, type Interactable, type PickupItem } from '../systems/Interaction';
+import {
+  Interaction,
+  type InteractTarget,
+  type Interactable,
+  type PickupItem,
+} from '../systems/Interaction';
 import { Objectives } from '../systems/Objectives';
 import { OPTIONAL_CLUES } from '../data/objectives';
 import { DIALOGUE } from '../data/dialogue';
@@ -55,6 +63,12 @@ export class Village extends Phaser.Scene {
   private debugGfx!: Phaser.GameObjects.Graphics;
   private hitMarkerTimer = 0;
   private debugHitboxes = false;
+  /** Props that are y-sorted with characters, re-depthed every frame. */
+  private sortedProps: Phaser.GameObjects.Image[] = [];
+  /** Supplied FX: concealment readout above the player, prompt marker, muzzle. */
+  private concealIcon!: Phaser.GameObjects.Image;
+  private promptIcon!: Phaser.GameObjects.Image;
+  private muzzle!: Phaser.GameObjects.Sprite;
 
   private exitZone!: Phaser.Geom.Rectangle;
   private exitRequires = '';
@@ -118,6 +132,21 @@ export class Village extends Phaser.Scene {
     this.crosshair = this.add.image(0, 0, 'crosshair').setDepth(60);
     this.hitMarkerGfx = this.add.graphics().setDepth(61);
     this.debugGfx = this.add.graphics().setDepth(70);
+
+    // Supplied FX art. The muzzle flash is parented to the weapon position, not
+    // the player's feet.
+    this.muzzle = this.add
+      .sprite(0, 0, textureKey.fx('muzzle'), 0)
+      .setDepth(31)
+      .setVisible(false);
+    this.concealIcon = this.add
+      .image(0, 0, textureKey.fx('eye_hidden'))
+      .setDepth(42)
+      .setVisible(false);
+    this.promptIcon = this.add
+      .image(0, 0, textureKey.fx('interaction'))
+      .setDepth(42)
+      .setVisible(false);
     this.input.setDefaultCursor('none');
     this.input.mouse?.disableContextMenu();
 
@@ -206,23 +235,78 @@ export class Village extends Phaser.Scene {
       });
     }
 
+    this.spawnProps(objects);
+
     const exit = requireObject(objects, 'exit');
     this.exitZone = new Phaser.Geom.Rectangle(exit.x, exit.y, exit.width, exit.height);
     this.exitRequires = String(exit.props.requires ?? '');
   }
 
   private propSprite(kind: string, obj: MapObject): Phaser.GameObjects.Image | undefined {
+    // Only the objects the art package has no equivalent for keep a generated
+    // sprite. The van is drawn by its own `decor` object, and the sigil is a
+    // tile in the decorBack layer, so neither gets one here.
     const texture =
       kind === 'radio' ? 'prop_radio' : kind === 'log' || kind === 'hymn' ? 'prop_doc' : null;
     if (!texture) return undefined;
     return this.add.image(Math.round(obj.x), Math.round(obj.y), texture).setDepth(3);
   }
 
+  /**
+   * Instantiates authored props and generated-placeholder decor.
+   *
+   * Collision is NOT created here: the map generator already rasterised each
+   * prop's footprint into the invisible `propCollision` layer, which feeds both
+   * the gameplay grid and the physics colliders. That keeps one source of truth
+   * and means an oversized footprint fails `npm run map` rather than silently
+   * walling off a route.
+   */
+  private spawnProps(objects: MapObject[]): void {
+    for (const obj of objectsOfType(objects, 'prop')) {
+      const area = String(obj.props.area ?? 'valcendre') as PropArea;
+      const name = String(obj.props.prop ?? '');
+      const def = PROPS.get(`${area}.${name}`);
+      if (!def) {
+        console.error(`[props] map references unknown prop ${area}.${name}`);
+        continue;
+      }
+      this.addPropSprite(def.texture, obj.x, obj.y, propOrigin(def), propFixedDepth(def));
+    }
+
+    for (const obj of objectsOfType(objects, 'decor')) {
+      const sprite = String(obj.props.sprite ?? '');
+      if (!sprite || !this.textures.exists(sprite)) {
+        console.error(`[props] map references missing decor texture "${sprite}"`);
+        continue;
+      }
+      const fixed = obj.props.depth === 'sorted' ? null : PROP_DEPTH.ground;
+      this.addPropSprite(sprite, obj.x, obj.y, { x: 0.5, y: 1 }, fixed);
+    }
+  }
+
+  private addPropSprite(
+    texture: string,
+    x: number,
+    y: number,
+    origin: { x: number; y: number },
+    fixedDepth: number | null
+  ): void {
+    const image = this.add.image(Math.round(x), Math.round(y), texture);
+    image.setOrigin(origin.x, origin.y);
+    if (fixedDepth === null) {
+      // y-sorted: a character south of a tree trunk draws in front of the
+      // canopy, one north of it draws behind. Same rule as the actors.
+      image.setDepth(10 + y / 10000);
+      this.sortedProps.push(image);
+    } else {
+      image.setDepth(fixedDepth);
+    }
+  }
+
   private makeEnemyWorld(): EnemyWorld {
     return {
       grid: this.level.grid,
-      playerSight: () => this.player.sightPoint,
-      playerAimPoint: () => rectCenter(this.player.hurtbox),
+      playerGround: () => this.player.groundPoint,
       playerFeet: () => ({ x: this.player.x, y: this.player.y }),
       playerStance: () => this.player.stance,
       playerInShadow: () => this.level.grid.isShadowWorld(this.player.x, this.player.y),
@@ -309,7 +393,14 @@ export class Village extends Phaser.Scene {
     const target = this.sliceComplete
       ? null
       : this.interaction.resolve(this.player, this.enemies, (id) => this.objectives.isComplete(id));
-    this.hud.update(frameDt, this.player, this.objectives.activeText(), target?.prompt ?? null);
+    this.hud.update(
+      frameDt,
+      this.player,
+      this.objectives.activeText(),
+      target?.prompt ?? null,
+      this.awarenessLevel()
+    );
+    this.updateStealthIcon(target);
     this.drawGlints();
     this.drawHitMarker(frameDt);
     this.drawDebugHitboxes();
@@ -321,7 +412,12 @@ export class Village extends Phaser.Scene {
     if (!this.keys) return { ...NEUTRAL_INPUT };
     const k = this.keys;
     const pointer = this.input.activePointer;
-    const muzzle = this.player.sightPoint;
+    // Aim is measured from the centre of the player's DRAWN torso to the
+    // crosshair, which is the one place screen space is used. Both actors are
+    // drawn with the same vertical offset, so this angle equals the ground-plane
+    // angle to the target - aiming at a visible torso and cover blocking the
+    // shot are then both correct. See core/hitbox.ts.
+    const muzzle = this.player.aimOrigin;
     const aim = Math.atan2(pointer.worldY - muzzle.y, pointer.worldX - muzzle.x);
 
     let weapon: WeaponId | null = null;
@@ -356,6 +452,7 @@ export class Village extends Phaser.Scene {
       const report = this.combat.playerFire(this.player);
       if (report.fired) {
         this.audio.play(this.player.weapon === 'pistol' ? 'pistol' : 'hit');
+        this.playMuzzleFlash();
         if (report.hits.length > 0) {
           // One clear hit cue per enemy struck, plus the on-crosshair marker.
           this.audio.play('flesh', 0.9);
@@ -363,6 +460,9 @@ export class Village extends Phaser.Scene {
           this.hud.showSubtitle('[hit]', 0.6);
         } else if (report.impacts.length > 0) {
           this.audio.play('ricochet', 0.5);
+        }
+        for (const impact of report.impacts) {
+          if (impact.flesh) this.playBlood(impact.x, impact.y);
         }
       }
     }
@@ -606,6 +706,68 @@ export class Village extends Phaser.Scene {
     }
   }
 
+  /**
+   * Muzzle flash at the weapon's visible position. The supplied 4-frame strip
+   * runs at 24 fps, so it is finished well inside the 0.36 s pistol interval and
+   * never sits on top of a target long enough to hide it.
+   */
+  private playMuzzleFlash(): void {
+    const at = this.player.muzzlePoint;
+    this.muzzle.setPosition(at.x, at.y);
+    this.muzzle.setVisible(true);
+    this.muzzle.play(FX_ANIM.muzzle, true);
+  }
+
+  private playBlood(x: number, y: number): void {
+    const splat = this.add.sprite(Math.round(x), Math.round(y), textureKey.fx('blood'), 0);
+    splat.setDepth(28);
+    splat.play(FX_ANIM.blood, true);
+    splat.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => splat.destroy());
+  }
+
+  /**
+   * Concealment readout using the supplied eye icons. This is also the visual
+   * cue for crouching, which the character art has no frames for: the mechanic
+   * is unchanged, and the player can see whether it is currently working.
+   */
+  private updateStealthIcon(target: InteractTarget): void {
+    const seen = this.enemies.some(
+      (e) => !e.dead && (e.alertLevel === 'combat' || e.suspicion > 0)
+    );
+    const show = !this.sliceComplete && !this.player.dead && (this.player.crouched || seen);
+    this.concealIcon.setVisible(show);
+    if (show) {
+      this.concealIcon.setTexture(textureKey.fx(seen ? 'eye' : 'eye_hidden'));
+      this.concealIcon.setPosition(Math.round(this.player.x), Math.round(this.player.y) - 40);
+    }
+
+    // Small marker on the thing the prompt refers to, so the player can tell
+    // which object the bottom-of-screen prompt belongs to.
+    if (target && target.type !== 'takedown') {
+      const at = target.type === 'prop' ? target.prop : target.item;
+      this.promptIcon.setPosition(Math.round(at.x), Math.round(at.y) - 16);
+      this.promptIcon.setVisible(true);
+    } else {
+      this.promptIcon.setVisible(false);
+    }
+  }
+
+  /**
+   * Highest alert in the level, as a frame index into the supplied awareness
+   * strip: 0 '?', 1 '!', 2 '!!', 3 detected. -1 means nothing is looking.
+   */
+  private awarenessLevel(): number {
+    let best = -1;
+    for (const enemy of this.enemies) {
+      if (enemy.dead) continue;
+      if (enemy.alertLevel === 'combat') return 3;
+      if (enemy.suspicion >= 70) best = Math.max(best, 2);
+      else if (enemy.suspicion >= 30) best = Math.max(best, 1);
+      else if (enemy.suspicion > 0) best = Math.max(best, 0);
+    }
+    return best;
+  }
+
   /** Brief ticks around the crosshair the moment a shot lands. */
   private drawHitMarker(dt: number): void {
     const g = this.hitMarkerGfx;
@@ -628,8 +790,9 @@ export class Village extends Phaser.Scene {
 
   /**
    * F3 overlay. Draws the three concepts separately so a mismatch between them
-   * is visible rather than inferred: feet colliders (movement), torso hurtboxes
-   * (bullets), sight origins (AI vision), and the retained player shot rays.
+   * is visible rather than inferred: feet colliders (movement), ground-plane
+   * bullet hitboxes, the drawn torso rectangles those correspond to, ground
+   * positions (vision/shot origins), and the retained player shot rays.
    */
   private drawDebugHitboxes(): void {
     const g = this.debugGfx;
@@ -645,20 +808,35 @@ export class Village extends Phaser.Scene {
       g.lineStyle(1, color, 0.95);
       g.strokeRect(Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height));
     };
+    // Dashed = a screen-space rectangle, not a collision shape.
+    const dashed = (r: { x: number; y: number; width: number; height: number }, color: number) => {
+      g.fillStyle(color, 0.8);
+      for (let x = 0; x < r.width; x += 2) {
+        g.fillRect(Math.round(r.x + x), Math.round(r.y), 1, 1);
+        g.fillRect(Math.round(r.x + x), Math.round(r.y + r.height), 1, 1);
+      }
+      for (let y = 0; y < r.height; y += 2) {
+        g.fillRect(Math.round(r.x), Math.round(r.y + y), 1, 1);
+        g.fillRect(Math.round(r.x + r.width), Math.round(r.y + y), 1, 1);
+      }
+    };
 
-    // Player: cyan feet collider, green hurtbox, white sight origin.
+    // Player: cyan feet collider, green ground hitbox, pale drawn torso.
     box(this.player.feetBox, 0x3fd0d8);
-    box(this.player.hurtbox, 0x6ee06e);
-    cross(this.player.sightPoint.x, this.player.sightPoint.y, 0xffffff);
+    box(this.player.hitbox, 0x6ee06e);
+    dashed(this.player.drawnTorso, 0xbfe8bf);
+    cross(this.player.x, this.player.y, 0xffffff);
 
     for (const enemy of this.enemies) {
       if (enemy.dead) continue;
-      // Enemies: blue feet collider, magenta hurtbox, yellow sight origin.
+      // Enemies: blue feet collider, magenta ground hitbox, pale drawn torso.
       box(enemy.feetBox, 0x4a7cd8);
-      box(enemy.hurtbox, 0xff5ad0);
-      cross(enemy.sightPoint.x, enemy.sightPoint.y, 0xffe066);
+      box(enemy.hitbox, 0xff5ad0);
+      dashed(enemy.drawnTorso, 0xffb8e8);
+      cross(enemy.x, enemy.y, 0xffe066);
     }
 
+    // Shot rays, drawn in the ground plane where they are actually resolved.
     for (const ray of this.combat.debugRays) {
       g.lineStyle(1, ray.hit ? 0xff5a3c : 0x9aa4b2, Phaser.Math.Clamp(ray.life, 0.15, 0.85));
       g.lineBetween(
@@ -668,6 +846,9 @@ export class Village extends Phaser.Scene {
         Math.round(ray.to.y)
       );
     }
+
+    // The aim origin, to show the TORSO_OFFSET_Y rendering offset explicitly.
+    cross(this.player.x, this.player.y - TORSO_OFFSET_Y, 0x8fd0ff);
   }
 
   /** Simple painter's-algorithm y-sorting between characters. */

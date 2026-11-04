@@ -1,0 +1,346 @@
+{
+  "name": "abbey",
+  "tilewidth": 16,
+  "tileheight": 16,
+  "columns": 8,
+  "tilecount": 48,
+  "image": "abbey_tiles_16x16.png",
+  "tiles": [
+    {
+      "id": 0,
+      "name": "floor_01",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 1,
+      "name": "floor_02",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 2,
+      "name": "floor_03",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 3,
+      "name": "floor_04",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 4,
+      "name": "floor_05",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 5,
+      "name": "floor_06",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 6,
+      "name": "floor_07",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 7,
+      "name": "floor_08",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 8,
+      "name": "wall_solid",
+      "solid": true,
+      "cover": "full",
+      "occludes_vision": true
+    },
+    {
+      "id": 9,
+      "name": "wall_variant",
+      "solid": true,
+      "cover": "full",
+      "occludes_vision": true
+    },
+    {
+      "id": 10,
+      "name": "wall_top",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 11,
+      "name": "wall_bottom",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 12,
+      "name": "wall_left",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 13,
+      "name": "wall_right",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 14,
+      "name": "wall_corner_tl",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 15,
+      "name": "wall_corner_tr",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 16,
+      "name": "wall_corner_bl",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 17,
+      "name": "wall_corner_br",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 18,
+      "name": "door_closed",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 19,
+      "name": "door_open",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 20,
+      "name": "threshold",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 21,
+      "name": "window",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 22,
+      "name": "stairs_up",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 23,
+      "name": "stairs_down",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 24,
+      "name": "trim",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 25,
+      "name": "floor_inlay",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 26,
+      "name": "floor_crack",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 27,
+      "name": "ground_debris",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 28,
+      "name": "floor_stain",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 29,
+      "name": "deep_shadow",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 30,
+      "name": "cover_low",
+      "solid": false,
+      "cover": "half",
+      "occludes_vision": false
+    },
+    {
+      "id": 31,
+      "name": "cover_high",
+      "solid": true,
+      "cover": "full",
+      "occludes_vision": true
+    },
+    {
+      "id": 32,
+      "name": "grass",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 33,
+      "name": "hedge",
+      "solid": true,
+      "cover": "full",
+      "occludes_vision": true
+    },
+    {
+      "id": 34,
+      "name": "flowerbed",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 35,
+      "name": "roof",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 36,
+      "name": "roof_edge",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 37,
+      "name": "rubble",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 38,
+      "name": "cobble",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 39,
+      "name": "brick",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 40,
+      "name": "checker",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 41,
+      "name": "carpet",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 42,
+      "name": "carpet_edge",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 43,
+      "name": "metal",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 44,
+      "name": "pillar",
+      "solid": true,
+      "cover": "none",
+      "occludes_vision": true
+    },
+    {
+      "id": 45,
+      "name": "grate",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 46,
+      "name": "accent",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    },
+    {
+      "id": 47,
+      "name": "ritual_mark",
+      "solid": false,
+      "cover": "none",
+      "occludes_vision": false
+    }
+  ]
+}

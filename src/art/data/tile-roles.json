@@ -1,0 +1,111 @@
+{
+  "_comment": [
+    "Semantic mapping: gameplay role -> artwork tile name -> gameplay flags.",
+    "Shared by the runtime (src/art/TilesetRegistry.ts) and the map generator",
+    "(tools/build-map.mjs), so the drawn tile and the collision grid can never",
+    "drift apart.",
+    "",
+    "The old prototype's 16 procedural tile indices have no relationship to the",
+    "48 tiles in the supplied tilesets, so every role names its tile explicitly.",
+    "Flags are the gameplay truth and are asserted against the tileset's own",
+    "solid/cover/occludes_vision hints by tools/build-map.mjs.",
+    "",
+    "All four stage tilesets share this 48-tile schema, so the same mapping",
+    "re-skins Valcendre, the Estate, the Abbey and the Ascension."
+  ],
+  "roles": {
+    "void": {
+      "tile": "roof",
+      "layer": "collision",
+      "collides": true,
+      "blocksSight": true,
+      "why": "Non-walkable interior of a block. Reads as rooftops from above, and 'roof' is already solid and vision-blocking in the supplied metadata."
+    },
+    "wall": {
+      "tile": "wall_solid",
+      "layer": "collision",
+      "collides": true,
+      "blocksSight": true
+    },
+    "cobble": {
+      "tile": "cobble",
+      "layer": "floor"
+    },
+    "cobbleAlt": {
+      "tile": "brick",
+      "layer": "floor"
+    },
+    "marketDirt": {
+      "tile": "floor_04",
+      "layer": "floor"
+    },
+    "concrete": {
+      "tile": "metal",
+      "layer": "floor"
+    },
+    "road": {
+      "tile": "ground_debris",
+      "layer": "floor"
+    },
+    "shadow": {
+      "tile": "deep_shadow",
+      "layer": "floor",
+      "shadow": true
+    },
+    "grass": {
+      "tile": "grass",
+      "layer": "decorBack"
+    },
+    "sigil": {
+      "tile": "ritual_mark",
+      "layer": "decorBack"
+    },
+    "crateHigh": {
+      "tile": "cover_high",
+      "layer": "cover",
+      "collides": true,
+      "blocksSight": true
+    },
+    "well": {
+      "tile": "pillar",
+      "layer": "cover",
+      "collides": true,
+      "blocksSight": true
+    },
+    "van": {
+      "tile": "cover_high",
+      "layer": "cover",
+      "collides": true,
+      "blocksSight": true,
+      "why": "No van artwork exists in the package; the gameplay object keeps a generated placeholder sprite drawn on top. See docs/art-integration.md."
+    },
+    "barrierLow": {
+      "tile": "cover_low",
+      "layer": "cover",
+      "collides": true,
+      "lowCover": true
+    }
+  },
+  "floorVariants": {
+    "cobble": [
+      "cobble",
+      "floor_01",
+      "floor_02"
+    ],
+    "marketDirt": [
+      "floor_04",
+      "floor_03",
+      "floor_inlay"
+    ],
+    "concrete": [
+      "metal",
+      "floor_06",
+      "grate"
+    ],
+    "road": [
+      "ground_debris",
+      "floor_crack",
+      "floor_stain"
+    ]
+  }
+}

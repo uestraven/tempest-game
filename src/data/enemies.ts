@@ -1,8 +1,12 @@
+import type { CharacterKey } from '../art/AssetRegistry';
+
 export type EnemyKind = 'lookout' | 'enforcer' | 'zealot' | 'ascendant';
 
 export interface EnemyDef {
   kind: EnemyKind;
   label: string;
+  /** Production sprite sheet this archetype renders with. */
+  sheet: CharacterKey;
   hp: number;
   /** Damage dealt to the player by one successful attack. */
   damage: number;
@@ -22,6 +26,7 @@ export interface EnemyDef {
 export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   lookout: {
     kind: 'lookout',
+    sheet: 'lookout_guard',
     label: 'Lookout',
     hp: 60,
     damage: 12,
@@ -36,6 +41,7 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   },
   enforcer: {
     kind: 'enforcer',
+    sheet: 'enforcer',
     label: 'Enforcer',
     hp: 100,
     damage: 16,
@@ -50,6 +56,7 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   },
   zealot: {
     kind: 'zealot',
+    sheet: 'zealot_cultist',
     label: 'Zealot',
     hp: 60,
     damage: 20,
@@ -64,6 +71,7 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   },
   ascendant: {
     kind: 'ascendant',
+    sheet: 'ascendant_cultist',
     label: 'Ascendant',
     hp: 130,
     damage: 25,

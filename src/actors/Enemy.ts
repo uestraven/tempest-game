@@ -1,8 +1,17 @@
 import Phaser from 'phaser';
 import { Grid, angleDelta, type Vec2 } from '../core/Grid';
-import { hurtboxAt, type Rect } from '../core/hitbox';
+import { bulletHitbox, drawnTorso, type Rect } from '../core/hitbox';
 import { COMBAT, PLAYER, SOUND_RADIUS, VISION } from '../core/constants';
-import { CHAR_H, CHAR_W, FRAME_COLS } from '../art/textures';
+import { textureKey } from '../art/AssetRegistry';
+import {
+  CHAR_FEET_INSET,
+  CHAR_FRAME_HEIGHT,
+  CHAR_FRAME_WIDTH,
+  CHAR_ORIGIN_X,
+  CHAR_ORIGIN_Y,
+  animKey,
+} from '../art/CharacterDefinitions';
+import { staticFrame } from '../art/AnimationRegistry';
 import { ENEMIES, type EnemyDef, type EnemyKind } from '../data/enemies';
 import { alertLevelFor, canSee, stepSuspicion, type AlertLevel } from '../systems/Vision';
 import type { SoundEvent } from '../systems/Hearing';
@@ -14,10 +23,8 @@ export type EnemyState = 'patrol' | 'investigate' | 'search' | 'combat' | 'dead'
 /** What an enemy is allowed to ask of the world. Keeps AI free of scene internals. */
 export interface EnemyWorld {
   grid: Grid;
-  /** Eye/chest point used for sight tests. Not a hurtbox. */
-  playerSight(): Vec2;
-  /** Centre of the player's torso hurtbox: what a shot should be aimed at. */
-  playerAimPoint(): Vec2;
+  /** The player's ground position: used for vision, occlusion and aiming. */
+  playerGround(): Vec2;
   playerFeet(): Vec2;
   playerStance(): 'standing' | 'crouching' | 'sprinting';
   playerInShadow(): boolean;
@@ -67,6 +74,8 @@ export class Enemy {
   private scanAngle = 0;
   private seenBodies = new Set<string>();
   private readonly alertGfx: Phaser.GameObjects.Graphics;
+  private readonly alertIcon: Phaser.GameObjects.Image;
+  private readonly sheet: string;
   private readonly spawnPoint: Vec2;
   private readonly route: Vec2[];
 
@@ -82,14 +91,29 @@ export class Enemy {
     this.spawnPoint = { x: spawn.x, y: spawn.y };
     this.route = spawn.route.length > 0 ? spawn.route : [{ x: spawn.x, y: spawn.y }];
 
-    this.sprite = scene.physics.add.sprite(spawn.x, spawn.y, `enemy_${spawn.kind}`, 0);
-    this.sprite.setOrigin(0.5, 1);
+    this.sheet = textureKey.character(this.def.sheet);
+    this.sprite = scene.physics.add.sprite(
+      spawn.x,
+      spawn.y,
+      this.sheet,
+      staticFrame(this.def.sheet, 'idle')
+    );
+    this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(9);
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
     body.setSize(PLAYER.bodyWidth, PLAYER.bodyHeight, false);
-    body.setOffset((CHAR_W - PLAYER.bodyWidth) / 2, CHAR_H - PLAYER.bodyHeight);
+    body.setOffset(
+      (CHAR_FRAME_WIDTH - PLAYER.bodyWidth) / 2,
+      CHAR_FRAME_HEIGHT - CHAR_FEET_INSET - PLAYER.bodyHeight
+    );
 
     this.alertGfx = scene.add.graphics().setDepth(40);
+    // Awareness icon from the supplied FX set. Shape carries the state, so the
+    // cue does not depend on telling red from yellow.
+    this.alertIcon = scene.add
+      .image(spawn.x, spawn.y, textureKey.fx('alert_question'))
+      .setDepth(41)
+      .setVisible(false);
   }
 
   get x(): number {
@@ -102,16 +126,19 @@ export class Enemy {
     return this.state === 'dead';
   }
   /**
-   * Eye/chest point for AI vision and as the muzzle position. Kept inside the
-   * feet collision body so it can never sit in a wall tile the enemy is hugging,
-   * which would blind it and block its own shots. Not a hurtbox.
+   * Ground position: the origin for vision and for this guard's own shots, and
+   * the same space as the tile grid. Not a hitbox.
    */
-  get sightPoint(): Vec2 {
-    return { x: this.sprite.x, y: this.sprite.y - 6 };
+  get groundPoint(): Vec2 {
+    return { x: this.sprite.x, y: this.sprite.y };
   }
-  /** Torso rectangle that player bullets must cross. Not the movement body. */
-  get hurtbox(): Rect {
-    return hurtboxAt(this.sprite.x, this.sprite.y);
+  /** Ground-plane body box that player bullets must cross. Not the movement body. */
+  get hitbox(): Rect {
+    return bulletHitbox(this.sprite.x, this.sprite.y);
+  }
+  /** Screen-space torso rectangle, for the F3 overlay. */
+  get drawnTorso(): Rect {
+    return drawnTorso(this.sprite.x, this.sprite.y);
   }
   /** Movement collision body in world space, for the debug overlay. */
   get feetBox(): Rect {
@@ -135,9 +162,9 @@ export class Enemy {
     }
     const sight = canSee(
       this.world.grid,
-      { pos: this.sightPoint, facing: this.facing },
+      { pos: this.groundPoint, facing: this.facing },
       {
-        pos: this.world.playerSight(),
+        pos: this.world.playerFeet(),
         stance: this.world.playerStance(),
         inShadow: this.world.playerInShadow(),
       }
@@ -185,12 +212,12 @@ export class Enemy {
       const toBody = Math.atan2(body.y - this.sprite.y, body.x - this.sprite.x);
       if (Math.abs(angleDelta(this.facing, toBody)) > (VISION.coneDegrees / 2) * (Math.PI / 180))
         continue;
-      if (!this.world.grid.hasLineOfSight(this.sightPoint, body, false)) continue;
+      if (!this.world.grid.hasLineOfSight(this.groundPoint, body, false)) continue;
       // A discovered body triggers a local search, never a permanent global alarm.
       this.seenBodies.add(key);
       this.suspicion = Math.max(this.suspicion, 70);
       this.beginInvestigate({ x: body.x, y: body.y });
-      this.world.shout(this.sightPoint, body);
+      this.world.shout(this.groundPoint, body);
       return;
     }
   }
@@ -209,7 +236,7 @@ export class Enemy {
     this.state = 'combat';
     this.aimTimer = COMBAT.aimWindup;
     this.attackTimer = 0;
-    this.world.shout(this.sightPoint, this.lastKnown ?? this.world.playerFeet());
+    this.world.shout(this.groundPoint, this.lastKnown ?? this.world.playerFeet());
   }
 
   /** Rallied by an ally's shout: investigate the reported spot, do not snap to the player. */
@@ -363,10 +390,10 @@ export class Enemy {
         return;
       }
       if (this.attackTimer <= 0 && dist <= this.def.engageRange + 40) {
-        const from = this.sightPoint;
-        // Aim at the centre of the torso hurtbox, not the sight origin: the sight
-        // origin sits on the hurtbox's bottom edge, so aiming there would graze.
-        const aimAt = this.world.playerAimPoint();
+        // Ground-plane shot: origin and target are both ground positions, so the
+        // round travels the line the player can see between the two actors.
+        const from = this.groundPoint;
+        const aimAt = this.world.playerGround();
         const angle = Math.atan2(aimAt.y - from.y, aimAt.x - from.x);
         this.world.fireProjectile(from, angle, this.def.damage, this);
         this.attackTimer = this.def.attackInterval;
@@ -418,19 +445,30 @@ export class Enemy {
     this.facing += step;
   }
 
+  /**
+   * Like the player: the sheet has no cardinal directions, so facing is shown by
+   * horizontal mirroring, and only for left/right. Up and down keep the previous
+   * mirror. The facing tick drawn in `drawAlert` is what makes a guard's actual
+   * patrol direction readable, which stealth depends on.
+   */
   private updateAnimation(): void {
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
     const speed = body.velocity.length();
     const row = directionRow(this.facing);
-    const base = row * FRAME_COLS;
-    if (speed <= 1 || this.stumbleTimer > 0) {
-      this.sprite.anims.stop();
-      this.sprite.setFrame(base);
-      return;
-    }
-    const key = `enemy_${this.def.kind}_walk_${row}`;
-    if (this.sprite.anims.currentAnim?.key !== key || !this.sprite.anims.isPlaying)
-      this.sprite.anims.play(key, true);
+    if (row === 1) this.sprite.setFlipX(true);
+    else if (row === 2) this.sprite.setFlipX(false);
+
+    const state =
+      this.stumbleTimer > 0
+        ? 'hit'
+        : this.state === 'combat' && speed <= 1
+          ? 'aim'
+          : speed > 1
+            ? 'walk'
+            : 'idle';
+    const key = animKey(this.def.sheet, state);
+    if (this.sprite.anims.currentAnim?.key !== key) this.sprite.anims.play(key, true);
+    else if (state === 'walk' && !this.sprite.anims.isPlaying) this.sprite.anims.play(key, true);
   }
 
   // ------------------------------------------------------------------- damage
@@ -482,10 +520,15 @@ export class Enemy {
     (this.sprite.body as Phaser.Physics.Arcade.Body).enable = false;
     this.sprite.clearTint();
     // Bodies stay as narrative discovery but never block movement or doorways.
-    this.sprite.setTexture('prop_body');
-    this.sprite.setOrigin(0.5, 0.7);
+    // The sheet's own `down` row keeps the corpse recognisable as this archetype,
+    // which matters because discovering a body is a gameplay event.
+    this.sprite.anims.stop();
+    this.sprite.setFlipX(false);
+    this.sprite.setTexture(this.sheet, staticFrame(this.def.sheet, 'down'));
+    this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(4);
     this.alertGfx.clear();
+    this.alertIcon.setVisible(false);
   }
 
   // ---------------------------------------------------------------- alert arc
@@ -493,16 +536,34 @@ export class Enemy {
   private drawAlert(): void {
     const g = this.alertGfx;
     g.clear();
-    if (this.dead) return;
-    const level = this.alertLevel;
-    if (level === 'unaware' && this.suspicion <= 0.5) return;
+    if (this.dead) {
+      this.alertIcon.setVisible(false);
+      return;
+    }
 
+    const level = this.alertLevel;
     const cx = Math.round(this.sprite.x);
-    const cy = Math.round(this.sprite.y - CHAR_H - 4);
+    const cy = Math.round(this.sprite.y - CHAR_FRAME_HEIGHT - 4);
+
+    // Facing tick: a 3px stub pointing where the guard is actually looking.
+    // The character art has no directional frames, so without this a patrol's
+    // facing would be unreadable whenever it is walking up or down the screen,
+    // and stealth depends on reading it.
+    const tx = Math.round(cx + Math.cos(this.facing) * 7);
+    const ty = Math.round(Math.round(this.sprite.y - 16) + Math.sin(this.facing) * 7);
+    g.fillStyle(0xf2ece0, 0.85);
+    g.fillRect(tx - 1, ty - 1, 2, 2);
+
+    if (level === 'unaware' && this.suspicion <= 0.5) {
+      this.alertIcon.setVisible(false);
+      return;
+    }
+
     const fill = this.suspicion / VISION.combatThreshold;
     const color = level === 'combat' ? 0xd9472f : 0xe0c04a;
 
-    // Arc fill communicates buildup; shape communicates level without relying on hue.
+    // Arc fill communicates buildup; the icon communicates the state by shape,
+    // so the cue never depends on telling two colours apart.
     g.lineStyle(1, 0x1b1b22, 0.9);
     g.beginPath();
     g.arc(cx, cy, 7, Math.PI, Math.PI * 2);
@@ -512,16 +573,15 @@ export class Enemy {
     g.arc(cx, cy, 7, Math.PI, Math.PI + Math.PI * Math.max(0.04, fill));
     g.strokePath();
 
-    if (level === 'combat') {
-      // Filled diamond + bar: "spotted".
-      g.fillStyle(color, 1);
-      g.fillTriangle(cx, cy - 10, cx - 3, cy - 5, cx + 3, cy - 5);
-      g.fillRect(cx - 1, cy - 4, 2, 2);
-    } else if (level === 'suspicious') {
-      // Hollow diamond: "something is off".
-      g.lineStyle(1, color, 1);
-      g.strokeTriangle(cx, cy - 10, cx - 3, cy - 5, cx + 3, cy - 5);
-    }
+    const icon =
+      level === 'combat'
+        ? 'alert_detected'
+        : this.suspicion >= VISION.suspiciousThreshold
+          ? 'alert_suspicious'
+          : 'alert_question';
+    this.alertIcon.setTexture(textureKey.fx(icon));
+    this.alertIcon.setPosition(cx, cy - 11);
+    this.alertIcon.setVisible(true);
   }
 
   // ---------------------------------------------------------------- snapshots
@@ -555,11 +615,14 @@ export class Enemy {
     this.attackTimer = 0;
     this.stumbleTimer = 0;
     this.alertGfx.clear();
+    this.alertIcon.setVisible(false);
 
     if (snap.dead) {
       this.state = 'dead';
-      this.sprite.setTexture('prop_body');
-      this.sprite.setOrigin(0.5, 0.7);
+      this.sprite.anims.stop();
+      this.sprite.setFlipX(false);
+      this.sprite.setTexture(this.sheet, staticFrame(this.def.sheet, 'down'));
+      this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
       this.sprite.setDepth(4);
       this.sprite.setPosition(snap.x, snap.y);
       body.reset(snap.x, snap.y);
@@ -568,15 +631,19 @@ export class Enemy {
     }
 
     this.state = 'patrol';
-    this.sprite.setTexture(`enemy_${this.def.kind}`);
-    this.sprite.setOrigin(0.5, 1);
+    this.sprite.anims.stop();
+    this.sprite.setTexture(this.sheet, staticFrame(this.def.sheet, 'idle'));
+    this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(9);
     this.sprite.clearTint();
     this.sprite.setPosition(snap.x, snap.y);
     body.reset(snap.x, snap.y);
     body.enable = true;
     body.setSize(PLAYER.bodyWidth, PLAYER.bodyHeight, false);
-    body.setOffset((CHAR_W - PLAYER.bodyWidth) / 2, CHAR_H - PLAYER.bodyHeight);
+    body.setOffset(
+      (CHAR_FRAME_WIDTH - PLAYER.bodyWidth) / 2,
+      CHAR_FRAME_HEIGHT - CHAR_FEET_INSET - PLAYER.bodyHeight
+    );
   }
 
   /** Fresh-level state, used when there is no checkpoint to restore. */
@@ -595,6 +662,7 @@ export class Enemy {
 
   destroy(): void {
     this.alertGfx.destroy();
+    this.alertIcon.destroy();
     this.sprite.destroy();
   }
 }

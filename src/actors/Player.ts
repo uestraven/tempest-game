@@ -1,7 +1,17 @@
 import Phaser from 'phaser';
 import { AMMO_CAP, AMMO_FLOOR, MEDKIT_HEAL, PLAYER, SOUND_RADIUS } from '../core/constants';
-import { hurtboxAt, type Rect } from '../core/hitbox';
-import { CHAR_H, CHAR_W, FRAME_COLS, GUN_KEY, PLAYER_KEY } from '../art/textures';
+import { aimOrigin, bulletHitbox, drawnTorso, type Rect } from '../core/hitbox';
+import { GUN_KEY } from '../art/textures';
+import { textureKey } from '../art/AssetRegistry';
+import {
+  CHAR_FEET_INSET,
+  CHAR_FRAME_HEIGHT,
+  CHAR_FRAME_WIDTH,
+  CHAR_ORIGIN_X,
+  CHAR_ORIGIN_Y,
+  animKey,
+} from '../art/CharacterDefinitions';
+import { staticFrame } from '../art/AnimationRegistry';
 import { WEAPONS, type WeaponId } from '../data/weapons';
 import type { Stance } from '../systems/Vision';
 import type { AmmoSnapshot, PlayerSnapshot } from '../systems/Save';
@@ -31,6 +41,9 @@ export const NEUTRAL_INPUT: InputState = {
   interactPressed: false,
 };
 
+/** Tempest's production sprite sheet. */
+const PLAYER_SHEET = textureKey.character('tempest');
+
 export class Player {
   readonly sprite: Phaser.Physics.Arcade.Sprite;
   readonly gun: Phaser.GameObjects.Image;
@@ -50,6 +63,8 @@ export class Player {
   };
 
   private fireCooldown = 0;
+  /** Seconds left on the recoil pose. Shorter than the pistol fire interval. */
+  private fireFlash = 0;
   private reloadTimer = 0;
   reloading = false;
   private invulnTimer = 0;
@@ -65,12 +80,17 @@ export class Player {
     y: number,
     private readonly hearing: Hearing
   ) {
-    this.sprite = scene.physics.add.sprite(x, y, PLAYER_KEY, 0);
-    this.sprite.setOrigin(0.5, 1);
+    this.sprite = scene.physics.add.sprite(x, y, PLAYER_SHEET, staticFrame('tempest', 'idle'));
+    this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(10);
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
     body.setSize(PLAYER.bodyWidth, PLAYER.bodyHeight, false);
-    body.setOffset((CHAR_W - PLAYER.bodyWidth) / 2, CHAR_H - PLAYER.bodyHeight);
+    // Feet box sits on the art's ground-contact row, which is `feetInset`
+    // pixels above the bottom of the 24x32 frame.
+    body.setOffset(
+      (CHAR_FRAME_WIDTH - PLAYER.bodyWidth) / 2,
+      CHAR_FRAME_HEIGHT - CHAR_FEET_INSET - PLAYER.bodyHeight
+    );
     body.setCollideWorldBounds(true);
 
     this.gun = scene.add.image(x, y, GUN_KEY, 0).setDepth(11);
@@ -84,23 +104,47 @@ export class Player {
   }
 
   /**
-   * Eye/muzzle point used for sight and hitscan. Kept inside the 10 px feet
-   * collision body so it can never sit inside a wall tile the player is hugging,
-   * which would otherwise block every outgoing shot.
+   * Ground position used for vision, occlusion and hitscan. Same space as the
+   * tile grid, so cover blocks exactly what it visually blocks.
    */
-  get sightPoint(): { x: number; y: number } {
-    return { x: this.sprite.x, y: this.sprite.y - 6 };
+  get groundPoint(): { x: number; y: number } {
+    return { x: this.sprite.x, y: this.sprite.y };
   }
 
-  /** Torso rectangle that enemy rounds must cross. Not the movement body. */
-  get hurtbox(): Rect {
-    return hurtboxAt(this.sprite.x, this.sprite.y);
+  /**
+   * Point the aim angle is measured from: the centre of the drawn torso. Screen
+   * space, used for input and effects only - never for collision.
+   */
+  get aimOrigin(): { x: number; y: number } {
+    return aimOrigin(this.sprite.x, this.sprite.y);
+  }
+
+  /** Ground-plane body box that enemy rounds must cross. Not the movement body. */
+  get hitbox(): Rect {
+    return bulletHitbox(this.sprite.x, this.sprite.y);
+  }
+
+  /** Screen-space torso rectangle, for the F3 overlay. */
+  get drawnTorso(): Rect {
+    return drawnTorso(this.sprite.x, this.sprite.y);
   }
 
   /** Movement collision body in world space, for the debug overlay. */
   get feetBox(): Rect {
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
     return { x: body.x, y: body.y, width: body.width, height: body.height };
+  }
+
+  /**
+   * Where the muzzle flash is drawn: just beyond the weapon overlay along the
+   * aim, so the effect appears at the gun rather than at the player's feet.
+   */
+  get muzzlePoint(): { x: number; y: number } {
+    const reach = 13;
+    return {
+      x: Math.round(this.sprite.x + Math.cos(this.aim) * reach),
+      y: Math.round(this.sprite.y - (this.crouched ? 12 : 16) + Math.sin(this.aim) * reach),
+    };
   }
 
   get stance(): Stance {
@@ -126,6 +170,7 @@ export class Player {
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
 
     this.fireCooldown = Math.max(0, this.fireCooldown - dt);
+    this.fireFlash = Math.max(0, this.fireFlash - dt);
     this.invulnTimer = Math.max(0, this.invulnTimer - dt);
     if (this.takedownTimer > 0) this.takedownTimer = Math.max(0, this.takedownTimer - dt);
 
@@ -186,18 +231,36 @@ export class Player {
     }
   }
 
+  /**
+   * Animation state machine over the production sheet's real rows.
+   *
+   * The sheet has NO cardinal directions (4 columns are pose variations, per the
+   * package manifest), so facing is expressed by horizontal mirroring only, and
+   * only when the aim is actually left or right - aiming straight up or down
+   * keeps the previous mirror so the sprite never snaps for no reason.
+   *
+   * Crouch has no artwork in the package. The mechanic is untouched: speed,
+   * collision and the suspicion rate all still change. The visual cue is the
+   * HUD stance pip plus the concealment eye icon above the player. Deliberately
+   * no squash or scale - that would violate the pixel contract - and no reuse of
+   * an unrelated row.
+   */
   private updateAnimation(speed: number): void {
     const dirRow = directionRow(this.aim);
-    const base = (dirRow + (this.crouched ? 4 : 0)) * FRAME_COLS;
-    if (speed <= 1) {
-      this.sprite.anims.stop();
-      this.sprite.setFrame(base);
-      return;
+    if (dirRow === 1) this.sprite.setFlipX(true);
+    else if (dirRow === 2) this.sprite.setFlipX(false);
+
+    const state: 'fire' | 'walk' | 'idle' =
+      this.fireFlash > 0 ? 'fire' : speed > 1 ? 'walk' : 'idle';
+    const key = animKey('tempest', state);
+
+    if (this.sprite.anims.currentAnim?.key !== key) this.sprite.anims.play(key, true);
+    else if (state === 'walk' && !this.sprite.anims.isPlaying) this.sprite.anims.play(key, true);
+
+    if (state === 'walk') {
+      // Frame rate tracks movement speed so the cycle does not skate.
+      this.sprite.anims.msPerFrame = this.sprinting ? 80 : this.crouched ? 170 : 110;
     }
-    const key = `player_walk_${dirRow}_${this.crouched ? 'c' : 's'}`;
-    if (this.sprite.anims.currentAnim?.key !== key || !this.sprite.anims.isPlaying)
-      this.sprite.anims.play(key, true);
-    this.sprite.anims.msPerFrame = this.sprinting ? 90 : this.crouched ? 190 : 140;
   }
 
   private syncGun(): void {
@@ -229,6 +292,7 @@ export class Player {
     if (!this.canFire()) return false;
     this.ammo[this.weapon].loaded -= 1;
     this.fireCooldown = this.weaponDef.fireInterval;
+    this.fireFlash = 0.12;
     // Firing interrupts a reload in progress.
     this.cancelReload();
     return true;

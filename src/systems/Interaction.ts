@@ -70,7 +70,7 @@ export class Interaction {
       if (prop.objective && objectiveDone(prop.objective) && prop.oneShot) continue;
       const d = Phaser.Math.Distance.Between(feet.x, feet.y, prop.x, prop.y);
       if (d > PLAYER.interactRange || d >= bestDist) continue;
-      if (!this.grid.hasClearReach(player.sightPoint, { x: prop.x, y: prop.y })) continue;
+      if (!this.grid.hasClearReach(player.groundPoint, { x: prop.x, y: prop.y })) continue;
       bestDist = d;
       best = { type: 'prop', prop, prompt: prop.prompt };
     }
@@ -79,7 +79,7 @@ export class Interaction {
       if (item.taken) continue;
       const d = Phaser.Math.Distance.Between(feet.x, feet.y, item.x, item.y);
       if (d > PLAYER.interactRange || d >= bestDist) continue;
-      if (!this.grid.hasClearReach(player.sightPoint, { x: item.x, y: item.y })) continue;
+      if (!this.grid.hasClearReach(player.groundPoint, { x: item.x, y: item.y })) continue;
       // A full-health player gets no medkit prompt, so the kit is never wasted.
       if (item.kind === 'medkit' && player.hp >= 100) continue;
       bestDist = d;
@@ -97,7 +97,7 @@ export class Interaction {
       const d = Phaser.Math.Distance.Between(player.x, player.y, enemy.x, enemy.y);
       if (d > PLAYER.takedownRange || d >= bestDist) continue;
       if (!isBehind(enemy.facing, enemy, player)) continue;
-      if (!this.grid.hasClearReach(player.sightPoint, enemy.sightPoint)) continue;
+      if (!this.grid.hasClearReach(player.groundPoint, enemy.groundPoint)) continue;
       bestDist = d;
       best = enemy;
     }

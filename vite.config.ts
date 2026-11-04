@@ -2,7 +2,9 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   base: './',
-  publicDir: 'assets',
+  // Runtime assets live in public/assets/, so they resolve identically in dev,
+  // build and preview. Art sources, references and previews stay in art-source/.
+  publicDir: 'public',
   build: {
     target: 'es2020',
     outDir: 'dist',

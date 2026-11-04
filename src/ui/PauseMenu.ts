@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { VIRTUAL_HEIGHT, VIRTUAL_WIDTH } from '../core/constants';
 import { PixelText } from './font';
+import { textureKey } from '../art/AssetRegistry';
 
 const CONTROLS = [
   'WASD   MOVE',
@@ -22,6 +23,7 @@ export interface PauseActions {
 /** Pause overlay carrying the objective recap and the controls (spec section 9). */
 export class PauseMenu {
   private readonly gfx: Phaser.GameObjects.Graphics;
+  private readonly panel: Phaser.GameObjects.NineSlice;
   private readonly title: PixelText;
   private readonly objective: PixelText;
   private readonly controls: PixelText;
@@ -33,6 +35,24 @@ export class PauseMenu {
     private readonly actions: PauseActions
   ) {
     this.gfx = scene.add.graphics().setScrollFactor(0).setDepth(118);
+    // Supplied nine-slice panel: 432x230 is far above the 32px minimum for 16px
+    // borders, so the corners stay pixel-perfect and only the middles stretch.
+    this.panel = scene.add
+      .nineslice(
+        24,
+        20,
+        textureKey.ui('panel'),
+        undefined,
+        VIRTUAL_WIDTH - 48,
+        VIRTUAL_HEIGHT - 40,
+        16,
+        16,
+        16,
+        16
+      )
+      .setOrigin(0, 0)
+      .setScrollFactor(0)
+      .setDepth(119);
     this.title = new PixelText(scene, VIRTUAL_WIDTH / 2, 30, 'PAUSED', {
       depth: 120,
       align: 'center',
@@ -92,6 +112,7 @@ export class PauseMenu {
   private setVisible(visible: boolean): void {
     this.visible = visible;
     this.gfx.setVisible(visible);
+    this.panel.setVisible(visible);
     this.title.setVisible(visible);
     this.objective.setVisible(visible);
     this.controls.setVisible(visible);
@@ -101,14 +122,14 @@ export class PauseMenu {
   private draw(): void {
     const g = this.gfx;
     g.clear();
+    // Dim the world behind; the panel art supplies the frame.
     g.fillStyle(0x07080c, 0.86);
     g.fillRect(0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-    g.lineStyle(1, 0x3b4150, 1);
-    g.strokeRect(24, 20, VIRTUAL_WIDTH - 48, VIRTUAL_HEIGHT - 40);
   }
 
   destroy(): void {
     this.gfx.destroy();
+    this.panel.destroy();
     this.title.destroy();
     this.objective.destroy();
     this.controls.destroy();

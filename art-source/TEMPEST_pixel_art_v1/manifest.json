@@ -1,0 +1,742 @@
+{
+  "title": "TEMPEST",
+  "version": "1.0.0",
+  "game_resolution": [
+    480,
+    270
+  ],
+  "tile_size": [
+    16,
+    16
+  ],
+  "human_sprite_size": [
+    24,
+    32
+  ],
+  "characters": {
+    "tempest": {
+      "file": "characters/tempest_24x32_4x6.png",
+      "frame_width": 24,
+      "frame_height": 32,
+      "columns": 4,
+      "rows": 6,
+      "row_names": [
+        "idle",
+        "walk",
+        "aim",
+        "fire",
+        "hit",
+        "down"
+      ],
+      "frames_per_row": 4,
+      "origin": [
+        12,
+        30
+      ],
+      "direction_note": "Pose frames from concept atlas, not a fully authored 4-directional animation set; mirror or redraw for directional play."
+    },
+    "lookout_guard": {
+      "file": "characters/lookout_guard_24x32_4x6.png",
+      "frame_width": 24,
+      "frame_height": 32,
+      "columns": 4,
+      "rows": 6,
+      "row_names": [
+        "idle",
+        "walk",
+        "aim",
+        "fire",
+        "hit",
+        "down"
+      ],
+      "frames_per_row": 4,
+      "origin": [
+        12,
+        30
+      ],
+      "direction_note": "Pose frames from concept atlas, not a fully authored 4-directional animation set; mirror or redraw for directional play."
+    },
+    "enforcer": {
+      "file": "characters/enforcer_24x32_4x6.png",
+      "frame_width": 24,
+      "frame_height": 32,
+      "columns": 4,
+      "rows": 6,
+      "row_names": [
+        "idle",
+        "walk",
+        "aim",
+        "fire",
+        "hit",
+        "down"
+      ],
+      "frames_per_row": 4,
+      "origin": [
+        12,
+        30
+      ],
+      "direction_note": "Pose frames from concept atlas, not a fully authored 4-directional animation set; mirror or redraw for directional play."
+    },
+    "zealot_cultist": {
+      "file": "characters/zealot_cultist_24x32_4x6.png",
+      "frame_width": 24,
+      "frame_height": 32,
+      "columns": 4,
+      "rows": 6,
+      "row_names": [
+        "idle",
+        "walk",
+        "aim",
+        "fire",
+        "hit",
+        "down"
+      ],
+      "frames_per_row": 4,
+      "origin": [
+        12,
+        30
+      ],
+      "direction_note": "Pose frames from concept atlas, not a fully authored 4-directional animation set; mirror or redraw for directional play."
+    },
+    "ascendant_cultist": {
+      "file": "characters/ascendant_cultist_24x32_4x6.png",
+      "frame_width": 24,
+      "frame_height": 32,
+      "columns": 4,
+      "rows": 6,
+      "row_names": [
+        "idle",
+        "walk",
+        "aim",
+        "fire",
+        "hit",
+        "down"
+      ],
+      "frames_per_row": 4,
+      "origin": [
+        12,
+        30
+      ],
+      "direction_note": "Pose frames from concept atlas, not a fully authored 4-directional animation set; mirror or redraw for directional play."
+    },
+    "suzanne": {
+      "file": "characters/suzanne_24x32_4x6.png",
+      "frame_width": 24,
+      "frame_height": 32,
+      "columns": 4,
+      "rows": 6,
+      "row_names": [
+        "idle",
+        "walk",
+        "aim",
+        "fire",
+        "hit",
+        "down"
+      ],
+      "frames_per_row": 4,
+      "origin": [
+        12,
+        30
+      ],
+      "direction_note": "Pose frames from concept atlas, not a fully authored 4-directional animation set; mirror or redraw for directional play."
+    },
+    "barnabe": {
+      "file": "characters/barnabe_24x32_4x6.png",
+      "frame_width": 24,
+      "frame_height": 32,
+      "columns": 4,
+      "rows": 6,
+      "row_names": [
+        "idle",
+        "walk",
+        "aim",
+        "fire",
+        "hit",
+        "down"
+      ],
+      "frames_per_row": 4,
+      "origin": [
+        12,
+        30
+      ],
+      "direction_note": "Pose frames from concept atlas, not a fully authored 4-directional animation set; mirror or redraw for directional play."
+    }
+  },
+  "environments": {
+    "valcendre": {
+      "png": "environments/valcendre_tiles_16x16.png",
+      "json": "environments/valcendre_tiles.json",
+      "tsx": "environments/valcendre_tiles.tsx",
+      "columns": 8,
+      "rows": 6,
+      "tile_size": [
+        16,
+        16
+      ]
+    },
+    "estate": {
+      "png": "environments/estate_tiles_16x16.png",
+      "json": "environments/estate_tiles.json",
+      "tsx": "environments/estate_tiles.tsx",
+      "columns": 8,
+      "rows": 6,
+      "tile_size": [
+        16,
+        16
+      ]
+    },
+    "abbey": {
+      "png": "environments/abbey_tiles_16x16.png",
+      "json": "environments/abbey_tiles.json",
+      "tsx": "environments/abbey_tiles.tsx",
+      "columns": 8,
+      "rows": 6,
+      "tile_size": [
+        16,
+        16
+      ]
+    },
+    "ascension": {
+      "png": "environments/ascension_tiles_16x16.png",
+      "json": "environments/ascension_tiles.json",
+      "tsx": "environments/ascension_tiles.tsx",
+      "columns": 8,
+      "rows": 6,
+      "tile_size": [
+        16,
+        16
+      ]
+    }
+  },
+  "props": {
+    "valcendre": [
+      {
+        "name": "fountain",
+        "file": "props/valcendre/fountain_32x32.png",
+        "width": 32,
+        "height": 32,
+        "origin": [
+          16,
+          31
+        ]
+      },
+      {
+        "name": "barrels",
+        "file": "props/valcendre/barrels_32x24.png",
+        "width": 32,
+        "height": 24,
+        "origin": [
+          16,
+          23
+        ]
+      },
+      {
+        "name": "hay_cart",
+        "file": "props/valcendre/hay_cart_32x24.png",
+        "width": 32,
+        "height": 24,
+        "origin": [
+          16,
+          23
+        ]
+      },
+      {
+        "name": "flower_box",
+        "file": "props/valcendre/flower_box_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "stone_cover",
+        "file": "props/valcendre/stone_cover_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "lamppost",
+        "file": "props/valcendre/lamppost_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      },
+      {
+        "name": "bench",
+        "file": "props/valcendre/bench_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "flower_pot",
+        "file": "props/valcendre/flower_pot_16x16.png",
+        "width": 16,
+        "height": 16,
+        "origin": [
+          8,
+          15
+        ]
+      },
+      {
+        "name": "tree",
+        "file": "props/valcendre/tree_32x32.png",
+        "width": 32,
+        "height": 32,
+        "origin": [
+          16,
+          31
+        ]
+      },
+      {
+        "name": "french_flag",
+        "file": "props/valcendre/french_flag_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      },
+      {
+        "name": "clothesline",
+        "file": "props/valcendre/clothesline_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "village_cross",
+        "file": "props/valcendre/village_cross_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      }
+    ],
+    "estate": [
+      {
+        "name": "statue",
+        "file": "props/estate/statue_32x32.png",
+        "width": 32,
+        "height": 32,
+        "origin": [
+          16,
+          31
+        ]
+      },
+      {
+        "name": "topiary",
+        "file": "props/estate/topiary_32x32.png",
+        "width": 32,
+        "height": 32,
+        "origin": [
+          16,
+          31
+        ]
+      },
+      {
+        "name": "candelabra",
+        "file": "props/estate/candelabra_16x24.png",
+        "width": 16,
+        "height": 24,
+        "origin": [
+          8,
+          23
+        ]
+      },
+      {
+        "name": "covered_table",
+        "file": "props/estate/covered_table_32x24.png",
+        "width": 32,
+        "height": 24,
+        "origin": [
+          16,
+          23
+        ]
+      },
+      {
+        "name": "wooden_crates",
+        "file": "props/estate/wooden_crates_32x24.png",
+        "width": 32,
+        "height": 24,
+        "origin": [
+          16,
+          23
+        ]
+      },
+      {
+        "name": "hedge",
+        "file": "props/estate/hedge_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "iron_gate",
+        "file": "props/estate/iron_gate_32x32.png",
+        "width": 32,
+        "height": 32,
+        "origin": [
+          16,
+          31
+        ]
+      },
+      {
+        "name": "banner",
+        "file": "props/estate/banner_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      },
+      {
+        "name": "lantern",
+        "file": "props/estate/lantern_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      },
+      {
+        "name": "wardrobe_cover",
+        "file": "props/estate/wardrobe_cover_32x32.png",
+        "width": 32,
+        "height": 32,
+        "origin": [
+          16,
+          31
+        ]
+      }
+    ],
+    "abbey": [
+      {
+        "name": "broken_wall",
+        "file": "props/abbey/broken_wall_32x32.png",
+        "width": 32,
+        "height": 32,
+        "origin": [
+          16,
+          31
+        ]
+      },
+      {
+        "name": "broken_column",
+        "file": "props/abbey/broken_column_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      },
+      {
+        "name": "stone_sarcophagus",
+        "file": "props/abbey/stone_sarcophagus_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "collapsed_pillar",
+        "file": "props/abbey/collapsed_pillar_32x24.png",
+        "width": 32,
+        "height": 24,
+        "origin": [
+          16,
+          23
+        ]
+      },
+      {
+        "name": "rubble",
+        "file": "props/abbey/rubble_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "candles",
+        "file": "props/abbey/candles_16x16.png",
+        "width": 16,
+        "height": 16,
+        "origin": [
+          8,
+          15
+        ]
+      },
+      {
+        "name": "lectern",
+        "file": "props/abbey/lectern_16x24.png",
+        "width": 16,
+        "height": 24,
+        "origin": [
+          8,
+          23
+        ]
+      },
+      {
+        "name": "chandelier",
+        "file": "props/abbey/chandelier_16x24.png",
+        "width": 16,
+        "height": 24,
+        "origin": [
+          8,
+          23
+        ]
+      },
+      {
+        "name": "skulls",
+        "file": "props/abbey/skulls_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "church_pew",
+        "file": "props/abbey/church_pew_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "banner",
+        "file": "props/abbey/banner_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      }
+    ],
+    "ascension": [
+      {
+        "name": "black_pillar",
+        "file": "props/ascension/black_pillar_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      },
+      {
+        "name": "infernal_altar",
+        "file": "props/ascension/infernal_altar_32x24.png",
+        "width": 32,
+        "height": 24,
+        "origin": [
+          16,
+          23
+        ]
+      },
+      {
+        "name": "flame_brazier",
+        "file": "props/ascension/flame_brazier_16x24.png",
+        "width": 16,
+        "height": 24,
+        "origin": [
+          8,
+          23
+        ]
+      },
+      {
+        "name": "hanging_cage",
+        "file": "props/ascension/hanging_cage_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      },
+      {
+        "name": "ritual_banner",
+        "file": "props/ascension/ritual_banner_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      },
+      {
+        "name": "skull_heap",
+        "file": "props/ascension/skull_heap_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "stone_steps",
+        "file": "props/ascension/stone_steps_32x16.png",
+        "width": 32,
+        "height": 16,
+        "origin": [
+          16,
+          15
+        ]
+      },
+      {
+        "name": "black_column",
+        "file": "props/ascension/black_column_16x32.png",
+        "width": 16,
+        "height": 32,
+        "origin": [
+          8,
+          31
+        ]
+      },
+      {
+        "name": "altar_candles",
+        "file": "props/ascension/altar_candles_16x16.png",
+        "width": 16,
+        "height": 16,
+        "origin": [
+          8,
+          15
+        ]
+      }
+    ],
+    "shared": [
+      {
+        "name": "body_guard",
+        "file": "props/shared/body_guard_32x16.png",
+        "width": 32,
+        "height": 16
+      },
+      {
+        "name": "body_cultist",
+        "file": "props/shared/body_cultist_32x16.png",
+        "width": 32,
+        "height": 16
+      },
+      {
+        "name": "body_civilian",
+        "file": "props/shared/body_civilian_32x16.png",
+        "width": 32,
+        "height": 16
+      }
+    ]
+  },
+  "fx": {
+    "muzzle": {
+      "file": "fx/muzzle_16x16_4f.png",
+      "frame_width": 16,
+      "frame_height": 16,
+      "frames": 4
+    },
+    "blood": {
+      "file": "fx/blood_16x16_4f.png",
+      "frame_width": 16,
+      "frame_height": 16,
+      "frames": 4
+    },
+    "alert_question": {
+      "file": "fx/alert_question_16x16_1f.png",
+      "frame_width": 16,
+      "frame_height": 16,
+      "frames": 1
+    },
+    "alert_suspicious": {
+      "file": "fx/alert_suspicious_16x16_1f.png",
+      "frame_width": 16,
+      "frame_height": 16,
+      "frames": 1
+    },
+    "alert_detected": {
+      "file": "fx/alert_detected_16x16_1f.png",
+      "frame_width": 16,
+      "frame_height": 16,
+      "frames": 1
+    },
+    "eye": {
+      "file": "fx/eye_16x16_1f.png",
+      "frame_width": 16,
+      "frame_height": 16,
+      "frames": 1
+    },
+    "eye_hidden": {
+      "file": "fx/eye_hidden_16x16_1f.png",
+      "frame_width": 16,
+      "frame_height": 16,
+      "frames": 1
+    },
+    "interaction": {
+      "file": "fx/interaction_16x16_1f.png",
+      "frame_width": 16,
+      "frame_height": 16,
+      "frames": 1
+    },
+    "silenced": {
+      "file": "fx/silenced_16x16_1f.png",
+      "frame_width": 16,
+      "frame_height": 16,
+      "frames": 1
+    }
+  },
+  "boss": {
+    "belial": {
+      "file": "boss/belial_64x64_4x4.png",
+      "frame_width": 64,
+      "frame_height": 64,
+      "columns": 4,
+      "rows": 4,
+      "row_names": [
+        "idle",
+        "grasp",
+        "blast",
+        "hit"
+      ],
+      "concept": "boss/belial_full_concept_crop.png",
+      "note": "Boss sprites are source-derived visual prototypes; frame-to-frame character continuity requires artist cleanup."
+    }
+  },
+  "notes": [
+    "Source-derived sprite sheets and prop crops require manual pixel cleanup and animation alignment before final production release.",
+    "Environment tiles, HUD font and FX are authored at exact native pixel resolution; each file has no antialiasing, blur, or fractional scaling.",
+    "Human sheet layout is 4 columns by 6 animation rows (idle, walk, aim, fire, hit, down); 4 columns are frames, NOT cardinal directions.",
+    "The AI-generated visual reference contains more detail than 16px tiles can hold; test sprite silhouettes, collision, and occlusion in your running game.",
+    "Tiled TSX tile collision properties are coarse; level-specific collision shapes, line-of-sight, and navigation meshes remain to be authored.",
+    "Belial concept art is not a finished multi-phase boss rig; boss sheets are action studies only."
+  ]
+}

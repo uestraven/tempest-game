@@ -1,14 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { hurtboxAt, rayRectEntry, rectContains } from '../src/core/hitbox';
+import {
+  TORSO_OFFSET_Y,
+  bulletHitbox,
+  drawnTorso,
+  rayRectEntry,
+  rectContains,
+} from '../src/core/hitbox';
 import { HURTBOX, PLAYER } from '../src/core/constants';
 
 /** Unit direction for an angle in radians. */
 const dir = (a: number) => ({ dx: Math.cos(a), dy: Math.sin(a) });
 
-describe('torso hurtbox geometry', () => {
+describe('drawn torso geometry (screen space)', () => {
   const feetX = 100;
   const feetY = 200;
-  const box = hurtboxAt(feetX, feetY);
+  const box = drawnTorso(feetX, feetY);
 
   it('is 12 x 18, centred on x and spanning y-24 to y-6', () => {
     expect(box.width).toBe(12);
@@ -31,8 +37,27 @@ describe('torso hurtbox geometry', () => {
   });
 });
 
-describe('ray against hurtbox', () => {
-  const box = hurtboxAt(100, 200); // x 94..106, y 176..194
+describe('ground-plane bullet hitbox', () => {
+  it('is 12 x 18 centred on the actor position', () => {
+    const box = bulletHitbox(100, 200);
+    expect(box).toEqual({ x: 94, y: 191, width: 12, height: 18 });
+  });
+
+  it('is the drawn torso shifted down by exactly the render offset', () => {
+    const ground = bulletHitbox(100, 200);
+    const drawn = drawnTorso(100, 200);
+    expect(ground.y - drawn.y).toBe(TORSO_OFFSET_Y);
+    expect(ground.width).toBe(drawn.width);
+    expect(ground.height).toBe(drawn.height);
+  });
+
+  it('contains the actor position itself, so a point-blank shot cannot miss', () => {
+    expect(rectContains(bulletHitbox(100, 200), 100, 200)).toBe(true);
+  });
+});
+
+describe('ray against the drawn torso rectangle', () => {
+  const box = drawnTorso(100, 200); // x 94..106, y 176..194
 
   it('hits a shot aimed level with the torso', () => {
     const { dx, dy } = dir(0);
@@ -95,8 +120,8 @@ describe('ray against hurtbox', () => {
   });
 
   it('reports the nearer of two stacked bodies first', () => {
-    const near = hurtboxAt(100, 200);
-    const far = hurtboxAt(160, 200);
+    const near = drawnTorso(100, 200);
+    const far = drawnTorso(160, 200);
     const { dx, dy } = dir(0);
     const a = rayRectEntry(0, 185, dx, dy, near, 400)!;
     const b = rayRectEntry(0, 185, dx, dy, far, 400)!;

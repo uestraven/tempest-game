@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { Grid, type TileFlags } from './Grid';
-import { TILE_KEY } from '../art/textures';
+import { STAGE_TILESETS, type StageKey } from '../art/TilesetRegistry';
 
 export interface MapObject {
   name: string;
@@ -15,48 +15,81 @@ export interface MapObject {
 export interface LoadedMap {
   map: Phaser.Tilemaps.Tilemap;
   grid: Grid;
-  /** Layers that physically stop the player. */
+  /** Layers that physically stop the player, including the invisible prop layer. */
   solidLayers: Phaser.Tilemaps.TilemapLayer[];
   objects: MapObject[];
   widthPx: number;
   heightPx: number;
+  stage: StageKey;
 }
 
-const LAYER_ORDER = ['floor', 'decorBack', 'collision', 'cover', 'decorFront'] as const;
-const SOLID_LAYERS = new Set(['collision', 'cover']);
-const DEPTHS: Record<string, number> = {
-  floor: 0,
-  decorBack: 1,
-  collision: 5,
-  cover: 6,
-  decorFront: 20,
-};
+/**
+ * Layer render order and depth.
+ *
+ * `propCollision` is created but never drawn: it carries the rasterised prop
+ * footprints so a prop can provide cover and occlusion without a duplicate
+ * cover tile being drawn underneath its sprite.
+ *
+ * `shadowZones` is likewise invisible; it only contributes `shadow` flags.
+ */
+const LAYERS: { name: string; depth: number; visible: boolean; solid: boolean; alpha?: number }[] = [
+  { name: 'floor', depth: 0, visible: true, solid: false },
+  { name: 'decorBack', depth: 1, visible: true, solid: false },
+  { name: 'collision', depth: 5, visible: true, solid: true },
+  { name: 'cover', depth: 6, visible: true, solid: true },
+  { name: 'propCollision', depth: 6, visible: false, solid: true },
+  { name: 'shadowZones', depth: 0, visible: false, solid: false },
+  { name: 'decorFront', depth: 20, visible: true, solid: false, alpha: 0.92 },
+];
 
 /**
- * Creates the Tiled layers and derives the gameplay Grid from per-tile
- * properties, so occlusion always matches the visible geometry.
+ * Creates the Tiled layers against the production tileset and derives the
+ * gameplay Grid from per-tile properties, so occlusion always matches the
+ * visible geometry.
  */
 export function loadLevel(scene: Phaser.Scene, mapKey: string): LoadedMap {
   const map = scene.make.tilemap({ key: mapKey });
-  const tileset = map.addTilesetImage('tiles', TILE_KEY, map.tileWidth, map.tileHeight, 0, 0);
-  if (!tileset) throw new Error(`map ${mapKey}: tileset "tiles" could not be bound`);
+
+  const stage = (map.properties as { name: string; value: string }[] | undefined)?.find(
+    (p) => p.name === 'stage'
+  )?.value as StageKey | undefined;
+  if (!stage || !STAGE_TILESETS[stage]) {
+    throw new Error(`map ${mapKey}: missing or unknown "stage" property`);
+  }
+  const stageTileset = STAGE_TILESETS[stage];
+
+  // Bind the Tiled tileset name to the production texture key.
+  const tileset = map.addTilesetImage(
+    stageTileset.tilesetName,
+    stageTileset.texture,
+    map.tileWidth,
+    map.tileHeight,
+    0,
+    0
+  );
+  if (!tileset) {
+    throw new Error(
+      `map ${mapKey}: tileset "${stageTileset.tilesetName}" could not bind to texture "${stageTileset.texture}"`
+    );
+  }
 
   const grid = new Grid(map.width, map.height);
   const solidLayers: Phaser.Tilemaps.TilemapLayer[] = [];
 
-  for (const name of LAYER_ORDER) {
-    if (!map.getLayer(name)) continue;
-    const layer = map.createLayer(name, tileset, 0, 0);
+  for (const spec of LAYERS) {
+    if (!map.getLayer(spec.name)) continue;
+    const layer = map.createLayer(spec.name, tileset, 0, 0);
     if (!layer) continue;
-    layer.setDepth(DEPTHS[name] ?? 0);
-    if (name === 'decorFront') layer.setAlpha(0.92);
-    if (SOLID_LAYERS.has(name)) {
+    layer.setDepth(spec.depth);
+    layer.setVisible(spec.visible);
+    if (spec.alpha !== undefined) layer.setAlpha(spec.alpha);
+    if (spec.solid) {
       layer.setCollisionByProperty({ collides: true });
       solidLayers.push(layer);
     }
   }
 
-  // Merge tile flags from every tile layer, including the invisible shadowZones.
+  // Merge tile flags from every tile layer, visible or not.
   for (const layerData of map.layers) {
     for (let y = 0; y < map.height; y++) {
       for (let x = 0; x < map.width; x++) {
@@ -97,6 +130,7 @@ export function loadLevel(scene: Phaser.Scene, mapKey: string): LoadedMap {
     objects,
     widthPx: map.widthInPixels,
     heightPx: map.heightInPixels,
+    stage,
   };
 }
 

@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { Grid, type Vec2 } from '../core/Grid';
 import { COMBAT } from '../core/constants';
-import { rayRectEntry, rectContains } from '../core/hitbox';
+import { TORSO_OFFSET_Y, rayRectEntry, rectContains } from '../core/hitbox';
 import type { Player } from '../actors/Player';
 import type { Enemy } from '../actors/Enemy';
 import type { Hearing } from './Hearing';
@@ -29,6 +29,9 @@ export interface DebugRay {
 
 interface Projectile {
   sprite: Phaser.GameObjects.Image;
+  /** Logical GROUND position. The sprite is drawn TORSO_OFFSET_Y above it. */
+  x: number;
+  y: number;
   vx: number;
   vy: number;
   damage: number;
@@ -51,9 +54,11 @@ const MAX_DEBUG_RAYS = 32;
  * Player rounds are deterministic: the crosshair is where they hit unless solid
  * cover intervenes. No random criticals, no headshots.
  *
- * Hits are resolved against each actor's torso hurtbox (core/hitbox.ts), never
- * against the small feet collision body and never against a single point plus a
- * radius - a point/radius approximation is what made hits feel imprecise.
+ * Hits are resolved in the GROUND PLANE against each actor's body hitbox
+ * (core/hitbox.ts), never against the small feet collision body and never
+ * against a single point plus a radius. Effects are drawn at torso height by
+ * applying TORSO_OFFSET_Y, which is a rendering offset only - see hitbox.ts for
+ * why mixing the two spaces breaks cover.
  */
 export class Combat {
   private readonly tracerGfx: Phaser.GameObjects.Graphics;
@@ -83,7 +88,8 @@ export class Combat {
   playerFire(player: Player): ShotReport {
     if (!player.consumeRound()) return { fired: false, hits: [], impacts: [] };
     const def = player.weaponDef;
-    const origin = player.sightPoint;
+    // Ground-plane origin: the same space as the tile grid and the hitboxes.
+    const origin = player.groundPoint;
     const hits = new Map<Enemy, number>();
     const impacts: { x: number; y: number; flesh: boolean }[] = [];
 
@@ -105,15 +111,21 @@ export class Combat {
         hits.set(victim.enemy, (hits.get(victim.enemy) ?? 0) + def.damagePerRay * falloff);
       }
 
-      this.tracers.push({ from: origin, to: end, life: COMBAT.tracerLifetime });
+      // Drawn at torso height; the maths above stayed in the ground plane.
+      this.tracers.push({
+        from: { x: origin.x, y: origin.y - TORSO_OFFSET_Y },
+        to: { x: end.x, y: end.y - TORSO_OFFSET_Y },
+        life: COMBAT.tracerLifetime,
+      });
       // Sparks only where something was actually struck, not at max range in air.
       if (flesh || wall.blocked) {
-        this.impacts.push({ x: end.x, y: end.y, life: COMBAT.impactLifetime, flesh });
-        impacts.push({ x: end.x, y: end.y, flesh });
+        const drawY = end.y - TORSO_OFFSET_Y;
+        this.impacts.push({ x: end.x, y: drawY, life: COMBAT.impactLifetime, flesh });
+        impacts.push({ x: end.x, y: drawY, flesh });
       }
       this.debugRaysList.push({
-        from: { ...origin },
-        to: { ...end },
+        from: { x: origin.x, y: origin.y },
+        to: { x: end.x, y: end.y },
         life: COMBAT.debugRayLifetime,
         hit: flesh,
       });
@@ -138,9 +150,9 @@ export class Combat {
   }
 
   /**
-   * Nearest live enemy whose torso hurtbox the ray enters before the wall impact.
-   * Exact ray/rectangle intersection, so what the player sees as the body is what
-   * the bullet has to cross.
+   * Nearest live enemy whose body hitbox the ray enters before the wall impact.
+   * Exact ray/rectangle intersection in the ground plane, bounded by the wall
+   * distance, so cover geometry and hits always agree.
    */
   private firstEnemyAlongRay(
     origin: Vec2,
@@ -153,7 +165,7 @@ export class Combat {
 
     for (const enemy of this.enemies) {
       if (enemy.dead) continue;
-      const entry = rayRectEntry(origin.x, origin.y, dx, dy, enemy.hurtbox, maxDistance);
+      const entry = rayRectEntry(origin.x, origin.y, dx, dy, enemy.hitbox, maxDistance);
       if (entry === null) continue;
       if (best && entry >= best.distance) continue;
       best = {
@@ -167,10 +179,16 @@ export class Combat {
 
   /** Enemy rounds are visible moving projectiles, blocked by solid obstacles. */
   fireProjectile(from: Vec2, angle: number, damage: number, shooter: Enemy): void {
-    const sprite = this.scene.add.image(Math.round(from.x), Math.round(from.y), 'bullet');
+    const sprite = this.scene.add.image(
+      Math.round(from.x),
+      Math.round(from.y - TORSO_OFFSET_Y),
+      'bullet'
+    );
     sprite.setDepth(29);
     this.projectiles.push({
       sprite,
+      x: from.x,
+      y: from.y,
       vx: Math.cos(angle) * COMBAT.enemyBulletSpeed,
       vy: Math.sin(angle) * COMBAT.enemyBulletSpeed,
       damage,
@@ -186,9 +204,9 @@ export class Combat {
   }
 
   private stepProjectiles(dt: number, player: Player): void {
-    // Same torso hurtbox the player's shots use against enemies, so incoming and
-    // outgoing fire are judged by the same rule.
-    const playerBox = player.hurtbox;
+    // Same ground-plane hitbox the player's shots use against enemies, so
+    // incoming and outgoing fire are judged by the same rule.
+    const playerBox = player.hitbox;
 
     for (let i = this.projectiles.length - 1; i >= 0; i--) {
       const p = this.projectiles[i];
@@ -196,27 +214,28 @@ export class Combat {
       const steps = Math.max(1, Math.ceil((Math.hypot(p.vx, p.vy) * dt) / 4));
       let consumed = false;
       for (let s = 0; s < steps && !consumed; s++) {
-        p.sprite.x += (p.vx * dt) / steps;
-        p.sprite.y += (p.vy * dt) / steps;
-        if (this.grid.isSolidWorld(p.sprite.x, p.sprite.y)) {
+        p.x += (p.vx * dt) / steps;
+        p.y += (p.vy * dt) / steps;
+        if (this.grid.isSolidWorld(p.x, p.y)) {
           this.impacts.push({
-            x: p.sprite.x,
-            y: p.sprite.y,
+            x: p.x,
+            y: p.y - TORSO_OFFSET_Y,
             life: COMBAT.impactLifetime,
             flesh: false,
           });
           consumed = true;
-        } else if (rectContains(playerBox, p.sprite.x, p.sprite.y)) {
+        } else if (rectContains(playerBox, p.x, p.y)) {
           if (player.takeDamage(p.damage))
             this.impacts.push({
-              x: p.sprite.x,
-              y: p.sprite.y,
+              x: p.x,
+              y: p.y - TORSO_OFFSET_Y,
               life: COMBAT.impactLifetime,
               flesh: true,
             });
           consumed = true;
         }
       }
+      p.sprite.setPosition(Math.round(p.x), Math.round(p.y - TORSO_OFFSET_Y));
       p.life -= dt;
       if (consumed || p.life <= 0) {
         p.sprite.destroy();

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { PLAYER, VIRTUAL_HEIGHT, VIRTUAL_WIDTH } from '../core/constants';
 import { PixelText, measure } from './font';
+import { textureKey } from '../art/AssetRegistry';
 import type { Player } from '../actors/Player';
 
 /**
@@ -16,6 +17,12 @@ export class HUD {
   private readonly clue: PixelText;
   private readonly subtitle: PixelText;
 
+  /**
+   * Supplied awareness strip: frame 0 '?', 1 '!', 2 '!!', 3 detected-eye, read
+   * from the artwork itself. Shows the highest alert level in the level, which
+   * is what the player needs for stealth; the per-enemy icons say who.
+   */
+  private readonly awareness: Phaser.GameObjects.Image;
   private objectiveLine = '';
   private clueLine = '';
   private clueTimer = 0;
@@ -45,6 +52,12 @@ export class HUD {
       align: 'center',
       color: 0xbfc8d4,
     });
+
+    this.awareness = scene.add
+      .image(VIRTUAL_WIDTH - 12, 12, textureKey.ui('awareness'), 0)
+      .setScrollFactor(0)
+      .setDepth(100)
+      .setVisible(false);
   }
 
   showClue(text: string, seconds = 4.5): void {
@@ -59,7 +72,17 @@ export class HUD {
     this.subtitleTimer = seconds;
   }
 
-  update(dt: number, player: Player, objectiveText: string, promptText: string | null): void {
+  /** `awarenessLevel` is -1 for "nothing is looking", else a 0-3 strip frame. */
+  update(
+    dt: number,
+    player: Player,
+    objectiveText: string,
+    promptText: string | null,
+    awarenessLevel = -1
+  ): void {
+    this.awareness.setVisible(awarenessLevel >= 0);
+    if (awarenessLevel >= 0) this.awareness.setFrame(Math.min(3, awarenessLevel));
+
     this.objectiveLine = `OBJECTIVE: ${objectiveText}`;
     this.objective.setText(this.objectiveLine);
 
@@ -136,6 +159,7 @@ export class HUD {
 
   destroy(): void {
     this.gfx.destroy();
+    this.awareness.destroy();
     this.objective.destroy();
     this.hpLabel.destroy();
     this.ammoLabel.destroy();

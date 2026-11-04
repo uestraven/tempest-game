@@ -1,9 +1,15 @@
-# TEMPEST — Phase A vertical slice
+# TEMPEST — Valcendre vertical slice (production art)
 
-Top-down tactical stealth shooter. This repository currently contains **Phase A only**:
-the Valcendre arrival alley, market square and transport garage as one contiguous map,
-with movement, the suppressed pistol, three Lookouts, stealth/cover/noise, one authored
-distraction, fixed supplies, the van clue chain, checkpoints and the north-road exit.
+Top-down tactical stealth shooter. This repository contains the Valcendre
+vertical slice — arrival alley, market square and transport garage as one
+contiguous map — with movement, the suppressed pistol, three Lookouts,
+stealth/cover/noise, one authored distraction, fixed supplies, the van clue
+chain, checkpoints and the north-road exit.
+
+The placeholder art has been replaced with the `TEMPEST_pixel_art_v1` production
+package. **Read [docs/art-integration.md](docs/art-integration.md)** for the
+asset architecture, the animation mapping, the tileset mapping, what is still a
+placeholder and the outstanding art problems.
 
 Per the locked spec's deliverable sequence, no other level is built yet.
 
@@ -16,13 +22,23 @@ npm test             # detection, cover, objective-gate and map-contract tests
 npm run build        # typecheck + static build into dist/
 ```
 
-`npm run dev` and `npm run build` regenerate `assets/maps/village.json` first.
+`npm run dev` and `npm run build` regenerate `public/assets/maps/village.json`
+first. That generator is also a gate: it fails the build if a tile role, a cover
+piece or a prop footprint makes any walkable tile, object anchor or patrol
+waypoint unreachable from the spawn point.
 
 ### Known blocker
 
-`npm install` currently fails with `E401 Unable to authenticate` against the configured
+`npm install` fails with `E401 Unable to authenticate` against the configured
 CodeArtifact registry (`amazon-149122183214.d.codeartifact.us-west-2.amazonaws.com`).
 Refresh the registry token, then install. Nothing in the source needs changing.
+
+Because of that, `npm test`, `npm run build`, `npm run dev` and `npm run preview`
+have **not** been run against this tree, and no screenshots have been captured.
+The Phaser-free half (grid, hitboxes, vision, objectives, asset registry,
+character/tileset/prop metadata, font charset, generated map) was verified
+out-of-band under Node's type stripping: 742 assertions, all passing. Anything
+that needs Phaser or a browser is unverified.
 
 ## Controls
 
@@ -43,12 +59,12 @@ Refresh the registry token, then install. Nothing in the source needs changing.
 
 | Drawn | Meaning |
 | --- | --- |
-| Cyan box | Player movement collider (12×10, at the feet) |
-| Green box | Player torso hurtbox (12×18, y−24 to y−6) |
-| Blue box | Enemy movement collider |
-| Magenta box | Enemy torso hurtbox |
-| White / yellow cross | Player / enemy sight origin (AI vision, muzzle) |
-| Grey / red line | Last player shot rays — red when the ray hit a hurtbox |
+| Cyan / blue solid box | Player / enemy movement collider (12×10, at the feet) |
+| Green / magenta solid box | Player / enemy ground-plane bullet hitbox (12×18) |
+| Pale dashed box | The drawn torso rectangle those correspond to (y−24 to y−6) |
+| White / yellow cross | Player / enemy ground position (vision + shot origin) |
+| Light blue cross | The player's aim origin, showing the render offset |
+| Grey / red line | Last 32 shot rays — red when the ray connected |
 
 ## Testing both routes
 
@@ -70,13 +86,21 @@ be made to hold a mandatory flag.
 
 ```
 src/
-  main.ts                 Phaser config: 480x270 virtual pixels, FIT + nearest neighbour
+  main.ts                 Phaser config: 480x270, integer zoom, nearest neighbour
   core/
     constants.ts          Every tuning value from the locked spec, in one place
     Grid.ts               Occlusion, line of sight, hitscan, bounded A* (Phaser-free)
-    hitbox.ts             Torso hurtbox + ray/rect intersection (Phaser-free)
+    hitbox.ts             Ground-plane hitbox, drawn torso, ray/rect (Phaser-free)
     MapLoader.ts          Tiled layers -> gameplay Grid via per-tile properties
-  art/textures.ts         Deterministic placeholder pixel art (16px tiles, 24x32 chars)
+  art/
+    AssetRegistry.ts      Every texture key, path and measured dimension
+    AssetLoader.ts        Preload + post-load validation, NEAREST enforcement
+    AnimationRegistry.ts  Character and FX animations from explicit metadata
+    CharacterDefinitions  Sheet layout, measured frame picks, origins
+    PropDefinitions.ts    Prop size, anchor, depth, collision footprint, cover
+    TilesetRegistry.ts    48-tile schema and gameplay-role -> tile mapping
+    textures.ts           The few generated placeholders the package lacks
+    data/*.json           Prop and tile-role data, shared with the map generator
   actors/{Player,Enemy}.ts
   systems/
     Vision.ts             Cone, suspicion rates, alert levels (Phaser-free)
@@ -87,11 +111,14 @@ src/
     Save.ts               Versioned localStorage snapshots
     Audio.ts              Procedural SFX placeholders
     Camera.ts             Follow camera, small dead zone, pixel snapping
-  ui/{font,HUD,DialogueBox,PauseMenu}.ts
+  ui/{font,font-data,HUD,DialogueBox,PauseMenu}.ts
   data/{weapons,enemies,objectives,dialogue}.ts
   scenes/{Boot,Title,Village}.ts
 tools/build-map.mjs       Authored geometry -> Tiled JSON, with reachability assertions
-tests/                    Grid, Vision, Objectives and map-contract tests
+tests/                    Grid, Vision, Objectives, hitbox, asset and map tests
+tools/inspect-assets.py   Dependency-free PNG inspector used to measure the art
+art-source/               Art package sources, references and previews
+public/assets/            Runtime art, by category
 ```
 
 ### Notable implementation choices
@@ -104,14 +131,15 @@ tests/                    Grid, Vision, Objectives and map-contract tests
 - **Map geometry is authored, not generated.** `tools/build-map.mjs` writes the Tiled
   JSON from hand-written region, cover, waypoint and object tables, and fails the build
   if any object anchor or walkable tile is unreachable from the spawn point.
-- **Three separate collision concepts.** Movement collision is the small 12×10 box at
-  the feet, so walking through doorways feels right. Bullets are judged against a
-  dedicated 12×18 torso hurtbox (`core/hitbox.ts`) by exact ray/rectangle
-  intersection — what you read as the body is what a shot has to cross. AI vision
-  and muzzle positions use a third, separate sight origin, kept low inside the feet
-  body so it can never land in a wall tile an actor is hugging. Shooters aim at the
-  hurtbox centre rather than the sight origin, which sits on its bottom edge. Press
-  F3 to see all three at once.
+- **One gameplay space, one rendering offset.** Movement collision is the small
+  12×10 box at the feet. Bullets are judged against a 12×18 body hitbox by exact
+  ray/rectangle intersection — in the **ground plane**, the same space as the tile
+  grid, so cover blocks exactly what it visibly blocks. The aim angle is the only
+  screen-space step: it is measured from the centre of the shooter's *drawn* torso
+  to the crosshair, which (because both actors share the same render offset) equals
+  the ground-plane angle to the target. That is what makes "aim at the visible
+  torso" and "cover stops the shot" true at the same time. Press F3 to see every
+  box and origin at once; `docs/art-integration.md` §7 has the full reasoning.
 - **Occlusion has one source of truth.** The gameplay `Grid` is derived from the same
   tile properties the renderer draws, so cover you can see always matches cover that
   blocks. High cover blocks all sight; low cover blocks bullets always and sight only
