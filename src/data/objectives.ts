@@ -1,7 +1,16 @@
 /**
- * Data-defined objective chain with stable IDs and explicit dependencies
- * (spec section 13). The runtime state machine in systems/Objectives.ts is
- * event-driven and idempotent: completing an ID twice changes nothing.
+ * The Valcendre objective chain: eight beats with stable IDs and explicit
+ * dependencies (docs/level-design/valcendre-rework.md §3).
+ *
+ * Array order is NARRATIVE order, which is what drives the HUD's active-objective
+ * pointer. Note that it is not ID order: V5 (the depot ledger) comes before V4
+ * (the van), because the ledger carries the garage key.
+ *
+ * ID REUSE WARNING. In the Phase B prototype V3 was an OPTIONAL BELIAL
+ * inscription and VX was the exit. Both meanings are gone: V3 is now depot
+ * traversal and V7 is the mandatory BELIAL discovery. An older save carrying the
+ * previous meanings must never be read as progress in this chain, which is what
+ * the SAVE_VERSION bump to 2 prevents (see systems/Save.ts).
  */
 
 export interface ObjectiveDef {
@@ -18,30 +27,58 @@ export interface ObjectiveDef {
 export const OBJECTIVES: ObjectiveDef[] = [
   {
     id: 'V1',
-    text: "Find Suzanne's transport in the village.",
-    clue: 'The van is here. Still warm.',
+    text: "Investigate the convoy's last stop in the market.",
+    clue: 'They stopped here. Not for long.',
     requires: [],
   },
   {
     id: 'V2',
-    text: 'Inspect the transport log.',
-    clue: 'Transport log: offloaded at the Barnabé estate, 6 km north.',
+    text: 'Determine where Suzanne was taken.',
+    clue: 'The delivery route ends at the Valcendre transport depot.',
     requires: ['V1'],
   },
   {
     id: 'V3',
-    text: 'Examine the inscription on the garage wall.',
-    clue: 'Carved beneath the sigil: BELIAL.',
+    text: 'Reach the transport depot.',
+    clue: 'Inside the depot yard. The office is the place to start.',
     requires: ['V2'],
-    optional: true,
   },
   {
-    id: 'VX',
+    id: 'V5',
+    text: 'Search the depot office for records.',
+    clue: 'Barnabé. His name is on all of it. The garage key was on the desk.',
+    requires: ['V3'],
+  },
+  {
+    id: 'V4',
+    text: "Locate Suzanne's transport in the garage.",
+    clue: 'She was alive when they moved her.',
+    requires: ['V5'],
+  },
+  {
+    id: 'V6',
+    text: 'Deal with the wounded man by the dock.',
+    clue: 'He would not take help. He wanted to go.',
+    requires: ['V4'],
+  },
+  {
+    id: 'V7',
+    text: 'Look behind the transport.',
+    clue: 'Carved into the stone: BELIAL.',
+    requires: ['V6'],
+  },
+  {
+    id: 'V8',
     text: 'Leave Valcendre by the north road.',
     clue: 'Valcendre is behind you.',
-    requires: ['V2'],
+    requires: ['V7'],
   },
 ];
+
+/** The last mandatory beat before the level may be left. */
+export const FINAL_OBJECTIVE = 'V8';
+/** The beat the exit gate checks. */
+export const EXIT_REQUIRES = 'V7';
 
 export const OPTIONAL_CLUES: Record<string, string> = {
   hymn: 'Torn hymn page - the same sigil, inked over the staves.',

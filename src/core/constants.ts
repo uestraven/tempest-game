@@ -105,7 +105,15 @@ export const PICKUP_AMOUNT = {
 } as const;
 
 export const SAVE_KEY = 'tempest.save.v1';
-export const SAVE_VERSION = 1;
+/**
+ * Save schema version. Bumped to 2 by Phase C.1B-2: the objective IDs changed
+ * meaning (V3 was an optional BELIAL inscription and is now depot traversal;
+ * VX is gone and V7 is the mandatory BELIAL beat), and the snapshot gained the
+ * garage key, door and story-event state. A version-1 save therefore describes
+ * progress that cannot be reinterpreted in this chain and is rejected outright
+ * rather than half-applied.
+ */
+export const SAVE_VERSION = 2;
 
 /** Palette: pale limestone, dusty blue, russet (spec section 12, Valcendre row). */
 export const COLORS = {

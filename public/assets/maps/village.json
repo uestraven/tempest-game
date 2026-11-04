@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 2,
- "nextobjectid": 99,
+ "nextobjectid": 101,
  "properties": [
   {
    "name": "level",
@@ -1471,7 +1471,7 @@
     46,
     44,
     44,
-    30,
+    44,
     30,
     30,
     30,
@@ -1575,7 +1575,7 @@
     44,
     44,
     44,
-    28,
+    44,
     28,
     28,
     28,
@@ -1679,7 +1679,7 @@
     44,
     44,
     44,
-    28,
+    44,
     28,
     28,
     28,
@@ -1783,7 +1783,7 @@
     44,
     44,
     44,
-    28,
+    30,
     28,
     28,
     28,
@@ -1887,7 +1887,7 @@
     46,
     44,
     44,
-    28,
+    30,
     28,
     28,
     28,
@@ -1991,7 +1991,7 @@
     44,
     44,
     46,
-    28,
+    30,
     28,
     28,
     28,
@@ -16163,32 +16163,7 @@
     0,
     0,
     0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    9,
-    37,
-    36,
-    36,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    36,
-    36,
-    37,
-    9,
+    11,
     0,
     0,
     0,
@@ -16199,6 +16174,11 @@
     37,
     36,
     36,
+    0,
+    0,
+    0,
+    0,
+    0,
     0,
     0,
     0,
@@ -16218,6 +16198,26 @@
     9,
     37,
     36,
+    36,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    36,
+    36,
+    37,
+    9,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    9,
+    37,
+    36,
     37,
     9,
     0,
@@ -16267,7 +16267,7 @@
     0,
     0,
     0,
-    0,
+    9,
     0,
     0,
     0,
@@ -16371,7 +16371,7 @@
     0,
     0,
     0,
-    0,
+    12,
     0,
     0,
     0,
@@ -16787,7 +16787,7 @@
     0,
     0,
     0,
-    0,
+    11,
     0,
     0,
     0,
@@ -16891,7 +16891,7 @@
     0,
     0,
     0,
-    0,
+    9,
     0,
     0,
     0,
@@ -16995,7 +16995,7 @@
     0,
     0,
     0,
-    0,
+    12,
     0,
     0,
     0,
@@ -23665,7 +23665,7 @@
     0,
     0,
     0,
-    0,
+    9,
     0,
     0,
     0,
@@ -23751,7 +23751,6 @@
     9,
     9,
     9,
-    0,
     0,
     0,
     0,
@@ -23770,6 +23769,7 @@
     0,
     0,
     0,
+    9,
     0,
     0,
     0,
@@ -23873,7 +23873,7 @@
     0,
     0,
     0,
-    0,
+    9,
     0,
     0,
     0,
@@ -24289,7 +24289,7 @@
     0,
     0,
     0,
-    0,
+    9,
     0,
     0,
     0,
@@ -24367,7 +24367,6 @@
     9,
     9,
     9,
-    0,
     0,
     0,
     0,
@@ -24394,6 +24393,7 @@
     0,
     0,
     0,
+    9,
     0,
     0,
     0,
@@ -24497,7 +24497,7 @@
     0,
     0,
     0,
-    0,
+    9,
     0,
     0,
     0,
@@ -46171,7 +46171,7 @@
     0,
     0,
     0,
-    30,
+    0,
     30,
     30,
     30,
@@ -46275,7 +46275,7 @@
     0,
     0,
     0,
-    30,
+    0,
     30,
     30,
     30,
@@ -46379,7 +46379,7 @@
     0,
     0,
     0,
-    30,
+    0,
     30,
     30,
     30,
@@ -46483,7 +46483,7 @@
     0,
     0,
     0,
-    30,
+    0,
     30,
     30,
     30,
@@ -60444,86 +60444,6 @@
     },
     {
      "id": 16,
-     "name": "item_medkit_market",
-     "type": "item",
-     "class": "item",
-     "x": 168,
-     "y": 728,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "medkit"
-      }
-     ]
-    },
-    {
-     "id": 17,
-     "name": "item_ammo_street",
-     "type": "item",
-     "class": "item",
-     "x": 968,
-     "y": 792,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "ammo_pistol"
-      }
-     ]
-    },
-    {
-     "id": 18,
-     "name": "item_ammo_lane",
-     "type": "item",
-     "class": "item",
-     "x": 456,
-     "y": 296,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "ammo_pistol"
-      }
-     ]
-    },
-    {
-     "id": 19,
-     "name": "item_medkit_courtyard",
-     "type": "item",
-     "class": "item",
-     "x": 872,
-     "y": 536,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "medkit"
-      }
-     ]
-    },
-    {
-     "id": 20,
      "name": "interact_radio",
      "type": "interactable",
      "class": "interactable",
@@ -60558,7 +60478,329 @@
      ]
     },
     {
+     "id": 17,
+     "name": "item_medkit_market",
+     "type": "item",
+     "class": "item",
+     "x": 168,
+     "y": 728,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "medkit"
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "name": "item_ammo_street",
+     "type": "item",
+     "class": "item",
+     "x": 968,
+     "y": 792,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "ammo_pistol"
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "name": "item_ammo_lane",
+     "type": "item",
+     "class": "item",
+     "x": 456,
+     "y": 296,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "ammo_pistol"
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "name": "item_medkit_courtyard",
+     "type": "item",
+     "class": "item",
+     "x": 872,
+     "y": 536,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "medkit"
+      }
+     ]
+    },
+    {
      "id": 21,
+     "name": "interact_tracks",
+     "type": "interactable",
+     "class": "interactable",
+     "x": 392,
+     "y": 776,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "tracks"
+      },
+      {
+       "name": "prompt",
+       "type": "string",
+       "value": "E - EXAMINE TRACKS"
+      },
+      {
+       "name": "objective",
+       "type": "string",
+       "value": "V1"
+      },
+      {
+       "name": "glint",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "name": "interact_stall",
+     "type": "interactable",
+     "class": "interactable",
+     "x": 488,
+     "y": 760,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "stall"
+      },
+      {
+       "name": "prompt",
+       "type": "string",
+       "value": "E - INVESTIGATE STALL"
+      },
+      {
+       "name": "objective",
+       "type": "string",
+       "value": "V1"
+      },
+      {
+       "name": "glint",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "interact_waybill",
+     "type": "interactable",
+     "class": "interactable",
+     "x": 488,
+     "y": 552,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "waybill"
+      },
+      {
+       "name": "prompt",
+       "type": "string",
+       "value": "E - READ WAYBILL"
+      },
+      {
+       "name": "objective",
+       "type": "string",
+       "value": "V2"
+      },
+      {
+       "name": "requires",
+       "type": "string",
+       "value": "V1"
+      },
+      {
+       "name": "glint",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "trigger_overheard",
+     "type": "trigger",
+     "class": "trigger",
+     "x": 352,
+     "y": 512,
+     "width": 160,
+     "height": 96,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "objective",
+       "type": "string",
+       "value": "V2"
+      },
+      {
+       "name": "requires",
+       "type": "string",
+       "value": "V1"
+      },
+      {
+       "name": "needsLivingGuardWithin",
+       "type": "float",
+       "value": 220
+      },
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "village_overheard"
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "trigger_depot_street",
+     "type": "trigger",
+     "class": "trigger",
+     "x": 1184,
+     "y": 640,
+     "width": 96,
+     "height": 80,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "objective",
+       "type": "string",
+       "value": "V3"
+      },
+      {
+       "name": "requires",
+       "type": "string",
+       "value": "V2"
+      },
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "village_depot"
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "name": "trigger_depot_garden",
+     "type": "trigger",
+     "class": "trigger",
+     "x": 800,
+     "y": 416,
+     "width": 64,
+     "height": 64,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "objective",
+       "type": "string",
+       "value": "V3"
+      },
+      {
+       "name": "requires",
+       "type": "string",
+       "value": "V2"
+      },
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "village_depot"
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "name": "interact_ledger",
+     "type": "interactable",
+     "class": "interactable",
+     "x": 888,
+     "y": 536,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "ledger"
+      },
+      {
+       "name": "prompt",
+       "type": "string",
+       "value": "E - READ DEPOT LEDGER"
+      },
+      {
+       "name": "objective",
+       "type": "string",
+       "value": "V5"
+      },
+      {
+       "name": "requires",
+       "type": "string",
+       "value": "V3"
+      },
+      {
+       "name": "glint",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 28,
      "name": "interact_van",
      "type": "interactable",
      "class": "interactable",
@@ -60583,62 +60825,27 @@
       {
        "name": "objective",
        "type": "string",
-       "value": "V1"
-      },
-      {
-       "name": "glint",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
-     "id": 22,
-     "name": "interact_log",
-     "type": "interactable",
-     "class": "interactable",
-     "x": 1208,
-     "y": 200,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "log"
-      },
-      {
-       "name": "prompt",
-       "type": "string",
-       "value": "E - READ TRANSPORT LOG"
-      },
-      {
-       "name": "objective",
-       "type": "string",
-       "value": "V2"
-      },
-      {
-       "name": "glint",
-       "type": "bool",
-       "value": true
+       "value": "V4"
       },
       {
        "name": "requires",
        "type": "string",
-       "value": "V1"
+       "value": "V5"
+      },
+      {
+       "name": "glint",
+       "type": "bool",
+       "value": true
       }
      ]
     },
     {
-     "id": 23,
-     "name": "interact_sigil",
-     "type": "interactable",
-     "class": "interactable",
-     "x": 1224,
-     "y": 184,
+     "id": 29,
+     "name": "actor_cultist",
+     "type": "story",
+     "class": "story",
+     "x": 1288,
+     "y": 264,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -60648,7 +60855,47 @@
       {
        "name": "kind",
        "type": "string",
-       "value": "sigil"
+       "value": "cultist"
+      },
+      {
+       "name": "objective",
+       "type": "string",
+       "value": "V6"
+      },
+      {
+       "name": "requires",
+       "type": "string",
+       "value": "V4"
+      },
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 44
+      },
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "village_cultist"
+      }
+     ]
+    },
+    {
+     "id": 30,
+     "name": "interact_inscription",
+     "type": "interactable",
+     "class": "interactable",
+     "x": 1208,
+     "y": 168,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "inscription"
       },
       {
        "name": "prompt",
@@ -60658,22 +60905,22 @@
       {
        "name": "objective",
        "type": "string",
-       "value": "V3"
+       "value": "V7"
+      },
+      {
+       "name": "requires",
+       "type": "string",
+       "value": "V6"
       },
       {
        "name": "glint",
        "type": "bool",
        "value": true
-      },
-      {
-       "name": "requires",
-       "type": "string",
-       "value": "V2"
       }
      ]
     },
     {
-     "id": 24,
+     "id": 31,
      "name": "interact_hymn",
      "type": "interactable",
      "class": "interactable",
@@ -60698,7 +60945,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 32,
      "name": "checkpoint_entry",
      "type": "checkpoint",
      "class": "checkpoint",
@@ -60718,12 +60965,12 @@
      ]
     },
     {
-     "id": 26,
-     "name": "checkpoint_log",
+     "id": 33,
+     "name": "checkpoint_market",
      "type": "checkpoint",
      "class": "checkpoint",
-     "x": 1176,
-     "y": 232,
+     "x": 584,
+     "y": 776,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -60733,12 +60980,52 @@
       {
        "name": "id",
        "type": "string",
-       "value": "cp_log"
+       "value": "cp_market"
       }
      ]
     },
     {
-     "id": 27,
+     "id": 34,
+     "name": "checkpoint_office",
+     "type": "checkpoint",
+     "class": "checkpoint",
+     "x": 888,
+     "y": 584,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "cp_office"
+      }
+     ]
+    },
+    {
+     "id": 35,
+     "name": "checkpoint_belial",
+     "type": "checkpoint",
+     "class": "checkpoint",
+     "x": 1128,
+     "y": 136,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "cp_belial"
+      }
+     ]
+    },
+    {
+     "id": 36,
      "name": "exit_north",
      "type": "exit",
      "class": "exit",
@@ -60757,12 +61044,12 @@
       {
        "name": "requires",
        "type": "string",
-       "value": "V2"
+       "value": "V7"
       }
      ]
     },
     {
-     "id": 28,
+     "id": 37,
      "name": "decor_van",
      "type": "decor",
      "class": "decor",
@@ -60787,232 +61074,85 @@
      ]
     },
     {
-     "id": 29,
-     "name": "reserved_convoy_stop",
-     "type": "reserved",
-     "class": "reserved",
-     "x": 184,
-     "y": 760,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "beat",
-       "type": "string",
-       "value": "V1"
-      },
-      {
-       "name": "note",
-       "type": "string",
-       "value": "convoy stop: tyre marks and casings by the fountain"
-      }
-     ]
-    },
-    {
-     "id": 30,
-     "name": "reserved_convoy_stall",
-     "type": "reserved",
-     "class": "reserved",
-     "x": 248,
-     "y": 712,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "beat",
-       "type": "string",
-       "value": "V1-alt"
-      },
-      {
-       "name": "note",
-       "type": "string",
-       "value": "alternate V1 source: overturned stall with a dropped sidearm"
-      }
-     ]
-    },
-    {
-     "id": 31,
-     "name": "reserved_waybill",
-     "type": "reserved",
-     "class": "reserved",
-     "x": 488,
-     "y": 552,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "beat",
-       "type": "string",
-       "value": "V2"
-      },
-      {
-       "name": "note",
-       "type": "string",
-       "value": "carter's waybill in the covered market"
-      }
-     ]
-    },
-    {
-     "id": 32,
-     "name": "reserved_overheard",
-     "type": "reserved",
-     "class": "reserved",
-     "x": 392,
-     "y": 552,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "beat",
-       "type": "string",
-       "value": "V2-alt"
-      },
-      {
-       "name": "note",
-       "type": "string",
-       "value": "alternate V2 source: proximity trigger to overhear two market guards"
-      }
-     ]
-    },
-    {
-     "id": 33,
-     "name": "reserved_ledger",
-     "type": "reserved",
-     "class": "reserved",
-     "x": 888,
-     "y": 536,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "beat",
-       "type": "string",
-       "value": "V5"
-      },
-      {
-       "name": "note",
-       "type": "string",
-       "value": "depot ledger naming Barnabe, on the office desk"
-      }
-     ]
-    },
-    {
-     "id": 34,
-     "name": "reserved_garage_key",
-     "type": "reserved",
-     "class": "reserved",
-     "x": 904,
-     "y": 552,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "beat",
-       "type": "string",
-       "value": "V5-key"
-      },
-      {
-       "name": "note",
-       "type": "string",
-       "value": "garage key, same desk - never on a guard"
-      }
-     ]
-    },
-    {
-     "id": 35,
-     "name": "reserved_office_checkpoint",
-     "type": "reserved",
-     "class": "reserved",
-     "x": 888,
-     "y": 584,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "beat",
-       "type": "string",
-       "value": "checkpoint"
-      },
-      {
-       "name": "note",
-       "type": "string",
-       "value": "checkpoint after the office"
-      }
-     ]
-    },
-    {
-     "id": 36,
-     "name": "reserved_cultist",
-     "type": "reserved",
-     "class": "reserved",
-     "x": 1400,
-     "y": 248,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "beat",
-       "type": "string",
-       "value": "V6"
-      },
-      {
-       "name": "note",
-       "type": "string",
-       "value": "wounded cultist against the dock wall, non-combatant"
-      }
-     ]
-    },
-    {
-     "id": 37,
-     "name": "reserved_belial",
-     "type": "reserved",
-     "class": "reserved",
-     "x": 1208,
-     "y": 168,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "beat",
-       "type": "string",
-       "value": "V7"
-      },
-      {
-       "name": "note",
-       "type": "string",
-       "value": "BELIAL inscription behind the van, becomes mandatory"
-      }
-     ]
-    },
-    {
      "id": 38,
+     "name": "door_garage_courtyard",
+     "type": "door",
+     "class": "door",
+     "x": 1296,
+     "y": 304,
+     "width": 48,
+     "height": 16,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "locked",
+       "type": "string",
+       "value": "garage_key"
+      },
+      {
+       "name": "tileX",
+       "type": "float",
+       "value": 81
+      },
+      {
+       "name": "tileY",
+       "type": "float",
+       "value": 19
+      },
+      {
+       "name": "tileW",
+       "type": "float",
+       "value": 3
+      },
+      {
+       "name": "tileH",
+       "type": "float",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 39,
+     "name": "door_garage_dock",
+     "type": "door",
+     "class": "door",
+     "x": 1344,
+     "y": 208,
+     "width": 16,
+     "height": 48,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "locked",
+       "type": "string",
+       "value": "garage_key"
+      },
+      {
+       "name": "tileX",
+       "type": "float",
+       "value": 84
+      },
+      {
+       "name": "tileY",
+       "type": "float",
+       "value": 13
+      },
+      {
+       "name": "tileW",
+       "type": "float",
+       "value": 1
+      },
+      {
+       "name": "tileH",
+       "type": "float",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 40,
      "name": "prop_lamppost_0",
      "type": "prop",
      "class": "prop",
@@ -61037,7 +61177,7 @@
      ]
     },
     {
-     "id": 39,
+     "id": 41,
      "name": "prop_barrels_1",
      "type": "prop",
      "class": "prop",
@@ -61062,7 +61202,7 @@
      ]
     },
     {
-     "id": 40,
+     "id": 42,
      "name": "prop_clothesline_2",
      "type": "prop",
      "class": "prop",
@@ -61087,7 +61227,7 @@
      ]
     },
     {
-     "id": 41,
+     "id": 43,
      "name": "prop_flower_pot_3",
      "type": "prop",
      "class": "prop",
@@ -61112,7 +61252,7 @@
      ]
     },
     {
-     "id": 42,
+     "id": 44,
      "name": "prop_bench_4",
      "type": "prop",
      "class": "prop",
@@ -61137,7 +61277,7 @@
      ]
     },
     {
-     "id": 43,
+     "id": 45,
      "name": "prop_fountain_5",
      "type": "prop",
      "class": "prop",
@@ -61162,7 +61302,7 @@
      ]
     },
     {
-     "id": 44,
+     "id": 46,
      "name": "prop_hay_cart_6",
      "type": "prop",
      "class": "prop",
@@ -61187,7 +61327,7 @@
      ]
     },
     {
-     "id": 45,
+     "id": 47,
      "name": "prop_tree_7",
      "type": "prop",
      "class": "prop",
@@ -61212,7 +61352,7 @@
      ]
     },
     {
-     "id": 46,
+     "id": 48,
      "name": "prop_tree_8",
      "type": "prop",
      "class": "prop",
@@ -61237,7 +61377,7 @@
      ]
     },
     {
-     "id": 47,
+     "id": 49,
      "name": "prop_bench_9",
      "type": "prop",
      "class": "prop",
@@ -61262,7 +61402,7 @@
      ]
     },
     {
-     "id": 48,
+     "id": 50,
      "name": "prop_bench_10",
      "type": "prop",
      "class": "prop",
@@ -61287,7 +61427,7 @@
      ]
     },
     {
-     "id": 49,
+     "id": 51,
      "name": "prop_barrels_11",
      "type": "prop",
      "class": "prop",
@@ -61312,7 +61452,7 @@
      ]
     },
     {
-     "id": 50,
+     "id": 52,
      "name": "prop_flower_box_12",
      "type": "prop",
      "class": "prop",
@@ -61337,7 +61477,7 @@
      ]
     },
     {
-     "id": 51,
+     "id": 53,
      "name": "prop_flower_pot_13",
      "type": "prop",
      "class": "prop",
@@ -61362,7 +61502,7 @@
      ]
     },
     {
-     "id": 52,
+     "id": 54,
      "name": "prop_lamppost_14",
      "type": "prop",
      "class": "prop",
@@ -61387,7 +61527,7 @@
      ]
     },
     {
-     "id": 53,
+     "id": 55,
      "name": "prop_lamppost_15",
      "type": "prop",
      "class": "prop",
@@ -61412,7 +61552,7 @@
      ]
     },
     {
-     "id": 54,
+     "id": 56,
      "name": "prop_clothesline_16",
      "type": "prop",
      "class": "prop",
@@ -61437,7 +61577,7 @@
      ]
     },
     {
-     "id": 55,
+     "id": 57,
      "name": "prop_french_flag_17",
      "type": "prop",
      "class": "prop",
@@ -61462,7 +61602,7 @@
      ]
     },
     {
-     "id": 56,
+     "id": 58,
      "name": "prop_village_cross_18",
      "type": "prop",
      "class": "prop",
@@ -61487,7 +61627,7 @@
      ]
     },
     {
-     "id": 57,
+     "id": 59,
      "name": "prop_stone_cover_19",
      "type": "prop",
      "class": "prop",
@@ -61512,7 +61652,7 @@
      ]
     },
     {
-     "id": 58,
+     "id": 60,
      "name": "prop_tree_20",
      "type": "prop",
      "class": "prop",
@@ -61537,7 +61677,7 @@
      ]
     },
     {
-     "id": 59,
+     "id": 61,
      "name": "prop_tree_21",
      "type": "prop",
      "class": "prop",
@@ -61562,7 +61702,7 @@
      ]
     },
     {
-     "id": 60,
+     "id": 62,
      "name": "prop_flower_box_22",
      "type": "prop",
      "class": "prop",
@@ -61587,7 +61727,7 @@
      ]
     },
     {
-     "id": 61,
+     "id": 63,
      "name": "prop_flower_box_23",
      "type": "prop",
      "class": "prop",
@@ -61612,7 +61752,7 @@
      ]
     },
     {
-     "id": 62,
+     "id": 64,
      "name": "prop_barrels_24",
      "type": "prop",
      "class": "prop",
@@ -61637,7 +61777,7 @@
      ]
     },
     {
-     "id": 63,
+     "id": 65,
      "name": "prop_hay_cart_25",
      "type": "prop",
      "class": "prop",
@@ -61662,7 +61802,7 @@
      ]
     },
     {
-     "id": 64,
+     "id": 66,
      "name": "prop_clothesline_26",
      "type": "prop",
      "class": "prop",
@@ -61687,7 +61827,7 @@
      ]
     },
     {
-     "id": 65,
+     "id": 67,
      "name": "prop_flower_pot_27",
      "type": "prop",
      "class": "prop",
@@ -61712,7 +61852,7 @@
      ]
     },
     {
-     "id": 66,
+     "id": 68,
      "name": "prop_village_cross_28",
      "type": "prop",
      "class": "prop",
@@ -61737,7 +61877,7 @@
      ]
     },
     {
-     "id": 67,
+     "id": 69,
      "name": "prop_barrels_29",
      "type": "prop",
      "class": "prop",
@@ -61762,7 +61902,7 @@
      ]
     },
     {
-     "id": 68,
+     "id": 70,
      "name": "prop_stone_cover_30",
      "type": "prop",
      "class": "prop",
@@ -61787,7 +61927,7 @@
      ]
     },
     {
-     "id": 69,
+     "id": 71,
      "name": "prop_clothesline_31",
      "type": "prop",
      "class": "prop",
@@ -61812,7 +61952,7 @@
      ]
     },
     {
-     "id": 70,
+     "id": 72,
      "name": "prop_lamppost_32",
      "type": "prop",
      "class": "prop",
@@ -61837,7 +61977,7 @@
      ]
     },
     {
-     "id": 71,
+     "id": 73,
      "name": "prop_lamppost_33",
      "type": "prop",
      "class": "prop",
@@ -61862,7 +62002,7 @@
      ]
     },
     {
-     "id": 72,
+     "id": 74,
      "name": "prop_lamppost_34",
      "type": "prop",
      "class": "prop",
@@ -61887,7 +62027,7 @@
      ]
     },
     {
-     "id": 73,
+     "id": 75,
      "name": "prop_flower_box_35",
      "type": "prop",
      "class": "prop",
@@ -61912,7 +62052,7 @@
      ]
     },
     {
-     "id": 74,
+     "id": 76,
      "name": "prop_barrels_36",
      "type": "prop",
      "class": "prop",
@@ -61937,7 +62077,7 @@
      ]
     },
     {
-     "id": 75,
+     "id": 77,
      "name": "prop_hay_cart_37",
      "type": "prop",
      "class": "prop",
@@ -61962,7 +62102,7 @@
      ]
     },
     {
-     "id": 76,
+     "id": 78,
      "name": "prop_bench_38",
      "type": "prop",
      "class": "prop",
@@ -61987,7 +62127,7 @@
      ]
     },
     {
-     "id": 77,
+     "id": 79,
      "name": "prop_stone_cover_39",
      "type": "prop",
      "class": "prop",
@@ -62012,7 +62152,7 @@
      ]
     },
     {
-     "id": 78,
+     "id": 80,
      "name": "prop_clothesline_40",
      "type": "prop",
      "class": "prop",
@@ -62037,7 +62177,7 @@
      ]
     },
     {
-     "id": 79,
+     "id": 81,
      "name": "prop_tree_41",
      "type": "prop",
      "class": "prop",
@@ -62062,7 +62202,7 @@
      ]
     },
     {
-     "id": 80,
+     "id": 82,
      "name": "prop_barrels_42",
      "type": "prop",
      "class": "prop",
@@ -62087,7 +62227,7 @@
      ]
     },
     {
-     "id": 81,
+     "id": 83,
      "name": "prop_lamppost_43",
      "type": "prop",
      "class": "prop",
@@ -62112,7 +62252,7 @@
      ]
     },
     {
-     "id": 82,
+     "id": 84,
      "name": "prop_barrels_44",
      "type": "prop",
      "class": "prop",
@@ -62137,7 +62277,7 @@
      ]
     },
     {
-     "id": 83,
+     "id": 85,
      "name": "prop_barrels_45",
      "type": "prop",
      "class": "prop",
@@ -62162,7 +62302,7 @@
      ]
     },
     {
-     "id": 84,
+     "id": 86,
      "name": "prop_barrels_46",
      "type": "prop",
      "class": "prop",
@@ -62187,7 +62327,7 @@
      ]
     },
     {
-     "id": 85,
+     "id": 87,
      "name": "prop_hay_cart_47",
      "type": "prop",
      "class": "prop",
@@ -62212,7 +62352,7 @@
      ]
     },
     {
-     "id": 86,
+     "id": 88,
      "name": "prop_stone_cover_48",
      "type": "prop",
      "class": "prop",
@@ -62237,7 +62377,7 @@
      ]
     },
     {
-     "id": 87,
+     "id": 89,
      "name": "prop_stone_cover_49",
      "type": "prop",
      "class": "prop",
@@ -62262,7 +62402,7 @@
      ]
     },
     {
-     "id": 88,
+     "id": 90,
      "name": "prop_lamppost_50",
      "type": "prop",
      "class": "prop",
@@ -62287,7 +62427,7 @@
      ]
     },
     {
-     "id": 89,
+     "id": 91,
      "name": "prop_lamppost_51",
      "type": "prop",
      "class": "prop",
@@ -62312,7 +62452,7 @@
      ]
     },
     {
-     "id": 90,
+     "id": 92,
      "name": "prop_lamppost_52",
      "type": "prop",
      "class": "prop",
@@ -62337,7 +62477,7 @@
      ]
     },
     {
-     "id": 91,
+     "id": 93,
      "name": "prop_barrels_53",
      "type": "prop",
      "class": "prop",
@@ -62362,7 +62502,7 @@
      ]
     },
     {
-     "id": 92,
+     "id": 94,
      "name": "prop_stone_cover_54",
      "type": "prop",
      "class": "prop",
@@ -62387,7 +62527,7 @@
      ]
     },
     {
-     "id": 93,
+     "id": 95,
      "name": "prop_barrels_55",
      "type": "prop",
      "class": "prop",
@@ -62412,7 +62552,7 @@
      ]
     },
     {
-     "id": 94,
+     "id": 96,
      "name": "prop_barrels_56",
      "type": "prop",
      "class": "prop",
@@ -62437,7 +62577,7 @@
      ]
     },
     {
-     "id": 95,
+     "id": 97,
      "name": "prop_stone_cover_57",
      "type": "prop",
      "class": "prop",
@@ -62462,7 +62602,7 @@
      ]
     },
     {
-     "id": 96,
+     "id": 98,
      "name": "prop_barrels_58",
      "type": "prop",
      "class": "prop",
@@ -62487,7 +62627,7 @@
      ]
     },
     {
-     "id": 97,
+     "id": 99,
      "name": "prop_lamppost_59",
      "type": "prop",
      "class": "prop",
@@ -62512,7 +62652,7 @@
      ]
     },
     {
-     "id": 98,
+     "id": 100,
      "name": "prop_village_cross_60",
      "type": "prop",
      "class": "prop",

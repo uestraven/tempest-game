@@ -31,6 +31,7 @@ import { fileURLToPath } from 'node:url';
 import {
   ACCENTS,
   COVER,
+  DOORS,
   FACADE_DOORS,
   OBJECTS,
   OBSTRUCTIONS,
@@ -137,6 +138,19 @@ for (const [area, list] of Object.entries(propData)) {
   }
 }
 
+// Doors become objects, carrying their tile rect and what unlocks them.
+for (const d of DOORS) {
+  OBJECTS.push({
+    name: d.name,
+    type: 'door',
+    x: d.x * TS,
+    y: d.y * TS,
+    width: d.w * TS,
+    height: d.h * TS,
+    props: { locked: d.locked, tileX: d.x, tileY: d.y, tileW: d.w, tileH: d.h },
+  });
+}
+
 // Props become objects too, so the scene can instantiate their sprites.
 let propIndex = 0;
 for (const placement of PROP_PLACEMENTS) {
@@ -188,6 +202,22 @@ for (const o of OBSTRUCTIONS) {
       walkable[idx(x, y)] = false;
       areaOf[idx(x, y)] = null;
       surfaceOf[idx(x, y)] = null;
+    }
+  }
+}
+
+/**
+ * Doors are carved back to walkable so the level is traversable once they open;
+ * the runtime makes them solid while locked. The locked-door reachability check
+ * further down proves the garage really is sealed until then.
+ */
+for (const d of DOORS) {
+  for (let y = d.y; y < d.y + d.h; y++) {
+    for (let x = d.x; x < d.x + d.w; x++) {
+      assertInside(`door "${d.name}"`, x, y);
+      walkable[idx(x, y)] = true;
+      areaOf[idx(x, y)] = areaOf[idx(x, y)] ?? 'garageInterior';
+      surfaceOf[idx(x, y)] = surfaceOf[idx(x, y)] ?? 'garageFloor';
     }
   }
 }
@@ -396,6 +426,64 @@ if (process.env.MAP_DOOR_CANDIDATES) {
         candidates.push(`${x},${y}`);
   console.log(`south-facing facade candidates (${candidates.length}):`);
   console.log('  ' + candidates.join(' '));
+}
+
+/**
+ * The garage must be SEALED while its doors are locked.
+ *
+ * Flood fill again with every door tile treated as solid: if the garage, the
+ * dock or the exit is still reachable, some other passage bypasses the key and
+ * the objective lock would be decoration. This is the authored guarantee behind
+ * "neither entrance can bypass the key requirement".
+ */
+{
+  const doorTiles = new Set();
+  for (const d of DOORS)
+    for (let y = d.y; y < d.y + d.h; y++)
+      for (let x = d.x; x < d.x + d.w; x++) doorTiles.add(idx(x, y));
+
+  const sealed = new Array(W * H).fill(false);
+  const stack = [[Math.floor(spawnObj.x / TS), Math.floor(spawnObj.y / TS)]];
+  sealed[idx(stack[0][0], stack[0][1])] = true;
+  while (stack.length) {
+    const [x, y] = stack.pop();
+    for (const [dx, dy] of [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+    ]) {
+      const nx = x + dx;
+      const ny = y + dy;
+      if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+      const i = idx(nx, ny);
+      if (sealed[i] || solid[i] || doorTiles.has(i)) continue;
+      sealed[i] = true;
+      stack.push([nx, ny]);
+    }
+  }
+
+  // The loading dock is deliberately NOT sealed: it is the open yard that leads
+  // to the garage's second entrance, and the shutter in its west wall is that
+  // entrance. What must be sealed is the garage itself and the exit beyond it.
+  const mustBeSealed = [
+    ['garage interior', 70, 14],
+    ['garage west bay', 60, 9],
+    ['north road exit', 62, 2],
+  ];
+  if (!sealed[idx(87, 15)])
+    throw new Error('the loading dock should be reachable without the key; it is the approach');
+  for (const [label, tx, ty] of mustBeSealed) {
+    if (sealed[idx(tx, ty)])
+      throw new Error(
+        `${label} at ${tx},${ty} is reachable with both garage doors locked - ` +
+          'some passage bypasses the garage key'
+      );
+  }
+  console.log(
+    `  locked-door check: garage and exit sealed behind ${DOORS.length} doors ` +
+      `(${doorTiles.size} door tiles); dock reachable as the second approach`
+  );
 }
 
 // Facade openings must land on the 1-tile wall ring, or they would be painted

@@ -201,3 +201,47 @@ more urgent, plus two items the rebuild newly needs.
 The rebuild removed the service corridor, so the Phase B request for corridor
 dressing is withdrawn. No new blocker, cover piece or walkable surface is
 required by the geometry: it is complete and testable as built.
+
+---
+
+## C.1B-02 addendum — the chain is implemented, these sites are empty
+
+The eight-beat objective chain is built and tested
+([`../level-design/valcendre-objectives-c1b02.md`](../level-design/valcendre-objectives-c1b02.md)).
+Nothing below blocks it. What changed is that these requests are no longer
+speculative: each one now names an interactable the player is *required* to
+find, and five of the seven mandatory sites currently show nothing but the
+interaction glint.
+
+| Request | Now blocks | Site |
+| --- | --- | --- |
+| **VP-001** BELIAL inscription | **V7**, which is mandatory and gates the exit | `interact_inscription`, tile 75,10 |
+| **VP-002** wounded cultist | **V6**, which gates V7 | `actor_cultist`, tile 80,16 |
+| **VP-003** convoy-stop decals | **V1**, the first beat, both of its sources | `interact_tracks` 24,48 · `interact_stall` 30,47 |
+| **VP-004** depot and dispatch props | **V5**, which carries the garage key | `interact_ledger`, tile 55,33 |
+
+Interim measures in place, so none of this is a blocker:
+
+- `interact_waybill` and `interact_ledger` reuse the existing `prop_doc`
+  document sprite.
+- `interact_van` is covered by the existing `decor_van` object, 41 px away.
+- `actor_cultist` reuses the approved `prop.shared.body_cultist` with a slow
+  1 px breathing bob while alive, and goes still when the scene resolves. It
+  reads as a body rather than as a wounded man, which is exactly what VP-002
+  fixes.
+- `interact_tracks`, `interact_stall` and `interact_inscription` have **no
+  sprite at all**. No placeholder was invented for them.
+
+### New, from the implementation
+
+#### VPD-001 · Garage door · P1
+
+| | |
+| --- | --- |
+| **Output** | `public/assets/props/valcendre/garage_door_48x16.png` and `garage_shutter_16x48.png` |
+| **Size** | Two frames each (`closed`, `open`): 96 × 16 and 32 × 48 |
+| **Why** | Both garage entrances are now real locked geometry, drawn from the tileset's single 16 × 16 `door_closed` / `door_open` pair tiled across a 3-tile doorway and a 3-tile shutter. A wide vehicle door made of three identical house doors does not read as a shutter, and the locked state is the single most important piece of information in the depot |
+| **Accept** | The closed frame reads as locked at 1:1 without a HUD cue · the open frame leaves the full opening legible · the shutter reads as vertical-travel, distinct from the hinged courtyard door |
+
+This is distinct from **VP-008** (the depot's outer *gate*), which is still
+wanted and still unbuilt.

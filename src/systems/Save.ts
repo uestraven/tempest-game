@@ -5,7 +5,7 @@
  */
 
 import { SAVE_KEY, SAVE_VERSION } from '../core/constants';
-import type { ObjectiveSnapshot } from './Objectives';
+import type { MissionSnapshot } from './Mission';
 import type { WeaponId } from '../data/weapons';
 
 export interface AmmoSnapshot {
@@ -40,7 +40,13 @@ export interface Checkpoint {
   checkpointId: string;
   player: PlayerSnapshot;
   enemies: EnemySnapshot[];
-  objectives: ObjectiveSnapshot;
+  /**
+   * Objectives, the garage key, which doors are open, one-shot story events and
+   * fired region triggers. Restoring this brings back the PHYSICAL state of the
+   * level - a locked door stays locked, an opened one stays open - not just the
+   * HUD objective line.
+   */
+  mission: MissionSnapshot;
   /** Object names already consumed, so reloading cannot duplicate a pickup. */
   consumed: string[];
   /** One-shot interactables already used. */
@@ -73,8 +79,11 @@ export function readSave(): Checkpoint | null {
   if (!raw) return null;
   try {
     const parsed = JSON.parse(raw) as Checkpoint;
+    // A save from an older schema carries objective IDs whose meanings have
+    // changed, so it is discarded rather than reinterpreted.
     if (parsed?.version !== SAVE_VERSION) return null;
     if (!parsed.player || !Array.isArray(parsed.enemies)) return null;
+    if (!parsed.mission || !parsed.mission.objectives) return null;
     return parsed;
   } catch {
     return null;

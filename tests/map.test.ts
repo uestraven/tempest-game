@@ -227,21 +227,23 @@ describe('village slice content', () => {
     expect(byType('interactable').filter((p) => p.props.noise)).toHaveLength(1);
   });
 
-  it('chains the van clue, the log and the inscription in order', () => {
-    expect(byName('interact_van')?.props.objective).toBe('V1');
-    expect(byName('interact_log')?.props.requires).toBe('V1');
-    expect(byName('interact_log')?.props.objective).toBe('V2');
-    expect(byName('interact_sigil')?.props.requires).toBe('V2');
+  it('chains the depot ledger, the transport and the inscription in order', () => {
+    expect(byName('interact_ledger')?.props.requires).toBe('V3');
+    expect(byName('interact_ledger')?.props.objective).toBe('V5');
+    expect(byName('interact_van')?.props.requires).toBe('V5');
+    expect(byName('interact_van')?.props.objective).toBe('V4');
+    expect(byName('interact_inscription')?.props.requires).toBe('V6');
+    expect(byName('interact_inscription')?.props.objective).toBe('V7');
   });
 
-  it('gates the exit behind the transport log', () => {
-    expect(byName('exit_north')?.props.requires).toBe('V2');
+  it('gates the exit behind the BELIAL inscription', () => {
+    expect(byName('exit_north')?.props.requires).toBe('V7');
   });
 
-  it('places a checkpoint at the entrance and after the log', () => {
+  it('places a checkpoint at the entrance and at each story beat', () => {
     const ids = byType('checkpoint').map((c) => c.props.id);
-    expect(ids).toContain('cp_entry');
-    expect(ids).toContain('cp_log');
+    for (const id of ['cp_entry', 'cp_market', 'cp_office', 'cp_belial'])
+      expect(ids, id).toContain(id);
   });
 
   it('keeps the van object and its placeholder sprite', () => {
@@ -327,11 +329,14 @@ describe('softlock resistance', () => {
 
   it('anchors every gameplay object on walkable ground', () => {
     for (const obj of objects) {
-      // Exits are trigger rectangles; props legitimately stand in their own
-      // collision footprint.
-      if (obj.type === 'exit' || obj.type === 'prop' || obj.type === 'decor') continue;
+      // Exits and region triggers are rectangles; props legitimately stand in
+      // their own collision footprint; a door's anchor is on the wall it pierces.
+      if (['exit', 'prop', 'decor', 'door'].includes(obj.type)) continue;
       expect(
-        walkable(Math.floor(obj.x / TILE), Math.floor(obj.y / TILE)),
+        walkable(
+          Math.floor((obj.x + obj.width / 2) / TILE),
+          Math.floor((obj.y + obj.height / 2) / TILE)
+        ),
         `${obj.name} sits on a solid tile`
       ).toBe(true);
     }
@@ -339,12 +344,18 @@ describe('softlock resistance', () => {
 
   it('can reach every objective, supply and checkpoint from the spawn point', () => {
     for (const name of [
+      'interact_tracks',
+      'interact_stall',
+      'interact_waybill',
+      'interact_ledger',
       'interact_van',
-      'interact_log',
-      'interact_sigil',
+      'interact_inscription',
+      'actor_cultist',
       'interact_radio',
       'interact_hymn',
-      'checkpoint_log',
+      'checkpoint_market',
+      'checkpoint_office',
+      'checkpoint_belial',
       'item_medkit_market',
       'item_medkit_courtyard',
       'item_ammo_street',

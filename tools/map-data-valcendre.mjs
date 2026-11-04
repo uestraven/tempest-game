@@ -106,6 +106,39 @@ export const OBSTRUCTIONS = [
   { x: 68, y: 36, w: 5, h: 3, why: 'depot outbuilding, south' },
   { x: 56, y: 22, w: 3, h: 3, why: 'depot gatehouse stub, north-west' },
   { x: 78, y: 28, w: 3, h: 3, why: 'depot store, east' },
+  // Wall the garage/dock junction so the dock is a real second ENTRANCE rather
+  // than part of the same room. The shutter at x84,y13-15 is carved back by
+  // DOORS, so with the doors locked the garage is sealed.
+  { x: 84, y: 10, w: 1, h: 9, why: 'garage east wall, pierced by the dock shutter' },
+];
+
+/**
+ * Lockable doors. Carved back to walkable AFTER the obstructions, so pathing
+ * and reachability work once they are open, and registered as `door` objects so
+ * the runtime can make them solid, sight-blocking and visibly shut while locked.
+ *
+ * The garage has two entrances by design. BOTH are doors, so neither can be the
+ * one that quietly bypasses the key.
+ */
+export const DOORS = [
+  {
+    name: 'door_garage_courtyard',
+    x: 81,
+    y: 19,
+    w: 3,
+    h: 1,
+    locked: 'garage_key',
+    why: "the garage's main door off the courtyard",
+  },
+  {
+    name: 'door_garage_dock',
+    x: 84,
+    y: 13,
+    w: 1,
+    h: 3,
+    locked: 'garage_key',
+    why: 'the loading dock shutter, the garage\'s second entrance',
+  },
 ];
 
 /** Appearance-only surface overrides. */
@@ -136,7 +169,7 @@ export const SHADOWS = [
   { x: 56, y: 20, w: 10, h: 2 },
   // Garage west bay and the dock.
   { x: 58, y: 6, w: 4, h: 6 },
-  { x: 84, y: 10, w: 7, h: 4 },
+  { x: 85, y: 10, w: 6, h: 4 },
 ];
 
 /**
@@ -384,48 +417,116 @@ export const OBJECTS = [
   pt('enemy_l2', 'enemy', 17, 39, { kind: 'lookout', route: 'l2', facing: 0 }),
   pt('enemy_l3', 'enemy', 60, 41, { kind: 'lookout', route: 'l3', facing: 0 }),
 
-  // --- supplies ---
-  pt('item_medkit_market', 'item', 10, 45, { kind: 'medkit' }),
-  pt('item_ammo_street', 'item', 60, 49, { kind: 'ammo_pistol' }),
-  pt('item_ammo_lane', 'item', 28, 18, { kind: 'ammo_pistol' }),
-  pt('item_medkit_courtyard', 'item', 54, 33, { kind: 'medkit' }),
-
-  // --- temporary objective chain, unchanged in behaviour ---
+  // --- the market distraction (unchanged) ---
   pt('interact_radio', 'interactable', 31, 34, {
     kind: 'radio',
     prompt: 'E - SWITCH ON RADIO',
     noise: 128,
     oneShot: true,
   }),
-  pt('interact_van', 'interactable', 69, 11, {
-    kind: 'van',
-    prompt: 'E - EXAMINE TRANSPORT',
+
+  // --- supplies ---
+  pt('item_medkit_market', 'item', 10, 45, { kind: 'medkit' }),
+  pt('item_ammo_street', 'item', 60, 49, { kind: 'ammo_pistol' }),
+  pt('item_ammo_lane', 'item', 28, 18, { kind: 'ammo_pistol' }),
+  pt('item_medkit_courtyard', 'item', 54, 33, { kind: 'medkit' }),
+
+  // --- the eight-beat investigation (docs/level-design/valcendre-rework.md) ---
+  // V1: two sources, either one completes the beat.
+  pt('interact_tracks', 'interactable', 24, 48, {
+    kind: 'tracks',
+    prompt: 'E - EXAMINE TRACKS',
     objective: 'V1',
     glint: true,
   }),
-  pt('interact_log', 'interactable', 75, 12, {
-    kind: 'log',
-    prompt: 'E - READ TRANSPORT LOG',
+  pt('interact_stall', 'interactable', 30, 47, {
+    kind: 'stall',
+    prompt: 'E - INVESTIGATE STALL',
+    objective: 'V1',
+    glint: true,
+  }),
+
+  // V2: the waybill, or overhearing the market guards.
+  pt('interact_waybill', 'interactable', 30, 34, {
+    kind: 'waybill',
+    prompt: 'E - READ WAYBILL',
     objective: 'V2',
-    glint: true,
     requires: 'V1',
-  }),
-  pt('interact_sigil', 'interactable', 76, 11, {
-    kind: 'sigil',
-    prompt: 'E - EXAMINE INSCRIPTION',
-    objective: 'V3',
     glint: true,
-    requires: 'V2',
   }),
+  // Proximity trigger covering the whole covered market, so the player never
+  // has to stand on a precise tile. It needs a living guard within earshot but
+  // never requires one: if they are all dead the waybill still works.
+  rect('trigger_overheard', 'trigger', 22, 32, 10, 6, {
+    objective: 'V2',
+    requires: 'V1',
+    needsLivingGuardWithin: 220,
+    dialogue: 'village_overheard',
+  }),
+
+  // V3: depot traversal. One trigger per approved route, so either works.
+  rect('trigger_depot_street', 'trigger', 74, 40, 6, 5, {
+    objective: 'V3',
+    requires: 'V2',
+    dialogue: 'village_depot',
+  }),
+  rect('trigger_depot_garden', 'trigger', 50, 26, 4, 4, {
+    objective: 'V3',
+    requires: 'V2',
+    dialogue: 'village_depot',
+  }),
+
+  // V5: the ledger, which carries the garage key. On a desk, never on a guard.
+  pt('interact_ledger', 'interactable', 55, 33, {
+    kind: 'ledger',
+    prompt: 'E - READ DEPOT LEDGER',
+    objective: 'V5',
+    requires: 'V3',
+    glint: true,
+  }),
+
+  // V4: the transport.
+  pt('interact_van', 'interactable', 69, 11, {
+    kind: 'van',
+    prompt: 'E - EXAMINE TRANSPORT',
+    objective: 'V4',
+    requires: 'V5',
+    glint: true,
+  }),
+
+  // V6: the wounded cultist. A non-combatant scripted scene, triggered by
+  // approach from either garage entrance, deferred while the player is in
+  // combat. Placed between the two entrances so it cannot be missed.
+  pt('actor_cultist', 'story', 80, 16, {
+    kind: 'cultist',
+    objective: 'V6',
+    requires: 'V4',
+    radius: 44,
+    dialogue: 'village_cultist',
+  }),
+
+  // V7: BELIAL. Mandatory, and the exit checks it.
+  pt('interact_inscription', 'interactable', 75, 10, {
+    kind: 'inscription',
+    prompt: 'E - EXAMINE INSCRIPTION',
+    objective: 'V7',
+    requires: 'V6',
+    glint: true,
+  }),
+
   pt('interact_hymn', 'interactable', 12, 25, {
     kind: 'hymn',
     prompt: 'E - READ TORN PAGE',
   }),
 
+  // Checkpoints: entry, after the market intelligence, after the ledger and
+  // key, and after BELIAL - so no failure repeats a long story beat.
   pt('checkpoint_entry', 'checkpoint', 10, 63, { id: 'cp_entry' }),
-  pt('checkpoint_log', 'checkpoint', 73, 14, { id: 'cp_log' }),
+  pt('checkpoint_market', 'checkpoint', 36, 48, { id: 'cp_market' }),
+  pt('checkpoint_office', 'checkpoint', 55, 36, { id: 'cp_office' }),
+  pt('checkpoint_belial', 'checkpoint', 70, 8, { id: 'cp_belial' }),
 
-  rect('exit_north', 'exit', 60, 0, 5, 2, { to: 'estate', requires: 'V2' }),
+  rect('exit_north', 'exit', 60, 0, 5, 2, { to: 'estate', requires: 'V7' }),
 
   // Generated-placeholder decor. The van's collision comes from the `van` cover
   // tiles beneath it; this 64x32 sprite covers those four-by-two tiles exactly.
@@ -440,41 +541,4 @@ export const OBJECTS = [
     props: { sprite: 'prop_van', depth: 'sorted' },
   },
 
-  // --- reserved for C.1B-2: positions and intent only, no behaviour ---
-  pt('reserved_convoy_stop', 'reserved', 11, 47, {
-    beat: 'V1',
-    note: 'convoy stop: tyre marks and casings by the fountain',
-  }),
-  pt('reserved_convoy_stall', 'reserved', 15, 44, {
-    beat: 'V1-alt',
-    note: 'alternate V1 source: overturned stall with a dropped sidearm',
-  }),
-  pt('reserved_waybill', 'reserved', 30, 34, {
-    beat: 'V2',
-    note: "carter's waybill in the covered market",
-  }),
-  pt('reserved_overheard', 'reserved', 24, 34, {
-    beat: 'V2-alt',
-    note: 'alternate V2 source: proximity trigger to overhear two market guards',
-  }),
-  pt('reserved_ledger', 'reserved', 55, 33, {
-    beat: 'V5',
-    note: 'depot ledger naming Barnabe, on the office desk',
-  }),
-  pt('reserved_garage_key', 'reserved', 56, 34, {
-    beat: 'V5-key',
-    note: 'garage key, same desk - never on a guard',
-  }),
-  pt('reserved_office_checkpoint', 'reserved', 55, 36, {
-    beat: 'checkpoint',
-    note: 'checkpoint after the office',
-  }),
-  pt('reserved_cultist', 'reserved', 87, 15, {
-    beat: 'V6',
-    note: 'wounded cultist against the dock wall, non-combatant',
-  }),
-  pt('reserved_belial', 'reserved', 75, 10, {
-    beat: 'V7',
-    note: 'BELIAL inscription behind the van, becomes mandatory',
-  }),
 ];

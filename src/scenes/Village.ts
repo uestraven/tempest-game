@@ -5,12 +5,14 @@ import {
   TILE,
   MAX_FRAME_DT,
   PICKUP_AMOUNT,
+  SAVE_VERSION,
   VIRTUAL_HEIGHT,
   VIRTUAL_WIDTH,
 } from '../core/constants';
 import { loadLevel, objectsOfType, requireObject, type LoadedMap, type MapObject } from '../core/MapLoader';
 import type { Vec2 } from '../core/Grid';
 import { TORSO_OFFSET_Y } from '../core/hitbox';
+import { STAGE_TILESETS, TILE_NAMES } from '../art/TilesetRegistry';
 import { textureKey, type PropArea } from '../art/AssetRegistry';
 import {
   PROP_DEPTH,
@@ -31,9 +33,9 @@ import {
   type Interactable,
   type PickupItem,
 } from '../systems/Interaction';
-import { Objectives } from '../systems/Objectives';
-import { OPTIONAL_CLUES } from '../data/objectives';
-import { DIALOGUE } from '../data/dialogue';
+import { Mission } from '../systems/Mission';
+import { EXIT_REQUIRES, FINAL_OBJECTIVE, OPTIONAL_CLUES } from '../data/objectives';
+import { DIALOGUE, type DialogueLine } from '../data/dialogue';
 import { readSave, writeSave, type Checkpoint } from '../systems/Save';
 import { Audio } from '../systems/Audio';
 import { setupCamera } from '../systems/Camera';
@@ -58,7 +60,7 @@ export class Village extends Phaser.Scene {
   private hearing!: Hearing;
   private combat!: Combat;
   private interaction!: Interaction;
-  private objectives!: Objectives;
+  private mission!: Mission;
   private hud!: HUD;
   private dialogue!: DialogueBox;
   private pause!: PauseMenu;
@@ -72,6 +74,11 @@ export class Village extends Phaser.Scene {
   private debugHitboxes = false;
   /** Props that are y-sorted with characters, re-depthed every frame. */
   private sortedProps: Phaser.GameObjects.Image[] = [];
+  private doors: DoorActor[] = [];
+  private triggers: TriggerRegion[] = [];
+  private storyActors: StoryActor[] = [];
+  /** A scene waiting for combat to end before it plays. */
+  private pendingScene: StoryActor | null = null;
   /** Supplied FX: concealment readout above the player, prompt marker, muzzle. */
   private concealIcon!: Phaser.GameObjects.Image;
   private promptIcon!: Phaser.GameObjects.Image;
@@ -79,6 +86,7 @@ export class Village extends Phaser.Scene {
 
   private exitZone!: Phaser.Geom.Rectangle;
   private exitRequires = '';
+  private tilesetTexture = '';
   private checkpointZones: { id: string; x: number; y: number; taken: boolean }[] = [];
   private lastCheckpoint: Checkpoint | null = null;
   private enemySpawnFacing = new Map<string, number>();
@@ -100,8 +108,9 @@ export class Village extends Phaser.Scene {
     this.level = loadLevel(this, LEVEL_ID);
     this.physics.world.setBounds(0, 0, this.level.widthPx, this.level.heightPx);
 
+    this.tilesetTexture = STAGE_TILESETS[this.level.stage].texture;
     this.hearing = new Hearing(this.level.grid);
-    this.objectives = new Objectives();
+    this.mission = new Mission();
     this.audio = new Audio(this);
 
     this.spawnFromMap();
@@ -130,7 +139,7 @@ export class Village extends Phaser.Scene {
       },
     });
 
-    this.objectives.onComplete((def) => {
+    this.mission.objectives.onComplete((def) => {
       if (def.clue) this.hud.showClue(def.clue);
       this.audio.play('pickup');
     });
@@ -243,18 +252,30 @@ export class Village extends Phaser.Scene {
     }
 
     this.spawnProps(objects);
+    this.spawnTriggers(objects);
+    this.spawnStoryActors(objects);
+    this.spawnDoors(objects);
 
     const exit = requireObject(objects, 'exit');
     this.exitZone = new Phaser.Geom.Rectangle(exit.x, exit.y, exit.width, exit.height);
-    this.exitRequires = String(exit.props.requires ?? '');
+    // The map authors the gate, but EXIT_REQUIRES is the contract: if the map
+    // ever ships without the property the exit still refuses until BELIAL.
+    this.exitRequires = String(exit.props.requires ?? EXIT_REQUIRES);
   }
 
+  /**
+   * Visible sprite for an interactable, where one exists.
+   *
+   * The paper evidence reuses the existing document sprite, and the transport
+   * is drawn by its own `decor_van` object. The remaining mandatory sites -
+   * the tyre tracks, the ransacked stall and the BELIAL inscription - have NO
+   * approved artwork yet; they are art requests VP-003 and VP-001, and until
+   * those land the glint is their only cue. No placeholder is invented for
+   * them here.
+   */
   private propSprite(kind: string, obj: MapObject): Phaser.GameObjects.Image | undefined {
-    // Only the objects the art package has no equivalent for keep a generated
-    // sprite. The van is drawn by its own `decor` object, and the sigil is a
-    // tile in the decorBack layer, so neither gets one here.
-    const texture =
-      kind === 'radio' ? 'prop_radio' : kind === 'log' || kind === 'hymn' ? 'prop_doc' : null;
+    const DOCUMENTS = ['waybill', 'ledger', 'hymn'];
+    const texture = kind === 'radio' ? 'prop_radio' : DOCUMENTS.includes(kind) ? 'prop_doc' : null;
     if (!texture) return undefined;
     return this.add.image(Math.round(obj.x), Math.round(obj.y), texture).setDepth(3);
   }
@@ -393,7 +414,7 @@ export class Village extends Phaser.Scene {
     this.updateCrosshair();
 
     if (this.paused) {
-      this.hud.update(frameDt, this.player, this.objectives.activeText(), null);
+      this.hud.update(frameDt, this.player, this.mission.activeText(), null);
       return;
     }
 
@@ -409,11 +430,11 @@ export class Village extends Phaser.Scene {
 
     const target = this.sliceComplete
       ? null
-      : this.interaction.resolve(this.player, this.enemies, (id) => this.objectives.isComplete(id));
+      : this.interaction.resolve(this.player, this.enemies, (id) => this.mission.isComplete(id));
     this.hud.update(
       frameDt,
       this.player,
-      this.objectives.activeText(),
+      this.mission.activeText(),
       target?.prompt ?? null,
       this.awarenessLevel()
     );
@@ -486,6 +507,8 @@ export class Village extends Phaser.Scene {
 
     for (const enemy of this.enemies) enemy.update(dt);
     this.combat.update(dt, this.player);
+    this.checkTriggers();
+    this.checkStoryActors();
     this.checkCheckpoints();
     this.checkExit();
   }
@@ -510,7 +533,7 @@ export class Village extends Phaser.Scene {
   private tryInteract(): void {
     if (this.player.busy) return;
     const target = this.interaction.resolve(this.player, this.enemies, (id) =>
-      this.objectives.isComplete(id)
+      this.mission.isComplete(id)
     );
     if (!target) return;
 
@@ -559,25 +582,253 @@ export class Village extends Phaser.Scene {
     }
 
     if (prop.objective) {
-      const granted = this.objectives.complete(prop.objective);
-      if (granted) {
-        const lines =
-          prop.objective === 'V1'
-            ? DIALOGUE.village_van
-            : prop.objective === 'V2'
-              ? DIALOGUE.village_log
-              : prop.objective === 'V3'
-                ? DIALOGUE.village_sigil
-                : [];
-        if (lines.length > 0) this.dialogue.play(lines);
-        if (prop.objective === 'V2') this.captureCheckpoint('cp_log');
-      }
+      this.grantBeat(prop.objective, EVIDENCE_DIALOGUE[prop.kind]);
     } else if (OPTIONAL_CLUES[prop.kind]) {
       this.hud.showClue(OPTIONAL_CLUES[prop.kind]);
     }
   }
 
+  /**
+   * Completes a beat from evidence, a trigger or a scene.
+   *
+   * Idempotent by construction: Mission.complete reports `granted` only on the
+   * transition, so a second evidence source for the same beat plays no clue, no
+   * dialogue and no checkpoint. An out-of-order attempt reports the missing
+   * prerequisite instead of silently doing nothing.
+   */
+  private grantBeat(id: string, lines?: DialogueLine[]): boolean {
+    const result = this.mission.complete(id);
+    if (!result.granted) {
+      if (result.blockedBy) this.hud.showSubtitle('Nothing useful here yet.', 1.6);
+      return false;
+    }
+    if (lines && lines.length > 0) this.dialogue.play(lines);
+
+    // V5 grants the garage key, so both garage doors swing open now.
+    if (id === 'V5') {
+      this.refreshDoors();
+      this.hud.showSubtitle('Garage key taken.', 2.2);
+      this.captureCheckpoint('cp_office');
+    }
+    if (id === 'V2') this.captureCheckpoint('cp_market');
+    if (id === 'V7') this.captureCheckpoint('cp_belial');
+    return true;
+  }
+
+  // ------------------------------------------ triggers, actors and doors
+
+  /**
+   * Authored region triggers, read straight from the map so the geometry and
+   * the progression cannot drift apart.
+   */
+  private spawnTriggers(objects: MapObject[]): void {
+    for (const obj of objectsOfType(objects, 'trigger')) {
+      this.triggers.push({
+        name: obj.name,
+        zone: new Phaser.Geom.Rectangle(obj.x, obj.y, obj.width, obj.height),
+        objective: obj.props.objective ? String(obj.props.objective) : undefined,
+        requires: obj.props.requires ? String(obj.props.requires) : undefined,
+        dialogue: obj.props.dialogue ? String(obj.props.dialogue) : undefined,
+        needsLivingGuardWithin: obj.props.needsLivingGuardWithin
+          ? Number(obj.props.needsLivingGuardWithin)
+          : undefined,
+      });
+    }
+  }
+
+  /**
+   * Non-combatant story actors. The wounded cultist uses the approved
+   * `prop.shared.body_cultist` sprite - a slumped cultist - with a slow 1px
+   * breathing bob while alive. Dedicated wounded-cultist art is requested as
+   * VP-002; nothing here is generated programmer art.
+   */
+  private spawnStoryActors(objects: MapObject[]): void {
+    for (const obj of objectsOfType(objects, 'story')) {
+      const texture = textureKey.prop('shared', 'body_cultist');
+      const sprite = this.add
+        .image(Math.round(obj.x), Math.round(obj.y), texture)
+        .setOrigin(0.5, 0.94)
+        .setDepth(6);
+      const actor: StoryActor = {
+        name: obj.name,
+        x: obj.x,
+        y: obj.y,
+        radius: Number(obj.props.radius ?? 44),
+        objective: obj.props.objective ? String(obj.props.objective) : undefined,
+        requires: obj.props.requires ? String(obj.props.requires) : undefined,
+        dialogue: String(obj.props.dialogue ?? ''),
+        sprite,
+        resolved: false,
+      };
+      this.storyActors.push(actor);
+      // Breathing bob, stopped when the scene resolves.
+      actor.bob = this.tweens.add({
+        targets: sprite,
+        y: Math.round(obj.y) - 1,
+        duration: 1400,
+        yoyo: true,
+        repeat: -1,
+      });
+    }
+  }
+
+  /**
+   * Doors are real geometry, not an objective check. While locked a door is
+   * solid in the gameplay grid (so it blocks movement, bullets, line of sight
+   * and A* alike), carries a static physics body, and draws the tileset's
+   * closed-door tile. Unlocking clears all three, so what the player sees and
+   * what the player can walk through never disagree.
+   */
+  private spawnDoors(objects: MapObject[]): void {
+    for (const obj of objectsOfType(objects, 'door')) {
+      const tileX = Number(obj.props.tileX);
+      const tileY = Number(obj.props.tileY);
+      const tileW = Number(obj.props.tileW);
+      const tileH = Number(obj.props.tileH);
+      const tiles: Phaser.Physics.Arcade.Image[] = [];
+      for (let ty = tileY; ty < tileY + tileH; ty++) {
+        for (let tx = tileX; tx < tileX + tileW; tx++) {
+          // One static image per tile is both the picture and the collider, so
+          // the two cannot be toggled out of step. The door tiles are carved out
+          // of the map's collision layer, so without this a closed door would
+          // stop bullets and sight but not feet.
+          const tile = this.physics.add.staticImage(
+            tx * TILE + TILE / 2,
+            ty * TILE + TILE / 2,
+            this.tilesetTexture,
+            DOOR_FRAME.closed
+          );
+          // Depth 6: above the architecture band that draws the wall it
+          // pierces, below characters, so somebody standing in an open doorway
+          // is drawn in front of it.
+          tile.setDepth(6);
+          tiles.push(tile);
+        }
+      }
+      this.doors.push({ name: obj.name, tileX, tileY, tileW, tileH, tiles });
+    }
+
+    // Everything that walks collides with a closed door, guards included.
+    for (const door of this.doors) {
+      for (const tile of door.tiles) {
+        this.physics.add.collider(this.player.sprite, tile);
+        for (const enemy of this.enemies) this.physics.add.collider(enemy.sprite, tile);
+      }
+    }
+    this.refreshDoors();
+  }
+
+  /** Applies the mission's door state to collision, the grid and the sprites. */
+  private refreshDoors(): void {
+    for (const door of this.doors) {
+      const open = this.mission.isDoorOpen(door.name);
+      for (let ty = door.tileY; ty < door.tileY + door.tileH; ty++)
+        for (let tx = door.tileX; tx < door.tileX + door.tileW; tx++)
+          this.level.grid.setDoor(tx, ty, !open);
+      for (const tile of door.tiles) {
+        tile.setFrame(open ? DOOR_FRAME.open : DOOR_FRAME.closed);
+        if (open) this.physics.world.disable(tile);
+        else this.physics.world.enable(tile, Phaser.Physics.Arcade.STATIC_BODY);
+      }
+    }
+  }
+
+  // --------------------------------------------------------------- triggers
+
+  /**
+   * Authored region triggers. Entering one grants its beat if the prerequisite
+   * is met; if it is not, the trigger is NOT consumed, so a player who crossed
+   * the depot gate early still completes V3 the moment the prerequisite lands
+   * while they stand in the yard - no walking back to a trigger they already
+   * crossed.
+   */
+  private checkTriggers(): void {
+    for (const trigger of this.triggers) {
+      if (this.mission.hasFired(trigger.name)) continue;
+      if (!trigger.zone.contains(this.player.x, this.player.y)) continue;
+      if (trigger.requires && !this.mission.isComplete(trigger.requires)) continue;
+      if (trigger.objective && this.mission.isComplete(trigger.objective)) {
+        this.mission.fireTrigger(trigger.name);
+        continue;
+      }
+      // The overheard conversation needs somebody alive to overhear. It never
+      // REQUIRES one: if every guard is dead the waybill still grants V2.
+      if (trigger.needsLivingGuardWithin !== undefined) {
+        const heard = this.enemies.some(
+          (e) =>
+            !e.dead &&
+            Phaser.Math.Distance.Between(e.x, e.y, this.player.x, this.player.y) <=
+              trigger.needsLivingGuardWithin!
+        );
+        if (!heard) continue;
+      }
+      if (!trigger.objective) continue;
+      if (this.grantBeat(trigger.objective, trigger.dialogue ? DIALOGUE[trigger.dialogue] : undefined)) {
+        this.mission.fireTrigger(trigger.name);
+      }
+    }
+  }
+
+  // ----------------------------------------------------------- story actors
+
+  /**
+   * Scripted non-combatant scenes. The cultist never attacks and cannot be
+   * required to die by the player's hand: approaching him after V4 plays the
+   * exchange and he dies on his own.
+   *
+   * If the player is in a firefight the scene is deferred rather than skipped,
+   * and it is one-shot through the mission state, so a checkpoint reload cannot
+   * replay it and interrupting it cannot lose it.
+   */
+  private checkStoryActors(): void {
+    if (this.pendingScene) {
+      if (this.inCombat() || this.dialogue.active) return;
+      const actor = this.pendingScene;
+      this.pendingScene = null;
+      this.playStoryScene(actor);
+      return;
+    }
+    for (const actor of this.storyActors) {
+      if (actor.resolved) continue;
+      if (actor.requires && !this.mission.isComplete(actor.requires)) continue;
+      const distance = Phaser.Math.Distance.Between(actor.x, actor.y, this.player.x, this.player.y);
+      if (distance > actor.radius) continue;
+      if (this.inCombat() || this.dialogue.active) {
+        this.pendingScene = actor;
+        this.hud.showSubtitle('[someone is trying to speak]', 1.6);
+        return;
+      }
+      this.playStoryScene(actor);
+      return;
+    }
+  }
+
+  private playStoryScene(actor: StoryActor): void {
+    if (!this.mission.markEvent(`scene_${actor.name}`)) {
+      actor.resolved = true;
+      return;
+    }
+    actor.resolved = true;
+    this.dialogue.play(DIALOGUE[actor.dialogue], () => {
+      this.resolveStoryActor(actor);
+      if (actor.objective) this.grantBeat(actor.objective);
+    });
+  }
+
+  /** The cultist goes still. Same approved sprite, no bob, one blood mark. */
+  private resolveStoryActor(actor: StoryActor): void {
+    actor.resolved = true;
+    actor.sprite?.setTint(0x9c8f8f);
+    this.playBlood(actor.x, actor.y - 6);
+    this.audio.play('flesh', 0.5);
+  }
+
+  private inCombat(): boolean {
+    return this.enemies.some((e) => !e.dead && e.alertLevel === 'combat');
+  }
+
   private checkCheckpoints(): void {
+
     for (const zone of this.checkpointZones) {
       if (zone.taken) continue;
       if (Phaser.Math.Distance.Between(this.player.x, this.player.y, zone.x, zone.y) > CHECKPOINT_RADIUS)
@@ -590,11 +841,14 @@ export class Village extends Phaser.Scene {
   private checkExit(): void {
     if (this.sliceComplete) return;
     if (!this.exitZone.contains(this.player.x, this.player.y)) return;
-    if (this.exitRequires && !this.objectives.isComplete(this.exitRequires)) {
-      this.hud.showSubtitle('Not yet. Find the transport first.', 2);
+    if (this.exitRequires && !this.mission.isComplete(this.exitRequires)) {
+      // Helpful, and specific: the player is told what is still outstanding.
+      if (this.mission.markEvent('exit_blocked_hint'))
+        this.dialogue.play(DIALOGUE.village_exit_blocked);
+      else this.hud.showSubtitle(`Not yet. ${this.mission.activeText()}`, 2.4);
       return;
     }
-    this.objectives.complete('VX');
+    this.grantBeat(FINAL_OBJECTIVE);
     this.sliceComplete = true;
     this.dialogue.play(DIALOGUE.village_exit, () => this.showSliceCard());
   }
@@ -614,8 +868,11 @@ export class Village extends Phaser.Scene {
         this,
         VIRTUAL_WIDTH / 2,
         VIRTUAL_HEIGHT / 2 + 2,
-        `TIME ${Math.floor(this.elapsed / 60)}:${String(Math.floor(this.elapsed % 60)).padStart(2, '0')}\n` +
-          `NEXT: THE ESTATE (NOT IN THIS SLICE)\n\nENTER - TITLE`,
+        `TIME ${Math.floor(this.elapsed / 60)}:${String(Math.floor(this.elapsed % 60)).padStart(2, '0')}\n\n` +
+          'SUZANNE SURVIVED THE TRANSPORT\n' +
+          'BARNABE IS IMPLICATED\n' +
+          'NEXT: THE BARNABE ESTATE\n' +
+          'BELIAL: UNEXPLAINED\n\nENTER - TITLE',
         { align: 'center', depth: 130 }
       );
       this.input.keyboard?.once('keydown-ENTER', () => {
@@ -629,12 +886,12 @@ export class Village extends Phaser.Scene {
 
   private captureCheckpoint(id: string): void {
     const checkpoint: Checkpoint = {
-      version: 1,
+      version: SAVE_VERSION,
       level: LEVEL_ID,
       checkpointId: id,
       player: this.player.snapshot(),
       enemies: this.enemies.map((e) => e.snapshot()),
-      objectives: this.objectives.snapshot(),
+      mission: this.mission.snapshot(),
       consumed: this.items.filter((i) => i.taken).map((i) => i.name),
       used: this.props.filter((p) => p.used).map((p) => p.name),
       clues: [],
@@ -672,7 +929,7 @@ export class Village extends Phaser.Scene {
   /** Restores a consistent snapshot: HP, resources, enemies, objectives, pickups. */
   private applyCheckpoint(checkpoint: Checkpoint): void {
     this.player.restore(checkpoint.player);
-    this.objectives.restore(checkpoint.objectives);
+    this.mission.restore(checkpoint.mission);
 
     const consumed = new Set(checkpoint.consumed);
     for (const item of this.items) {
@@ -681,6 +938,23 @@ export class Village extends Phaser.Scene {
     }
     const used = new Set(checkpoint.used);
     for (const prop of this.props) prop.used = used.has(prop.name);
+
+    // Physical story state, not just the HUD: doors re-lock or re-open, and a
+    // scene that already played stays played.
+    this.refreshDoors();
+    for (const actor of this.storyActors) {
+      const played = this.mission.hasEvent(`scene_${actor.name}`);
+      actor.resolved = played;
+      if (played) {
+        actor.bob?.stop();
+        actor.sprite?.setPosition(Math.round(actor.x), Math.round(actor.y));
+        actor.sprite?.setTint(0x9c8f8f);
+      } else {
+        actor.sprite?.clearTint();
+        actor.bob?.restart();
+      }
+    }
+    this.pendingScene = null;
 
     const byName = new Map(checkpoint.enemies.map((e) => [e.name, e]));
     for (const enemy of this.enemies) {
@@ -713,8 +987,8 @@ export class Village extends Phaser.Scene {
     const pulse = 0.35 + 0.35 * Math.sin(this.elapsed * 3.4);
     for (const prop of this.props) {
       if (!prop.glint || prop.used) continue;
-      if (prop.requires && !this.objectives.isComplete(prop.requires)) continue;
-      if (prop.objective && this.objectives.isComplete(prop.objective)) continue;
+      if (prop.requires && !this.mission.isComplete(prop.requires)) continue;
+      if (prop.objective && this.mission.isComplete(prop.objective)) continue;
       const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, prop.x, prop.y);
       if (dist > GLINT_RANGE) continue;
       g.fillStyle(0xf4e9c0, pulse);
@@ -943,7 +1217,7 @@ export class Village extends Phaser.Scene {
     this.paused = paused;
     if (paused) {
       this.physics.pause();
-      this.pause.open(this.objectives.activeText());
+      this.pause.open(this.mission.activeText());
     } else {
       this.physics.resume();
       this.pause.close();
@@ -969,3 +1243,60 @@ const NEUTRAL_EDGES = {
   selectWeapon: null,
   interactPressed: false,
 } as const;
+
+/**
+ * Frames in the stage tileset used for door state. Derived from TILE_NAMES
+ * rather than written as literals, so re-ordering the tileset cannot silently
+ * leave a closed door drawing as a window.
+ */
+const DOOR_FRAME = {
+  closed: TILE_NAMES.indexOf('door_closed'),
+  open: TILE_NAMES.indexOf('door_open'),
+} as const;
+
+/**
+ * Which dialogue a piece of evidence plays. Keyed by the interactable's `kind`
+ * rather than its objective, because two sources share one beat and each has
+ * its own line.
+ */
+const EVIDENCE_DIALOGUE: Record<string, DialogueLine[] | undefined> = {
+  tracks: DIALOGUE.village_tracks,
+  stall: DIALOGUE.village_stall,
+  waybill: DIALOGUE.village_waybill,
+  ledger: DIALOGUE.village_ledger,
+  van: DIALOGUE.village_van,
+  inscription: DIALOGUE.village_belial,
+};
+
+interface DoorActor {
+  name: string;
+  tileX: number;
+  tileY: number;
+  tileW: number;
+  tileH: number;
+  /** One static image per door tile: the picture and the collider in one. */
+  tiles: Phaser.Physics.Arcade.Image[];
+}
+
+interface TriggerRegion {
+  name: string;
+  zone: Phaser.Geom.Rectangle;
+  objective?: string;
+  requires?: string;
+  dialogue?: string;
+  /** The overheard conversation needs a living guard in earshot. */
+  needsLivingGuardWithin?: number;
+}
+
+interface StoryActor {
+  name: string;
+  x: number;
+  y: number;
+  radius: number;
+  objective?: string;
+  requires?: string;
+  dialogue: string;
+  sprite?: Phaser.GameObjects.Image;
+  bob?: Phaser.Tweens.Tween;
+  resolved: boolean;
+}

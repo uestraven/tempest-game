@@ -38,6 +38,8 @@ export class Grid {
   readonly width: number;
   readonly height: number;
   private readonly flags: TileFlags[];
+  /** Tile index -> closed. Absent means the tile is not a door. */
+  private readonly doors = new Map<number, boolean>();
 
   constructor(width: number, height: number, flags?: TileFlags[]) {
     this.width = width;
@@ -60,15 +62,42 @@ export class Grid {
     return tx >= 0 && ty >= 0 && tx < this.width && ty < this.height;
   }
 
+  /**
+   * Effective flags for a tile, including door state.
+   *
+   * A closed door is solid and blocks sight; an open one blocks neither. Doing
+   * it here means every consumer agrees without knowing doors exist: line of
+   * sight, hitscan, enemy vision and A* pathing all read the same answer, so a
+   * visibly closed door cannot be walked through, seen through or shot through.
+   */
   at(tx: number, ty: number): TileFlags {
     if (!this.inBounds(tx, ty)) return EMPTY;
-    return this.flags[this.index(tx, ty)];
+    const i = this.index(tx, ty);
+    const base = this.flags[i];
+    const closed = this.doors.get(i);
+    if (closed === undefined) return base;
+    return closed ? { ...base, collides: true, blocksSight: true } : { ...base, collides: false, blocksSight: false, lowCover: false };
+  }
+
+  /**
+   * Registers a tile as a door and sets its state. Door tiles are carved as
+   * walkable floor in the map so pathing works once they are open; while closed
+   * this override makes them behave exactly like wall.
+   */
+  setDoor(tx: number, ty: number, closed: boolean): void {
+    if (!this.inBounds(tx, ty)) return;
+    this.doors.set(this.index(tx, ty), closed);
+  }
+
+  isDoorTile(tx: number, ty: number): boolean {
+    return this.inBounds(tx, ty) && this.doors.has(this.index(tx, ty));
   }
 
   /** Out-of-bounds counts as solid so actors can never leave the authored map. */
   solidAt(tx: number, ty: number): boolean {
     if (!this.inBounds(tx, ty)) return true;
-    return this.flags[this.index(tx, ty)].collides;
+    // Through at(), so a closed door is solid for pathing too.
+    return this.at(tx, ty).collides;
   }
 
   merge(tx: number, ty: number, patch: Partial<TileFlags>): void {
