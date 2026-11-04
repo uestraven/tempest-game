@@ -40,6 +40,12 @@ export interface PropDef {
   blocksSight: boolean;
   cover: PropCover;
   decorative: boolean;
+  /**
+   * Pixels to raise a 'front' prop above its anchor so it hangs over a
+   * character instead of across its body. A character sprite is 31px tall above
+   * its ground position, so 32 clears the tallest one. 0 for every other depth.
+   */
+  overheadLift: number;
   note?: string;
 }
 
@@ -60,6 +66,7 @@ type RawProp = {
   blocksSight: boolean;
   cover: string;
   decorative: boolean;
+  overheadLift?: number;
   note?: string;
 };
 
@@ -83,6 +90,7 @@ function build(): Map<string, PropDef> {
         blocksSight: raw.blocksSight,
         cover: raw.cover as PropCover,
         decorative: raw.decorative,
+        overheadLift: raw.overheadLift ?? 0,
         note: raw.note,
       };
       out.set(`${area}.${raw.name}`, def);
@@ -110,6 +118,14 @@ export function propsForArea(area: PropArea): PropDef[] {
  */
 export function propOrigin(def: PropDef): { x: number; y: number } {
   return { x: 0.5, y: (def.height - def.feetInset) / def.height };
+}
+
+/**
+ * World y a prop's sprite is placed at: its anchor, raised by `overheadLift` for
+ * overhead props. Always a whole pixel.
+ */
+export function propDrawY(def: PropDef, anchorY: number): number {
+  return Math.round(anchorY) - def.overheadLift;
 }
 
 /** Fixed depth, or null when the prop should be y-sorted with characters. */

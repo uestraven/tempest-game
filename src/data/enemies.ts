@@ -7,6 +7,13 @@ export interface EnemyDef {
   label: string;
   /** Production sprite sheet this archetype renders with. */
   sheet: CharacterKey;
+  /**
+   * Shared corpse prop used when incapacitated. The character sheets' own
+   * `down` row carries an opaque dark region that is not the body (see
+   * docs/art-requests/phase-b1.md), so the purpose-made body props are used
+   * instead - they are properly matted and read correctly on any surface.
+   */
+  bodyProp: 'body_guard' | 'body_cultist' | 'body_civilian';
   hp: number;
   /** Damage dealt to the player by one successful attack. */
   damage: number;
@@ -26,6 +33,7 @@ export interface EnemyDef {
 export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   lookout: {
     kind: 'lookout',
+    bodyProp: 'body_guard',
     sheet: 'lookout_guard',
     label: 'Lookout',
     hp: 60,
@@ -41,6 +49,7 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   },
   enforcer: {
     kind: 'enforcer',
+    bodyProp: 'body_guard',
     sheet: 'enforcer',
     label: 'Enforcer',
     hp: 100,
@@ -56,6 +65,7 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   },
   zealot: {
     kind: 'zealot',
+    bodyProp: 'body_cultist',
     sheet: 'zealot_cultist',
     label: 'Zealot',
     hp: 60,
@@ -71,6 +81,7 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   },
   ascendant: {
     kind: 'ascendant',
+    bodyProp: 'body_cultist',
     sheet: 'ascendant_cultist',
     label: 'Ascendant',
     hp: 130,

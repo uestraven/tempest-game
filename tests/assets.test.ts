@@ -10,7 +10,17 @@ import {
   propNames,
   textureKey,
 } from '../src/art/AssetRegistry';
-import { CHARACTERS, CHAR_COLUMNS, CHAR_ROW, CHAR_ROWS, frameIndex } from '../src/art/CharacterDefinitions';
+import {
+  CHARACTERS,
+  CHAR_COLUMNS,
+  CHAR_ROW,
+  CHAR_ROWS,
+  CHAR_STATES,
+  FACINGS,
+  clipFor,
+  facingFromAngle,
+  frameIndex,
+} from '../src/art/CharacterDefinitions';
 import { PROPS, propOrigin } from '../src/art/PropDefinitions';
 import { CHARSET, FONT_COLUMNS, GLYPH_HEIGHT, GLYPH_WIDTH } from '../src/ui/font-data';
 import {
@@ -112,19 +122,19 @@ describe('character definitions against the package manifest', () => {
     expect(rows).toEqual(Object.keys(CHAR_ROW));
   });
 
-  it('only picks frame columns that exist', () => {
+  it('keeps every clip frame inside the 24-frame sheet', () => {
     for (const def of Object.values(CHARACTERS)) {
-      const columns = [
-        ...def.idleFrames,
-        ...def.walkFrames,
-        def.aimFrame,
-        def.fireFrame,
-        def.hitFrame,
-        def.downFrame,
-      ];
-      for (const column of columns) {
-        expect(column, `${def.key}`).toBeGreaterThanOrEqual(0);
-        expect(column, `${def.key}`).toBeLessThan(CHAR_COLUMNS);
+      for (const state of CHAR_STATES) {
+        for (const facing of FACINGS) {
+          const clip = def.clips[state][facing];
+          expect(clip.frames.length, `${def.key} ${state} ${facing}`).toBeGreaterThanOrEqual(1);
+          for (const frame of clip.frames) {
+            expect(frame, `${def.key} ${state} ${facing}`).toBeGreaterThanOrEqual(0);
+            expect(frame, `${def.key} ${state} ${facing}`).toBeLessThan(
+              CHAR_COLUMNS * CHAR_ROWS
+            );
+          }
+        }
       }
     }
   });
@@ -133,26 +143,77 @@ describe('character definitions against the package manifest', () => {
     expect(frameIndex('idle', 0)).toBe(0);
     expect(frameIndex('walk', 0)).toBe(4);
     expect(frameIndex('down', 3)).toBe(23);
+  });
+
+  it('gives every looping clip enough frames to actually animate', () => {
     for (const def of Object.values(CHARACTERS)) {
-      for (const column of def.walkFrames) {
-        expect(frameIndex('walk', column)).toBeLessThan(CHAR_COLUMNS * CHAR_ROWS);
+      for (const state of CHAR_STATES) {
+        for (const facing of FACINGS) {
+          const clip = def.clips[state][facing];
+          if (clip.loop) {
+            expect(clip.frames.length, `${def.key} ${state} ${facing} loops`).toBeGreaterThanOrEqual(2);
+          }
+        }
       }
     }
   });
 
-  it('gives every character a usable idle and walk cycle', () => {
-    for (const def of Object.values(CHARACTERS)) {
-      expect(def.idleFrames.length, `${def.key} idle`).toBeGreaterThanOrEqual(1);
-      expect(def.walkFrames.length, `${def.key} walk`).toBeGreaterThanOrEqual(2);
+  it('never mixes tempest front and back views inside one clip', () => {
+    // Regression guard: the Phase B mapping picked idle columns [1, 2], which
+    // on tempest is one FRONT and one BACK frame, so the idle animation
+    // alternated between facing the camera and facing away.
+    const FRONT = [frameIndex('idle', 0), frameIndex('idle', 1)];
+    const BACK = [frameIndex('idle', 2), frameIndex('idle', 3)];
+    const down = clipFor('tempest', 'idle', 'down').frames;
+    const up = clipFor('tempest', 'idle', 'up').frames;
+    expect(down.every((f) => FRONT.includes(f))).toBe(true);
+    expect(up.every((f) => BACK.includes(f))).toBe(true);
+    for (const facing of FACINGS) {
+      const frames = clipFor('tempest', 'idle', facing).frames;
+      const hasFront = frames.some((f) => FRONT.includes(f));
+      const hasBack = frames.some((f) => BACK.includes(f));
+      expect(hasFront && hasBack, `tempest idle ${facing} mixes front and back`).toBe(false);
     }
   });
 
-  it('documents a reason for every excluded frame', () => {
+  it('only mirrors or falls back where authored art is missing', () => {
+    // tempest's walk is drawn facing left, so the right-facing walk is the
+    // mirror and the left-facing one must NOT be flipped.
+    expect(clipFor('tempest', 'walk', 'left').flipX).toBe(false);
+    expect(clipFor('tempest', 'walk', 'left').source).toBe('authored');
+    expect(clipFor('tempest', 'walk', 'right').flipX).toBe(true);
+    // The lookout's walk is drawn facing right, so the mirroring is reversed.
+    expect(clipFor('lookout_guard', 'walk', 'right').flipX).toBe(false);
+    expect(clipFor('lookout_guard', 'walk', 'right').source).toBe('authored');
+    expect(clipFor('lookout_guard', 'walk', 'left').flipX).toBe(true);
+  });
+
+  it('documents a note on every non-authored clip of a verified character', () => {
     for (const def of Object.values(CHARACTERS)) {
-      for (const reason of def.excluded) {
-        expect(reason.length, `${def.key}`).toBeGreaterThan(20);
+      if (!def.verified) continue;
+      expect(def.observations.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('keeps unverified sheets on a single-frame idle so they cannot flicker', () => {
+    for (const def of Object.values(CHARACTERS)) {
+      if (def.verified) continue;
+      for (const facing of FACINGS) {
+        expect(def.clips.idle[facing].frames.length, `${def.key} idle ${facing}`).toBe(1);
       }
     }
+  });
+
+  it('verifies exactly the characters Valcendre instantiates', () => {
+    expect(CHARACTERS.tempest.verified).toBe(true);
+    expect(CHARACTERS.lookout_guard.verified).toBe(true);
+  });
+
+  it('maps angles to the four facings', () => {
+    expect(facingFromAngle(0)).toBe('right');
+    expect(facingFromAngle(Math.PI / 2)).toBe('down');
+    expect(facingFromAngle(Math.PI)).toBe('left');
+    expect(facingFromAngle(-Math.PI / 2)).toBe('up');
   });
 });
 

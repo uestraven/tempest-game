@@ -3,6 +3,7 @@ import { Grid, angleDelta, type Vec2 } from '../core/Grid';
 import { bulletHitbox, drawnTorso, type Rect } from '../core/hitbox';
 import { COMBAT, PLAYER, SOUND_RADIUS, VISION } from '../core/constants';
 import { textureKey } from '../art/AssetRegistry';
+import { propDef, propOrigin } from '../art/PropDefinitions';
 import {
   CHAR_FEET_INSET,
   CHAR_FRAME_HEIGHT,
@@ -10,13 +11,16 @@ import {
   CHAR_ORIGIN_X,
   CHAR_ORIGIN_Y,
   animKey,
+  clipFor,
+  facingFromAngle,
+  type CharState,
 } from '../art/CharacterDefinitions';
 import { staticFrame } from '../art/AnimationRegistry';
 import { ENEMIES, type EnemyDef, type EnemyKind } from '../data/enemies';
 import { alertLevelFor, canSee, stepSuspicion, type AlertLevel } from '../systems/Vision';
 import type { SoundEvent } from '../systems/Hearing';
 import type { EnemySnapshot } from '../systems/Save';
-import { directionRow } from './Player';
+
 
 export type EnemyState = 'patrol' | 'investigate' | 'search' | 'combat' | 'dead';
 
@@ -96,7 +100,7 @@ export class Enemy {
       spawn.x,
       spawn.y,
       this.sheet,
-      staticFrame(this.def.sheet, 'idle')
+      staticFrame(this.def.sheet, 'idle', 'down')
     );
     this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(9);
@@ -446,19 +450,19 @@ export class Enemy {
   }
 
   /**
-   * Like the player: the sheet has no cardinal directions, so facing is shown by
-   * horizontal mirroring, and only for left/right. Up and down keep the previous
-   * mirror. The facing tick drawn in `drawAlert` is what makes a guard's actual
-   * patrol direction readable, which stealth depends on.
+   * Directional playback from the clip metadata, exactly as the player does it.
+   * Mirroring comes from the clip, not from the facing angle, because each
+   * sheet's rows have their own intrinsic facing.
+   *
+   * The facing tick drawn in `drawAlert` remains the precise cue: four facings
+   * cannot express a 100-degree vision cone, and stealth depends on reading
+   * where a guard is actually looking.
    */
   private updateAnimation(): void {
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
     const speed = body.velocity.length();
-    const row = directionRow(this.facing);
-    if (row === 1) this.sprite.setFlipX(true);
-    else if (row === 2) this.sprite.setFlipX(false);
-
-    const state =
+    const facing = facingFromAngle(this.facing);
+    const state: CharState =
       this.stumbleTimer > 0
         ? 'hit'
         : this.state === 'combat' && speed <= 1
@@ -466,9 +470,12 @@ export class Enemy {
           : speed > 1
             ? 'walk'
             : 'idle';
-    const key = animKey(this.def.sheet, state);
+    const clip = clipFor(this.def.sheet, state, facing);
+    const key = animKey(this.def.sheet, state, facing);
+
+    this.sprite.setFlipX(clip.flipX);
     if (this.sprite.anims.currentAnim?.key !== key) this.sprite.anims.play(key, true);
-    else if (state === 'walk' && !this.sprite.anims.isPlaying) this.sprite.anims.play(key, true);
+    else if (clip.loop && !this.sprite.anims.isPlaying) this.sprite.anims.play(key, true);
   }
 
   // ------------------------------------------------------------------- damage
@@ -511,6 +518,19 @@ export class Enemy {
     this.enterCombat();
   }
 
+  /**
+   * Swaps to the shared corpse prop. Anchored at its own ground-contact row so
+   * the body lies where the guard fell.
+   */
+  private applyCorpseSprite(): void {
+    const body = propDef('shared', this.def.bodyProp);
+    const origin = propOrigin(body);
+    this.sprite.anims.stop();
+    this.sprite.setFlipX(false);
+    this.sprite.setTexture(body.texture);
+    this.sprite.setOrigin(origin.x, origin.y);
+  }
+
   kill(): void {
     if (this.dead) return;
     this.state = 'dead';
@@ -520,12 +540,7 @@ export class Enemy {
     (this.sprite.body as Phaser.Physics.Arcade.Body).enable = false;
     this.sprite.clearTint();
     // Bodies stay as narrative discovery but never block movement or doorways.
-    // The sheet's own `down` row keeps the corpse recognisable as this archetype,
-    // which matters because discovering a body is a gameplay event.
-    this.sprite.anims.stop();
-    this.sprite.setFlipX(false);
-    this.sprite.setTexture(this.sheet, staticFrame(this.def.sheet, 'down'));
-    this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
+    this.applyCorpseSprite();
     this.sprite.setDepth(4);
     this.alertGfx.clear();
     this.alertIcon.setVisible(false);
@@ -619,10 +634,7 @@ export class Enemy {
 
     if (snap.dead) {
       this.state = 'dead';
-      this.sprite.anims.stop();
-      this.sprite.setFlipX(false);
-      this.sprite.setTexture(this.sheet, staticFrame(this.def.sheet, 'down'));
-      this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
+      this.applyCorpseSprite();
       this.sprite.setDepth(4);
       this.sprite.setPosition(snap.x, snap.y);
       body.reset(snap.x, snap.y);
@@ -632,7 +644,8 @@ export class Enemy {
 
     this.state = 'patrol';
     this.sprite.anims.stop();
-    this.sprite.setTexture(this.sheet, staticFrame(this.def.sheet, 'idle'));
+    this.sprite.setFlipX(false);
+    this.sprite.setTexture(this.sheet, staticFrame(this.def.sheet, 'idle', 'down'));
     this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(9);
     this.sprite.clearTint();

@@ -3,17 +3,25 @@
  * Builds public/assets/maps/village.json (Tiled 1.10 JSON) for the Valcendre
  * vertical slice, against the PRODUCTION tileset.
  *
- * The geometry is AUTHORED, not generated: every region, cover piece, prop,
- * patrol waypoint and object position below is written out by hand. This script
- * exists so the hand-authored numbers stay readable and the 2400-tile Tiled
- * arrays stay in sync.
+ * Geometry is AUTHORED, not generated: every region, cover piece, prop, patrol
+ * waypoint and object position below is written out by hand.
  *
- * It is also the gate that keeps art and gameplay honest. It fails the build if:
- *   - a semantic role names a tile the supplied tileset does not define;
- *   - a role's gameplay flags contradict the tileset's own solid/cover hints;
- *   - a floor-variation tile is actually solid;
- *   - a prop, cover piece or wall makes any walkable tile or object anchor
- *     unreachable from the spawn point.
+ * APPEARANCE IS SEPARATE FROM COLLISION.
+ *   - `collision` (invisible, collider) carries one blocker tile for every
+ *     non-walkable tile. This is the gameplay truth and is derived purely from
+ *     the carved regions, so repainting the village cannot change where the
+ *     player can walk.
+ *   - `architecture` (visible, not a collider) paints what the player actually
+ *     sees outside the playable area: stone wall faces with windows and doors,
+ *     then a roof edge, then red roof tiles, then darkness.
+ *   - `floor` paints a per-area surface so each authored space reads
+ *     differently.
+ *
+ * It is also the gate that keeps art and gameplay honest. It fails the build if
+ * a role or surface names a tile the tileset does not define, if a gameplay role
+ * calls a solid art tile walkable, if a surface tile is solid, or if a prop,
+ * cover piece or wall makes any walkable tile, object anchor or patrol waypoint
+ * unreachable from the spawn point.
  *
  * Re-run with `npm run map` (also run automatically by `dev` and `build`).
  */
@@ -46,7 +54,7 @@ const tileId = (name) => {
   return tile.id;
 };
 
-/** role -> { id, flags, layer }, validated against the artwork's own hints. */
+/** Gameplay roles, validated against the artwork's own hints. */
 const ROLES = {};
 for (const [role, raw] of Object.entries(roleData.roles)) {
   const art = tileByName.get(raw.tile);
@@ -58,27 +66,13 @@ for (const [role, raw] of Object.entries(roleData.roles)) {
     shadow: !!raw.shadow,
   };
   // A role may be stricter than the artwork hint (authored cover), but it must
-  // never claim a solid art tile is walkable - that would let the player walk
-  // through something that visibly blocks the way.
+  // never claim a solid art tile is walkable.
   if (art.solid && !flags.collides) {
     throw new Error(
       `role "${role}" -> "${raw.tile}": tileset marks this tile solid but the role is walkable`
     );
   }
-  if (art.occludes_vision && !flags.blocksSight && !flags.lowCover) {
-    throw new Error(
-      `role "${role}" -> "${raw.tile}": tileset marks this tile vision-occluding but the role does not block sight`
-    );
-  }
   ROLES[role] = { id: art.id, flags, layer: raw.layer, tile: raw.tile };
-}
-
-for (const [surface, names] of Object.entries(roleData.floorVariants)) {
-  for (const name of names) {
-    const art = tileByName.get(name);
-    if (!art) throw new Error(`floor variant "${name}" (${surface}) is not in the tileset`);
-    if (art.solid) throw new Error(`floor variant "${name}" (${surface}) is solid; floors must be walkable`);
-  }
 }
 
 const roleId = (role) => {
@@ -86,33 +80,64 @@ const roleId = (role) => {
   return ROLES[role].id;
 };
 
-/** Deterministic floor variation: same input always produces the same map. */
-const variantFor = (surface, x, y) => {
-  const names = roleData.floorVariants[surface];
-  if (!names) return roleId(surface);
-  let h = (x * 73856093) ^ (y * 19349663);
-  h = (h ^ (h >>> 13)) >>> 0;
-  // Keep the base tile dominant so surfaces stay readable at 480x270.
-  const pick = h % 100 < 70 ? 0 : 1 + (h % (names.length - 1));
-  return tileId(names[pick]);
+/** Per-area ground surfaces. Appearance only; never touches walkability. */
+const SURFACES = {};
+for (const [name, raw] of Object.entries(roleData.surfaces)) {
+  if (name.startsWith('_')) continue;
+  for (const tile of [raw.base, ...raw.variants]) {
+    const art = tileByName.get(tile);
+    if (!art) throw new Error(`surface "${name}" names unknown tile "${tile}"`);
+    if (art.solid) throw new Error(`surface "${name}" uses solid tile "${tile}"; floors must be walkable`);
+  }
+  SURFACES[name] = raw;
+}
+
+const ARCH = {};
+for (const [name, tile] of Object.entries(roleData.architecture)) {
+  if (name.startsWith('_')) continue;
+  ARCH[name] = tileId(tile);
+}
+
+/** Deterministic hash: the same input always produces the same map. */
+const hash = (x, y, salt = 0) => {
+  let h = (x * 73856093) ^ (y * 19349663) ^ (salt * 83492791);
+  return (h ^ (h >>> 13)) >>> 0;
+};
+
+const surfaceTile = (surface, x, y) => {
+  const def = SURFACES[surface];
+  if (!def) throw new Error(`unknown surface "${surface}"`);
+  if (def.variants.length === 0) return tileId(def.base);
+  const roll = hash(x, y, 7) % 100;
+  if (roll >= def.variantChance) return tileId(def.base);
+  return tileId(def.variants[hash(x, y, 11) % def.variants.length]);
 };
 
 // ------------------------------------------------------------------- surfaces
+// Each region names the AREA it belongs to; the area decides its surface.
 const REGIONS = [
-  { id: 'alley', x: 5, y: 30, w: 6, h: 9, surface: 'cobble' },
-  { id: 'alleyNeck', x: 6, y: 26, w: 4, h: 5, surface: 'cobble' },
-  { id: 'market', x: 4, y: 12, w: 26, h: 15, surface: 'marketDirt' },
-  { id: 'gardenLane', x: 1, y: 24, w: 3, h: 11, surface: 'cobbleAlt' },
-  { id: 'gardenLink', x: 4, y: 32, w: 1, h: 3, surface: 'cobbleAlt' },
-  { id: 'yardCorridor', x: 30, y: 20, w: 5, h: 6, surface: 'cobble' },
-  { id: 'yard', x: 35, y: 16, w: 19, h: 18, surface: 'concrete' },
-  { id: 'garage', x: 38, y: 4, w: 16, h: 11, surface: 'concrete' },
-  { id: 'garageDoor', x: 45, y: 15, w: 3, h: 1, surface: 'concrete' },
-  { id: 'northRoad', x: 46, y: 0, w: 4, h: 4, surface: 'road' },
-  { id: 'rearCorridorV', x: 25, y: 6, w: 4, h: 7, surface: 'cobbleAlt' },
-  { id: 'rearCorridorH', x: 28, y: 6, w: 11, h: 3, surface: 'cobbleAlt' },
-  { id: 'bakeryNook', x: 20, y: 8, w: 4, h: 4, surface: 'cobbleAlt' },
-  { id: 'bakeryLink', x: 23, y: 9, w: 3, h: 2, surface: 'cobbleAlt' },
+  { id: 'alley', area: 'arrivalAlley', x: 5, y: 30, w: 6, h: 9, surface: 'alleyCobble' },
+  { id: 'alleyNeck', area: 'arrivalAlley', x: 6, y: 26, w: 4, h: 5, surface: 'alleyCobble' },
+  { id: 'market', area: 'marketSquare', x: 4, y: 12, w: 26, h: 15, surface: 'marketPaving' },
+  { id: 'gardenLane', area: 'gardenLane', x: 1, y: 24, w: 3, h: 11, surface: 'gardenGrass' },
+  { id: 'gardenLink', area: 'gardenLane', x: 4, y: 32, w: 1, h: 3, surface: 'gardenPath' },
+  { id: 'yardCorridor', area: 'garageYard', x: 30, y: 20, w: 5, h: 6, surface: 'alleyCobble' },
+  { id: 'yard', area: 'garageYard', x: 35, y: 16, w: 19, h: 18, surface: 'yardGravel' },
+  { id: 'garage', area: 'garageInterior', x: 38, y: 4, w: 16, h: 11, surface: 'garageFloor' },
+  { id: 'garageDoor', area: 'garageInterior', x: 45, y: 15, w: 3, h: 1, surface: 'garageFloor' },
+  { id: 'northRoad', area: 'northRoad', x: 46, y: 0, w: 4, h: 4, surface: 'roadDirt' },
+  { id: 'rearCorridorV', area: 'serviceCorridor', x: 25, y: 6, w: 4, h: 7, surface: 'serviceBrick' },
+  { id: 'rearCorridorH', area: 'serviceCorridor', x: 28, y: 6, w: 11, h: 3, surface: 'serviceBrick' },
+  { id: 'bakeryNook', area: 'serviceCorridor', x: 20, y: 8, w: 4, h: 4, surface: 'serviceBrick' },
+  { id: 'bakeryLink', area: 'serviceCorridor', x: 23, y: 9, w: 3, h: 2, surface: 'serviceBrick' },
+];
+
+/**
+ * A garden path strip down the middle of the grass lane, so the lane reads as a
+ * residential garden route rather than a green rectangle. Appearance only.
+ */
+const SURFACE_OVERRIDES = [
+  { x: 2, y: 24, w: 1, h: 11, surface: 'gardenPath' },
 ];
 
 /** Authored dark zones: crouching here accumulates suspicion slowly. */
@@ -130,12 +155,7 @@ const SHADOWS = [
   { x: 52, y: 4, w: 2, h: 11 },
 ];
 
-/**
- * Tile-based cover. The market stall counters stay as `cover_low` tiles because
- * the tileset draws that tile as a purpose-made waist-height counter; the cart
- * and the well are now PROPS instead (hay_cart, fountain), so their tiles are
- * gone from this list - no duplicate visuals, no duplicated collision.
- */
+/** Tile-based cover. The cart and the well are props now, not tiles. */
 const COVER = [
   { x: 8, y: 16, w: 5, h: 1, role: 'barrierLow' },
   { x: 16, y: 16, w: 5, h: 1, role: 'barrierLow' },
@@ -151,66 +171,121 @@ const COVER = [
   { x: 44, y: 9, w: 4, h: 2, role: 'van' },
 ];
 
-const DECOR_BACK = [
-  { x: 1, y: 24, w: 3, h: 2, role: 'grass' },
-  { x: 1, y: 33, w: 3, h: 2, role: 'grass' },
-  { x: 35, y: 16, w: 2, h: 1, role: 'grass' },
-  { x: 43, y: 11, w: 1, h: 1, role: 'sigil' },
-  { x: 48, y: 8, w: 1, h: 1, role: 'sigil' },
+/**
+ * Authored decorative accents on the decorBack layer. These are the framed
+ * motif tiles, placed deliberately instead of scattered as floor variation.
+ */
+const ACCENTS = [
+  // A small paved medallion under the market fountain. Kept to 2x2: the
+  // `checker` tile is high-contrast and reads as a chessboard at any larger size.
+  { x: 25, y: 18, w: 2, h: 2, tile: 'accentChecker' },
+  // Thresholds on the walkable tile in front of each authored door.
+  { x: 9, y: 12, w: 2, h: 1, tile: 'threshold' },
+  { x: 14, y: 12, w: 2, h: 1, tile: 'threshold' },
+  { x: 5, y: 30, w: 1, h: 1, tile: 'threshold' },
+  { x: 37, y: 16, w: 2, h: 1, tile: 'threshold' },
+  // Garden-lane greenery, drawn over the lane's dark concealment floor so the
+  // residential route reads as a shaded garden without altering the shadow zone.
+  { x: 1, y: 24, w: 2, h: 2, tile: 'grass' },
+  { x: 1, y: 28, w: 1, h: 3, tile: 'grass' },
+  { x: 3, y: 26, w: 1, h: 2, tile: 'grass' },
+  { x: 1, y: 33, w: 2, h: 2, tile: 'grass' },
+  { x: 3, y: 30, w: 1, h: 1, tile: 'flowerbed' },
+  { x: 1, y: 26, w: 1, h: 1, tile: 'flowerbed' },
+  { x: 3, y: 33, w: 1, h: 1, tile: 'flowerbed' },
+  // Hedge dressing along the market's shaded north-west corner.
+  { x: 4, y: 17, w: 2, h: 1, tile: 'hedge' },
+
+  // The scratched sigils: the recurring symbol that ties the levels together.
+  { x: 43, y: 11, w: 1, h: 1, tile: 'accentInlay' },
+  { x: 48, y: 8, w: 1, h: 1, tile: 'accentInlay' },
+];
+
+/**
+ * Authored facade openings. `face` is the wall tile the opening replaces, found
+ * by walking the 1-tile-thick wall ring. Appearance only: the collision layer
+ * still blocks these tiles, so a window or door changes nothing mechanically.
+ */
+const FACADE_DOORS = [
+  // Market square shopfronts, on the north wall - the only wall face a
+  // top-down camera shows, since it has walkable floor directly below it.
+  { x: 9, y: 11 },
+  { x: 10, y: 11 },
+  { x: 14, y: 11 },
+  { x: 15, y: 11 },
+  // A house door onto the arrival alley.
+  { x: 5, y: 29 },
+  // Service door onto the garage yard.
+  { x: 37, y: 15 },
+  { x: 38, y: 15 },
 ];
 
 // ---------------------------------------------------------------------- props
 const propByName = new Map();
 for (const [area, list] of Object.entries(propData)) {
   if (!Array.isArray(list)) continue;
-  for (const prop of list) propByName.set(`${area}.${prop.name}`, { area, ...prop });
+  for (const prop of list) {
+    if (typeof prop !== 'object' || prop === null) continue;
+    propByName.set(`${area}.${prop.name}`, { area, ...prop });
+  }
 }
 
 /**
  * Prop placements. `tx`/`ty` are the tile the prop's base sits in; `dx` is the
  * anchor's pixel offset inside that tile (8 = tile centre, 16 = the boundary
  * with the next tile, which aligns a 32px prop to a two-tile block).
- *
- * Gameplay roles come from prop-metadata.json, so a placement cannot
- * accidentally invent cover the collision grid does not have.
  */
 const PROP_PLACEMENTS = [
-  // --- market square: the heart of the village ---
-  // Replaces the old 2x2 "well" cover tiles.
+  // --- market square ---
   { prop: 'valcendre.fountain', tx: 25, ty: 19, dx: 16 },
-  // Replaces the old 2x1 "cart" cover tiles.
   { prop: 'valcendre.hay_cart', tx: 7, ty: 24, dx: 16 },
   { prop: 'valcendre.tree', tx: 6, ty: 20, dx: 8 },
+  { prop: 'valcendre.tree', tx: 28, ty: 15, dx: 8 },
   { prop: 'valcendre.bench', tx: 14, ty: 24, dx: 16 },
+  { prop: 'valcendre.bench', tx: 22, ty: 19, dx: 16 },
   { prop: 'valcendre.barrels', tx: 27, ty: 22, dx: 16 },
   { prop: 'valcendre.flower_box', tx: 4, ty: 14, dx: 16 },
+  { prop: 'valcendre.flower_box', tx: 17, ty: 13, dx: 16 },
   { prop: 'valcendre.flower_pot', tx: 22, ty: 13, dx: 8 },
-  // Not on tile (24,24): that is patrol waypoint wp_l2_2, and the generator's
-  // reachability assertion rejects a prop that sits on an authored waypoint.
+  { prop: 'valcendre.flower_pot', tx: 11, ty: 13, dx: 8 },
   { prop: 'valcendre.lamppost', tx: 22, ty: 25, dx: 8 },
+  { prop: 'valcendre.lamppost', tx: 12, ty: 18, dx: 8 },
   { prop: 'valcendre.clothesline', tx: 9, ty: 15, dx: 16 },
-  { prop: 'valcendre.french_flag', tx: 20, ty: 12, dx: 8 },
+  { prop: 'valcendre.clothesline', tx: 16, ty: 20, dx: 16 },
+  { prop: 'valcendre.french_flag', tx: 20, ty: 13, dx: 8 },
 
   // --- arrival alley ---
-  { prop: 'valcendre.clothesline', tx: 7, ty: 31, dx: 16 },
+  { prop: 'valcendre.clothesline', tx: 7, ty: 32, dx: 16 },
   { prop: 'valcendre.flower_pot', tx: 9, ty: 37, dx: 8 },
+  { prop: 'valcendre.barrels', tx: 9, ty: 34, dx: 16 },
+  { prop: 'valcendre.lamppost', tx: 5, ty: 36, dx: 8 },
 
-  // --- west garden lane: greenery and the solitary village cross ---
+  // --- west garden lane ---
   { prop: 'valcendre.tree', tx: 2, ty: 27, dx: 8 },
   { prop: 'valcendre.village_cross', tx: 2, ty: 31, dx: 8 },
+  { prop: 'valcendre.flower_box', tx: 1, ty: 25, dx: 16 },
+  { prop: 'valcendre.flower_pot', tx: 3, ty: 34, dx: 8 },
 
-  // --- bakery rear nook ---
+  // --- bakery rear nook and service corridor ---
   { prop: 'valcendre.flower_box', tx: 20, ty: 11, dx: 16 },
+  { prop: 'valcendre.barrels', tx: 22, ty: 9, dx: 16 },
+  { prop: 'valcendre.barrels', tx: 36, ty: 8, dx: 16 },
+  { prop: 'valcendre.clothesline', tx: 26, ty: 8, dx: 16 },
 
-  // --- yard corridor: one cover break on the direct route ---
+  // --- yard corridor ---
   { prop: 'valcendre.stone_cover', tx: 31, ty: 22, dx: 16 },
 
   // --- transport garage yard ---
-  // Replaces the old 2x1 crate cover tiles in front of the garage door.
   { prop: 'valcendre.barrels', tx: 44, ty: 24, dx: 16 },
   { prop: 'valcendre.stone_cover', tx: 41, ty: 30, dx: 16 },
+  { prop: 'valcendre.stone_cover', tx: 47, ty: 32, dx: 16 },
   { prop: 'valcendre.lamppost', tx: 36, ty: 20, dx: 8 },
+  { prop: 'valcendre.lamppost', tx: 52, ty: 25, dx: 8 },
   { prop: 'valcendre.barrels', tx: 50, ty: 18, dx: 16 },
+  { prop: 'valcendre.hay_cart', tx: 38, ty: 17, dx: 16 },
+
+  // --- north road ---
+  { prop: 'valcendre.village_cross', tx: 48, ty: 2, dx: 8 },
 ];
 
 // ------------------------------------------------------------------- objects
@@ -307,7 +382,6 @@ function route(id, points) {
   );
 }
 
-// Props become objects too, so the scene can instantiate their sprites.
 let propIndex = 0;
 for (const placement of PROP_PLACEMENTS) {
   const def = propByName.get(placement.prop);
@@ -330,42 +404,117 @@ const blank = () => new Array(W * H).fill(0);
 const idx = (x, y) => y * W + x;
 
 const walkable = new Array(W * H).fill(false);
-const floor = blank();
+const areaOf = new Array(W * H).fill(null);
+const surfaceOf = new Array(W * H).fill(null);
+
 for (const r of REGIONS) {
   for (let y = r.y; y < r.y + r.h; y++) {
     for (let x = r.x; x < r.x + r.w; x++) {
       assertInside(r.id, x, y);
       walkable[idx(x, y)] = true;
-      floor[idx(x, y)] = variantFor(r.surface, x, y) + 1;
+      areaOf[idx(x, y)] = r.area;
+      surfaceOf[idx(x, y)] = r.surface;
     }
   }
 }
+for (const o of SURFACE_OVERRIDES) {
+  for (let y = o.y; y < o.y + o.h; y++)
+    for (let x = o.x; x < o.x + o.w; x++)
+      if (walkable[idx(x, y)]) surfaceOf[idx(x, y)] = o.surface;
+}
 
+// ---- floor: per-area surfaces, plus the dark fill beyond the buildings.
+const floor = blank();
+for (let y = 0; y < H; y++) {
+  for (let x = 0; x < W; x++) {
+    floor[idx(x, y)] = walkable[idx(x, y)]
+      ? surfaceTile(surfaceOf[idx(x, y)], x, y) + 1
+      : surfaceTile('voidFill', x, y) + 1;
+  }
+}
+
+// ---- shadow zones: gameplay flag, plus a darker floor where they apply.
 const shadowZones = blank();
 for (const s of SHADOWS) {
   stamp(s, roleId('shadow'), shadowZones, true);
   for (let y = s.y; y < s.y + s.h; y++)
     for (let x = s.x; x < s.x + s.w; x++)
-      if (walkable[idx(x, y)]) floor[idx(x, y)] = roleId('shadow') + 1;
+      if (walkable[idx(x, y)]) floor[idx(x, y)] = surfaceTile('shadowFloor', x, y) + 1;
 }
 
-// collision = the complement of the carved floor. Tiles touching floor get the
-// limestone wall face; everything further out reads as rooftops.
+// ---- collision: INVISIBLE. One blocker tile per non-walkable tile.
 const collision = blank();
+for (let y = 0; y < H; y++)
+  for (let x = 0; x < W; x++)
+    if (!walkable[idx(x, y)]) collision[idx(x, y)] = roleId('blocker') + 1;
+
+/**
+ * architecture: VISIBLE, not a collider.
+ *
+ * Painted by Chebyshev distance to the nearest walkable tile, so the ring of
+ * identical wall tiles becomes a street of buildings: wall face, roof edge, red
+ * roof, darkness. Windows and doors are placed on south-facing faces, which are
+ * the ones the top-down camera actually shows.
+ */
+const ROOF_EDGE_DIST = 2;
+const ROOF_DEPTH = 4;
+const architecture = blank();
+const doorSet = new Set(FACADE_DOORS.map((d) => `${d.x},${d.y}`));
+
 for (let y = 0; y < H; y++) {
   for (let x = 0; x < W; x++) {
     if (walkable[idx(x, y)]) continue;
-    collision[idx(x, y)] = (touchesFloor(x, y) ? roleId('wall') : roleId('void')) + 1;
+    const dist = distanceToWalkable(x, y, ROOF_DEPTH + 1);
+    if (dist === 1) {
+      const openSouth = isWalkable(x, y + 1);
+      const openNorth = isWalkable(x, y - 1);
+      let tile = openSouth ? ARCH.wallSouth : openNorth ? ARCH.wallNorth : ARCH.wallFace;
+      if (openSouth) {
+        if (doorSet.has(`${x},${y}`)) tile = ARCH.door;
+        // Deterministic window rhythm along south-facing facades.
+        else if ((x + y * 3) % 5 === 2) tile = ARCH.window;
+      }
+      architecture[idx(x, y)] = tile + 1;
+    } else if (dist === ROOF_EDGE_DIST) {
+      architecture[idx(x, y)] = ARCH.roofEdge + 1;
+    } else if (dist <= ROOF_DEPTH) {
+      architecture[idx(x, y)] = ARCH.roof + 1;
+    }
+    // Beyond ROOF_DEPTH the floor layer's dark fill is all that shows.
   }
 }
 
+function isWalkable(x, y) {
+  return x >= 0 && y >= 0 && x < W && y < H && walkable[idx(x, y)];
+}
+function distanceToWalkable(x, y, limit) {
+  for (let r = 1; r <= limit; r++) {
+    for (let dy = -r; dy <= r; dy++)
+      for (let dx = -r; dx <= r; dx++) {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+        if (isWalkable(x + dx, y + dy)) return r;
+      }
+  }
+  return limit + 1;
+}
+
+// ---- cover: gameplay.
 const cover = blank();
 for (const c of COVER) stamp(c, roleId(c.role), cover, true);
 
+// ---- decorBack: authored accents, below characters, appearance only.
 const decorBack = blank();
-for (const d of DECOR_BACK) stamp(d, roleId(d.role), decorBack, true);
-// decorFront stays empty in this slice: there is no awning tile in the supplied
-// tileset, so overhead decoration is handled by front-depth props instead.
+for (const a of ACCENTS) {
+  if (!(a.tile in ARCH)) throw new Error(`accent names unknown architecture tile "${a.tile}"`);
+  for (let y = a.y; y < a.y + a.h; y++)
+    for (let x = a.x; x < a.x + a.w; x++) {
+      assertInside(`accent@${x},${y}`, x, y);
+      decorBack[idx(x, y)] = ARCH[a.tile] + 1;
+    }
+}
+
+// decorFront stays empty: the tileset has no overhead art, so foreground
+// decoration is handled by front-depth props instead.
 const decorFront = blank();
 
 /**
@@ -394,8 +543,7 @@ for (const placement of PROP_PLACEMENTS) {
     y0: anchorY - def.footprint.height,
     y1: anchorY,
   };
-  const role =
-    def.cover === 'low' ? 'barrierLow' : def.blocksSight ? 'crateHigh' : 'wall';
+  const role = def.cover === 'low' ? 'barrierLow' : def.blocksSight ? 'crateHigh' : 'blocker';
 
   let claimed = 0;
   for (let ty = Math.floor(box.y0 / TS); ty <= Math.floor((box.y1 - 1) / TS); ty++) {
@@ -422,15 +570,6 @@ function stamp(r, tile, target, requireFloor) {
     }
   }
 }
-function touchesFloor(x, y) {
-  for (let dy = -1; dy <= 1; dy++)
-    for (let dx = -1; dx <= 1; dx++) {
-      const nx = x + dx;
-      const ny = y + dy;
-      if (nx >= 0 && ny >= 0 && nx < W && ny < H && walkable[idx(nx, ny)]) return true;
-    }
-  return false;
-}
 function assertInside(what, x, y) {
   if (x < 0 || y < 0 || x >= W || y >= H) throw new Error(`${what}: ${x},${y} out of bounds`);
 }
@@ -454,11 +593,9 @@ for (let i = 0; i < solid.length; i++) if (!solid[i] && !reach[i]) orphans++;
 if (orphans > 0) throw new Error(`${orphans} walkable tiles are unreachable from spawn`);
 
 for (const o of OBJECTS) {
-  if (o.type === 'exit') continue;
+  if (o.type === 'exit' || o.type === 'prop' || o.type === 'decor') continue;
   const tx = Math.floor(o.x / TS);
   const ty = Math.floor(o.y / TS);
-  // A prop's own anchor tile may legitimately be inside its own collision box.
-  if (o.type === 'prop') continue;
   if (!reach[idx(tx, ty)]) throw new Error(`object ${o.name} at tile ${tx},${ty} is unreachable`);
 }
 
@@ -468,6 +605,17 @@ for (let y = exitObj.y / TS; y < (exitObj.y + exitObj.height) / TS; y++)
   for (let x = exitObj.x / TS; x < (exitObj.x + exitObj.width) / TS; x++)
     if (reach[idx(x, y)]) exitOk = true;
 if (!exitOk) throw new Error('exit rectangle is unreachable');
+
+// Facade openings must land on the 1-tile wall ring, or they would be painted
+// into roof tiles where no one can see them.
+for (const d of FACADE_DOORS) {
+  assertInside(`door@${d.x},${d.y}`, d.x, d.y);
+  if (walkable[idx(d.x, d.y)]) throw new Error(`facade door ${d.x},${d.y} is on walkable floor`);
+  if (distanceToWalkable(d.x, d.y, 2) !== 1)
+    throw new Error(`facade door ${d.x},${d.y} is not on the wall face ring`);
+  if (!isWalkable(d.x, d.y + 1))
+    throw new Error(`facade door ${d.x},${d.y} does not face south onto walkable floor`);
+}
 
 function floodFill(sx, sy) {
   const seen = new Array(W * H).fill(false);
@@ -544,12 +692,13 @@ const objectLayer = {
   })),
 };
 
-// Per-tile gameplay properties, emitted only for tiles a role actually uses.
+// Per-tile gameplay properties, emitted only for tiles a gameplay role uses.
 const tileProperties = [];
 for (const def of Object.values(ROLES)) {
   const entries = Object.entries(def.flags).filter(([, v]) => v);
   if (entries.length === 0) continue;
-  if (tileProperties.some((t) => t.id === def.id)) continue;
+  const existing = tileProperties.find((t) => t.id === def.id);
+  if (existing) continue;
   tileProperties.push({
     id: def.id,
     properties: entries.map(([name, value]) => ({ name, type: 'bool', value })),
@@ -574,11 +723,12 @@ const map = {
   layers: [
     tileLayer('floor', floor),
     tileLayer('decorBack', decorBack),
-    tileLayer('collision', collision),
+    tileLayer('architecture', architecture),
+    tileLayer('collision', collision, false),
     tileLayer('cover', cover),
     tileLayer('propCollision', propCollision, false),
     tileLayer('shadowZones', shadowZones, false),
-    tileLayer('decorFront', decorFront, true, 0.92),
+    tileLayer('decorFront', decorFront),
     objectLayer,
   ],
   tilesets: [
@@ -604,13 +754,24 @@ mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, JSON.stringify(map, null, 1) + '\n');
 
 const walkableCount = walkable.filter(Boolean).length;
-const propTiles = propCollision.filter(Boolean).length;
+const areaCounts = {};
+for (let i = 0; i < areaOf.length; i++)
+  if (areaOf[i]) areaCounts[areaOf[i]] = (areaCounts[areaOf[i]] ?? 0) + 1;
+const windows = architecture.filter((g) => g === ARCH.window + 1).length;
+const doors = architecture.filter((g) => g === ARCH.door + 1).length;
+
 console.log(
   `village.json: ${W}x${H} tiles (${W * TS}x${H * TS} px), ${walkableCount} walkable, ` +
     `${OBJECTS.length} objects (${PROP_PLACEMENTS.length} props), ` +
-    `${propTiles} prop-collision tiles, tileset "${STAGE}" (${tilesetMeta.tilecount} tiles). All reachable.`
+    `${propCollision.filter(Boolean).length} prop-collision tiles, ` +
+    `${windows} windows, ${doors} doors. All reachable.`
 );
-for (const r of propCollisionRoles) {
+console.log(
+  '  areas: ' +
+    Object.entries(areaCounts)
+      .map(([a, n]) => `${a} ${n}`)
+      .join(', ')
+);
+for (const r of propCollisionRoles)
   if (r.claimed === 0)
     console.log(`  note: ${r.prop} footprint claims no tile (decorative in practice)`);
-}

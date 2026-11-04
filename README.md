@@ -9,7 +9,12 @@ chain, checkpoints and the north-road exit.
 The placeholder art has been replaced with the `TEMPEST_pixel_art_v1` production
 package. **Read [docs/art-integration.md](docs/art-integration.md)** for the
 asset architecture, the animation mapping, the tileset mapping, what is still a
-placeholder and the outstanding art problems.
+placeholder, the Phase B.1A transparency diagnosis and the environmental audit.
+
+Outstanding artwork is specified in
+[docs/art-requests/phase-b1.md](docs/art-requests/phase-b1.md) (and
+[`phase-b1.json`](docs/art-requests/phase-b1.json)). Supporting measurements are
+in [docs/diagnostics/](docs/diagnostics/) — test images only, never shipped.
 
 Per the locked spec's deliverable sequence, no other level is built yet.
 
@@ -53,17 +58,22 @@ that needs Phaser or a browser is unverified.
 | E | Interact / silent takedown |
 | 1 / 2 | Pistol / shotgun (shotgun unlocks in Level 2, not in this slice) |
 | Esc | Pause — objective recap, controls, K restart checkpoint, Q quit to title |
-| F3 | Toggle the hitbox debug overlay |
+| F3 | Toggle the debug overlay (off by default) |
 
-### Hitbox debug overlay (F3)
+### Debug overlay (F3)
+
+Off by default. Drawn into its own `Graphics` object, so it cannot affect
+production rendering.
 
 | Drawn | Meaning |
 | --- | --- |
 | Cyan / blue solid box | Player / enemy movement collider (12×10, at the feet) |
 | Green / magenta solid box | Player / enemy ground-plane bullet hitbox (12×18) |
 | Pale dashed box | The drawn torso rectangle those correspond to (y−24 to y−6) |
-| White / yellow cross | Player / enemy ground position (vision + shot origin) |
+| White / yellow cross + dot | Player / enemy ground position and feet anchor |
 | Light blue cross | The player's aim origin, showing the render offset |
+| Yellow line from a guard | Vision origin and cone centre |
+| Pink / green / orange / indigo tile outline | Solid · low cover · **prop-derived** collision · concealment zone |
 | Grey / red line | Last 32 shot rays — red when the ray connected |
 
 ## Testing both routes

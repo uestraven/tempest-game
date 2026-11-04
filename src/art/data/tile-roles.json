@@ -1,64 +1,41 @@
 {
   "_comment": [
-    "Semantic mapping: gameplay role -> artwork tile name -> gameplay flags.",
-    "Shared by the runtime (src/art/TilesetRegistry.ts) and the map generator",
-    "(tools/build-map.mjs), so the drawn tile and the collision grid can never",
-    "drift apart.",
+    "Semantic mapping for the supplied 48-tile stage tilesets. Shared by the",
+    "runtime (src/art/TilesetRegistry.ts) and the map generator",
+    "(tools/build-map.mjs).",
     "",
-    "The old prototype's 16 procedural tile indices have no relationship to the",
-    "48 tiles in the supplied tilesets, so every role names its tile explicitly.",
-    "Flags are the gameplay truth and are asserted against the tileset's own",
-    "solid/cover/occludes_vision hints by tools/build-map.mjs.",
+    "TWO SEPARATE CONCERNS:",
     "",
-    "All four stage tilesets share this 48-tile schema, so the same mapping",
-    "re-skins Valcendre, the Estate, the Abbey and the Ascension."
+    "  roles      - GAMEPLAY. Emitted onto the gameplay layers (collision, cover,",
+    "               propCollision, shadowZones) and the only source of tile flags",
+    "               the grid reads. Flags here are authoritative.",
+    "  surfaces   - APPEARANCE ONLY. Per-area ground painting on the visual-only",
+    "               `floor` layer. Changing a surface can never change walkability.",
+    "  architecture - APPEARANCE ONLY. Wall faces, windows, doors and the roof",
+    "               band drawn on the visual-only `architecture` layer.",
+    "",
+    "MapLoader only merges tile flags from the gameplay layers, so a decorative",
+    "tile can never accidentally make a floor solid, and the same tile image may",
+    "appear in both a decorative and a gameplay role without its flags leaking.",
+    "",
+    "Measured limitation driving the composition rules: only 28 of the 48 tiles",
+    "are visually distinct, and wall_solid / wall_variant / wall_left /",
+    "wall_right / wall_corner_tl / wall_corner_tr are near-identical art, so",
+    "there are no true directional wall edges to build corners from. See",
+    "docs/art-requests/phase-b1.md."
   ],
   "roles": {
-    "void": {
-      "tile": "roof",
-      "layer": "collision",
-      "collides": true,
-      "blocksSight": true,
-      "why": "Non-walkable interior of a block. Reads as rooftops from above, and 'roof' is already solid and vision-blocking in the supplied metadata."
-    },
-    "wall": {
+    "blocker": {
       "tile": "wall_solid",
       "layer": "collision",
       "collides": true,
-      "blocksSight": true
-    },
-    "cobble": {
-      "tile": "cobble",
-      "layer": "floor"
-    },
-    "cobbleAlt": {
-      "tile": "brick",
-      "layer": "floor"
-    },
-    "marketDirt": {
-      "tile": "floor_04",
-      "layer": "floor"
-    },
-    "concrete": {
-      "tile": "metal",
-      "layer": "floor"
-    },
-    "road": {
-      "tile": "ground_debris",
-      "layer": "floor"
+      "blocksSight": true,
+      "why": "The single gameplay blocker for every non-walkable tile. The collision layer is invisible; what the player sees there is painted by the architecture layer, so appearance and collision cannot drift apart."
     },
     "shadow": {
       "tile": "deep_shadow",
-      "layer": "floor",
+      "layer": "shadowZones",
       "shadow": true
-    },
-    "grass": {
-      "tile": "grass",
-      "layer": "decorBack"
-    },
-    "sigil": {
-      "tile": "ritual_mark",
-      "layer": "decorBack"
     },
     "crateHigh": {
       "tile": "cover_high",
@@ -77,7 +54,7 @@
       "layer": "cover",
       "collides": true,
       "blocksSight": true,
-      "why": "No van artwork exists in the package; the gameplay object keeps a generated placeholder sprite drawn on top. See docs/art-integration.md."
+      "why": "No van artwork exists in the package; the gameplay object keeps a generated placeholder sprite drawn over these tiles. See docs/art-integration.md."
     },
     "barrierLow": {
       "tile": "cover_low",
@@ -86,26 +63,113 @@
       "lowCover": true
     }
   },
-  "floorVariants": {
-    "cobble": [
-      "cobble",
-      "floor_01",
-      "floor_02"
+  "surfaces": {
+    "_comment": [
+      "variantChance is a percentage. It is kept low because the only available",
+      "floor variants are decorative motifs: at the previous 30% the market read",
+      "as patterned wallpaper rather than a village square.",
+      "floor_inlay and checker are deliberately NOT random variants - they are",
+      "framed motifs that only work as authored accents.",
+      "floor_stain is red blood spatter: deliberately unused in Valcendre, because",
+      "blood is an Abbey/Ascension escalation in the locked design, not village set",
+      "dressing."
     ],
-    "marketDirt": [
-      "floor_04",
-      "floor_03",
-      "floor_inlay"
+    "alleyCobble": {
+      "base": "cobble",
+      "variants": [
+        "floor_01",
+        "floor_crack"
+      ],
+      "variantChance": 12
+    },
+    "marketPaving": {
+      "base": "floor_04",
+      "variants": [
+        "floor_01"
+      ],
+      "variantChance": 8
+    },
+    "gardenGrass": {
+      "base": "grass",
+      "variants": [
+        "flowerbed"
+      ],
+      "variantChance": 22
+    },
+    "gardenPath": {
+      "base": "cobble",
+      "variants": [
+        "floor_01"
+      ],
+      "variantChance": 10
+    },
+    "serviceBrick": {
+      "base": "brick",
+      "variants": [
+        "floor_crack"
+      ],
+      "variantChance": 10
+    },
+    "yardGravel": {
+      "base": "ground_debris",
+      "variants": [
+        "floor_crack"
+      ],
+      "variantChance": 5
+    },
+    "garageFloor": {
+      "base": "metal",
+      "variants": [
+        "grate"
+      ],
+      "variantChance": 9
+    },
+    "roadDirt": {
+      "base": "cobble",
+      "variants": [
+        "ground_debris",
+        "floor_crack"
+      ],
+      "variantChance": 16
+    },
+    "shadowFloor": {
+      "base": "deep_shadow",
+      "variants": [],
+      "variantChance": 0
+    },
+    "voidFill": {
+      "base": "deep_shadow",
+      "variants": [],
+      "variantChance": 0
+    }
+  },
+  "architecture": {
+    "_comment": [
+      "Drawn outward from the playable area by Chebyshev distance to the nearest",
+      "walkable tile: a stone wall face, then a roof edge, then red roof tiles,",
+      "then darkness. That is what turns a flat ring of identical wall tiles into",
+      "buildings with pitched roofs, using only approved art.",
+      "wallSouth/wallNorth exist because wall_bottom and wall_top are the only",
+      "wall pieces measurably different from wall_solid.",
+      "grass/flowerbed/hedge are listed here as appearance-only names so garden",
+      "dressing can be drawn on decorBack, ABOVE the floor. The garden lane is an",
+      "authored shadow zone, so its floor must stay the dark concealment tile for",
+      "gameplay legibility; the greenery sits on top of it. The tileset has no",
+      "shaded-grass variant, which is requested in docs/art-requests/phase-b1.md."
     ],
-    "concrete": [
-      "metal",
-      "floor_06",
-      "grate"
-    ],
-    "road": [
-      "ground_debris",
-      "floor_crack",
-      "floor_stain"
-    ]
+    "wallFace": "wall_solid",
+    "wallSouth": "wall_bottom",
+    "wallNorth": "wall_top",
+    "roofEdge": "roof_edge",
+    "roof": "roof",
+    "window": "window",
+    "door": "door_closed",
+    "doorOpen": "door_open",
+    "threshold": "threshold",
+    "accentInlay": "floor_inlay",
+    "accentChecker": "checker",
+    "grass": "grass",
+    "flowerbed": "flowerbed",
+    "hedge": "hedge"
   }
 }

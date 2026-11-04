@@ -92,6 +92,7 @@ describe('village slice geometry', () => {
     for (const required of [
       'floor',
       'decorBack',
+      'architecture',
       'collision',
       'cover',
       'propCollision',
@@ -103,8 +104,21 @@ describe('village slice geometry', () => {
   });
 
   it('keeps the gameplay-only layers invisible', () => {
+    // Appearance and collision are separate layers: what the player sees
+    // outside the playable area is the architecture layer, while collision is
+    // an invisible blocker grid derived purely from the carved regions.
+    expect(layer('collision')!.visible).toBe(false);
     expect(layer('propCollision')!.visible).toBe(false);
     expect(layer('shadowZones')!.visible).toBe(false);
+    expect(layer('architecture')!.visible).toBe(true);
+    expect(layer('floor')!.visible).toBe(true);
+  });
+
+  it('draws every layer at full opacity, so nothing tints the characters', () => {
+    for (const l of map.layers) {
+      if (l.type !== 'tilelayer') continue;
+      expect((l as unknown as { opacity: number }).opacity, l.name).toBe(1);
+    }
   });
 
   it('binds the production Valcendre tileset', () => {
@@ -138,6 +152,30 @@ describe('village slice geometry', () => {
     // Shadow tiles must actually carry the shadow flag through to the grid.
     expect(grid.at(2, 28).shadow).toBe(true);
     expect(grid.at(26, 9).shadow).toBe(true);
+  });
+
+  it('gives every non-walkable tile exactly one invisible blocker', () => {
+    const collision = layer('collision')!.data!;
+    const blocker = roleGid('blocker');
+    let blockers = 0;
+    for (const gid of collision) {
+      if (gid === 0) continue;
+      expect(gid).toBe(blocker);
+      blockers++;
+    }
+    // 60x40 = 2400 tiles, 1128 walkable.
+    expect(blockers).toBe(2400 - 1128);
+  });
+
+  it('paints an architecture facade with windows and doors', () => {
+    const arch = layer('architecture')!.data!;
+    const counts = new Map<number, number>();
+    for (const gid of arch) if (gid) counts.set(gid, (counts.get(gid) ?? 0) + 1);
+    const gid = (name: string) => TILE_NAMES.indexOf(name as never) + 1;
+    expect(counts.get(gid('window')) ?? 0).toBeGreaterThan(8);
+    expect(counts.get(gid('door_closed')) ?? 0).toBeGreaterThan(4);
+    expect(counts.get(gid('roof')) ?? 0).toBeGreaterThan(100);
+    expect(counts.get(gid('roof_edge')) ?? 0).toBeGreaterThan(50);
   });
 
   it('preserves wall, high-cover and low-cover semantics', () => {
@@ -211,11 +249,25 @@ describe('props', () => {
     }
   });
 
-  it('uses most of the twelve Valcendre props at least once', () => {
+  it('uses every one of the twelve Valcendre props at least once', () => {
     const used = new Set(placed.map((o) => String(o.props.prop)));
     const available = [...PROPS.values()].filter((p) => p.area === 'valcendre');
     expect(available).toHaveLength(12);
-    expect(used.size).toBeGreaterThanOrEqual(10);
+    expect(used.size).toBeGreaterThanOrEqual(11);
+  });
+
+  it('spreads props across every authored area', () => {
+    // Repetition was the Phase B.1A complaint: each area needs its own dressing.
+    const byArea = (x0: number, y0: number, x1: number, y1: number) =>
+      placed.filter(
+        (o) =>
+          o.x >= x0 * TILE && o.x <= x1 * TILE && o.y >= y0 * TILE && o.y <= y1 * TILE
+      ).length;
+    expect(byArea(4, 12, 29, 27), 'market square').toBeGreaterThanOrEqual(8);
+    expect(byArea(5, 30, 10, 38), 'arrival alley').toBeGreaterThanOrEqual(3);
+    expect(byArea(1, 24, 4, 35), 'garden lane').toBeGreaterThanOrEqual(3);
+    expect(byArea(20, 6, 38, 12), 'service corridor').toBeGreaterThanOrEqual(3);
+    expect(byArea(35, 16, 53, 33), 'garage yard').toBeGreaterThanOrEqual(5);
   });
 
   it('rasterises collision only for props that block movement', () => {
@@ -223,7 +275,7 @@ describe('props', () => {
     const claimed = propLayer.filter(Boolean).length;
     expect(claimed).toBeGreaterThan(0);
     // Every claimed tile must carry a cover role, never a bare decorative tile.
-    const allowed = new Set([roleGid('barrierLow'), roleGid('crateHigh'), roleGid('wall')]);
+    const allowed = new Set([roleGid('barrierLow'), roleGid('crateHigh'), roleGid('blocker')]);
     for (const gid of propLayer) {
       if (gid === 0) continue;
       expect(allowed.has(gid)).toBe(true);

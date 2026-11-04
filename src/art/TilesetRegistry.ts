@@ -86,24 +86,20 @@ export type TileName = (typeof TILE_NAMES)[number];
 export const tileIndex = (name: TileName): number => TILE_NAMES.indexOf(name);
 
 /**
- * Gameplay roles the map generator and the collision grid speak in. These are
- * the authoritative gameplay concepts; the artwork is a presentation detail.
+ * Gameplay roles the map generator and the collision grid speak in.
+ *
+ * These are the ONLY tiles whose properties reach the gameplay grid. Appearance
+ * is a separate concern: per-area ground surfaces and the architecture band are
+ * painted onto visual-only layers, and MapLoader does not read flags from
+ * those. Repainting the village therefore cannot change where the player walks.
  */
 export type TileRole =
-  | 'void' // outside the playable area: solid, blocks sight
-  | 'cobble' // street surface
-  | 'cobbleAlt' // street variation
-  | 'marketDirt' // open market square
+  | 'blocker' // every non-walkable tile: solid, blocks sight, never drawn
   | 'shadow' // authored concealment zone
-  | 'concrete' // garage / yard slab
-  | 'road' // the north exit road
-  | 'wall' // building face: solid, blocks sight
   | 'crateHigh' // high cover: solid, blocks sight
-  | 'barrierLow' // low cover: solid, blocks sight of a crouched player only
   | 'well' // high cover
-  | 'sigil' // floor marking, decorative
-  | 'grass' // decorative ground
-  | 'van'; // Suzanne's transport: high cover (placeholder art, see docs)
+  | 'van' // Suzanne's transport: high cover (placeholder sprite drawn over it)
+  | 'barrierLow'; // low cover: blocks bullets always, sight only when crouched
 
 export interface RoleFlags {
   collides: boolean;
@@ -119,7 +115,7 @@ export interface RoleDef {
   /** Gameplay truth. Independent of the artwork. */
   flags: Partial<RoleFlags>;
   /** Which Tiled layer the role belongs on. */
-  layer: 'floor' | 'decorBack' | 'collision' | 'cover' | 'decorFront';
+  layer: 'collision' | 'cover' | 'shadowZones';
 }
 
 interface RawRole {
@@ -151,16 +147,35 @@ export const TILE_ROLES: Record<TileRole, RoleDef> = Object.fromEntries(
 ) as Record<TileRole, RoleDef>;
 
 /**
- * Floor variation tiles, used to break up large surfaces without changing
- * walkability. Every entry must be a non-solid tile in the supplied metadata;
- * `tools/build-map.mjs` asserts that.
+ * Per-area ground surfaces. APPEARANCE ONLY - a surface can never make a tile
+ * solid, because MapLoader ignores tile flags on the floor layer.
+ *
+ * variantChance is kept low: the only available floor variants are decorative
+ * motifs, and at the Phase B value of 30% the market square read as patterned
+ * wallpaper rather than a village square.
  */
-export const FLOOR_VARIANTS: Record<string, TileName[]> = roleData.floorVariants as Record<
-  string,
-  TileName[]
->;
+export interface SurfaceDef {
+  base: TileName;
+  variants: TileName[];
+  variantChance: number;
+}
 
-/** Tiles that are solid in the supplied metadata, for validation. */
+export const SURFACES: Record<string, SurfaceDef> = Object.fromEntries(
+  Object.entries(roleData.surfaces as Record<string, unknown>).filter(
+    ([name]) => !name.startsWith('_')
+  )
+) as Record<string, SurfaceDef>;
+
+/**
+ * Floor variation tiles per surface. Every entry must be a non-solid tile in
+ * the supplied metadata; `tools/build-map.mjs` asserts that at build time and
+ * `tests/assets.test.ts` asserts it again against the shipped tileset JSON.
+ */
+export const FLOOR_VARIANTS: Record<string, TileName[]> = Object.fromEntries(
+  Object.entries(SURFACES).map(([name, def]) => [name, def.variants])
+);
+
+/** Tiles the supplied metadata marks solid, for validation. */
 export const SOLID_TILE_NAMES: TileName[] = [
   'wall_solid',
   'wall_variant',
@@ -180,6 +195,13 @@ export const SOLID_TILE_NAMES: TileName[] = [
   'pillar',
 ];
 
+/** Named architecture and decoration tiles. APPEARANCE ONLY. */
+export const ARCHITECTURE: Record<string, TileName> = Object.fromEntries(
+  Object.entries(roleData.architecture as Record<string, unknown>).filter(
+    ([name]) => !name.startsWith('_')
+  )
+) as Record<string, TileName>;
+
 export interface StageTileset {
   stage: StageKey;
   /** Phaser texture key. */
@@ -195,7 +217,10 @@ export const STAGE_TILESETS: Record<StageKey, StageTileset> = Object.fromEntries
   ])
 ) as Record<StageKey, StageTileset>;
 
-/** Gameplay flags for a tile index, derived from the role table. */
+/**
+ * Gameplay flags for a tile index, derived from the role table. Returns null for
+ * a tile no gameplay role uses - which is every purely decorative tile.
+ */
 export function flagsForTileIndex(index: number): RoleFlags | null {
   for (const def of Object.values(TILE_ROLES)) {
     if (tileIndex(def.tile) !== index) continue;

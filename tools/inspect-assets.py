@@ -9,6 +9,7 @@ Usage:
   python3 -I tools/inspect-assets.py info   <file.png> [...]
   python3 -I tools/inspect-assets.py sheet  <file.png> <frame_w> <frame_h>
   python3 -I tools/inspect-assets.py tiles  <file.png> <tile_w> <tile_h>
+  python3 -I tools/inspect-assets.py alpha  <file.png> <frame_w> <frame_h>
 """
 import struct
 import sys
@@ -203,9 +204,155 @@ def prop(paths):
         )
 
 
+# ---------------------------------------------------------------- alpha audit
+def _holes(rows, x0, y0, w, h, threshold=0):
+    """Transparent regions fully enclosed by the sprite, i.e. see-through holes.
+
+    Flood-fills transparent pixels inward from the frame border; anything
+    transparent that the fill cannot reach is surrounded by sprite pixels and
+    will show the background through the character's body.
+    """
+    transparent = [[rows[y0 + y][x0 + x][3] <= threshold for x in range(w)] for y in range(h)]
+    reached = [[False] * w for _ in range(h)]
+    stack = []
+    for x in range(w):
+        for y in (0, h - 1):
+            if transparent[y][x] and not reached[y][x]:
+                reached[y][x] = True
+                stack.append((x, y))
+    for y in range(h):
+        for x in (0, w - 1):
+            if transparent[y][x] and not reached[y][x]:
+                reached[y][x] = True
+                stack.append((x, y))
+    while stack:
+        x, y = stack.pop()
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < w and 0 <= ny < h and transparent[ny][nx] and not reached[ny][nx]:
+                reached[ny][nx] = True
+                stack.append((nx, ny))
+
+    # Group the unreached transparent pixels into distinct holes.
+    seen = [[False] * w for _ in range(h)]
+    sizes = []
+    for sy in range(h):
+        for sx in range(w):
+            if not transparent[sy][sx] or reached[sy][sx] or seen[sy][sx]:
+                continue
+            size = 0
+            seen[sy][sx] = True
+            grp = [(sx, sy)]
+            while grp:
+                x, y = grp.pop()
+                size += 1
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    nx, ny = x + dx, y + dy
+                    if (
+                        0 <= nx < w
+                        and 0 <= ny < h
+                        and transparent[ny][nx]
+                        and not reached[ny][nx]
+                        and not seen[ny][nx]
+                    ):
+                        seen[ny][nx] = True
+                        grp.append((nx, ny))
+            sizes.append(size)
+    return sorted(sizes, reverse=True)
+
+
+def alpha(path, fw, fh):
+    w, h, rows = decode_png(path)
+    cols, nrows = w // fw, h // fh
+    print(f"{path}: {w}x{h} -> {cols} cols x {nrows} rows of {fw}x{fh}")
+    total_partial = 0
+    total_holes = 0
+    for r in range(nrows):
+        for c in range(cols):
+            opaque = trans = partial = 0
+            colors = set()
+            for y in range(fh):
+                for x in range(fw):
+                    px = rows[r * fh + y][c * fw + x]
+                    a = px[3]
+                    if a == 255:
+                        opaque += 1
+                        colors.add(px[:3])
+                    elif a == 0:
+                        trans += 1
+                    else:
+                        partial += 1
+                        colors.add(px[:3])
+            holes = _holes(rows, c * fw, r * fh, fw, fh)
+            total_partial += partial
+            total_holes += len(holes)
+            b = bbox(rows, c * fw, r * fh, fw, fh)
+            bb = "EMPTY" if b is None else f"{b['w']}x{b['h']}@{b['x']},{b['y']}"
+            print(
+                f"  r{r}c{c}: opaque{opaque:>4} transparent{trans:>4} partial{partial:>3} "
+                f"colors{len(colors):>4} bbox {bb:<12} "
+                f"holes {len(holes):>2}{(' sizes ' + ','.join(map(str, holes[:6]))) if holes else ''}"
+            )
+    print(f"  TOTALS: partial-alpha px {total_partial}, enclosed holes {total_holes}")
+
+
+
+
+
+def tilediff(path, tw, th, names_json=None):
+    """Groups near-identical tiles, to find named tiles that carry no distinct art."""
+    import json as _json
+
+    w, h, rows = decode_png(path)
+    cols, nrows = w // tw, h // th
+    count = cols * nrows
+    names = [f"tile_{i}" for i in range(count)]
+    if names_json:
+        with open(names_json) as fh:
+            names = [t["name"] for t in _json.load(fh)["tiles"]]
+
+    def tile(i):
+        tx, ty = (i % cols) * tw, (i // cols) * th
+        return [rows[ty + y][tx + x] for y in range(th) for x in range(tw)]
+
+    data = [tile(i) for i in range(count)]
+
+    def diff(a, b):
+        total = 0
+        for pa, pb in zip(a, b):
+            total += abs(pa[0] - pb[0]) + abs(pa[1] - pb[1]) + abs(pa[2] - pb[2])
+        return total / (len(a) * 3)
+
+    print(f"{path}: {count} tiles of {tw}x{th}")
+    seen = set()
+    for i in range(count):
+        if i in seen:
+            continue
+        group = [i]
+        for j in range(i + 1, count):
+            if j in seen:
+                continue
+            if diff(data[i], data[j]) < 6.0:
+                group.append(j)
+                seen.add(j)
+        if len(group) > 1:
+            seen.add(i)
+            print(
+                f"  NEAR-IDENTICAL ({len(group)}): "
+                + ", ".join(f"{names[g]}#{g}" for g in group)
+            )
+    singles = [i for i in range(count) if i not in seen]
+    print(f"  visually distinct tiles: {len(singles)} of {count}")
+
+
 if __name__ == "__main__":
     mode = sys.argv[1]
-    if mode == "prop":
+    if mode == "tilediff":
+        tilediff(sys.argv[2], int(sys.argv[3]), int(sys.argv[4]),
+                 sys.argv[5] if len(sys.argv) > 5 else None)
+    elif mode == "alpha":
+        alpha(sys.argv[2], int(sys.argv[3]), int(sys.argv[4]))
+    elif mode == "prop":
         prop(sys.argv[2:])
     elif mode == "info":
         info(sys.argv[2:])

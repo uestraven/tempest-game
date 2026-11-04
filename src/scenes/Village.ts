@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import {
   COMBAT,
   FIXED_DT,
+  TILE,
   MAX_FRAME_DT,
   PICKUP_AMOUNT,
   VIRTUAL_HEIGHT,
@@ -11,7 +12,13 @@ import { loadLevel, objectsOfType, requireObject, type LoadedMap, type MapObject
 import type { Vec2 } from '../core/Grid';
 import { TORSO_OFFSET_Y } from '../core/hitbox';
 import { textureKey, type PropArea } from '../art/AssetRegistry';
-import { PROP_DEPTH, PROPS, propFixedDepth, propOrigin } from '../art/PropDefinitions';
+import {
+  PROP_DEPTH,
+  PROPS,
+  propDrawY,
+  propFixedDepth,
+  propOrigin,
+} from '../art/PropDefinitions';
 import { FX_ANIM } from '../art/AnimationRegistry';
 import { NEUTRAL_INPUT, Player, type InputState } from '../actors/Player';
 import { Enemy, SHOUT_RADIUS, type EnemySpawn, type EnemyWorld } from '../actors/Enemy';
@@ -270,7 +277,16 @@ export class Village extends Phaser.Scene {
         console.error(`[props] map references unknown prop ${area}.${name}`);
         continue;
       }
-      this.addPropSprite(def.texture, obj.x, obj.y, propOrigin(def), propFixedDepth(def));
+      // Overhead props are lifted clear of head height; the depth sort still
+      // uses the anchor y so ordering matches the prop's ground position.
+      this.addPropSprite(
+        def.texture,
+        obj.x,
+        propDrawY(def, obj.y),
+        propOrigin(def),
+        propFixedDepth(def),
+        obj.y
+      );
     }
 
     for (const obj of objectsOfType(objects, 'decor')) {
@@ -289,14 +305,15 @@ export class Village extends Phaser.Scene {
     x: number,
     y: number,
     origin: { x: number; y: number },
-    fixedDepth: number | null
+    fixedDepth: number | null,
+    sortY = y
   ): void {
     const image = this.add.image(Math.round(x), Math.round(y), texture);
     image.setOrigin(origin.x, origin.y);
     if (fixedDepth === null) {
       // y-sorted: a character south of a tree trunk draws in front of the
       // canopy, one north of it draws behind. Same rule as the actors.
-      image.setDepth(10 + y / 10000);
+      image.setDepth(10 + sortY / 10000);
       this.sortedProps.push(image);
     } else {
       image.setDepth(fixedDepth);
@@ -789,10 +806,12 @@ export class Village extends Phaser.Scene {
   }
 
   /**
-   * F3 overlay. Draws the three concepts separately so a mismatch between them
-   * is visible rather than inferred: feet colliders (movement), ground-plane
-   * bullet hitboxes, the drawn torso rectangles those correspond to, ground
-   * positions (vision/shot origins), and the retained player shot rays.
+   * F3 overlay. Disabled by default and drawn into its own Graphics object, so
+   * it cannot affect production rendering: no production sprite's alpha, tint,
+   * depth or blend mode is touched by anything in here.
+   *
+   * Every gameplay shape is drawn separately so a mismatch between them is
+   * visible rather than inferred.
    */
   private drawDebugHitboxes(): void {
     const g = this.debugGfx;
@@ -821,11 +840,16 @@ export class Village extends Phaser.Scene {
       }
     };
 
+    this.drawDebugTiles(g);
+
     // Player: cyan feet collider, green ground hitbox, pale drawn torso.
     box(this.player.feetBox, 0x3fd0d8);
     box(this.player.hitbox, 0x6ee06e);
     dashed(this.player.drawnTorso, 0xbfe8bf);
     cross(this.player.x, this.player.y, 0xffffff);
+    // Feet anchor: where the sprite's ground-contact row is pinned.
+    g.fillStyle(0xffffff, 1);
+    g.fillRect(Math.round(this.player.x) - 1, Math.round(this.player.y) - 1, 3, 3);
 
     for (const enemy of this.enemies) {
       if (enemy.dead) continue;
@@ -834,6 +858,17 @@ export class Village extends Phaser.Scene {
       box(enemy.hitbox, 0xff5ad0);
       dashed(enemy.drawnTorso, 0xffb8e8);
       cross(enemy.x, enemy.y, 0xffe066);
+      g.fillStyle(0xffe066, 1);
+      g.fillRect(Math.round(enemy.x) - 1, Math.round(enemy.y) - 1, 3, 3);
+      // Vision origin and cone centre line.
+      const reach = 24;
+      g.lineStyle(1, 0xffe066, 0.5);
+      g.lineBetween(
+        Math.round(enemy.x),
+        Math.round(enemy.y),
+        Math.round(enemy.x + Math.cos(enemy.facing) * reach),
+        Math.round(enemy.y + Math.sin(enemy.facing) * reach)
+      );
     }
 
     // Shot rays, drawn in the ground plane where they are actually resolved.
@@ -849,6 +884,51 @@ export class Village extends Phaser.Scene {
 
     // The aim origin, to show the TORSO_OFFSET_Y rendering offset explicitly.
     cross(this.player.x, this.player.y - TORSO_OFFSET_Y, 0x8fd0ff);
+  }
+
+  /**
+   * Cover, occlusion and prop-collision tiles, drawn only for the tiles on
+   * screen. Authored cover and prop-derived cover use different colours so an
+   * oversized prop footprint is immediately obvious.
+   */
+  private drawDebugTiles(g: Phaser.GameObjects.Graphics): void {
+    const view = this.cameras.main.worldView;
+    const x0 = Math.max(0, Math.floor(view.x / TILE) - 1);
+    const y0 = Math.max(0, Math.floor(view.y / TILE) - 1);
+    const x1 = Math.min(this.level.grid.width - 1, Math.ceil(view.right / TILE));
+    const y1 = Math.min(this.level.grid.height - 1, Math.ceil(view.bottom / TILE));
+
+    const propLayer = this.level.map.getLayer('propCollision')?.data;
+
+    for (let ty = y0; ty <= y1; ty++) {
+      for (let tx = x0; tx <= x1; tx++) {
+        const flags = this.level.grid.at(tx, ty);
+        if (!flags.collides && !flags.shadow) continue;
+        const x = tx * TILE;
+        const y = ty * TILE;
+        const fromProp = !!propLayer?.[ty]?.[tx] && propLayer[ty][tx].index > 0;
+
+        if (flags.shadow && !flags.collides) {
+          // Concealment zone.
+          g.lineStyle(1, 0x6a5acd, 0.5);
+          g.strokeRect(x + 1, y + 1, TILE - 2, TILE - 2);
+          continue;
+        }
+        if (fromProp) {
+          // Prop-derived collision: orange.
+          g.lineStyle(1, 0xffa23c, 0.85);
+        } else if (flags.lowCover) {
+          // Low cover: blocks bullets, hides only a crouched player.
+          g.lineStyle(1, 0x3cd6a0, 0.8);
+        } else if (flags.blocksSight) {
+          // Solid and vision-blocking.
+          g.lineStyle(1, 0xd94f8f, 0.55);
+        } else {
+          g.lineStyle(1, 0x8f8fd9, 0.55);
+        }
+        g.strokeRect(x, y, TILE, TILE);
+      }
+    }
   }
 
   /** Simple painter's-algorithm y-sorting between characters. */

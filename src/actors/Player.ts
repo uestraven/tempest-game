@@ -10,6 +10,9 @@ import {
   CHAR_ORIGIN_X,
   CHAR_ORIGIN_Y,
   animKey,
+  clipFor,
+  facingFromAngle,
+  type CharState,
 } from '../art/CharacterDefinitions';
 import { staticFrame } from '../art/AnimationRegistry';
 import { WEAPONS, type WeaponId } from '../data/weapons';
@@ -80,7 +83,7 @@ export class Player {
     y: number,
     private readonly hearing: Hearing
   ) {
-    this.sprite = scene.physics.add.sprite(x, y, PLAYER_SHEET, staticFrame('tempest', 'idle'));
+    this.sprite = scene.physics.add.sprite(x, y, PLAYER_SHEET, staticFrame('tempest', 'idle', 'down'));
     this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(10);
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
@@ -232,32 +235,31 @@ export class Player {
   }
 
   /**
-   * Animation state machine over the production sheet's real rows.
+   * Animation state machine over the sheet's measured directional art.
    *
-   * The sheet has NO cardinal directions (4 columns are pose variations, per the
-   * package manifest), so facing is expressed by horizontal mirroring only, and
-   * only when the aim is actually left or right - aiming straight up or down
-   * keeps the previous mirror so the sprite never snaps for no reason.
+   * The sheet is only partly directional and inconsistently so (tempest has
+   * front and back idle views, a LEFT-facing walk and a RIGHT-facing aim), so
+   * the clip metadata carries each frame's intrinsic facing and whether it has
+   * to be mirrored. Flipping is applied from the clip, never guessed from the
+   * aim angle, which is what stops a left-facing walk cycle from being turned
+   * the wrong way round.
    *
-   * Crouch has no artwork in the package. The mechanic is untouched: speed,
-   * collision and the suspicion rate all still change. The visual cue is the
-   * HUD stance pip plus the concealment eye icon above the player. Deliberately
-   * no squash or scale - that would violate the pixel contract - and no reuse of
+   * Crouch has no artwork. The mechanic is untouched: speed, collision and the
+   * suspicion rate all still change. The visual cue is the HUD stance pip plus
+   * the concealment eye icon. Deliberately no squash or scale, and no reuse of
    * an unrelated row.
    */
   private updateAnimation(speed: number): void {
-    const dirRow = directionRow(this.aim);
-    if (dirRow === 1) this.sprite.setFlipX(true);
-    else if (dirRow === 2) this.sprite.setFlipX(false);
+    const facing = facingFromAngle(this.aim);
+    const state: CharState = this.fireFlash > 0 ? 'fire' : speed > 1 ? 'walk' : 'idle';
+    const clip = clipFor('tempest', state, facing);
+    const key = animKey('tempest', state, facing);
 
-    const state: 'fire' | 'walk' | 'idle' =
-      this.fireFlash > 0 ? 'fire' : speed > 1 ? 'walk' : 'idle';
-    const key = animKey('tempest', state);
-
+    this.sprite.setFlipX(clip.flipX);
     if (this.sprite.anims.currentAnim?.key !== key) this.sprite.anims.play(key, true);
-    else if (state === 'walk' && !this.sprite.anims.isPlaying) this.sprite.anims.play(key, true);
+    else if (clip.loop && !this.sprite.anims.isPlaying) this.sprite.anims.play(key, true);
 
-    if (state === 'walk') {
+    if (state === 'walk' && clip.loop) {
       // Frame rate tracks movement speed so the cycle does not skate.
       this.sprite.anims.msPerFrame = this.sprinting ? 80 : this.crouched ? 170 : 110;
     }
@@ -437,13 +439,4 @@ export class Player {
     this.gun.destroy();
     this.sprite.destroy();
   }
-}
-
-/** Maps an angle to one of the four art rows: 0 down, 1 left, 2 right, 3 up. */
-export function directionRow(angle: number): number {
-  const deg = ((angle * 180) / Math.PI + 360) % 360;
-  if (deg >= 45 && deg < 135) return 0; // down
-  if (deg >= 135 && deg < 225) return 1; // left
-  if (deg >= 225 && deg < 315) return 3; // up
-  return 2; // right
 }

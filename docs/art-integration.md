@@ -339,3 +339,144 @@ Ordered by impact.
     non-solid, which is reasonable for rubble but meant it could not back an
     authored cover role. Cover-capable tiles are limited to `cover_low`,
     `cover_high`, `hedge` and `pillar`.
+
+---
+
+# Phase B.1A — visual diagnostics and engine corrections
+
+## 11. Transparency diagnosis
+
+**Verdict: the reported transparency is not in the PNGs. The visible defects
+were in the engine, plus two minor art contributors.**
+
+### Evidence that the source art is opaque
+
+| Measurement | Method | Result |
+| --- | --- | --- |
+| Partial-alpha pixels (alpha 1–254), all 7 sheets | `inspect-assets.py alpha` | **0** |
+| Sprite alpha below 1 on any character | code audit of every `setAlpha`/`alpha` use | **none** |
+| Non-NORMAL blend mode on any character | code audit of every `setBlendMode` use | **none** |
+| Tint left applied | `setTintFill`/`setTint` are hit flashes with `clearTint` on a timer | temporary only |
+| Visual check over magenta | `diagnostics.py contact` | bodies and clothing **solid** |
+
+Contact sheets over white, black, magenta and real cobblestone:
+`docs/diagnostics/transparency/<name>_contact.png`. Per-pixel alpha
+classification, with enclosed holes painted magenta:
+`<name>_alphamap.png`. Magenta is the decisive background — any genuine
+see-through would be unmissable, and there is none.
+
+### What actually looked wrong, and why
+
+Four engine defects, all fixed:
+
+1. **The idle animation alternated between facing the camera and facing away.**
+   Phase B picked idle columns `[1, 2]` for every character. On tempest, column 1
+   is a FRONT view and column 2 is a BACK view, so at 3 fps the character spun
+   front/back twice a second. This is the most likely source of "the character
+   looks wrong / see-through" — the body silhouette changed every frame.
+   *Fixed:* directional clips, with front frames in `idle.down` and back frames
+   in `idle.up`. `tests/assets.test.ts` guards against a clip ever mixing them.
+
+2. **Mirroring fought the art.** Facing was derived from the aim angle and
+   applied as a blanket `flipX`. But tempest's walk row is drawn facing **left**
+   and the lookout's facing **right**, so one of them was always reversed —
+   legs striding one way while the weapon overlay pointed the other.
+   *Fixed:* each clip records its intrinsic facing and whether it needs
+   mirroring; the actor applies the clip's flag, never a guess.
+
+3. **Overhead props were drawn across characters' bodies.** `clothesline` and
+   `french_flag` sit at fixed depth 22 (above characters) but were anchored at
+   ground level, so a 32×16 laundry line at 85% fill was composited over the
+   player's torso and legs. Two clotheslines were placed on walking routes —
+   the market and the arrival alley. A character with an environment element
+   drawn across their body reads exactly as "the environment is showing through
+   them".
+   *Fixed:* `overheadLift` in the prop metadata raises overhead props clear of a
+   31px character (32px for laundry, 26px for wall-mounted flags), while depth
+   sorting still uses the ground anchor.
+
+4. **A translucent foreground tile layer.** `decorFront` was created at
+   `alpha 0.92`. It is empty in this slice, so it was latent rather than active,
+   but any tile placed on it would have tinted every character underneath by 8%.
+   *Fixed:* full opacity. Characters in front of foreground art are handled by
+   depth sorting, not by making the art see-through.
+
+### Art-side contributors (handed off, not worked around in the art)
+
+- **CHAR-003** — the `down` row has an opaque dark region that is not the body.
+  Corpses now use the purpose-made `props/shared/body_*.png` instead, which are
+  properly matted. The character sheets were not modified.
+- **CHAR-004** — matting speckle: enclosed transparent holes, worst case a 44px
+  hole in `enforcer` idle column 0. In Valcendre's two instantiated characters
+  the used frames have holes of ≤4px, which is not visible in play.
+
+## 12. Environmental audit — why Valcendre looked repetitive
+
+Both causes were real, and they are separable.
+
+### Cause A: genuinely missing artwork (handed off)
+
+`inspect-assets.py tilediff` grouped tiles within a mean per-channel difference
+of 6/255: **only 28 of the 48 tiles are visually distinct.** Six of the ten named
+wall pieces are the same image, and six of the eight floor tiles are the same
+image. The tileset has one door, one window, a flat roof tile and a roof edge —
+no facades, shutters, shopfronts, roof ridges, eaves, ground transitions or
+environmental shadows. All four stage tilesets share a byte-identical schema.
+
+No amount of composition fixes that. See **ENV-001**, **ENV-002**, **ENV-003**,
+**ENV-004**, **ENV-005**.
+
+### Cause B: implementation mistakes (fixed)
+
+The diagnostic renders made these obvious — `docs/diagnostics/map/`:
+
+| Problem | Fix |
+| --- | --- |
+| `void` mapped to `roof`, a **red brick** tile, so the entire out-of-bounds area was a loud red-brick field that dominated every screenshot | out-of-bounds is now a dark fill; red roof tiles are used as a 2-tile *roof band* just outside wall faces, where they read as French tile roofs |
+| Floor variation ran at 30% using `floor_inlay`, a **framed decorative diamond** — the market square read as patterned wallpaper | variant chance cut to 5–22% per area; motif tiles removed from random variation and placed deliberately as accents |
+| `concrete` → `metal` (grey vertical stripes) used for **both** the outdoor yard and the garage interior | yard is gravel, garage interior keeps metal |
+| `floor_stain` (red blood spatter) scattered across the yard at 5% | removed — blood is an Abbey/Ascension escalation in the locked design, not village set dressing |
+| Buildings were a uniform 1-tile ring of identical `wall_solid` | architecture band: wall face → roof edge → roof → darkness, with a deterministic window rhythm (17 windows) and 7 authored doors |
+| Every area shared one surface, so all six looked alike | per-area surfaces: alley cobble, market paving, garden grass + path, service **red brick**, yard gravel, garage metal, road dirt |
+| 20 props clustered in the market and yard | 37 placements, all 12 Valcendre props used, spread across every authored area |
+
+### Architecture: appearance is now independent of collision
+
+This was the structural fix that made the rest safe.
+
+- `collision` is **invisible** and carries one blocker tile per non-walkable
+  tile, derived purely from the carved regions.
+- `architecture` is **visible** and is never a collider.
+- `MapLoader` merges tile flags from an **allowlist** of gameplay layers only
+  (`collision`, `cover`, `propCollision`, `shadowZones`).
+
+So repainting the village cannot change where the player walks — and a
+decorative tile can no longer leak a gameplay role's flags, which was a live
+footgun: painting the dark `deep_shadow` tile outside the map would otherwise
+have made every authored shadow zone solid.
+
+All gameplay geometry is preserved by construction: regions, patrol routes,
+cover, objectives, waypoints and exits are untouched, and the generator still
+fails the build if any walkable tile, object anchor or waypoint becomes
+unreachable.
+
+## 13. F3 debug view
+
+Disabled by default, drawn into its own `Graphics` object, and it touches no
+production sprite's alpha, tint, depth or blend mode.
+
+| Drawn | Meaning |
+| --- | --- |
+| Cyan / blue solid box | Player / enemy movement collider (12×10 at the feet) |
+| Green / magenta solid box | Player / enemy ground-plane bullet hitbox (12×18) |
+| Pale dashed box | The drawn torso rectangle those correspond to |
+| White / yellow cross + 3×3 dot | Player / enemy ground position and **feet anchor** |
+| Light blue cross | The player's aim origin, showing the render offset |
+| Yellow line from each guard | Vision origin and cone centre |
+| Pink tile outline | Solid + vision-blocking |
+| Green tile outline | Low cover (bullets always, sight only when crouched) |
+| **Orange** tile outline | **Prop-derived** collision — distinct from authored cover, so an oversized footprint is obvious |
+| Indigo tile outline | Concealment zone |
+| Grey / red ray | Last 32 shot rays, red when the ray connected |
+
+Only on-screen tiles are drawn, so the overlay costs nothing off-camera.
