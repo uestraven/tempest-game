@@ -4,3 +4,5 @@ build.log
 *.log
 .DS_Store
 .vite/
+__pycache__/
+*.pyc
