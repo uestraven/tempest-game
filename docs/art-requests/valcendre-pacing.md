@@ -153,3 +153,51 @@ anything in this file:
 - **ENV-001 / ENV-002** — wall edges, corners and a facade sheet. The rework
   adds two interiors (depot office, garage) and a third street, all of which
   will be built from the same 28 distinct tiles.
+
+---
+
+## C.1B-01 addendum — what the built geometry needs
+
+The 104 × 72 layout is now implemented and playable
+([`../level-design/valcendre-geometry-c1b01.md`](../level-design/valcendre-geometry-c1b01.md)).
+Nothing below blocks it: every space is built from existing approved tiles and
+props. These are the places where the built geometry makes an existing request
+more urgent, plus two items the rebuild newly needs.
+
+### Priority raised by the rebuild
+
+| Request | Why it matters more now |
+| --- | --- |
+| **ENV-002** facade sheet | The map went from 1 wall ring to **18 authored doors and 38 windows** across seven areas, all drawn from one `wall_solid` tile plus one `window` and one `door_closed`. Every street now reads as the same wall |
+| **ENV-001** wall edges and corners | The layout is deliberately irregular — five composed market rects, five courtyard rects, seven building blocks. Irregular outlines are exactly what needs real corner tiles, and six of the ten named wall pieces are the same image |
+| **ENV-003** distinct floor tiles | Nine surfaces are now in use across nine areas, and six of the eight `floor_*` tiles are one repeated image |
+| **ENV-004** shaded surface variants | The garden branch is now 639 walkable tiles and almost entirely an authored shadow zone, so it is all one flat dark tile. It is the longest single space on the map |
+| **VP-004** depot and dispatch props | The depot office is built: a 5 × 7 interior with one door. It currently contains nothing but floor |
+| **VP-007** loading dock props | The dock is built as the garage's second entrance. Without the ramp and drums it reads as an empty 7 × 11 side room rather than a way in |
+
+### New, from the built geometry
+
+#### VPG-001 · Depot courtyard structures · P1
+
+| | |
+| --- | --- |
+| **Output** | `public/assets/props/valcendre/` |
+| **Items** | `depot_outbuilding_48x32.png` · `fuel_tank_32x24.png` · `gantry_crane_48x32.png` (decorative, `front` depth, `overheadLift` 34) · `pallet_rack_32x24.png` |
+| **Collision** | Outbuilding and fuel tank: solid, `high` cover. Pallet rack: solid, `low`. Crane: decorative |
+| **Why** | The courtyard is 36 × 24 tiles — **larger than one 480 × 270 screen** — and is the map's one genuinely open space. Three building blocks and a dozen cover pieces were added from existing props and it still reads as the emptiest area. The encounter design needs the span for its three shooting lanes, so the fix is internal structure, not a smaller courtyard |
+| **Accept** | Each piece breaks a sight line without closing a lane · the outbuilding reads as part of a working transport depot, not a house · at 1:1 the courtyard reads as a yard with somewhere to take cover |
+
+#### VPG-002 · Garden wall and upper lane · P2
+
+| | |
+| --- | --- |
+| **Output** | `public/assets/props/valcendre/` |
+| **Items** | `garden_gate_16x24.png` (solid when closed) · `wall_buttress_16x24.png` (solid, `high`) · `lane_steps_32x16.png` (walkable, decorative) · `washing_line_pole_16x32.png` (decorative) |
+| **Why** | The garden branch climbs from y31 to y3 and runs 36 tiles east — a 1 419 px route. It is the longest space on the map and currently has four prop types in it. A buttress was wanted to break the 18-tile straight but could not be placed, because a building block there collided with the authored shadow zone; a prop would sit on top of the shadow instead |
+| **Accept** | The steps make the climb legible at 1:1 · the buttress breaks the straight without narrowing the lane below two tiles |
+
+### Confirmed not needed
+
+The rebuild removed the service corridor, so the Phase B request for corridor
+dressing is withdrawn. No new blocker, cover piece or walkable surface is
+required by the geometry: it is complete and testable as built.

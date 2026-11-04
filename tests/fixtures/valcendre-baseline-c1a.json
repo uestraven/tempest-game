@@ -1,0 +1,39 @@
+{
+  "_comment": [
+    "HISTORICAL FIXTURE - the Phase C.1A baseline, before the C.1B-01 rebuild.",
+    "These are the measured figures that justified the rework; they describe the",
+    "OLD 60x40 map and must never be asserted against the current one.",
+    "The narrative is in docs/level-design/valcendre-rework.md §1; the original",
+    "assertions are preserved alongside this file as",
+    "valcendre-baseline-c1a.test.ts.disabled."
+  ],
+  "phase": "C.1A",
+  "map": { "widthTiles": 60, "heightTiles": 40, "walkableTiles": 1027 },
+  "criticalPath": {
+    "totalPx": 1165,
+    "totalTiles": 72.8,
+    "sprintSeconds": 7.7,
+    "walkSeconds": 10.8,
+    "crouchSeconds": 17.7,
+    "legs": { "spawnToVan": 891, "vanToLog": 112, "logToExit": 162 }
+  },
+  "coverage": {
+    "distinctTilesVisited": 64,
+    "percentOfWalkable": 6.2,
+    "guardExposurePercent": 17,
+    "areasCrossedZero": ["garageYard", "gardenLane"]
+  },
+  "dominantBypass": {
+    "viaYardDoorPx": 947,
+    "viaServiceCorridorPx": 901,
+    "note": "the stealth route was 47 px SHORTER than the combat route"
+  },
+  "detection": {
+    "secondsToCombatSprinting": 0.83,
+    "guardReactionSeconds": 0.89,
+    "exposureNeededBeforeFirstShotSeconds": 1.28,
+    "distanceCoveredInThatTimePx": 195
+  },
+  "patrolLoopSeconds": { "l1": 6, "l2": 23, "l3": 21 },
+  "belialOptional": true
+}

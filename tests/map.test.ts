@@ -142,29 +142,43 @@ describe('village slice geometry', () => {
   });
 
   it('keeps authored openings at least two tiles wide', () => {
-    expect([45, 46, 47].filter((x) => walkable(x, 15)).length).toBeGreaterThanOrEqual(2);
-    expect([46, 47, 48, 49].filter((x) => walkable(x, 4)).length).toBeGreaterThanOrEqual(2);
+    // Garage door and the depot gate.
+    expect([81, 82, 83].filter((x) => walkable(x, 19)).length).toBeGreaterThanOrEqual(2);
+    expect([75, 76, 77, 78].filter((x) => walkable(x, 44)).length).toBeGreaterThanOrEqual(2);
   });
 
   it('authors shadow zones for the stealth route', () => {
     const count = (layer('shadowZones')?.data ?? []).filter((gid) => gid !== 0).length;
-    expect(count).toBeGreaterThan(40);
+    expect(count).toBeGreaterThan(200);
     // Shadow tiles must actually carry the shadow flag through to the grid.
-    expect(grid.at(2, 28).shadow).toBe(true);
-    expect(grid.at(26, 9).shadow).toBe(true);
+    expect(grid.at(10, 45).shadow).toBe(true);
+    expect(grid.at(8, 10).shadow).toBe(true);
   });
 
   it('gives every non-walkable tile exactly one invisible blocker', () => {
     const collision = layer('collision')!.data!;
     const blocker = roleGid('blocker');
-    let blockers = 0;
     for (const gid of collision) {
       if (gid === 0) continue;
       expect(gid).toBe(blocker);
-      blockers++;
     }
-    // 60x40 = 2400 tiles, 1128 walkable.
-    expect(blockers).toBe(2400 - 1128);
+    // The real invariant: a tile is solid in the gameplay grid exactly when the
+    // collision layer blocks it, or a cover tile does, or a prop footprint does.
+    // Comparing raw counts would be wrong, because cover and prop-collision
+    // tiles sit ON carved floor and so have no collision-layer blocker.
+    const cover = layer('cover')!.data!;
+    const propLayer = layer('propCollision')!.data!;
+    const flagsById = new Map<number, Partial<TileFlags>>();
+    for (const tile of map.tilesets[0].tiles ?? [])
+      flagsById.set(tile.id, props(tile.properties) as unknown as Partial<TileFlags>);
+    const solidGid = (gid: number) => gid !== 0 && !!flagsById.get(gid - 1)?.collides;
+    let mismatches = 0;
+    for (let i = 0; i < collision.length; i++) {
+      const expected = solidGid(collision[i]) || solidGid(cover[i]) || solidGid(propLayer[i]);
+      const actual = grid.solidAt(i % map.width, Math.floor(i / map.width));
+      if (expected !== actual) mismatches++;
+    }
+    expect(mismatches).toBe(0);
   });
 
   it('paints an architecture facade with windows and doors', () => {
@@ -182,13 +196,13 @@ describe('village slice geometry', () => {
     const cover = layer('cover')!.data!;
     const idx = (x: number, y: number) => y * map.width + x;
     // Market stall counter: low cover.
-    expect(cover[idx(8, 16)]).toBe(roleGid('barrierLow'));
-    expect(grid.at(8, 16).lowCover).toBe(true);
-    expect(grid.at(8, 16).collides).toBe(true);
-    expect(grid.at(8, 16).blocksSight).toBe(false);
-    // Yard crate: high cover.
-    expect(cover[idx(38, 28)]).toBe(roleGid('crateHigh'));
-    expect(grid.at(38, 28).blocksSight).toBe(true);
+    expect(cover[idx(16, 36)]).toBe(roleGid('barrierLow'));
+    expect(grid.at(16, 36).lowCover).toBe(true);
+    expect(grid.at(16, 36).collides).toBe(true);
+    expect(grid.at(16, 36).blocksSight).toBe(false);
+    // Depot courtyard crate: high cover.
+    expect(cover[idx(61, 22)]).toBe(roleGid('crateHigh'));
+    expect(grid.at(61, 22).blocksSight).toBe(true);
     // Building wall.
     expect(grid.at(0, 0).collides).toBe(true);
     expect(grid.at(0, 0).blocksSight).toBe(true);
@@ -263,11 +277,12 @@ describe('props', () => {
         (o) =>
           o.x >= x0 * TILE && o.x <= x1 * TILE && o.y >= y0 * TILE && o.y <= y1 * TILE
       ).length;
-    expect(byArea(4, 12, 29, 27), 'market square').toBeGreaterThanOrEqual(8);
-    expect(byArea(5, 30, 10, 38), 'arrival alley').toBeGreaterThanOrEqual(3);
-    expect(byArea(1, 24, 4, 35), 'garden lane').toBeGreaterThanOrEqual(3);
-    expect(byArea(20, 6, 38, 12), 'service corridor').toBeGreaterThanOrEqual(3);
-    expect(byArea(35, 16, 53, 33), 'garage yard').toBeGreaterThanOrEqual(5);
+    expect(byArea(9, 32, 42, 56), 'market square').toBeGreaterThanOrEqual(8);
+    expect(byArea(6, 56, 16, 69), 'arrival alley').toBeGreaterThanOrEqual(3);
+    expect(byArea(6, 3, 52, 31), 'bakery and garden route').toBeGreaterThanOrEqual(8);
+    expect(byArea(43, 44, 79, 57), 'main street').toBeGreaterThanOrEqual(6);
+    expect(byArea(50, 19, 86, 44), 'depot courtyard').toBeGreaterThanOrEqual(6);
+    expect(byArea(58, 6, 91, 21), 'garage and dock').toBeGreaterThanOrEqual(4);
   });
 
   it('rasterises collision only for props that block movement', () => {
@@ -294,11 +309,16 @@ describe('props', () => {
     const names = new Set(placed.map((o) => String(o.props.prop)));
     expect(names.has('fountain')).toBe(true);
     expect(names.has('hay_cart')).toBe(true);
-    // The old prototype's well/cart tiles are gone from the cover layer.
+    // No cover tile is drawn under the fountain or either hay cart: each one
+    // supplies its own collision through the propCollision layer.
     const cover = layer('cover')!.data!;
     const idx = (x: number, y: number) => y * map.width + x;
-    expect(cover[idx(25, 18)]).toBe(0);
-    expect(cover[idx(7, 24)]).toBe(0);
+    for (const o of placed) {
+      if (!['fountain', 'hay_cart'].includes(String(o.props.prop))) continue;
+      const tx = Math.floor(o.x / TILE);
+      const ty = Math.floor(o.y / TILE) - 1;
+      expect(cover[idx(tx, ty)], `${o.name} has a cover tile under it`).toBe(0);
+    }
   });
 });
 
@@ -326,16 +346,17 @@ describe('softlock resistance', () => {
       'interact_hymn',
       'checkpoint_log',
       'item_medkit_market',
-      'item_ammo_yard',
-      'item_ammo_rear',
+      'item_medkit_courtyard',
+      'item_ammo_street',
+      'item_ammo_lane',
     ]) {
       const target = byName(name)!;
-      const path = grid.findPath({ x: spawn.x, y: spawn.y }, { x: target.x, y: target.y }, 8000);
+      const path = grid.findPath({ x: spawn.x, y: spawn.y }, { x: target.x, y: target.y }, 60000);
       expect(path, `no path from spawn to ${name}`).not.toBeNull();
     }
     const exit = byName('exit_north')!;
     const centre = { x: exit.x + exit.width / 2, y: exit.y + exit.height / 2 };
-    expect(grid.findPath({ x: spawn.x, y: spawn.y }, centre, 8000)).not.toBeNull();
+    expect(grid.findPath({ x: spawn.x, y: spawn.y }, centre, 60000)).not.toBeNull();
   });
 
   it('keeps patrol waypoints walkable after props are placed', () => {
@@ -347,13 +368,13 @@ describe('softlock resistance', () => {
     }
   });
 
-  it('offers a second approach: the rear service corridor reaches the garage', () => {
-    expect(walkable(26, 9)).toBe(true);
-    expect(walkable(33, 7)).toBe(true);
+  it('offers a second approach: the garden route reaches the depot', () => {
+    expect(walkable(8, 10)).toBe(true);
+    expect(walkable(20, 4)).toBe(true);
     const path = grid.findPath(
-      { x: 26 * TILE + 8, y: 9 * TILE + 8 },
-      { x: 39 * TILE + 8, y: 7 * TILE + 8 },
-      8000
+      { x: 17 * TILE + 8, y: 31 * TILE + 8 },
+      { x: 51 * TILE + 8, y: 26 * TILE + 8 },
+      60000
     );
     expect(path).not.toBeNull();
   });

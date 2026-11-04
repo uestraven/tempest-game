@@ -319,13 +319,20 @@ def map_render():
     print(f"  wrote {os.path.relpath(out, ROOT)} ({W}x{H})")
 
     # Native-resolution 480x270 crops, one per authored area.
+    # Native-resolution crops, one per authored area of the C.1B-01 rebuild.
     crops = [
-        ("arrival_alley", 0, 440),
-        ("market_square", 60, 190),
-        ("garden_lane", 0, 330),
-        ("bakery_corridor", 290, 70),
-        ("garage_yard", 480, 280),
-        ("garage_interior", 560, 40),
+        ("arrival_alley", 32, 880),
+        ("market_square", 160, 560),
+        ("market_plaza", 192, 448),
+        ("bakery_yard", 48, 304),
+        ("garden_walk", 16, 48),
+        ("upper_lane", 320, 64),
+        ("main_street", 704, 736),
+        ("depot_courtyard", 848, 400),
+        ("depot_office", 768, 448),
+        ("garage_interior", 1024, 112),
+        ("loading_dock", 1184, 160),
+        ("north_road", 848, 0),
     ]
     for name, cx, cy in crops:
         cw, ch = 480, 270

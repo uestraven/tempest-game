@@ -28,6 +28,17 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  ACCENTS,
+  COVER,
+  FACADE_DOORS,
+  OBJECTS,
+  OBSTRUCTIONS,
+  PROP_PLACEMENTS,
+  REGIONS,
+  SHADOWS,
+  SURFACE_OVERRIDES,
+} from './map-data-valcendre.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p) => JSON.parse(readFileSync(resolve(ROOT, p), 'utf8'));
@@ -38,8 +49,8 @@ const ROLES_SRC = 'src/art/data/tile-roles.json';
 const PROPS_SRC = 'src/art/data/prop-metadata.json';
 const OUT = 'public/assets/maps/village.json';
 
-const W = 60;
-const H = 40;
+const W = 104;
+const H = 72;
 const TS = 16;
 
 // ------------------------------------------------- production tileset metadata
@@ -113,112 +124,8 @@ const surfaceTile = (surface, x, y) => {
   return tileId(def.variants[hash(x, y, 11) % def.variants.length]);
 };
 
-// ------------------------------------------------------------------- surfaces
-// Each region names the AREA it belongs to; the area decides its surface.
-const REGIONS = [
-  { id: 'alley', area: 'arrivalAlley', x: 5, y: 30, w: 6, h: 9, surface: 'alleyCobble' },
-  { id: 'alleyNeck', area: 'arrivalAlley', x: 6, y: 26, w: 4, h: 5, surface: 'alleyCobble' },
-  { id: 'market', area: 'marketSquare', x: 4, y: 12, w: 26, h: 15, surface: 'marketPaving' },
-  { id: 'gardenLane', area: 'gardenLane', x: 1, y: 24, w: 3, h: 11, surface: 'gardenGrass' },
-  { id: 'gardenLink', area: 'gardenLane', x: 4, y: 32, w: 1, h: 3, surface: 'gardenPath' },
-  { id: 'yardCorridor', area: 'garageYard', x: 30, y: 20, w: 5, h: 6, surface: 'alleyCobble' },
-  { id: 'yard', area: 'garageYard', x: 35, y: 16, w: 19, h: 18, surface: 'yardGravel' },
-  { id: 'garage', area: 'garageInterior', x: 38, y: 4, w: 16, h: 11, surface: 'garageFloor' },
-  { id: 'garageDoor', area: 'garageInterior', x: 45, y: 15, w: 3, h: 1, surface: 'garageFloor' },
-  { id: 'northRoad', area: 'northRoad', x: 46, y: 0, w: 4, h: 4, surface: 'roadDirt' },
-  { id: 'rearCorridorV', area: 'serviceCorridor', x: 25, y: 6, w: 4, h: 7, surface: 'serviceBrick' },
-  { id: 'rearCorridorH', area: 'serviceCorridor', x: 28, y: 6, w: 11, h: 3, surface: 'serviceBrick' },
-  { id: 'bakeryNook', area: 'serviceCorridor', x: 20, y: 8, w: 4, h: 4, surface: 'serviceBrick' },
-  { id: 'bakeryLink', area: 'serviceCorridor', x: 23, y: 9, w: 3, h: 2, surface: 'serviceBrick' },
-];
-
-/**
- * A garden path strip down the middle of the grass lane, so the lane reads as a
- * residential garden route rather than a green rectangle. Appearance only.
- */
-const SURFACE_OVERRIDES = [
-  { x: 2, y: 24, w: 1, h: 11, surface: 'gardenPath' },
-];
-
-/** Authored dark zones: crouching here accumulates suspicion slowly. */
-const SHADOWS = [
-  { x: 1, y: 24, w: 3, h: 11 },
-  { x: 4, y: 32, w: 1, h: 3 },
-  { x: 25, y: 6, w: 4, h: 7 },
-  { x: 28, y: 6, w: 11, h: 3 },
-  { x: 20, y: 8, w: 4, h: 4 },
-  { x: 23, y: 9, w: 3, h: 2 },
-  { x: 8, y: 17, w: 5, h: 1 },
-  { x: 16, y: 17, w: 5, h: 1 },
-  { x: 5, y: 30, w: 2, h: 4 },
-  { x: 38, y: 4, w: 4, h: 2 },
-  { x: 52, y: 4, w: 2, h: 11 },
-];
-
-/** Tile-based cover. The cart and the well are props now, not tiles. */
-const COVER = [
-  { x: 8, y: 16, w: 5, h: 1, role: 'barrierLow' },
-  { x: 16, y: 16, w: 5, h: 1, role: 'barrierLow' },
-  { x: 10, y: 21, w: 5, h: 1, role: 'barrierLow' },
-  { x: 18, y: 21, w: 5, h: 1, role: 'barrierLow' },
-  { x: 11, y: 25, w: 4, h: 1, role: 'barrierLow' },
-  { x: 38, y: 28, w: 2, h: 2, role: 'crateHigh' },
-  { x: 50, y: 29, w: 2, h: 2, role: 'crateHigh' },
-  { x: 41, y: 26, w: 4, h: 1, role: 'barrierLow' },
-  { x: 48, y: 20, w: 3, h: 1, role: 'barrierLow' },
-  { x: 40, y: 6, w: 2, h: 2, role: 'crateHigh' },
-  { x: 50, y: 12, w: 2, h: 2, role: 'crateHigh' },
-  { x: 44, y: 9, w: 4, h: 2, role: 'van' },
-];
-
-/**
- * Authored decorative accents on the decorBack layer. These are the framed
- * motif tiles, placed deliberately instead of scattered as floor variation.
- */
-const ACCENTS = [
-  // A small paved medallion under the market fountain. Kept to 2x2: the
-  // `checker` tile is high-contrast and reads as a chessboard at any larger size.
-  { x: 25, y: 18, w: 2, h: 2, tile: 'accentChecker' },
-  // Thresholds on the walkable tile in front of each authored door.
-  { x: 9, y: 12, w: 2, h: 1, tile: 'threshold' },
-  { x: 14, y: 12, w: 2, h: 1, tile: 'threshold' },
-  { x: 5, y: 30, w: 1, h: 1, tile: 'threshold' },
-  { x: 37, y: 16, w: 2, h: 1, tile: 'threshold' },
-  // Garden-lane greenery, drawn over the lane's dark concealment floor so the
-  // residential route reads as a shaded garden without altering the shadow zone.
-  { x: 1, y: 24, w: 2, h: 2, tile: 'grass' },
-  { x: 1, y: 28, w: 1, h: 3, tile: 'grass' },
-  { x: 3, y: 26, w: 1, h: 2, tile: 'grass' },
-  { x: 1, y: 33, w: 2, h: 2, tile: 'grass' },
-  { x: 3, y: 30, w: 1, h: 1, tile: 'flowerbed' },
-  { x: 1, y: 26, w: 1, h: 1, tile: 'flowerbed' },
-  { x: 3, y: 33, w: 1, h: 1, tile: 'flowerbed' },
-  // Hedge dressing along the market's shaded north-west corner.
-  { x: 4, y: 17, w: 2, h: 1, tile: 'hedge' },
-
-  // The scratched sigils: the recurring symbol that ties the levels together.
-  { x: 43, y: 11, w: 1, h: 1, tile: 'accentInlay' },
-  { x: 48, y: 8, w: 1, h: 1, tile: 'accentInlay' },
-];
-
-/**
- * Authored facade openings. `face` is the wall tile the opening replaces, found
- * by walking the 1-tile-thick wall ring. Appearance only: the collision layer
- * still blocks these tiles, so a window or door changes nothing mechanically.
- */
-const FACADE_DOORS = [
-  // Market square shopfronts, on the north wall - the only wall face a
-  // top-down camera shows, since it has walkable floor directly below it.
-  { x: 9, y: 11 },
-  { x: 10, y: 11 },
-  { x: 14, y: 11 },
-  { x: 15, y: 11 },
-  // A house door onto the arrival alley.
-  { x: 5, y: 29 },
-  // Service door onto the garage yard.
-  { x: 37, y: 15 },
-  { x: 38, y: 15 },
-];
+// The authored geometry, cover, props and objects live in
+// tools/map-data-valcendre.mjs. Everything below is machinery.
 
 // ---------------------------------------------------------------------- props
 const propByName = new Map();
@@ -230,158 +137,7 @@ for (const [area, list] of Object.entries(propData)) {
   }
 }
 
-/**
- * Prop placements. `tx`/`ty` are the tile the prop's base sits in; `dx` is the
- * anchor's pixel offset inside that tile (8 = tile centre, 16 = the boundary
- * with the next tile, which aligns a 32px prop to a two-tile block).
- */
-const PROP_PLACEMENTS = [
-  // --- market square ---
-  { prop: 'valcendre.fountain', tx: 25, ty: 19, dx: 16 },
-  { prop: 'valcendre.hay_cart', tx: 7, ty: 24, dx: 16 },
-  { prop: 'valcendre.tree', tx: 6, ty: 20, dx: 8 },
-  { prop: 'valcendre.tree', tx: 28, ty: 15, dx: 8 },
-  { prop: 'valcendre.bench', tx: 14, ty: 24, dx: 16 },
-  { prop: 'valcendre.bench', tx: 22, ty: 19, dx: 16 },
-  { prop: 'valcendre.barrels', tx: 27, ty: 22, dx: 16 },
-  { prop: 'valcendre.flower_box', tx: 4, ty: 14, dx: 16 },
-  { prop: 'valcendre.flower_box', tx: 17, ty: 13, dx: 16 },
-  { prop: 'valcendre.flower_pot', tx: 22, ty: 13, dx: 8 },
-  { prop: 'valcendre.flower_pot', tx: 11, ty: 13, dx: 8 },
-  { prop: 'valcendre.lamppost', tx: 22, ty: 25, dx: 8 },
-  { prop: 'valcendre.lamppost', tx: 12, ty: 18, dx: 8 },
-  { prop: 'valcendre.clothesline', tx: 9, ty: 15, dx: 16 },
-  { prop: 'valcendre.clothesline', tx: 16, ty: 20, dx: 16 },
-  { prop: 'valcendre.french_flag', tx: 20, ty: 13, dx: 8 },
-
-  // --- arrival alley ---
-  { prop: 'valcendre.clothesline', tx: 7, ty: 32, dx: 16 },
-  { prop: 'valcendre.flower_pot', tx: 9, ty: 37, dx: 8 },
-  { prop: 'valcendre.barrels', tx: 9, ty: 34, dx: 16 },
-  { prop: 'valcendre.lamppost', tx: 5, ty: 36, dx: 8 },
-
-  // --- west garden lane ---
-  { prop: 'valcendre.tree', tx: 2, ty: 27, dx: 8 },
-  { prop: 'valcendre.village_cross', tx: 2, ty: 31, dx: 8 },
-  { prop: 'valcendre.flower_box', tx: 1, ty: 25, dx: 16 },
-  { prop: 'valcendre.flower_pot', tx: 3, ty: 34, dx: 8 },
-
-  // --- bakery rear nook and service corridor ---
-  { prop: 'valcendre.flower_box', tx: 20, ty: 11, dx: 16 },
-  { prop: 'valcendre.barrels', tx: 22, ty: 9, dx: 16 },
-  { prop: 'valcendre.barrels', tx: 36, ty: 8, dx: 16 },
-  { prop: 'valcendre.clothesline', tx: 26, ty: 8, dx: 16 },
-
-  // --- yard corridor ---
-  { prop: 'valcendre.stone_cover', tx: 31, ty: 22, dx: 16 },
-
-  // --- transport garage yard ---
-  { prop: 'valcendre.barrels', tx: 44, ty: 24, dx: 16 },
-  { prop: 'valcendre.stone_cover', tx: 41, ty: 30, dx: 16 },
-  { prop: 'valcendre.stone_cover', tx: 47, ty: 32, dx: 16 },
-  { prop: 'valcendre.lamppost', tx: 36, ty: 20, dx: 8 },
-  { prop: 'valcendre.lamppost', tx: 52, ty: 25, dx: 8 },
-  { prop: 'valcendre.barrels', tx: 50, ty: 18, dx: 16 },
-  { prop: 'valcendre.hay_cart', tx: 38, ty: 17, dx: 16 },
-
-  // --- north road ---
-  { prop: 'valcendre.village_cross', tx: 48, ty: 2, dx: 8 },
-];
-
-// ------------------------------------------------------------------- objects
-const px = (t) => t * TS + TS / 2;
-
-const OBJECTS = [
-  pt('spawn', 'spawn', 7, 36, { facing: 0 }),
-
-  ...route('l1', [
-    [7, 26],
-    [8, 31],
-  ]),
-  ...route('l2', [
-    [10, 14],
-    [24, 14],
-    [24, 24],
-    [10, 24],
-  ]),
-  ...route('l3', [
-    [40, 24],
-    [46, 18],
-    [46, 12],
-    [39, 7],
-  ]),
-
-  pt('enemy_l1', 'enemy', 7, 28, { kind: 'lookout', route: 'l1', facing: 90 }),
-  pt('enemy_l2', 'enemy', 10, 14, { kind: 'lookout', route: 'l2', facing: 0 }),
-  pt('enemy_l3', 'enemy', 40, 24, { kind: 'lookout', route: 'l3', facing: 270 }),
-
-  pt('item_medkit_market', 'item', 13, 19, { kind: 'medkit' }),
-  pt('item_ammo_yard', 'item', 36, 22, { kind: 'ammo_pistol' }),
-  pt('item_ammo_rear', 'item', 26, 9, { kind: 'ammo_pistol' }),
-
-  pt('interact_radio', 'interactable', 23, 14, {
-    kind: 'radio',
-    prompt: 'E - SWITCH ON RADIO',
-    noise: 128,
-    oneShot: true,
-  }),
-  pt('interact_van', 'interactable', 43, 10, {
-    kind: 'van',
-    prompt: 'E - EXAMINE TRANSPORT',
-    objective: 'V1',
-    glint: true,
-  }),
-  pt('interact_log', 'interactable', 48, 10, {
-    kind: 'log',
-    prompt: 'E - READ TRANSPORT LOG',
-    objective: 'V2',
-    glint: true,
-    requires: 'V1',
-  }),
-  pt('interact_sigil', 'interactable', 49, 8, {
-    kind: 'sigil',
-    prompt: 'E - EXAMINE INSCRIPTION',
-    objective: 'V3',
-    glint: true,
-    requires: 'V2',
-  }),
-  pt('interact_hymn', 'interactable', 21, 9, {
-    kind: 'hymn',
-    prompt: 'E - READ TORN PAGE',
-  }),
-
-  pt('checkpoint_entry', 'checkpoint', 7, 35, { id: 'cp_entry' }),
-  pt('checkpoint_log', 'checkpoint', 48, 12, { id: 'cp_log' }),
-
-  rect('exit_north', 'exit', 46, 0, 4, 2, { to: 'estate', requires: 'V2' }),
-
-  // Generated-placeholder decor. The van's gameplay collision comes from the
-  // `van` cover tiles beneath it; this 64x32 sprite covers those four-by-two
-  // tiles exactly, so no cover tile is left visible under it.
-  {
-    name: 'decor_van',
-    type: 'decor',
-    point: true,
-    x: 46 * TS,
-    y: 11 * TS,
-    width: 0,
-    height: 0,
-    props: { sprite: 'prop_van', depth: 'sorted' },
-  },
-];
-
-function pt(name, type, tx, ty, props = {}) {
-  return { name, type, point: true, x: px(tx), y: px(ty), width: 0, height: 0, props };
-}
-function rect(name, type, tx, ty, tw, th, props = {}) {
-  return { name, type, x: tx * TS, y: ty * TS, width: tw * TS, height: th * TS, props };
-}
-function route(id, points) {
-  return points.map(([tx, ty], i) =>
-    pt(`wp_${id}_${i}`, 'waypoint', tx, ty, { route: id, index: i })
-  );
-}
-
+// Props become objects too, so the scene can instantiate their sprites.
 let propIndex = 0;
 for (const placement of PROP_PLACEMENTS) {
   const def = propByName.get(placement.prop);
@@ -417,6 +173,25 @@ for (const r of REGIONS) {
     }
   }
 }
+/**
+ * Buildings and interior walls: carved back out of the regions above, so
+ * everything still non-walkable becomes collision and the architecture pass
+ * paints it. The reachability flood fill runs afterwards, so an obstruction
+ * that seals a route fails the build.
+ */
+let obstructed = 0;
+for (const o of OBSTRUCTIONS) {
+  for (let y = o.y; y < o.y + o.h; y++) {
+    for (let x = o.x; x < o.x + o.w; x++) {
+      assertInside(`obstruction "${o.why}"`, x, y);
+      if (walkable[idx(x, y)]) obstructed++;
+      walkable[idx(x, y)] = false;
+      areaOf[idx(x, y)] = null;
+      surfaceOf[idx(x, y)] = null;
+    }
+  }
+}
+
 for (const o of SURFACE_OVERRIDES) {
   for (let y = o.y; y < o.y + o.h; y++)
     for (let x = o.x; x < o.x + o.w; x++)
@@ -592,11 +367,17 @@ let orphans = 0;
 for (let i = 0; i < solid.length; i++) if (!solid[i] && !reach[i]) orphans++;
 if (orphans > 0) throw new Error(`${orphans} walkable tiles are unreachable from spawn`);
 
+const blockedObjects = [];
 for (const o of OBJECTS) {
   if (o.type === 'exit' || o.type === 'prop' || o.type === 'decor') continue;
   const tx = Math.floor(o.x / TS);
   const ty = Math.floor(o.y / TS);
-  if (!reach[idx(tx, ty)]) throw new Error(`object ${o.name} at tile ${tx},${ty} is unreachable`);
+  if (!reach[idx(tx, ty)]) blockedObjects.push(`${o.name} at ${tx},${ty}`);
+}
+if (blockedObjects.length > 0) {
+  throw new Error(
+    `${blockedObjects.length} unreachable object anchor(s):\n  ` + blockedObjects.join('\n  ')
+  );
 }
 
 const exitObj = OBJECTS.find((o) => o.type === 'exit');
@@ -605,6 +386,17 @@ for (let y = exitObj.y / TS; y < (exitObj.y + exitObj.height) / TS; y++)
   for (let x = exitObj.x / TS; x < (exitObj.x + exitObj.width) / TS; x++)
     if (reach[idx(x, y)]) exitOk = true;
 if (!exitOk) throw new Error('exit rectangle is unreachable');
+
+// Optional authoring aid: list every valid south-facing facade position.
+if (process.env.MAP_DOOR_CANDIDATES) {
+  const candidates = [];
+  for (let y = 0; y < H; y++)
+    for (let x = 0; x < W; x++)
+      if (!walkable[idx(x, y)] && distanceToWalkable(x, y, 2) === 1 && isWalkable(x, y + 1))
+        candidates.push(`${x},${y}`);
+  console.log(`south-facing facade candidates (${candidates.length}):`);
+  console.log('  ' + candidates.join(' '));
+}
 
 // Facade openings must land on the 1-tile wall ring, or they would be painted
 // into roof tiles where no one can see them.
@@ -761,7 +553,8 @@ const windows = architecture.filter((g) => g === ARCH.window + 1).length;
 const doors = architecture.filter((g) => g === ARCH.door + 1).length;
 
 console.log(
-  `village.json: ${W}x${H} tiles (${W * TS}x${H * TS} px), ${walkableCount} walkable, ` +
+  `village.json: ${W}x${H} tiles (${W * TS}x${H * TS} px), ${walkableCount} walkable ` +
+    `(${obstructed} tiles removed by buildings), ` +
     `${OBJECTS.length} objects (${PROP_PLACEMENTS.length} props), ` +
     `${propCollision.filter(Boolean).length} prop-collision tiles, ` +
     `${windows} windows, ${doors} doors. All reachable.`
