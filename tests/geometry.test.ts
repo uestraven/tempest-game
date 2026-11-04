@@ -33,6 +33,7 @@ const map = JSON.parse(readFileSync(MAP_PATH, 'utf8')) as {
   layers: {
     name: string;
     type: string;
+    visible: boolean;
     data?: number[];
     objects?: {
       name: string;
