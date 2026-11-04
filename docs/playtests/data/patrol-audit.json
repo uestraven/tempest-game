@@ -1,0 +1,4886 @@
+{
+ "observedSeconds": 45,
+ "report": [
+  {
+   "guard": "enemy_l1",
+   "travelled": 1220,
+   "expected": 1081,
+   "ratio": 1.13,
+   "stalled": false,
+   "diagnosis": {
+    "n": "enemy_l1",
+    "tile": "14,53",
+    "feetTileSolid": false,
+    "body": {
+     "x": 222,
+     "y": 852,
+     "w": 12,
+     "h": 10
+    },
+    "overhangIntoRowAbove": -4,
+    "blocked": {
+     "up": false,
+     "down": false,
+     "left": false,
+     "right": false
+    },
+    "speed": 44,
+    "neighbourhood": [
+     "...",
+     "...",
+     "..."
+    ],
+    "destination": "13,54",
+    "astarSaysReachable": true,
+    "nextNodeDistance": 15
+   }
+  },
+  {
+   "guard": "enemy_l2",
+   "travelled": 108,
+   "expected": 1409,
+   "ratio": 0.08,
+   "stalled": true,
+   "diagnosis": {
+    "n": "enemy_l2",
+    "tile": "28,49",
+    "feetTileSolid": false,
+    "body": {
+     "x": 448,
+     "y": 782,
+     "w": 12,
+     "h": 10
+    },
+    "overhangIntoRowAbove": 2,
+    "blocked": {
+     "up": false,
+     "down": false,
+     "left": true,
+     "right": false
+    },
+    "speed": 44,
+    "neighbourhood": [
+     "#..",
+     "..#",
+     "..."
+    ],
+    "destination": "24,50",
+    "astarSaysReachable": true,
+    "nextNodeDistance": 14
+   }
+  },
+  {
+   "guard": "enemy_l3",
+   "travelled": 179,
+   "expected": 1363,
+   "ratio": 0.13,
+   "stalled": true,
+   "diagnosis": {
+    "n": "enemy_l3",
+    "tile": "19,32",
+    "feetTileSolid": false,
+    "body": {
+     "x": 308,
+     "y": 510,
+     "w": 12,
+     "h": 10
+    },
+    "overhangIntoRowAbove": 2,
+    "blocked": {
+     "up": false,
+     "down": false,
+     "left": false,
+     "right": true
+    },
+    "speed": 44,
+    "neighbourhood": [
+     "..#",
+     "...",
+     "..."
+    ],
+    "destination": "26,34",
+    "astarSaysReachable": true,
+    "nextNodeDistance": 14
+   }
+  },
+  {
+   "guard": "enemy_l4",
+   "travelled": 1386,
+   "expected": 1307,
+   "ratio": 1.06,
+   "stalled": false,
+   "diagnosis": {
+    "n": "enemy_l4",
+    "tile": "20,20",
+    "feetTileSolid": false,
+    "body": {
+     "x": 319,
+     "y": 320,
+     "w": 12,
+     "h": 10
+    },
+    "overhangIntoRowAbove": 0,
+    "blocked": {
+     "up": false,
+     "down": false,
+     "left": false,
+     "right": false
+    },
+    "speed": 0,
+    "neighbourhood": [
+     "###",
+     "..#",
+     "..#"
+    ],
+    "destination": null,
+    "astarSaysReachable": false,
+    "nextNodeDistance": null
+   }
+  },
+  {
+   "guard": "enemy_l5",
+   "travelled": 1421,
+   "expected": 1312,
+   "ratio": 1.08,
+   "stalled": false,
+   "diagnosis": {
+    "n": "enemy_l5",
+    "tile": "72,41",
+    "feetTileSolid": false,
+    "body": {
+     "x": 1152,
+     "y": 654,
+     "w": 12,
+     "h": 10
+    },
+    "overhangIntoRowAbove": 2,
+    "blocked": {
+     "up": false,
+     "down": false,
+     "left": false,
+     "right": false
+    },
+    "speed": 44,
+    "neighbourhood": [
+     "...",
+     "...",
+     "..."
+    ],
+    "destination": "78,45",
+    "astarSaysReachable": true,
+    "nextNodeDistance": 18
+   }
+  },
+  {
+   "guard": "enemy_l6",
+   "travelled": 196,
+   "expected": 1576,
+   "ratio": 0.12,
+   "stalled": true,
+   "diagnosis": {
+    "n": "enemy_l6",
+    "tile": "67,39",
+    "feetTileSolid": false,
+    "body": {
+     "x": 1076,
+     "y": 622,
+     "w": 12,
+     "h": 10
+    },
+    "overhangIntoRowAbove": 2,
+    "blocked": {
+     "up": false,
+     "down": false,
+     "left": false,
+     "right": true
+    },
+    "speed": 44,
+    "neighbourhood": [
+     "..#",
+     "...",
+     "###"
+    ],
+    "destination": "78,40",
+    "astarSaysReachable": true,
+    "nextNodeDistance": 14
+   }
+  },
+  {
+   "guard": "enemy_l7",
+   "travelled": 1445,
+   "expected": 1510,
+   "ratio": 0.96,
+   "stalled": false,
+   "diagnosis": {
+    "n": "enemy_l7",
+    "tile": "71,12",
+    "feetTileSolid": false,
+    "body": {
+     "x": 1132,
+     "y": 192,
+     "w": 12,
+     "h": 10
+    },
+    "overhangIntoRowAbove": 0,
+    "blocked": {
+     "up": true,
+     "down": false,
+     "left": false,
+     "right": false
+    },
+    "speed": 44,
+    "neighbourhood": [
+     "###",
+     "...",
+     "..."
+    ],
+    "destination": "66,9",
+    "astarSaysReachable": true,
+    "nextNodeDistance": 10
+   }
+  }
+ ],
+ "series": [
+  [
+   {
+    "n": "enemy_l1",
+    "x": 216,
+    "y": 872,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 552,
+    "y": 776,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 424,
+    "y": 552,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l4",
+    "x": 328,
+    "y": 328,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1256,
+    "y": 728,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 904,
+    "y": 680,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1112,
+    "y": 264,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 217,
+    "y": 871,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 551,
+    "y": 776,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 423,
+    "y": 552,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l4",
+    "x": 327,
+    "y": 328,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1255,
+    "y": 728,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 905,
+    "y": 680,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1113,
+    "y": 263,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 234,
+    "y": 858,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 529,
+    "y": 776,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 403,
+    "y": 545,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l4",
+    "x": 305,
+    "y": 328,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1235,
+    "y": 721,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 927,
+    "y": 680,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1130,
+    "y": 250,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 256,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 506,
+    "y": 776,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 386,
+    "y": 530,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l4",
+    "x": 282,
+    "y": 328,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1218,
+    "y": 706,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 935,
+    "y": 675,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1150,
+    "y": 241,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 278,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 484,
+    "y": 776,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 367,
+    "y": 522,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l4",
+    "x": 260,
+    "y": 328,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1202,
+    "y": 690,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 945,
+    "y": 657,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1166,
+    "y": 226,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 462,
+    "y": 776,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 346,
+    "y": 522,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l4",
+    "x": 238,
+    "y": 328,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1187,
+    "y": 675,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 964,
+    "y": 649,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1185,
+    "y": 217,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 790,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 324,
+    "y": 522,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l4",
+    "x": 220,
+    "y": 341,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1168,
+    "y": 665,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 980,
+    "y": 648,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1207,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 289,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 302,
+    "y": 521,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l4",
+    "x": 204,
+    "y": 356,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 980,
+    "y": 648,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1220,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 267,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 284,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 203,
+    "y": 357,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 982,
+    "y": 648,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1220,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 245,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 284,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 203,
+    "y": 357,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1004,
+    "y": 648,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1216,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 226,
+    "y": 864,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 284,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 201,
+    "y": 373,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1167,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1026,
+    "y": 648,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1198,
+    "y": 205,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 870,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 306,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 395,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1189,
+    "y": 665,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1044,
+    "y": 635,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1176,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 870,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 417,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1206,
+    "y": 679,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1065,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1155,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 225,
+    "y": 863,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 439,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1222,
+    "y": 694,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1133,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 245,
+    "y": 857,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 461,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1238,
+    "y": 710,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1113,
+    "y": 200,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 267,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 468,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1097,
+    "y": 184,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 289,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 468,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1081,
+    "y": 169,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 209,
+    "y": 461,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1067,
+    "y": 155,
+    "state": "patrol",
+    "routeIndex": 3
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 229,
+    "y": 458,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1237,
+    "y": 722,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1067,
+    "y": 155,
+    "state": "patrol",
+    "routeIndex": 3
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 278,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 250,
+    "y": 454,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1220,
+    "y": 708,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1067,
+    "y": 155,
+    "state": "patrol",
+    "routeIndex": 3
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 256,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 267,
+    "y": 442,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1204,
+    "y": 692,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1071,
+    "y": 172,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 234,
+    "y": 857,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 276,
+    "y": 441,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1189,
+    "y": 677,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1079,
+    "y": 192,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 276,
+    "y": 441,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1171,
+    "y": 666,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1091,
+    "y": 210,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 278,
+    "y": 432,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1098,
+    "y": 231,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 291,
+    "y": 414,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1110,
+    "y": 248,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 235,
+    "y": 858,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 296,
+    "y": 394,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1111,
+    "y": 260,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 257,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 296,
+    "y": 372,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1164,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1111,
+    "y": 260,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 280,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 296,
+    "y": 349,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1186,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1116,
+    "y": 257,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 309,
+    "y": 331,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1204,
+    "y": 677,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1136,
+    "y": 249,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 325,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1220,
+    "y": 692,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1154,
+    "y": 237,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 288,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 325,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1235,
+    "y": 707,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1170,
+    "y": 222,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 265,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 323,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1252,
+    "y": 724,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1191,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 243,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 302,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1213,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 224,
+    "y": 865,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 280,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1220,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 259,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1240,
+    "y": 724,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1220,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 236,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1222,
+    "y": 710,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1209,
+    "y": 214,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 227,
+    "y": 861,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 218,
+    "y": 342,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1206,
+    "y": 694,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1192,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 248,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 203,
+    "y": 357,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1191,
+    "y": 679,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1170,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 270,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 203,
+    "y": 357,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1174,
+    "y": 666,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1148,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 203,
+    "y": 357,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1151,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1126,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 201,
+    "y": 375,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1108,
+    "y": 195,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 397,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1092,
+    "y": 180,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 275,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 419,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1162,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1076,
+    "y": 164,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 253,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 442,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1185,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1067,
+    "y": 155,
+    "state": "patrol",
+    "routeIndex": 3
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 232,
+    "y": 859,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 464,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1203,
+    "y": 676,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1067,
+    "y": 155,
+    "state": "patrol",
+    "routeIndex": 3
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 468,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1219,
+    "y": 691,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1066,
+    "y": 159,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 468,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1234,
+    "y": 706,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1075,
+    "y": 178,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 220,
+    "y": 868,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 210,
+    "y": 460,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1250,
+    "y": 722,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1081,
+    "y": 199,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 238,
+    "y": 857,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 231,
+    "y": 458,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1094,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 260,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 251,
+    "y": 453,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1102,
+    "y": 236,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 282,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 268,
+    "y": 442,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1241,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1111,
+    "y": 255,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 276,
+    "y": 441,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1223,
+    "y": 711,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1111,
+    "y": 260,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 276,
+    "y": 441,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1207,
+    "y": 695,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1111,
+    "y": 260,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 285,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 278,
+    "y": 431,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1192,
+    "y": 680,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1122,
+    "y": 253,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 263,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 291,
+    "y": 414,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1175,
+    "y": 666,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1142,
+    "y": 247,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 240,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 296,
+    "y": 392,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1153,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1159,
+    "y": 232,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 222,
+    "y": 867,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 296,
+    "y": 370,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1176,
+    "y": 218,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 296,
+    "y": 348,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1198,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 310,
+    "y": 331,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1161,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1220,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 229,
+    "y": 859,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 325,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1183,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1220,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 251,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 325,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1202,
+    "y": 675,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1220,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 273,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 323,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1218,
+    "y": 690,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1205,
+    "y": 211,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 301,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1233,
+    "y": 705,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1186,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 279,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1249,
+    "y": 721,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1164,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 257,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1143,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 273,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 236,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1121,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 251,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 218,
+    "y": 343,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1242,
+    "y": 726,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1104,
+    "y": 192,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 230,
+    "y": 861,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 203,
+    "y": 357,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1224,
+    "y": 712,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1088,
+    "y": 176,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 203,
+    "y": 357,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1208,
+    "y": 696,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1072,
+    "y": 160,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 203,
+    "y": 357,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1193,
+    "y": 681,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1067,
+    "y": 155,
+    "state": "patrol",
+    "routeIndex": 3
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 222,
+    "y": 867,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 376,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1177,
+    "y": 667,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1067,
+    "y": 155,
+    "state": "patrol",
+    "routeIndex": 3
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 241,
+    "y": 857,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 399,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1154,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1065,
+    "y": 165,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 263,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 421,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1078,
+    "y": 183,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 285,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 443,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1085,
+    "y": 203,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 465,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1159,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1095,
+    "y": 221,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 468,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1182,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1106,
+    "y": 240,
+    "state": "patrol",
+    "routeIndex": 0
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 282,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 200,
+    "y": 468,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1200,
+    "y": 674,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1111,
+    "y": 260,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 260,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 211,
+    "y": 460,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1217,
+    "y": 689,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1111,
+    "y": 260,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 238,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 232,
+    "y": 458,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1232,
+    "y": 704,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1111,
+    "y": 260,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 220,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 252,
+    "y": 452,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1248,
+    "y": 720,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1127,
+    "y": 250,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 270,
+    "y": 442,
+    "state": "patrol",
+    "routeIndex": 3
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1147,
+    "y": 243,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 219,
+    "y": 869,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 276,
+    "y": 441,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1253,
+    "y": 725,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1163,
+    "y": 229,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 231,
+    "y": 859,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 276,
+    "y": 441,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1243,
+    "y": 727,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1181,
+    "y": 218,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 253,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 279,
+    "y": 430,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1225,
+    "y": 713,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1204,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 1
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 275,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 292,
+    "y": 413,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1209,
+    "y": 697,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1220,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 296,
+    "y": 391,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1194,
+    "y": 682,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1220,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 296,
+    "y": 369,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1178,
+    "y": 667,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1220,
+    "y": 216,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 292,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 297,
+    "y": 347,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1156,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1201,
+    "y": 207,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 270,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 311,
+    "y": 331,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1181,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 248,
+    "y": 856,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 325,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1148,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1159,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ],
+  [
+   {
+    "n": "enemy_l1",
+    "x": 228,
+    "y": 862,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l2",
+    "x": 454,
+    "y": 792,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l3",
+    "x": 314,
+    "y": 520,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l4",
+    "x": 325,
+    "y": 330,
+    "state": "patrol",
+    "routeIndex": 1
+   },
+   {
+    "n": "enemy_l5",
+    "x": 1158,
+    "y": 664,
+    "state": "patrol",
+    "routeIndex": 0
+   },
+   {
+    "n": "enemy_l6",
+    "x": 1082,
+    "y": 632,
+    "state": "patrol",
+    "routeIndex": 2
+   },
+   {
+    "n": "enemy_l7",
+    "x": 1138,
+    "y": 202,
+    "state": "patrol",
+    "routeIndex": 2
+   }
+  ]
+ ]
+}

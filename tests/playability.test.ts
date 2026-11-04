@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { loadMap, pathBetween, samplePath, type MapObject } from './support/encounter-metrics';
-import { PLAYER, TILE, VISION } from '../src/core/constants';
+import { PLAYER, SOUND_RADIUS, TILE, VISION } from '../src/core/constants';
 import { ENEMIES } from '../src/data/enemies';
 import { WEAPONS } from '../src/data/weapons';
+import { Grid } from '../src/core/Grid';
+import { canSee, stepSuspicion, suspicionRate } from '../src/systems/Vision';
+import { SOUND_REFRACTORY, SOUND_SCATTER } from '../src/systems/Hearing';
 
 /**
  * Deterministic playability invariants, added in Phase C.1B-04A.
@@ -158,46 +161,113 @@ describe('3. alternate evidence sources really do lie on the route', () => {
   });
 });
 
-describe('4. documented pacing and escape arithmetic', () => {
+describe('4. the stealth contract', () => {
   /**
-   * These are NOT balance assertions - nothing here says the numbers are right.
-   * They record the arithmetic the playthroughs ran into, so that a future
-   * change to a speed or a damage value shows up as a deliberate decision
-   * rather than a surprise.
+   * Rewritten in Phase C.1B-04B-1. The previous version asserted that
+   * `PLAYER.speedCrouch === ENEMIES.lookout.combatSpeed`, which recorded a
+   * tuning coincidence as if it were a requirement. The disengagement suite
+   * then showed the escape sequence works fine at those speeds, so pinning the
+   * equality would have blocked a harmless future tweak while testing nothing
+   * about whether stealth actually recovers.
+   *
+   * These assert the CONTRACT instead. Tuning values are recorded in
+   * docs/playtests/valcendre-c1b04b1.md.
    */
-  it('records that a crouched player cannot outrun a pursuing Lookout', () => {
-    // Crouch 66 px/s against combatSpeed 66 px/s: breaking away requires
-    // standing up (108) or sprinting (152). The harness learned this the hard
-    // way - crouch-fleeing is fatal.
-    expect(PLAYER.speedCrouch).toBe(ENEMIES.lookout.combatSpeed);
+  it('gives crouching a real detection advantage', () => {
+    const standing = suspicionRate({ pos: { x: 0, y: 0 }, stance: 'standing', inShadow: false }, 100);
+    const crouching = suspicionRate({ pos: { x: 0, y: 0 }, stance: 'crouching', inShadow: false }, 100);
+    const shadowed = suspicionRate({ pos: { x: 0, y: 0 }, stance: 'crouching', inShadow: true }, 100);
+    expect(crouching).toBeLessThan(standing);
+    expect(shadowed).toBeLessThan(crouching);
+    // Worth having, not merely non-zero: crouching must buy at least 1.5x the
+    // time to detection, and shadow more again.
+    expect(standing / crouching).toBeGreaterThanOrEqual(1.5);
+    expect(standing / shadowed).toBeGreaterThanOrEqual(2.5);
+  });
+
+  it('gives standing and sprinting a real mobility advantage', () => {
+    // Crouch is for concealment, not for fleeing; the mobility to escape comes
+    // from standing up. Both must beat a Lookout's pursuit speed.
+    expect(PLAYER.speedWalk).toBeGreaterThan(PLAYER.speedCrouch);
+    expect(PLAYER.speedSprint).toBeGreaterThan(PLAYER.speedWalk);
     expect(PLAYER.speedWalk).toBeGreaterThan(ENEMIES.lookout.combatSpeed);
-    expect(PLAYER.speedSprint).toBeGreaterThan(ENEMIES.lookout.combatSpeed);
+    expect(PLAYER.speedSprint).toBeGreaterThan(ENEMIES.lookout.combatSpeed * 2);
   });
 
-  it('records time-to-death under sustained fire', () => {
-    const hits = Math.ceil(PLAYER.maxHp / ENEMIES.lookout.damage);
-    const onePlusTelegraph = ENEMIES.lookout.attackInterval;
-    // One Lookout: 9 hits, 1.4 s apart.
-    expect(hits).toBe(9);
-    const soloSeconds = (hits - 1) * onePlusTelegraph;
-    expect(soloSeconds).toBeCloseTo(11.2, 1);
-    // Two Lookouts roughly halve it, which is what killed two of three sprints.
-    expect(soloSeconds / 2).toBeLessThan(6);
+  it('makes mobility cost concealment, so escaping is a real trade', () => {
+    const crouch = suspicionRate({ pos: { x: 0, y: 0 }, stance: 'crouching', inShadow: false }, 100);
+    const sprint = suspicionRate({ pos: { x: 0, y: 0 }, stance: 'sprinting', inShadow: false }, 100);
+    expect(sprint).toBeGreaterThan(crouch);
+    // And sprinting is audible while crouching is silent.
+    expect(SOUND_RADIUS.footstepCrouch).toBe(0);
+    expect(SOUND_RADIUS.footstepSprint).toBeGreaterThan(SOUND_RADIUS.footstepWalk);
   });
 
-  it('records that a sprinter is detected faster than they can cross a cone', () => {
-    // 120/s sprinting against a 100 threshold: 0.84 s of exposure is a fight.
-    const secondsToDetect = VISION.combatThreshold / VISION.ratesSprinting;
-    expect(secondsToDetect).toBeLessThan(0.9);
-    const pxCovered = secondsToDetect * PLAYER.speedSprint;
-    expect(pxCovered).toBeLessThan(VISION.maxDistance);
+  it('lets solid cover break line of sight entirely', () => {
+    const grid = new Grid(5, 3);
+    for (let x = 0; x < 5; x++) grid.merge(x, 1, { collides: true, blocksSight: true });
+    const below = { x: 2 * TILE + 8, y: 2 * TILE + 8 };
+    const above = { x: 2 * TILE + 8, y: 8 };
+    expect(grid.hasLineOfSight(below, above, false)).toBe(false);
+    const observer = { pos: below, facing: -Math.PI / 2 };
+    expect(canSee(grid, observer, { pos: above, stance: 'standing', inShadow: false }).visible).toBe(
+      false
+    );
   });
 
-  it('records that the pistol kills a Lookout in two body hits', () => {
-    // The combat scenario measured exactly 2 kills from 4 shots; this is why.
-    const perShot = WEAPONS.pistol.damagePerRay * WEAPONS.pistol.rays;
-    expect(perShot).toBe(34);
-    expect(Math.ceil(ENEMIES.lookout.hp / perShot)).toBe(2);
+  it('hides a crouching player behind low cover but not a standing one', () => {
+    const grid = new Grid(5, 3);
+    grid.merge(2, 1, { collides: true, lowCover: true });
+    const below = { x: 2 * TILE + 8, y: 2 * TILE + 8 };
+    const above = { x: 2 * TILE + 8, y: 8 };
+    expect(grid.hasLineOfSight(below, above, true)).toBe(false);
+    expect(grid.hasLineOfSight(below, above, false)).toBe(true);
+  });
+
+  it('never lets a sound hand over an exact position, except the radio', () => {
+    // A guard that hears you must search an AREA. The radio is the deliberate
+    // exception: it is an object in a known place and going to it is the point.
+    expect(SOUND_SCATTER.footstep).toBeGreaterThan(0);
+    expect(SOUND_SCATTER.gunshot).toBeGreaterThan(0);
+    expect(SOUND_SCATTER.distraction).toBe(0);
+    // The scatter must be big enough to matter against the body it is hiding.
+    expect(SOUND_SCATTER.footstep).toBeGreaterThan(PLAYER.interactRange);
+  });
+
+  it('keeps hearing strictly less informative than seeing', () => {
+    // Sprint footsteps arrive every 22px of travel. Without rate limiting the
+    // implied suspicion gain exceeds the rate for actually seeing a sprinter.
+    const stepsPerSecond = PLAYER.speedSprint / 22;
+    const bumpPerEvent = 34;
+    const unlimited = stepsPerSecond * bumpPerEvent;
+    expect(unlimited).toBeGreaterThan(VISION.ratesSprinting); // the defect
+    const limited = bumpPerEvent / SOUND_REFRACTORY;
+    expect(limited).toBeLessThan(VISION.ratesSprinting); // the fix
+  });
+
+  it('lets suspicion decay to patrol from a full alert without being re-bumped', () => {
+    // A silent, hidden player must be able to wait a guard out. 100 -> below the
+    // 30 threshold at 18/s, inside the 8s investigate timeout.
+    const secondsToCalm = (VISION.combatThreshold - VISION.suspiciousThreshold) / VISION.decayPerSecond;
+    expect(secondsToCalm).toBeLessThan(VISION.investigateTimeout);
+    // VISION is `as const`, so annotate or the literal type 100 is inferred.
+    let suspicion: number = VISION.combatThreshold;
+    for (let t = 0; t < VISION.investigateTimeout; t += 1 / 60)
+      suspicion = stepSuspicion(suspicion, 0, 1 / 60, false);
+    expect(suspicion).toBe(0);
+  });
+
+  it('records the tuning values the escape sequence was verified against', () => {
+    // Documentation, not a requirement: these are the numbers behind the
+    // measurements in docs/playtests/valcendre-c1b04b1.md. A change here should
+    // prompt a re-run of tools/disengage-tests.mjs, not an automatic failure.
+    expect({
+      crouch: PLAYER.speedCrouch,
+      walk: PLAYER.speedWalk,
+      sprint: PLAYER.speedSprint,
+      pursuit: ENEMIES.lookout.combatSpeed,
+      investigate: ENEMIES.lookout.investigateSpeed,
+    }).toEqual({ crouch: 66, walk: 108, sprint: 152, pursuit: 66, investigate: 78 });
   });
 });
 

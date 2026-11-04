@@ -193,6 +193,26 @@ export class Grid {
     return this.cast(from, Math.cos(angle), Math.sin(angle), range, (f) => f.collides);
   }
 
+  /**
+   * Where a SIGHT ray stops, using the same occlusion predicate as
+   * `hasLineOfSight`: `blocksSight`, plus low cover when the target is
+   * crouched.
+   *
+   * Exists so the F3 vision overlay can draw the cone the engine actually
+   * uses rather than an approximation of it. `raycastShot` is the wrong tool
+   * here - it stops on `collides`, and low cover collides with bullets while
+   * leaving a standing target perfectly visible.
+   */
+  raycastSight(from: Vec2, angle: number, range: number, targetCrouched = false): RayHit {
+    return this.cast(
+      from,
+      Math.cos(angle),
+      Math.sin(angle),
+      range,
+      (f) => f.blocksSight || (targetCrouched && f.lowCover)
+    );
+  }
+
   /** True when `from` can physically see `to`. Low cover only hides a crouched target. */
   hasLineOfSight(from: Vec2, to: Vec2, targetCrouched: boolean): boolean {
     const dx = to.x - from.x;

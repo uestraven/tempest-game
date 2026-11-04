@@ -18,7 +18,7 @@ import {
 import { staticFrame } from '../art/AnimationRegistry';
 import { ENEMIES, type EnemyDef, type EnemyKind } from '../data/enemies';
 import { alertLevelFor, canSee, stepSuspicion, type AlertLevel } from '../systems/Vision';
-import type { SoundEvent } from '../systems/Hearing';
+import { SOUND_REFRACTORY, SOUND_SCATTER, type SoundEvent } from '../systems/Hearing';
 import { nextReachableWaypoint } from '../systems/Patrol';
 import type { EnemySnapshot } from '../systems/Save';
 
@@ -55,6 +55,8 @@ const TURN_RATE_PATROL = 3.0; // rad/s
 const TURN_RATE_ALERT = 6.0;
 const WAYPOINT_TOLERANCE = 5;
 const REPATH_INTERVAL = 0.45;
+
+
 /** Pause before retrying a patrol route that is entirely cut off by a closed door. */
 const SEALED_ROUTE_RETRY = 0.75;
 
@@ -77,6 +79,7 @@ export class Enemy {
   private aimTimer = 0;
   private attackTimer = 0;
   private stumbleTimer = 0;
+  private soundCooldown = 0;
   private lastKnown: Vec2 | null = null;
   private scanAngle = 0;
   private seenBodies = new Set<string>();
@@ -148,6 +151,21 @@ export class Enemy {
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
     return { x: body.x, y: body.y, width: body.width, height: body.height };
   }
+  /**
+   * Read-only accessors for the F3 diagnostic overlay. They expose what the AI
+   * is thinking so the overlay can show WHY a guard is doing something; nothing
+   * reads them during simulation.
+   */
+  get debugLastKnown(): Vec2 | null {
+    return this.lastKnown ? { ...this.lastKnown } : null;
+  }
+  get debugDestination(): Vec2 | null {
+    return this.pathTarget ? { ...this.pathTarget } : null;
+  }
+  get debugSoundCooldown(): number {
+    return this.soundCooldown;
+  }
+
   get alertLevel(): AlertLevel {
     return this.state === 'combat' ? 'combat' : alertLevelFor(this.suspicion);
   }
@@ -177,22 +195,48 @@ export class Enemy {
     return sight.visible;
   }
 
-  /** Called by the hearing bus. Produces an investigate target at the sound, not on the player. */
+  /**
+   * Called by the hearing bus. Produces an investigate target at the sound, not
+   * on the player.
+   *
+   * TWO RULES, both of which exist because a sound is a vaguer cue than a sight.
+   *
+   * 1. LOCALISATION IS APPROXIMATE. A sound is investigated as an area, by
+   *    scattering the target within `SOUND_SCATTER` for its kind. Footsteps get
+   *    the widest scatter: you hear a direction, not a position. The radio is
+   *    the deliberate exception - it is a real object sitting in a known place,
+   *    and walking to it is exactly what a distraction is for.
+   *
+   *    Without this, a sprinting player emitted one footstep every 22 px - about
+   *    seven a second - each handing the guard their exact live coordinates, so
+   *    a guard that had never seen the player followed them perfectly through
+   *    cover. Measured in Phase C.1B-04B-1: one footstep 64 px away moved the
+   *    guard's destination to within 0 px of the noise.
+   *
+   * 2. REPEATED SOUND DOES NOT STACK FREELY. One bump per `SOUND_REFRACTORY`
+   *    seconds. Seven footsteps a second at 34 each is ~234 suspicion/s, nearly
+   *    double the 120/s rate for actually SEEING a sprinter, which pinned
+   *    suspicion above the de-escalation threshold indefinitely and re-armed the
+   *    8 s investigate timer on every step. Rate-limiting keeps hearing strictly
+   *    less informative than sight, which is the intended ordering.
+   *
+   * Neither rule touches vision, movement speed, damage or health, and being
+   * seen in the open is exactly as dangerous as before.
+   */
   hear(event: SoundEvent, audible: number): void {
     if (this.dead) return;
     const dist = Math.hypot(event.x - this.sprite.x, event.y - this.sprite.y);
     if (dist > audible) return;
     if (this.state === 'combat') return;
+    if (this.soundCooldown > 0) return;
+    this.soundCooldown = SOUND_REFRACTORY;
 
     const bump = event.kind === 'gunshot' ? 45 : event.kind === 'shout' ? 40 : 34;
     this.suspicion = Math.min(VISION.combatThreshold - 1, this.suspicion + bump);
 
-    // A gunshot raises the alarm but does not hand over the player's exact
-    // position: an unseen shot is investigated as an area, not a pinpoint.
+    const spread = SOUND_SCATTER[event.kind];
     const target =
-      event.kind === 'gunshot' && !this.lastKnown
-        ? this.scatter(event.x, event.y, 36)
-        : { x: event.x, y: event.y };
+      spread > 0 ? this.scatter(event.x, event.y, spread) : { x: event.x, y: event.y };
     this.beginInvestigate(target);
   }
 
@@ -266,6 +310,7 @@ export class Enemy {
     this.stumbleTimer = Math.max(0, this.stumbleTimer - dt);
     this.attackTimer = Math.max(0, this.attackTimer - dt);
     this.repathTimer = Math.max(0, this.repathTimer - dt);
+    this.soundCooldown = Math.max(0, this.soundCooldown - dt);
 
     const visible = this.perceive(dt);
     this.checkForBodies();
@@ -663,6 +708,7 @@ export class Enemy {
     this.aimTimer = 0;
     this.attackTimer = 0;
     this.stumbleTimer = 0;
+    this.soundCooldown = 0;
     this.alertGfx.clear();
     this.alertIcon.setVisible(false);
 

@@ -102,3 +102,67 @@ describe('angleDelta', () => {
     expect(Math.abs(angleDelta(0.1, 0.1 + Math.PI * 2))).toBeLessThan(1e-9);
   });
 });
+
+describe('sight raycasting (F3 vision overlay)', () => {
+  /**
+   * The overlay traces its cone with `raycastSight`, so the wedge it draws is
+   * only honest if that uses the same occlusion rule as `hasLineOfSight`.
+   * `raycastShot` is explicitly the wrong predicate: it stops on `collides`,
+   * and low cover collides with bullets while leaving a standing target fully
+   * visible.
+   */
+  const sightGrid = (): Grid => {
+    const grid = new Grid(8, 3);
+    grid.merge(4, 1, { collides: true, blocksSight: true }); // wall
+    grid.merge(6, 1, { collides: true, lowCover: true }); // low cover
+    return grid;
+  };
+  const from = { x: 8, y: TILE + 8 };
+
+  it('stops a sight ray at a sight-blocking wall', () => {
+    const hit = sightGrid().raycastSight(from, 0, 112);
+    expect(hit.blocked).toBe(true);
+    expect(hit.tileX).toBe(4);
+  });
+
+  it('passes low cover for a standing target but stops for a crouching one', () => {
+    const grid = new Grid(8, 3);
+    grid.merge(6, 1, { collides: true, lowCover: true });
+    // Range stops inside tile 7: out of bounds counts as solid, so a longer ray
+    // would report blocked for the wrong reason.
+    expect(grid.raycastSight(from, 0, 112, false).blocked).toBe(false);
+    const crouched = grid.raycastSight(from, 0, 112, true);
+    expect(crouched.blocked).toBe(true);
+    expect(crouched.tileX).toBe(6);
+  });
+
+  it('agrees with hasLineOfSight, which is what canSee uses', () => {
+    const grid = sightGrid();
+    for (const [tx, crouch] of [
+      [3, false],
+      [5, false],
+      [5, true],
+      [7, false],
+      [7, true],
+    ] as const) {
+      const to = { x: tx * TILE + 8, y: TILE + 8 };
+      const byRay = !grid.raycastSight(from, 0, Math.hypot(to.x - from.x, 0), crouch).blocked;
+      expect(byRay, `tile ${tx} crouch=${crouch}`).toBe(grid.hasLineOfSight(from, to, crouch));
+    }
+  });
+
+  it('differs from raycastShot, which is the point of having both', () => {
+    const grid = new Grid(8, 3);
+    grid.merge(6, 1, { collides: true, lowCover: true });
+    // A bullet is stopped by low cover; a standing target behind it is visible.
+    expect(grid.raycastShot(from, 0, 112).blocked).toBe(true);
+    expect(grid.raycastSight(from, 0, 112, false).blocked).toBe(false);
+  });
+
+  it('reports the unobstructed range when nothing blocks', () => {
+    const grid = new Grid(16, 3);
+    const hit = grid.raycastSight(from, 0, 176);
+    expect(hit.blocked).toBe(false);
+    expect(Math.round(hit.distance)).toBe(176);
+  });
+});

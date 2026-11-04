@@ -6,6 +6,7 @@ import {
   MAX_FRAME_DT,
   PICKUP_AMOUNT,
   SAVE_VERSION,
+  VISION,
   VIRTUAL_HEIGHT,
   VIRTUAL_WIDTH,
 } from '../core/constants';
@@ -14,6 +15,7 @@ import type { Vec2 } from '../core/Grid';
 import { TORSO_OFFSET_Y } from '../core/hitbox';
 import { STAGE_TILESETS, TILE_NAMES } from '../art/TilesetRegistry';
 import { textureKey, type PropArea } from '../art/AssetRegistry';
+import { CHAR_FRAME_HEIGHT } from '../art/CharacterDefinitions';
 import {
   PROP_DEPTH,
   PROPS,
@@ -70,6 +72,10 @@ export class Village extends Phaser.Scene {
   private glintGfx!: Phaser.GameObjects.Graphics;
   private hitMarkerGfx!: Phaser.GameObjects.Graphics;
   private debugGfx!: Phaser.GameObjects.Graphics;
+  /** Separate layer so the translucent vision wedges sit under the hitbox lines. */
+  private visionGfx!: Phaser.GameObjects.Graphics;
+  private guardLabels: PixelText[] = [];
+  private debugStanceLabel: PixelText | null = null;
   private hitMarkerTimer = 0;
   private debugHitboxes = false;
   /** Props that are y-sorted with characters, re-depthed every frame. */
@@ -147,6 +153,15 @@ export class Village extends Phaser.Scene {
     this.glintGfx = this.add.graphics().setDepth(19);
     this.crosshair = this.add.image(0, 0, 'crosshair').setDepth(60);
     this.hitMarkerGfx = this.add.graphics().setDepth(61);
+    this.visionGfx = this.add.graphics().setDepth(68);
+    // One persistent label per guard plus a stance readout, created once and
+    // hidden, so the overlay allocates nothing per frame.
+    this.guardLabels = this.enemies.map(
+      () => new PixelText(this, 0, 0, '', { align: 'center', depth: 71, scrollFactor: 1 })
+    );
+    for (const label of this.guardLabels) label.setVisible(false);
+    this.debugStanceLabel = new PixelText(this, 4, 22, '', { depth: 71, color: 0x8fd0ff });
+    this.debugStanceLabel.setVisible(false);
     this.debugGfx = this.add.graphics().setDepth(70);
 
     // Supplied FX art. The muzzle flash is parented to the weapon position, not
@@ -442,6 +457,7 @@ export class Village extends Phaser.Scene {
     this.drawGlints();
     this.drawHitMarker(frameDt);
     this.drawDebugHitboxes();
+    this.drawVisionDebug();
     this.sortDepths();
   }
 
@@ -1174,6 +1190,159 @@ export class Village extends Phaser.Scene {
    * screen. Authored cover and prop-derived cover use different colours so an
    * oversized prop footprint is immediately obvious.
    */
+  /**
+   * F3 vision diagnostics: why a guard can or cannot see Tempest.
+   *
+   * The wedge is NOT an approximation. Each boundary point comes from
+   * `Grid.raycastSight`, which uses the engine's own occlusion predicate - the
+   * same `blocksSight` test `canSee` runs - so a wedge clipped by a wall is
+   * clipped exactly where sight is actually lost. The arc is sampled at
+   * `VISION_RAYS` angles, so only the curvature between adjacent rays is
+   * interpolated; the range and the cone half-angle are exact.
+   *
+   * Low cover is deliberately absent from the wedge: it blocks sight only for a
+   * CROUCHING target, so a single wedge cannot be correct for both stances. The
+   * wedge is drawn for the player's current stance, and the HUD line states
+   * which stance that is.
+   *
+   * Purely additive rendering on its own graphics layer. It reads state through
+   * read-only accessors, writes nothing, and is off unless F3 is toggled.
+   */
+  private drawVisionDebug(): void {
+    const g = this.visionGfx;
+    g.clear();
+    if (!this.debugHitboxes) {
+      for (const label of this.guardLabels) label.setVisible(false);
+      return;
+    }
+
+    const VISION_RAYS = 24;
+    const half = (VISION.coneDegrees / 2) * (Math.PI / 180);
+    const crouched = this.player.crouched;
+
+    for (let i = 0; i < this.enemies.length; i++) {
+      const enemy = this.enemies[i];
+      const label = this.guardLabels[i];
+      if (enemy.dead) {
+        label?.setVisible(false);
+        continue;
+      }
+
+      const colour =
+        enemy.state === 'combat'
+          ? 0xd9472f
+          : enemy.state === 'investigate' || enemy.state === 'search'
+            ? 0xe0c04a
+            : 0x6fb4a0;
+
+      // Wedge boundary, traced with the engine's own sight raycast.
+      const origin = enemy.groundPoint;
+      const points: Phaser.Geom.Point[] = [new Phaser.Geom.Point(origin.x, origin.y)];
+      for (let r = 0; r <= VISION_RAYS; r++) {
+        const angle = enemy.facing - half + (2 * half * r) / VISION_RAYS;
+        const hit = this.level.grid.raycastSight(origin, angle, VISION.maxDistance, crouched);
+        points.push(new Phaser.Geom.Point(hit.x, hit.y));
+      }
+      g.fillStyle(colour, 0.22);
+      g.fillPoints(points, true);
+      // The arc itself, drawn as a bright polyline. A translucent fill alone is
+      // unreadable over 16px pixel art at 480x270, which is the whole audience
+      // for this overlay.
+      g.lineStyle(1, colour, 0.95);
+      g.strokePoints(points.slice(1), false);
+      // And the two cone edges, so the 100 degree limit is unmistakable.
+      for (const edge of [points[1], points[points.length - 1]]) {
+        g.lineBetween(
+          Math.round(origin.x),
+          Math.round(origin.y),
+          Math.round(edge.x),
+          Math.round(edge.y)
+        );
+      }
+
+      // Facing centre line, full range.
+      const centre = this.level.grid.raycastSight(
+        origin,
+        enemy.facing,
+        VISION.maxDistance,
+        crouched
+      );
+      g.lineStyle(1, colour, 0.8);
+      g.lineBetween(
+        Math.round(origin.x),
+        Math.round(origin.y),
+        Math.round(centre.x),
+        Math.round(centre.y)
+      );
+
+      // Suspicion as a 20px bar above the guard.
+      const barX = Math.round(enemy.x) - 10;
+      const barY = Math.round(enemy.y) - CHAR_FRAME_HEIGHT - 12;
+      g.fillStyle(0x15151c, 0.8);
+      g.fillRect(barX, barY, 20, 3);
+      g.fillStyle(colour, 1);
+      g.fillRect(barX, barY, Math.round((enemy.suspicion / VISION.combatThreshold) * 20), 3);
+
+      // Last known player position: hollow square, joined by a dotted line.
+      const known = enemy.debugLastKnown;
+      if (known) {
+        g.lineStyle(1, 0xff8fd0, 0.9);
+        g.strokeRect(Math.round(known.x) - 3, Math.round(known.y) - 3, 6, 6);
+        for (let t = 0; t < 1; t += 0.12) {
+          g.fillStyle(0xff8fd0, 0.5);
+          g.fillRect(
+            Math.round(origin.x + (known.x - origin.x) * t),
+            Math.round(origin.y + (known.y - origin.y) * t),
+            1,
+            1
+          );
+        }
+      }
+
+      // Current investigation/pursuit destination: an X.
+      const dest = enemy.debugDestination;
+      if (dest) {
+        g.lineStyle(1, 0x8fd0ff, 0.9);
+        g.lineBetween(
+          Math.round(dest.x) - 3,
+          Math.round(dest.y) - 3,
+          Math.round(dest.x) + 3,
+          Math.round(dest.y) + 3
+        );
+        g.lineBetween(
+          Math.round(dest.x) - 3,
+          Math.round(dest.y) + 3,
+          Math.round(dest.x) + 3,
+          Math.round(dest.y) - 3
+        );
+      }
+
+      const text =
+        `${enemy.name.replace('enemy_', '').toUpperCase()} ${enemy.state.toUpperCase()} ` +
+        `${Math.round(enemy.suspicion)}`;
+      if (label) {
+        label.setText(text);
+        label.setPosition(Math.round(enemy.x), barY - 9);
+        label.setVisible(true);
+      }
+    }
+
+    // Player stance and concealment readout, in screen space.
+    const inShadow = this.level.grid.isShadowWorld(this.player.x, this.player.y);
+    const rate = crouched
+      ? inShadow
+        ? VISION.ratesCrouchingShadow
+        : VISION.ratesCrouching
+      : this.player.sprinting
+        ? VISION.ratesSprinting
+        : VISION.ratesStanding;
+    this.debugStanceLabel?.setText(
+      `${this.player.stance.toUpperCase()}${inShadow ? ' +SHADOW' : ''}  ${rate}/s  ` +
+        `CONE ${VISION.coneDegrees}deg ${VISION.maxDistance}px`
+    );
+    this.debugStanceLabel?.setVisible(true);
+  }
+
   private drawDebugTiles(g: Phaser.GameObjects.Graphics): void {
     const view = this.cameras.main.worldView;
     const x0 = Math.max(0, Math.floor(view.x / TILE) - 1);
@@ -1239,6 +1408,12 @@ export class Village extends Phaser.Scene {
     if (this.torndown) return;
     this.torndown = true;
     this.input.setDefaultCursor('default');
+    // PixelText allocates a canvas texture per instance, so the debug labels
+    // must be released with the scene.
+    for (const label of this.guardLabels) label.destroy();
+    this.guardLabels = [];
+    this.debugStanceLabel?.destroy();
+    this.debugStanceLabel = null;
     this.hud?.destroy();
     this.dialogue?.destroy();
     this.pause?.destroy();
