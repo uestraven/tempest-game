@@ -17,6 +17,10 @@
 import { STAGE_KEYS, textureKey, type StageKey } from './AssetRegistry';
 import roleData from './data/tile-roles.json';
 
+// Re-exported because STAGE_TILESETS is keyed by it, so anything consuming this
+// module's stage map needs the key type too.
+export type { StageKey };
+
 export const TILE_SIZE = 16;
 export const TILESET_COLUMNS = 8;
 export const TILESET_ROWS = 6;
