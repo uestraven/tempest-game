@@ -79,7 +79,6 @@ export class Enemy {
   private seenBodies = new Set<string>();
   private readonly alertGfx: Phaser.GameObjects.Graphics;
   private readonly alertIcon: Phaser.GameObjects.Image;
-  private readonly sheet: string;
   private readonly spawnPoint: Vec2;
   private readonly route: Vec2[];
 
@@ -95,8 +94,9 @@ export class Enemy {
     this.spawnPoint = { x: spawn.x, y: spawn.y };
     this.route = spawn.route.length > 0 ? spawn.route : [{ x: spawn.x, y: spawn.y }];
 
+    // The clip metadata owns the texture: `staticFrame` returns the sheet its
+    // frame belongs to, so a character may span several sheets.
     const idle = staticFrame(this.def.sheet, 'idle', 'down');
-    this.sheet = idle.sheet;
     this.sprite = scene.physics.add.sprite(spawn.x, spawn.y, idle.sheet, idle.frame);
     this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(9);
