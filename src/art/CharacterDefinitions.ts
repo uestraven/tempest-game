@@ -39,7 +39,7 @@
  * format so none of this guesswork is needed.
  */
 
-import type { CharacterKey } from './AssetRegistry';
+import { textureKey, type CharacterKey } from './AssetRegistry';
 
 export const CHAR_COLUMNS = 4;
 export const CHAR_ROWS = 6;
@@ -83,13 +83,26 @@ export const CHAR_STATES: CharState[] = ['idle', 'walk', 'aim', 'fire', 'hit'];
  */
 export type FrameSource = 'authored' | 'mirrored' | 'fallback';
 
+/**
+ * Where the character's weapon comes from while a clip plays. Exactly one
+ * source is ever active, so two pistols can never be drawn at once.
+ *
+ *   in-frame - the artwork already contains the pistol; no overlay is drawn
+ *   overlay  - the artwork has no weapon, so the separate overlay sprite is used
+ *   none     - the weapon is lowered or holstered in this pose; nothing is drawn
+ */
+export type WeaponSource = 'in-frame' | 'overlay' | 'none';
+
 export interface Clip {
-  /** Flat frame indices into the 4x6 sheet. */
+  /** Texture key the frames belong to. A character may span several sheets. */
+  sheet: string;
+  /** Flat frame indices into that sheet, row-major. */
   frames: number[];
   flipX: boolean;
   source: FrameSource;
   fps: number;
   loop: boolean;
+  weapon: WeaponSource;
   /** Why this clip looks the way it does. Surfaced in the art request. */
   note?: string;
 }
@@ -117,86 +130,184 @@ interface ClipOpts {
   source?: FrameSource;
   fps?: number;
   loop?: boolean;
+  weapon?: WeaponSource;
   note?: string;
 }
 
-const clip = (row: CharRow, columns: number[], opts: ClipOpts = {}): Clip => ({
-  frames: frameIndices(row, columns),
-  flipX: opts.flipX ?? false,
-  source: opts.source ?? 'authored',
-  fps: opts.fps ?? 1,
-  loop: opts.loop ?? false,
-  note: opts.note,
-});
+/** Clip from a pose-atlas (4x6) sheet, addressed by action row and column. */
+const atlasClip =
+  (name: CharacterKey) =>
+  (row: CharRow, columns: number[], opts: ClipOpts = {}): Clip => ({
+    sheet: textureKey.character(name),
+    frames: frameIndices(row, columns),
+    flipX: opts.flipX ?? false,
+    source: opts.source ?? 'authored',
+    fps: opts.fps ?? 1,
+    loop: opts.loop ?? false,
+    // The pose-atlas sheets' aim and fire rows already hold a weapon.
+    weapon: opts.weapon ?? (row === 'aim' || row === 'fire' ? 'in-frame' : 'none'),
+    note: opts.note,
+  });
 
 const IDLE_FPS = 3;
 const WALK_FPS = 9;
+const FIRE_FPS = 18;
+
+// --------------------------------------------------------- directional sheets
+
+/** Art Task 01 format: 6 animation slots by 5 rows, row-major. */
+export const DIR_COLUMNS = 6;
+export const DIR_ROWS = 5;
+
+/** Sheet A rows, from tempest_directional_manifest.json. */
+export const DIR_SHEET_A_ROWS = ['idle_down', 'idle_up', 'idle_side', 'walk_down', 'walk_up'] as const;
+/** Sheet B rows. */
+export const DIR_SHEET_B_ROWS = ['walk_side', 'aim_side', 'aim_down', 'aim_up', 'fire_side'] as const;
+
+export type DirRowName = (typeof DIR_SHEET_A_ROWS)[number] | (typeof DIR_SHEET_B_ROWS)[number];
+
+/** Row index and sheet suffix for every directional row name. */
+export const DIR_ROW_LOCATION: Record<DirRowName, { sheet: 'dir_a' | 'dir_b'; row: number }> = {
+  idle_down: { sheet: 'dir_a', row: 0 },
+  idle_up: { sheet: 'dir_a', row: 1 },
+  idle_side: { sheet: 'dir_a', row: 2 },
+  walk_down: { sheet: 'dir_a', row: 3 },
+  walk_up: { sheet: 'dir_a', row: 4 },
+  walk_side: { sheet: 'dir_b', row: 0 },
+  aim_side: { sheet: 'dir_b', row: 1 },
+  aim_down: { sheet: 'dir_b', row: 2 },
+  aim_up: { sheet: 'dir_b', row: 3 },
+  fire_side: { sheet: 'dir_b', row: 4 },
+};
 
 /**
- * tempest - pixel-verified from docs/diagnostics/transparency/tempest_zoom8x.png
- * and tempest_rows0-2_16x.png.
+ * Distinct pose counts, verified against the pixels rather than taken on trust:
+ * every row's held slots are byte-identical to slot 0, so only the distinct
+ * leading slots are animated. Animating all six slots of a 2-pose idle row
+ * would hold the first pose for five frames out of six.
  */
-const TEMPEST: CharacterDef = {
-  key: 'tempest',
-  verified: true,
-  observations: [
-    'idle row: columns 0-1 are FRONT views, columns 2-3 are BACK views.',
-    'walk row: all four columns face LEFT.',
-    'aim row: all four columns face RIGHT.',
-    'fire row: all four columns face RIGHT.',
-    'hit row: facing not conclusively readable; only column 0 is used.',
-    'down row: contains an opaque dark region that is not the body, so corpses use the shared body props instead.',
-  ],
-  clips: {
-    idle: {
-      down: clip('idle', [0, 1], { fps: IDLE_FPS, loop: true }),
-      up: clip('idle', [2, 3], { fps: IDLE_FPS, loop: true }),
-      right: clip('aim', [0], { note: 'standing weapon-ready pose, the only right-facing stand' }),
-      left: clip('aim', [0], { flipX: true, source: 'mirrored' }),
-    },
-    walk: {
-      left: clip('walk', [0, 1, 2, 3], { fps: WALK_FPS, loop: true }),
-      right: clip('walk', [0, 1, 2, 3], { fps: WALK_FPS, loop: true, flipX: true, source: 'mirrored' }),
-      down: clip('idle', [0, 1], {
-        fps: IDLE_FPS,
-        loop: true,
-        source: 'fallback',
-        note: 'no front-facing walk cycle exists; the front idle plays instead of mis-using the left-facing legs',
-      }),
-      up: clip('idle', [2, 3], {
-        fps: IDLE_FPS,
-        loop: true,
-        source: 'fallback',
-        note: 'no back-facing walk cycle exists; the back idle plays instead',
-      }),
-    },
-    aim: {
-      right: clip('aim', [0]),
-      left: clip('aim', [0], { flipX: true, source: 'mirrored' }),
-      down: clip('aim', [0], { source: 'fallback', note: 'no front-facing aim pose' }),
-      up: clip('aim', [0], { source: 'fallback', note: 'no back-facing aim pose' }),
-    },
-    fire: {
-      right: clip('fire', [3]),
-      left: clip('fire', [3], { flipX: true, source: 'mirrored' }),
-      down: clip('fire', [3], { source: 'fallback', note: 'no front-facing fire pose' }),
-      up: clip('fire', [3], { source: 'fallback', note: 'no back-facing fire pose' }),
-    },
-    hit: {
-      down: clip('hit', [0], { source: 'fallback' }),
-      up: clip('hit', [0], { source: 'fallback' }),
-      left: clip('hit', [0], { source: 'fallback' }),
-      right: clip('hit', [0], { source: 'fallback' }),
-    },
-  },
+export const DIR_DISTINCT_POSES: Record<DirRowName, number> = {
+  idle_down: 2,
+  idle_up: 2,
+  idle_side: 2,
+  walk_down: 6,
+  walk_up: 6,
+  walk_side: 6,
+  aim_side: 1,
+  aim_down: 1,
+  aim_up: 1,
+  fire_side: 3,
 };
+
+export function dirFrameIndex(row: number, column: number): number {
+  return row * DIR_COLUMNS + column;
+}
+
+/** Clip from a directional sheet, addressed by row name. Uses distinct slots only. */
+const dirClip =
+  (name: CharacterKey) =>
+  (rowName: DirRowName, opts: ClipOpts = {}): Clip => {
+    const loc = DIR_ROW_LOCATION[rowName];
+    const distinct = DIR_DISTINCT_POSES[rowName];
+    return {
+      sheet: textureKey.characterSheet(name, loc.sheet),
+      frames: Array.from({ length: distinct }, (_, c) => dirFrameIndex(loc.row, c)),
+      flipX: opts.flipX ?? false,
+      source: opts.source ?? 'authored',
+      fps: opts.fps ?? 1,
+      loop: opts.loop ?? false,
+      weapon: opts.weapon ?? 'none',
+      note: opts.note,
+    };
+  };
+
+/**
+ * tempest - Art Task 01 directional sheets.
+ *
+ * Verified against the delivered PNGs with tools/inspect-assets.py and the 7x
+ * contact sheet: both sheets are 144x160 with 30 frames, every frame's content
+ * ends on row 30 with row 31 transparent, heights are a constant 26px and
+ * widths constant per row, alpha is binary, and the held slots are
+ * byte-identical to slot 0. Down is front, up is back, every side row faces +X.
+ *
+ * WEAPON RULE: the aim and fire rows already contain the pistol, so the
+ * separate gun overlay is never drawn for Tempest. The idle and walk rows show
+ * the weapon lowered, and nothing is drawn over them. Exactly one pistol is
+ * therefore visible at any time, and never two.
+ */
+const TEMPEST: CharacterDef = (() => {
+  const c = dirClip('tempest');
+  return {
+    key: 'tempest',
+    verified: true,
+    observations: [
+      'Art Task 01 directional format: 144x160, 6 slots x 5 rows, 30 frames per sheet.',
+      'Verified: content bottom row 30 on all 60 frames, row 31 transparent, 0 partial-alpha pixels, 22-23 colour palette.',
+      'Distinct poses per row verified by byte comparison: idle 2, walk 6, aim 1, fire 3. Held slots are identical to slot 0 and are not animated.',
+      'Side rows face +X and are mirrored for left. Down is front, up is back; neither is ever mirrored.',
+      'Measured weapon barrel tip: side (+11, -13) from the feet anchor, down (0, -10), up (+3, -20).',
+      'No hit row exists in this format; the hit state falls back to idle and is unused by the player.',
+    ],
+    clips: {
+      idle: {
+        down: c('idle_down', { fps: IDLE_FPS, loop: true }),
+        up: c('idle_up', { fps: IDLE_FPS, loop: true }),
+        right: c('idle_side', { fps: IDLE_FPS, loop: true }),
+        left: c('idle_side', { fps: IDLE_FPS, loop: true, flipX: true, source: 'mirrored' }),
+      },
+      walk: {
+        down: c('walk_down', { fps: WALK_FPS, loop: true }),
+        up: c('walk_up', { fps: WALK_FPS, loop: true }),
+        right: c('walk_side', { fps: WALK_FPS, loop: true }),
+        left: c('walk_side', { fps: WALK_FPS, loop: true, flipX: true, source: 'mirrored' }),
+      },
+      aim: {
+        down: c('aim_down', { weapon: 'in-frame' }),
+        up: c('aim_up', { weapon: 'in-frame' }),
+        right: c('aim_side', { weapon: 'in-frame' }),
+        left: c('aim_side', { weapon: 'in-frame', flipX: true, source: 'mirrored' }),
+      },
+      fire: {
+        // No front or back firing row; the cardinal aim pose holds instead, and
+        // the shot direction is unaffected - see Player.updateAnimation.
+        down: c('aim_down', { weapon: 'in-frame', source: 'fallback', note: 'no fire_down row' }),
+        up: c('aim_up', { weapon: 'in-frame', source: 'fallback', note: 'no fire_up row' }),
+        right: c('fire_side', { fps: FIRE_FPS, weapon: 'in-frame' }),
+        left: c('fire_side', { fps: FIRE_FPS, weapon: 'in-frame', flipX: true, source: 'mirrored' }),
+      },
+      hit: {
+        down: c('idle_down', { source: 'fallback', note: 'no hit row in the directional format' }),
+        up: c('idle_up', { source: 'fallback' }),
+        right: c('idle_side', { source: 'fallback' }),
+        left: c('idle_side', { flipX: true, source: 'fallback' }),
+      },
+    },
+  };
+})();
+
+/**
+ * Measured barrel-tip offsets from Tempest's feet anchor, per facing, for
+ * placing the muzzle flash on the pistol drawn inside the frame. Taken from the
+ * rightmost weapon-metal pixel of aim_side/fire_side and the weapon pixels of
+ * aim_down/aim_up.
+ */
+export const TEMPEST_MUZZLE_OFFSET: Record<Facing, { x: number; y: number }> = {
+  right: { x: 11, y: -13 },
+  left: { x: -11, y: -13 },
+  down: { x: 0, y: -10 },
+  up: { x: 3, y: -20 },
+};
+
+// ------------------------------------------------------- pose-atlas sheets
 
 /**
  * lookout_guard - pixel-verified from
  * docs/diagnostics/transparency/lookout_guard_rows0-2_14x.png.
  * Its layout differs from tempest's: no back view, and the walk faces RIGHT.
  */
-const LOOKOUT: CharacterDef = {
+const LOOKOUT: CharacterDef = (() => {
+  const clip = atlasClip('lookout_guard');
+  return {
   key: 'lookout_guard',
   verified: true,
   observations: [
@@ -242,7 +353,8 @@ const LOOKOUT: CharacterDef = {
       right: clip('hit', [0], { source: 'fallback' }),
     },
   },
-};
+  } satisfies CharacterDef;
+})();
 
 /**
  * Conservative definition for a sheet whose frame facings have NOT been
@@ -251,6 +363,7 @@ const LOOKOUT: CharacterDef = {
  * other state. None of these characters is instantiated in Valcendre.
  */
 function unverified(key: CharacterKey): CharacterDef {
+  const clip = atlasClip(key);
   const still = (row: CharRow, column: number, note?: string): Record<Facing, Clip> => ({
     down: clip(row, [column], { source: 'fallback', note }),
     up: clip(row, [column], { source: 'fallback', note }),

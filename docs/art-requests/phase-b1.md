@@ -294,3 +294,36 @@ python3 -I tools/diagnostics.py map                       # composed level rende
 
 No third-party packages required — PNG decode and encode are done with `zlib`
 from the standard library, because Pillow is not available here.
+
+---
+
+## Task 02 status update
+
+Art Task 01 delivered Tempest's directional sheets, which closes **CHAR-001 for
+Tempest**. The entry stays open for the other six characters, which remain on
+the pose-atlas format.
+
+| Request | Status after Task 02 |
+| --- | --- |
+| CHAR-001 directional sheets | **Delivered for Tempest**; open for the other six |
+| CHAR-002 crouch row | Open — scheduled as Art Task 03 |
+| CHAR-003 `down` row baked background | Open for the six pose-atlas sheets; Tempest no longer loads its 4×6 sheet |
+| PROP-002 `weapon_overlay_pistol` | **Withdrawn** — the directional aim/fire rows contain the pistol, so the overlay was deleted rather than risk drawing two weapons |
+
+### CHAR-006 · Tempest aim coverage (new, P2)
+
+**Wanted:** `tempest_24x32_dir_c.png`, 144×160, rows `aim_diag_down`,
+`aim_diag_up`, `fire_down`, `fire_up`, `walk_side_aim`.
+
+Three gaps the Task 01 delivery leaves, none blocking:
+
+1. **No diagonal aim poses.** Mouse aiming is 8-direction and the shot angle is
+   exact, but the body quantises to four facings, so a 45° aim shows a cardinal
+   pose. The crosshair carries the true direction.
+2. **No `fire_down` / `fire_up`.** Firing toward or away from the camera holds
+   the cardinal aim pose rather than a recoil pose.
+3. **No aim-walk row.** Moving while armed plays the weapon-lowered walk cycle,
+   so the pistol is not visible while walking.
+
+All three fallbacks are marked `source: 'fallback'` in
+`src/art/CharacterDefinitions.ts`, and none of them affects hitscan.

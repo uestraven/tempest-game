@@ -95,13 +95,9 @@ export class Enemy {
     this.spawnPoint = { x: spawn.x, y: spawn.y };
     this.route = spawn.route.length > 0 ? spawn.route : [{ x: spawn.x, y: spawn.y }];
 
-    this.sheet = textureKey.character(this.def.sheet);
-    this.sprite = scene.physics.add.sprite(
-      spawn.x,
-      spawn.y,
-      this.sheet,
-      staticFrame(this.def.sheet, 'idle', 'down')
-    );
+    const idle = staticFrame(this.def.sheet, 'idle', 'down');
+    this.sheet = idle.sheet;
+    this.sprite = scene.physics.add.sprite(spawn.x, spawn.y, idle.sheet, idle.frame);
     this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(9);
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
@@ -645,7 +641,8 @@ export class Enemy {
     this.state = 'patrol';
     this.sprite.anims.stop();
     this.sprite.setFlipX(false);
-    this.sprite.setTexture(this.sheet, staticFrame(this.def.sheet, 'idle', 'down'));
+    const idle = staticFrame(this.def.sheet, 'idle', 'down');
+    this.sprite.setTexture(idle.sheet, idle.frame);
     this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(9);
     this.sprite.clearTint();

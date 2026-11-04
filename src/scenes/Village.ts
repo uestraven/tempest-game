@@ -934,7 +934,6 @@ export class Village extends Phaser.Scene {
   /** Simple painter's-algorithm y-sorting between characters. */
   private sortDepths(): void {
     this.player.sprite.setDepth(10 + this.player.y / 10000);
-    this.player.gun.setDepth(10.5 + this.player.y / 10000);
     for (const enemy of this.enemies)
       if (!enemy.dead) enemy.sprite.setDepth(10 + enemy.y / 10000);
   }

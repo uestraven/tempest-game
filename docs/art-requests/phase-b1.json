@@ -10,7 +10,8 @@
   "notes": [
     "Every figure here was measured from the shipped PNGs, not inferred from filenames or manifest.json.",
     "The engine agent has not modified any production artwork. Where a defect was worked around, the workaround is named in the matching entry so it can be removed once the art lands.",
-    "Priority: P0 blocks correct gameplay presentation, P1 is a visible defect with a working fallback, P2 is quality."
+    "Priority: P0 blocks correct gameplay presentation, P1 is a visible defect with a working fallback, P2 is quality.",
+    "Task 02 status fields were added to the entries the Art Task 01 delivery resolved."
   ],
   "requests": [
     {
@@ -27,17 +28,34 @@
         "public/assets/characters/suzanne_24x32_4x6.png"
       ],
       "desiredOutput": "public/assets/characters/<name>_24x32_dir.png",
-      "dimensions": { "frameWidth": 24, "frameHeight": 32, "sheetWidth": 144, "sheetHeight": 160 },
+      "dimensions": {
+        "frameWidth": 24,
+        "frameHeight": 32,
+        "sheetWidth": 144,
+        "sheetHeight": 160
+      },
       "layout": {
         "columns": 6,
         "rows": 5,
         "columnMeaning": "animation frame within the state",
-        "rowMeaning": ["idle_down", "idle_up", "idle_side", "walk_down", "walk_up"],
+        "rowMeaning": [
+          "idle_down",
+          "idle_up",
+          "idle_side",
+          "walk_down",
+          "walk_up"
+        ],
         "secondSheet": {
           "desiredOutput": "public/assets/characters/<name>_24x32_dir_b.png",
           "sheetWidth": 144,
           "sheetHeight": 160,
-          "rowMeaning": ["walk_side", "aim_side", "aim_down", "aim_up", "fire_side"]
+          "rowMeaning": [
+            "walk_side",
+            "aim_side",
+            "aim_down",
+            "aim_up",
+            "fire_side"
+          ]
         },
         "sideConvention": "All *_side rows face RIGHT (+x). The engine mirrors them for left. Do not supply a left-facing variant.",
         "unusedColumns": "Pad a shorter state by repeating its first frame; never leave a column empty."
@@ -63,7 +81,8 @@
         "Content bottom is frame row 30 on every frame.",
         "No partial alpha, no enclosed transparent holes, no baked background."
       ],
-      "engineFallbackInUse": "src/art/CharacterDefinitions.ts maps the existing partial directional art per character and mirrors only where a facing genuinely does not exist. Vertical walk falls back to the vertical idle, since no front or back walk cycle exists."
+      "engineFallbackInUse": "Tempest now uses the delivered directional pair and needs no fallback. The other six remain on the pose-atlas format with per-character measured facing and mirroring only where art is missing.",
+      "status": "DELIVERED for Tempest (Art Task 01); still open for the other six characters"
     },
     {
       "id": "CHAR-002-crouch-row",
@@ -71,15 +90,31 @@
       "category": "character",
       "existingSource": null,
       "desiredOutput": "public/assets/characters/<name>_24x32_crouch.png",
-      "dimensions": { "frameWidth": 24, "frameHeight": 32, "sheetWidth": 144, "sheetHeight": 96 },
+      "dimensions": {
+        "frameWidth": 24,
+        "frameHeight": 32,
+        "sheetWidth": 144,
+        "sheetHeight": 96
+      },
       "layout": {
         "columns": 6,
         "rows": 3,
-        "rowMeaning": ["crouch_idle_down", "crouch_idle_up", "crouch_move_side"],
+        "rowMeaning": [
+          "crouch_idle_down",
+          "crouch_idle_up",
+          "crouch_move_side"
+        ],
         "sideConvention": "faces RIGHT; the engine mirrors for left"
       },
-      "transparency": { "alpha": "binary only", "background": "fully transparent" },
-      "feetAnchor": { "x": 12, "y": 30, "rule": "same as CHAR-001" },
+      "transparency": {
+        "alpha": "binary only",
+        "background": "fully transparent"
+      },
+      "feetAnchor": {
+        "x": 12,
+        "y": 30,
+        "rule": "same as CHAR-001"
+      },
       "description": "Crouching poses for Tempest at minimum; the other six are desirable but not blocking.",
       "existingIssue": "There is no crouch artwork at all. Crouch is a core locked mechanic (66 px/s, 45 suspicion/s, 28/s in shadow), so the player currently cannot see whether they are crouched except from the HUD pip.",
       "acceptanceCriteria": [
@@ -87,7 +122,8 @@
         "Readable as crouching at 480x270 without zooming.",
         "Same transparency and anchor rules as CHAR-001."
       ],
-      "engineFallbackInUse": "Crouch keeps the standing art. Mechanics are unchanged; the cues are the HUD stance pip and the supplied eye/eye_hidden concealment icon. No squash or scale is applied, because that would break the pixel-art contract."
+      "engineFallbackInUse": "Crouch keeps the standing art. Mechanics are unchanged; the cues are the HUD stance pip and the supplied eye/eye_hidden concealment icon. No squash or scale is applied, because that would break the pixel-art contract.",
+      "status": "OPEN - scheduled as Art Task 03"
     },
     {
       "id": "CHAR-003-down-row-baked-background",
@@ -95,7 +131,10 @@
       "category": "character",
       "existingSource": "public/assets/characters/<name>_24x32_4x6.png row 5 (down)",
       "desiredOutput": "same path, corrected in place",
-      "dimensions": { "frameWidth": 24, "frameHeight": 32 },
+      "dimensions": {
+        "frameWidth": 24,
+        "frameHeight": 32
+      },
       "transparency": {
         "alpha": "binary only",
         "bakedBackground": "the dark region that is not the body must be transparent"
@@ -110,7 +149,8 @@
         "No opaque pixel outside the figure's silhouette.",
         "Every column of the row contains a complete, recognisable fallen figure."
       ],
-      "engineFallbackInUse": "Corpses now use the purpose-made props/shared/body_*.png instead of the sheet's down row. See src/actors/Enemy.ts applyCorpseSprite."
+      "engineFallbackInUse": "Corpses now use the purpose-made props/shared/body_*.png instead of the sheet's down row. See src/actors/Enemy.ts applyCorpseSprite.",
+      "status": "OPEN for the six pose-atlas sheets; Tempest no longer loads its 4x6 sheet"
     },
     {
       "id": "CHAR-004-matting-speckle",
@@ -118,7 +158,9 @@
       "category": "character",
       "existingSource": "public/assets/characters/*.png",
       "desiredOutput": "same paths, corrected in place",
-      "transparency": { "enclosedHoles": "none" },
+      "transparency": {
+        "enclosedHoles": "none"
+      },
       "description": "Small transparent holes fully enclosed by body or clothing pixels.",
       "existingIssue": "Measured enclosed-hole counts and largest hole, per sheet: lookout_guard 14 holes (largest 15px), enforcer 11 (largest 44px), tempest 9 (largest 14px), zealot_cultist 7 (largest 15px), barnabe 5 (largest 12px), suzanne 2, ascendant_cultist 1. The 44px hole in enforcer idle column 0 and the 22px hole in enforcer walk column 0 are large enough to see the ground through the character.",
       "measuredDetail": {
@@ -150,19 +192,48 @@
       "category": "environment",
       "existingSource": "public/assets/environments/<stage>_tiles_16x16.png tiles 8-17",
       "desiredOutput": "same path, corrected in place",
-      "dimensions": { "tileWidth": 16, "tileHeight": 16 },
+      "dimensions": {
+        "tileWidth": 16,
+        "tileHeight": 16
+      },
       "description": "Real directional wall edge and corner tiles.",
       "existingIssue": "The tileset names ten wall pieces (wall_solid, wall_variant, wall_top, wall_bottom, wall_left, wall_right, wall_corner_tl/tr/bl/br) but six of them are near-identical art: wall_solid, wall_variant, wall_left, wall_right, wall_corner_tl and wall_corner_tr are within a mean per-channel difference of 6/255 of each other. There is no directional information to build corners from, so a building outline cannot be drawn correctly.",
       "measuredDetail": {
         "distinctTiles": 28,
         "totalTiles": 48,
         "nearIdenticalGroups": [
-          ["floor_01", "floor_05"],
-          ["floor_02", "floor_03", "floor_04", "floor_07", "floor_08", "accent"],
-          ["wall_solid", "wall_variant", "wall_left", "wall_right", "wall_corner_tl", "wall_corner_tr"],
-          ["stairs_up", "stairs_down"],
-          ["ground_debris", "rubble"],
-          ["carpet", "carpet_edge"]
+          [
+            "floor_01",
+            "floor_05"
+          ],
+          [
+            "floor_02",
+            "floor_03",
+            "floor_04",
+            "floor_07",
+            "floor_08",
+            "accent"
+          ],
+          [
+            "wall_solid",
+            "wall_variant",
+            "wall_left",
+            "wall_right",
+            "wall_corner_tl",
+            "wall_corner_tr"
+          ],
+          [
+            "stairs_up",
+            "stairs_down"
+          ],
+          [
+            "ground_debris",
+            "rubble"
+          ],
+          [
+            "carpet",
+            "carpet_edge"
+          ]
         ]
       },
       "acceptanceCriteria": [
@@ -177,27 +248,80 @@
       "category": "environment",
       "existingSource": null,
       "desiredOutput": "public/assets/environments/valcendre_facades_16x16.png",
-      "dimensions": { "tileWidth": 16, "tileHeight": 16, "sheetWidth": 128, "sheetHeight": 128 },
+      "dimensions": {
+        "tileWidth": 16,
+        "tileHeight": 16,
+        "sheetWidth": 128,
+        "sheetHeight": 128
+      },
       "layout": {
         "columns": 8,
         "rows": 8,
         "tileList": [
-          "facade_plaster_a", "facade_plaster_b", "facade_limestone_a", "facade_limestone_b",
-          "facade_timber_a", "facade_timber_b", "facade_base_trim", "facade_cornice",
-          "window_shuttered_closed", "window_shuttered_open", "window_flowerbox", "window_dark",
-          "window_lit", "window_arched", "window_small", "window_boarded",
-          "door_wood_left", "door_wood_right", "door_arched", "door_shop_left",
-          "door_shop_right", "doorway_dark", "doorstep", "door_garage_wide",
-          "shopfront_awning_left", "shopfront_awning_mid", "shopfront_awning_right", "shopfront_sign_bakery",
-          "shopfront_sign_blank", "shopfront_window_left", "shopfront_window_right", "shopfront_crates",
-          "roof_tile_a", "roof_tile_b", "roof_ridge", "roof_eave_south",
-          "roof_eave_north", "roof_valley", "roof_hip_left", "roof_hip_right",
-          "roof_chimney", "roof_dormer", "roof_skylight", "roof_edge_gutter",
-          "transition_cobble_to_grass", "transition_cobble_to_dirt", "transition_grass_to_dirt", "transition_paving_edge",
-          "shadow_wall_south", "shadow_wall_east", "shadow_corner", "shadow_under_eave",
-          "trim_string_course", "trim_quoin", "trim_pilaster", "trim_plinth",
-          "sign_bracket", "lamp_bracket", "drainpipe", "cellar_hatch",
-          "indoor_floor_board", "indoor_floor_tile", "indoor_threshold", "indoor_wall_base"
+          "facade_plaster_a",
+          "facade_plaster_b",
+          "facade_limestone_a",
+          "facade_limestone_b",
+          "facade_timber_a",
+          "facade_timber_b",
+          "facade_base_trim",
+          "facade_cornice",
+          "window_shuttered_closed",
+          "window_shuttered_open",
+          "window_flowerbox",
+          "window_dark",
+          "window_lit",
+          "window_arched",
+          "window_small",
+          "window_boarded",
+          "door_wood_left",
+          "door_wood_right",
+          "door_arched",
+          "door_shop_left",
+          "door_shop_right",
+          "doorway_dark",
+          "doorstep",
+          "door_garage_wide",
+          "shopfront_awning_left",
+          "shopfront_awning_mid",
+          "shopfront_awning_right",
+          "shopfront_sign_bakery",
+          "shopfront_sign_blank",
+          "shopfront_window_left",
+          "shopfront_window_right",
+          "shopfront_crates",
+          "roof_tile_a",
+          "roof_tile_b",
+          "roof_ridge",
+          "roof_eave_south",
+          "roof_eave_north",
+          "roof_valley",
+          "roof_hip_left",
+          "roof_hip_right",
+          "roof_chimney",
+          "roof_dormer",
+          "roof_skylight",
+          "roof_edge_gutter",
+          "transition_cobble_to_grass",
+          "transition_cobble_to_dirt",
+          "transition_grass_to_dirt",
+          "transition_paving_edge",
+          "shadow_wall_south",
+          "shadow_wall_east",
+          "shadow_corner",
+          "shadow_under_eave",
+          "trim_string_course",
+          "trim_quoin",
+          "trim_pilaster",
+          "trim_plinth",
+          "sign_bracket",
+          "lamp_bracket",
+          "drainpipe",
+          "cellar_hatch",
+          "indoor_floor_board",
+          "indoor_floor_tile",
+          "indoor_threshold",
+          "indoor_wall_base"
         ]
       },
       "transparency": {
@@ -219,7 +343,10 @@
       "category": "environment",
       "existingSource": "public/assets/environments/<stage>_tiles_16x16.png tiles 0-7",
       "desiredOutput": "same path, corrected in place",
-      "dimensions": { "tileWidth": 16, "tileHeight": 16 },
+      "dimensions": {
+        "tileWidth": 16,
+        "tileHeight": 16
+      },
       "description": "Eight genuinely different ground tiles per stage, intended as subtle tiling variation.",
       "existingIssue": "floor_02, floor_03, floor_04, floor_07, floor_08 and accent are one tile repeated six times; floor_01 and floor_05 are a second. So a 'floor variant' changes nothing, and the only tiles that do differ (floor_inlay, checker) are framed decorative motifs that read as wallpaper when scattered.",
       "acceptanceCriteria": [
@@ -235,8 +362,17 @@
       "category": "environment",
       "existingSource": "public/assets/environments/<stage>_tiles_16x16.png tile 29 (deep_shadow)",
       "desiredOutput": "same path, extended",
-      "dimensions": { "tileWidth": 16, "tileHeight": 16 },
-      "tileList": ["shade_cobble", "shade_grass", "shade_paving", "shade_gravel", "shade_indoor"],
+      "dimensions": {
+        "tileWidth": 16,
+        "tileHeight": 16
+      },
+      "tileList": [
+        "shade_cobble",
+        "shade_grass",
+        "shade_paving",
+        "shade_gravel",
+        "shade_indoor"
+      ],
       "description": "Shaded versions of each ground surface, for authored concealment zones.",
       "existingIssue": "There is exactly one shadow tile, a flat dark grey. A concealment zone must be legible, so the generator replaces the surface with that tile - which means the garden lane, an authored shadow zone, cannot also read as grass. Greenery is currently drawn on top as a workaround.",
       "acceptanceCriteria": [
@@ -270,7 +406,10 @@
       "category": "prop",
       "existingSource": "public/assets/props/valcendre/village_cross_16x32.png",
       "desiredOutput": "public/assets/props/valcendre/village_cross_16x16.png",
-      "dimensions": { "width": 16, "height": 16 },
+      "dimensions": {
+        "width": 16,
+        "height": 16
+      },
       "description": "Re-export at its real size, or extend the art to fill the canvas.",
       "existingIssue": "The art occupies only rows 16-31 of a 16x32 canvas: the top 16 rows are entirely transparent, so it is a 16x16 sprite in a double-height file.",
       "acceptanceCriteria": [
@@ -286,21 +425,51 @@
       "desiredOutput": "public/assets/props/valcendre/",
       "description": "Artwork for the mission-critical objects that have none.",
       "items": [
-        { "name": "transport_van", "width": 64, "height": 32, "note": "Suzanne's transport: the level's central clue. Side-on, doors wrenched open." },
-        { "name": "medkit", "width": 16, "height": 16, "note": "Health pickup, readable on cobble and gravel." },
-        { "name": "ammo_box_pistol", "width": 16, "height": 16, "note": "Pistol ammunition pickup." },
-        { "name": "radio_set", "width": 16, "height": 16, "note": "The market distraction; should read as a period radio." },
-        { "name": "document_sheet", "width": 16, "height": 16, "note": "Transport log and torn hymn page." },
-        { "name": "weapon_overlay_pistol", "width": 12, "height": 12, "frames": 8, "note": "8-direction held-pistol overlay, one frame per octant. Currently the only directional art in the game." }
+        {
+          "name": "transport_van",
+          "width": 64,
+          "height": 32,
+          "note": "Suzanne's transport: the level's central clue. Side-on, doors wrenched open."
+        },
+        {
+          "name": "medkit",
+          "width": 16,
+          "height": 16,
+          "note": "Health pickup, readable on cobble and gravel."
+        },
+        {
+          "name": "ammo_box_pistol",
+          "width": 16,
+          "height": 16,
+          "note": "Pistol ammunition pickup."
+        },
+        {
+          "name": "radio_set",
+          "width": 16,
+          "height": 16,
+          "note": "The market distraction; should read as a period radio."
+        },
+        {
+          "name": "document_sheet",
+          "width": 16,
+          "height": 16,
+          "note": "Transport log and torn hymn page."
+        }
       ],
-      "transparency": { "alpha": "binary only", "background": "fully transparent" },
-      "feetAnchor": { "rule": "1px transparent padding below the ground-contact row, matching every other prop" },
+      "transparency": {
+        "alpha": "binary only",
+        "background": "fully transparent"
+      },
+      "feetAnchor": {
+        "rule": "1px transparent padding below the ground-contact row, matching every other prop"
+      },
       "existingIssue": "No artwork exists for any of these, so they are drawn by generated placeholders in src/art/textures.ts.",
       "acceptanceCriteria": [
         "Each reads at 480x270 against the surface it sits on.",
         "The van is exactly 64x32 so it covers its four-by-two cover tiles."
       ],
-      "engineFallbackInUse": "Generated placeholders. They are listed in src/art/textures.ts PLACEHOLDER_KEYS and are never shipped as production art."
+      "engineFallbackInUse": "Generated placeholders. They are listed in src/art/textures.ts PLACEHOLDER_KEYS and are never shipped as production art.",
+      "notes": "weapon_overlay_pistol was removed from this request in Task 02: Tempest's directional aim and fire rows contain the pistol, so the overlay was deleted rather than risk drawing two weapons. It would only return if an 8-direction overlay were needed, which CHAR-006 covers instead."
     },
     {
       "id": "UI-001-portrait-consistency",
@@ -308,8 +477,13 @@
       "category": "ui",
       "existingSource": "public/assets/characters/portraits/*.png",
       "desiredOutput": "same paths, re-exported",
-      "dimensions": { "width": 64, "height": 56 },
-      "transparency": { "alpha": "binary; background transparent" },
+      "dimensions": {
+        "width": 64,
+        "height": 56
+      },
+      "transparency": {
+        "alpha": "binary; background transparent"
+      },
       "description": "Uniformly sized portraits with transparent backgrounds.",
       "existingIssue": "Measured sizes vary per file (tempest 64x54, lookout_guard 64x52, enforcer 65x53, zealot_cultist 61x54, ascendant_cultist 62x54, barnabe 63x55, suzanne 65x54) and all seven are 100% opaque, so they cannot be composited into a panel without letterboxing.",
       "acceptanceCriteria": [
@@ -317,6 +491,53 @@
         "The head sits in the same place in each, so the dialogue panel does not jump."
       ],
       "engineFallbackInUse": "Drawn 1:1 and centred in a fixed 65x54 slot inside the dialogue panel, which absorbs the size differences."
+    },
+    {
+      "id": "CHAR-006-tempest-aim-coverage",
+      "priority": "P2",
+      "category": "character",
+      "existingSource": [
+        "public/assets/characters/tempest_24x32_dir.png",
+        "public/assets/characters/tempest_24x32_dir_b.png"
+      ],
+      "desiredOutput": "public/assets/characters/tempest_24x32_dir_c.png",
+      "dimensions": {
+        "frameWidth": 24,
+        "frameHeight": 32,
+        "sheetWidth": 144,
+        "sheetHeight": 160
+      },
+      "layout": {
+        "columns": 6,
+        "rows": 5,
+        "rowMeaning": [
+          "aim_diag_down",
+          "aim_diag_up",
+          "fire_down",
+          "fire_up",
+          "walk_side_aim"
+        ],
+        "sideConvention": "All diagonal and side rows face +X; the engine mirrors for left."
+      },
+      "transparency": {
+        "alpha": "binary only",
+        "background": "fully transparent",
+        "enclosedHoles": "none beyond the intentional between-leg voids"
+      },
+      "feetAnchor": {
+        "x": 12,
+        "y": 30,
+        "rule": "identical to the Task 01 sheets"
+      },
+      "description": "Fills the three aiming gaps the Task 01 delivery leaves.",
+      "existingIssue": "Three gaps, none blocking: (1) No diagonal aim poses. Mouse aiming is 8-direction and the shot angle is exact, but the body quantises to four facings, so a 45-degree aim shows a cardinal pose. (2) No fire_down or fire_up rows. Firing toward or away from the camera holds the cardinal aim pose instead of a recoil pose. (3) No aim-walk row. Moving while armed plays the weapon-lowered walk cycle, so the pistol is not visible while walking.",
+      "acceptanceCriteria": [
+        "aim_diag_down and aim_diag_up read as a 45-degree aim and mirror cleanly for the other side.",
+        "fire_down and fire_up match the existing fire_side recoil timing at 3 distinct poses.",
+        "walk_side_aim keeps the same six-phase leg timing as walk_side so the two can cross-fade.",
+        "Same palette, anchor and transparency rules as the Task 01 sheets."
+      ],
+      "engineFallbackInUse": "Body pose quantises to the nearest of four facings while this.aim keeps the exact mouse angle, so hitscan is unaffected. fire_down/fire_up fall back to aim_down/aim_up. Moving plays walk with the weapon lowered. All three fallbacks are marked source: fallback in src/art/CharacterDefinitions.ts."
     }
   ]
 }

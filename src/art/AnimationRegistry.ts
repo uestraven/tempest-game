@@ -51,8 +51,13 @@ export function registerAnimations(scene: Phaser.Scene): void {
   }
 }
 
+/**
+ * Frames carry their own texture key, so a character may span several sheets -
+ * Tempest's clips come from two. Mirroring is NOT baked in: the clip records
+ * whether its art needs flipping and the actor applies it, which keeps the flip
+ * relative to each clip's intrinsic facing.
+ */
 function registerCharacter(scene: Phaser.Scene, name: CharacterKey): void {
-  const key = textureKey.character(name);
   for (const state of CHAR_STATES) {
     for (const facing of FACINGS) {
       const animName = animKey(name, state, facing);
@@ -60,7 +65,7 @@ function registerCharacter(scene: Phaser.Scene, name: CharacterKey): void {
       const clip = CHARACTERS[name].clips[state][facing];
       scene.anims.create({
         key: animName,
-        frames: clip.frames.map((frame) => ({ key, frame })),
+        frames: clip.frames.map((frame) => ({ key: clip.sheet, frame })),
         frameRate: clip.fps,
         repeat: clip.loop ? -1 : 0,
       });
@@ -68,7 +73,15 @@ function registerCharacter(scene: Phaser.Scene, name: CharacterKey): void {
   }
 }
 
-/** First frame of a clip, for callers that set a frame instead of playing one. */
-export function staticFrame(name: CharacterKey, state: CharState, facing: Facing = 'down'): number {
-  return clipFor(name, state, facing).frames[0];
+/**
+ * Texture key and first frame of a clip, for callers that set a frame directly
+ * instead of playing an animation.
+ */
+export function staticFrame(
+  name: CharacterKey,
+  state: CharState,
+  facing: Facing = 'down'
+): { sheet: string; frame: number } {
+  const clip = clipFor(name, state, facing);
+  return { sheet: clip.sheet, frame: clip.frames[0] };
 }

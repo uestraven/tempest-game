@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import { AMMO_CAP, AMMO_FLOOR, MEDKIT_HEAL, PLAYER, SOUND_RADIUS } from '../core/constants';
 import { aimOrigin, bulletHitbox, drawnTorso, type Rect } from '../core/hitbox';
-import { GUN_KEY } from '../art/textures';
 import { textureKey } from '../art/AssetRegistry';
 import {
   CHAR_FEET_INSET,
@@ -9,10 +8,12 @@ import {
   CHAR_FRAME_WIDTH,
   CHAR_ORIGIN_X,
   CHAR_ORIGIN_Y,
+  TEMPEST_MUZZLE_OFFSET,
   animKey,
   clipFor,
   facingFromAngle,
   type CharState,
+  type Facing,
 } from '../art/CharacterDefinitions';
 import { staticFrame } from '../art/AnimationRegistry';
 import { WEAPONS, type WeaponId } from '../data/weapons';
@@ -44,12 +45,21 @@ export const NEUTRAL_INPUT: InputState = {
   interactPressed: false,
 };
 
-/** Tempest's production sprite sheet. */
-const PLAYER_SHEET = textureKey.character('tempest');
+/**
+ * Tempest's clips span two directional sheets, so the texture is taken from the
+ * clip rather than fixed here. This is the sheet the sprite is constructed with.
+ */
+const PLAYER_SHEET = textureKey.characterSheet('tempest', 'dir_a');
+
+/**
+ * How long the weapon stays raised after firing or holding the fire button.
+ * Without it the aim pose would drop between shots, flicking the drawn pistol
+ * in and out during a 0.36 s pistol cadence.
+ */
+const WEAPON_READY_TIME = 1.2;
 
 export class Player {
   readonly sprite: Phaser.Physics.Arcade.Sprite;
-  readonly gun: Phaser.GameObjects.Image;
 
   // Explicit annotation: PLAYER is `as const`, so inference would pin this to 100.
   hp: number = PLAYER.maxHp;
@@ -68,6 +78,10 @@ export class Player {
   private fireCooldown = 0;
   /** Seconds left on the recoil pose. Shorter than the pistol fire interval. */
   private fireFlash = 0;
+  /** Seconds the weapon stays raised; drives the aim pose. */
+  private weaponReady = 0;
+  /** Facing the animation resolved to this frame, for muzzle placement. */
+  private facing: Facing = 'down';
   private reloadTimer = 0;
   reloading = false;
   private invulnTimer = 0;
@@ -83,7 +97,12 @@ export class Player {
     y: number,
     private readonly hearing: Hearing
   ) {
-    this.sprite = scene.physics.add.sprite(x, y, PLAYER_SHEET, staticFrame('tempest', 'idle', 'down'));
+    this.sprite = scene.physics.add.sprite(
+      x,
+      y,
+      PLAYER_SHEET,
+      staticFrame('tempest', 'idle', 'down').frame
+    );
     this.sprite.setOrigin(CHAR_ORIGIN_X, CHAR_ORIGIN_Y);
     this.sprite.setDepth(10);
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
@@ -96,7 +115,6 @@ export class Player {
     );
     body.setCollideWorldBounds(true);
 
-    this.gun = scene.add.image(x, y, GUN_KEY, 0).setDepth(11);
   }
 
   get x(): number {
@@ -139,14 +157,15 @@ export class Player {
   }
 
   /**
-   * Where the muzzle flash is drawn: just beyond the weapon overlay along the
-   * aim, so the effect appears at the gun rather than at the player's feet.
+   * Where the muzzle flash is drawn: the barrel tip of the pistol drawn inside
+   * the current frame, measured from the delivered sheets rather than projected
+   * along the aim angle. Mirrored with the sprite for left-facing clips.
    */
   get muzzlePoint(): { x: number; y: number } {
-    const reach = 13;
+    const offset = TEMPEST_MUZZLE_OFFSET[this.facing];
     return {
-      x: Math.round(this.sprite.x + Math.cos(this.aim) * reach),
-      y: Math.round(this.sprite.y - (this.crouched ? 12 : 16) + Math.sin(this.aim) * reach),
+      x: Math.round(this.sprite.x + offset.x),
+      y: Math.round(this.sprite.y + offset.y),
     };
   }
 
@@ -174,12 +193,13 @@ export class Player {
 
     this.fireCooldown = Math.max(0, this.fireCooldown - dt);
     this.fireFlash = Math.max(0, this.fireFlash - dt);
+    this.weaponReady = Math.max(0, this.weaponReady - dt);
+    if (input.firing) this.weaponReady = WEAPON_READY_TIME;
     this.invulnTimer = Math.max(0, this.invulnTimer - dt);
     if (this.takedownTimer > 0) this.takedownTimer = Math.max(0, this.takedownTimer - dt);
 
     if (this.dead || this.takedownTimer > 0) {
       body.setVelocity(0, 0);
-      this.syncGun();
       return;
     }
 
@@ -207,7 +227,6 @@ export class Player {
 
     this.updateFootsteps(dt, move.length());
     this.updateAnimation(move.length());
-    this.syncGun();
   }
 
   private updateFootsteps(dt: number, speed: number): void {
@@ -235,23 +254,42 @@ export class Player {
   }
 
   /**
-   * Animation state machine over the sheet's measured directional art.
+   * Animation state machine over Tempest's directional sheets.
    *
-   * The sheet is only partly directional and inconsistently so (tempest has
-   * front and back idle views, a LEFT-facing walk and a RIGHT-facing aim), so
-   * the clip metadata carries each frame's intrinsic facing and whether it has
-   * to be mirrored. Flipping is applied from the clip, never guessed from the
-   * aim angle, which is what stops a left-facing walk cycle from being turned
-   * the wrong way round.
+   * Four body facings are chosen from the aim angle; `down` is the authored
+   * front view, `up` the authored back view, and the side rows are authored
+   * facing +X and mirrored for left. Front and back frames are NEVER mirrored,
+   * and front-facing art is never used to represent facing away.
    *
-   * Crouch has no artwork. The mechanic is untouched: speed, collision and the
-   * suspicion rate all still change. The visual cue is the HUD stance pip plus
-   * the concealment eye icon. Deliberately no squash or scale, and no reuse of
-   * an unrelated row.
+   * WEAPON RULE - exactly one pistol, ever:
+   *   aim and fire clips contain the pistol in the artwork, so no overlay is
+   *   drawn. Idle and walk clips show the weapon lowered, and nothing is drawn
+   *   over them. The separate gun-overlay sprite has been removed entirely, so
+   *   two pistols cannot be drawn simultaneously by construction.
+   *
+   * Eight-direction aiming is untouched: `this.aim` stays the exact mouse angle
+   * and drives hitscan. Only the body pose quantises to four facings, which is
+   * the closest the authored art can represent. The crosshair carries the
+   * precise direction. An eight-direction aim row is a future art request.
+   *
+   * Crouch has no artwork yet (Art Task 03). The mechanic is untouched - speed,
+   * collision and suspicion rates all still change - and the sprite is NOT
+   * squashed or scaled. The cues remain the HUD stance pip and the concealment
+   * eye icon.
    */
   private updateAnimation(speed: number): void {
     const facing = facingFromAngle(this.aim);
-    const state: CharState = this.fireFlash > 0 ? 'fire' : speed > 1 ? 'walk' : 'idle';
+    this.facing = facing;
+
+    const state: CharState =
+      this.fireFlash > 0
+        ? 'fire'
+        : speed > 1
+          ? 'walk'
+          : this.weaponReady > 0
+            ? 'aim'
+            : 'idle';
+
     const clip = clipFor('tempest', state, facing);
     const key = animKey('tempest', state, facing);
 
@@ -260,21 +298,9 @@ export class Player {
     else if (clip.loop && !this.sprite.anims.isPlaying) this.sprite.anims.play(key, true);
 
     if (state === 'walk' && clip.loop) {
-      // Frame rate tracks movement speed so the cycle does not skate.
-      this.sprite.anims.msPerFrame = this.sprinting ? 80 : this.crouched ? 170 : 110;
+      // Frame rate tracks movement speed so the six-phase cycle does not skate.
+      this.sprite.anims.msPerFrame = this.sprinting ? 80 : this.crouched ? 150 : 110;
     }
-  }
-
-  private syncGun(): void {
-    const octant = Math.round((this.aim < 0 ? this.aim + Math.PI * 2 : this.aim) / (Math.PI / 4)) % 8;
-    this.gun.setFrame(octant);
-    // Pixel-aligned: the overlay sits on an integer offset from the torso.
-    const reach = 7;
-    this.gun.setPosition(
-      Math.round(this.sprite.x + Math.cos(this.aim) * reach),
-      Math.round(this.sprite.y - (this.crouched ? 12 : 16) + Math.sin(this.aim) * reach)
-    );
-    this.gun.setVisible(!this.dead && this.takedownTimer <= 0);
   }
 
   // ------------------------------------------------------------------ weapons
@@ -295,6 +321,7 @@ export class Player {
     this.ammo[this.weapon].loaded -= 1;
     this.fireCooldown = this.weaponDef.fireInterval;
     this.fireFlash = 0.12;
+    this.weaponReady = WEAPON_READY_TIME;
     // Firing interrupts a reload in progress.
     this.cancelReload();
     return true;
@@ -381,7 +408,6 @@ export class Player {
       // Stop dead immediately: the scene stops stepping the player this frame.
       (this.sprite.body as Phaser.Physics.Arcade.Body).setVelocity(0, 0);
       this.sprite.anims.stop();
-      this.gun.setVisible(false);
     }
     return true;
   }
@@ -436,7 +462,6 @@ export class Player {
   }
 
   destroy(): void {
-    this.gun.destroy();
     this.sprite.destroy();
   }
 }

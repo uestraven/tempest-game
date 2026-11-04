@@ -30,7 +30,44 @@ export interface AssetEntry {
   frameCount?: number;
 }
 
-const CHAR_SHEET = { kind: 'spritesheet', width: 96, height: 192, frameWidth: 24, frameHeight: 32, frameCount: 24 } as const;
+/**
+ * Character sheet formats.
+ *
+ * `pose-atlas-4x6` is the original delivery: 96x192, 4 columns of pose
+ * variations by 6 action rows. Six characters still use it.
+ *
+ * `directional-6x5` is the Art Task 01 format: 144x160, 6 animation slots by 5
+ * rows, where each row is one action in one facing. Tempest uses two of these.
+ * Both formats coexist deliberately - the remaining six sheets are not migrated.
+ */
+export type SheetFormat = 'pose-atlas-4x6' | 'directional-6x5';
+
+export interface CharacterSheetSpec {
+  /** Texture key. */
+  key: string;
+  path: string;
+  format: SheetFormat;
+  columns: number;
+  rows: number;
+  width: number;
+  height: number;
+}
+
+const POSE_ATLAS: Omit<CharacterSheetSpec, 'key' | 'path'> = {
+  format: 'pose-atlas-4x6',
+  columns: 4,
+  rows: 6,
+  width: 96,
+  height: 192,
+};
+
+const DIRECTIONAL: Omit<CharacterSheetSpec, 'key' | 'path'> = {
+  format: 'directional-6x5',
+  columns: 6,
+  rows: 5,
+  width: 144,
+  height: 160,
+};
 
 export const CHARACTER_KEYS = [
   'tempest',
@@ -51,7 +88,10 @@ export const PROP_AREAS = ['valcendre', 'estate', 'abbey', 'ascension', 'shared'
 export type PropArea = (typeof PROP_AREAS)[number];
 
 export const textureKey = {
+  /** Pose-atlas sheet for a character still on the original format. */
   character: (name: CharacterKey) => `char.${name}`,
+  /** One of a character's directional sheets. */
+  characterSheet: (name: CharacterKey, suffix: string) => `char.${name}.${suffix}`,
   portrait: (name: CharacterKey) => `portrait.${name}`,
   tileset: (stage: StageKey) => `tiles.${stage}`,
   prop: (area: PropArea, name: string) => `prop.${area}.${name}`,
@@ -59,12 +99,63 @@ export const textureKey = {
   ui: (name: string) => `ui.${name}`,
 };
 
-/** Character sheets: 96x192, 4 columns x 6 rows of 24x32. */
-const CHARACTERS: AssetEntry[] = CHARACTER_KEYS.map((name) => ({
-  key: textureKey.character(name),
-  path: `assets/characters/${name}_24x32_4x6.png`,
-  ...CHAR_SHEET,
-}));
+function poseAtlas(name: CharacterKey): CharacterSheetSpec {
+  return {
+    key: textureKey.character(name),
+    path: `assets/characters/${name}_24x32_4x6.png`,
+    ...POSE_ATLAS,
+  };
+}
+
+/**
+ * Which sheets each character loads.
+ *
+ * Tempest's original `tempest_24x32_4x6.png` is deliberately NOT registered: it
+ * is superseded by the Art Task 01 directional pair. The file is left on disk
+ * untouched - the engine agent never deletes production artwork - it is simply
+ * no longer loaded. The other six characters keep the 4x6 contract unchanged.
+ */
+export const CHARACTER_SHEETS: Record<CharacterKey, CharacterSheetSpec[]> = {
+  tempest: [
+    {
+      key: textureKey.characterSheet('tempest', 'dir_a'),
+      path: 'assets/characters/tempest_24x32_dir.png',
+      ...DIRECTIONAL,
+    },
+    {
+      key: textureKey.characterSheet('tempest', 'dir_b'),
+      path: 'assets/characters/tempest_24x32_dir_b.png',
+      ...DIRECTIONAL,
+    },
+  ],
+  lookout_guard: [poseAtlas('lookout_guard')],
+  enforcer: [poseAtlas('enforcer')],
+  zealot_cultist: [poseAtlas('zealot_cultist')],
+  ascendant_cultist: [poseAtlas('ascendant_cultist')],
+  barnabe: [poseAtlas('barnabe')],
+  suzanne: [poseAtlas('suzanne')],
+};
+
+export function sheetsFor(name: CharacterKey): CharacterSheetSpec[] {
+  return CHARACTER_SHEETS[name];
+}
+
+export function sheetFormat(name: CharacterKey): SheetFormat {
+  return CHARACTER_SHEETS[name][0].format;
+}
+
+const CHARACTERS: AssetEntry[] = CHARACTER_KEYS.flatMap((name) =>
+  CHARACTER_SHEETS[name].map((sheet) => ({
+    key: sheet.key,
+    path: sheet.path,
+    kind: 'spritesheet' as const,
+    width: sheet.width,
+    height: sheet.height,
+    frameWidth: 24,
+    frameHeight: 32,
+    frameCount: sheet.columns * sheet.rows,
+  }))
+);
 
 /**
  * Portraits. Dimensions are irregular per file (61x54 to 65x53) and fully

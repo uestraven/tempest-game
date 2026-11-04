@@ -480,3 +480,148 @@ production sprite's alpha, tint, depth or blend mode.
 | Grey / red ray | Last 32 shot rays, red when the ray connected |
 
 Only on-screen tiles are drawn, so the overlay costs nothing off-camera.
+
+---
+
+# Task 02 — Tempest directional sheet integration
+
+## 14. What changed
+
+Tempest moved from the pose-atlas format to the two Art Task 01 directional
+sheets. Nothing else moved: the other six characters, the tilesets, props,
+level layout and gameplay mechanics are untouched.
+
+| File | Change |
+| --- | --- |
+| `src/art/AssetRegistry.ts` | Generalized `CharacterSheetSpec` / `CHARACTER_SHEETS`: a character may own several sheets in either format. Tempest registers the two 144×160 sheets; the other six keep one 96×192 sheet each |
+| `src/art/CharacterDefinitions.ts` | `Clip` gains `sheet` and `weapon`. Directional row table, distinct-pose table, `dirClip`, Tempest's definition, measured muzzle offsets. Legacy defs now build clips via `atlasClip(name)` |
+| `src/art/AnimationRegistry.ts` | Animation frames carry their own texture key, so a character can span sheets. `staticFrame` returns `{ sheet, frame }` |
+| `src/actors/Player.ts` | Directional state machine, weapon-ready timer, weapon rule, muzzle from the drawn barrel. **Gun overlay removed** |
+| `src/actors/Enemy.ts` | Uses the new `staticFrame` shape; otherwise unchanged |
+| `src/art/textures.ts` | `GUN_KEY` and the 8-direction overlay generator deleted |
+| `src/scenes/Village.ts` | Dropped the overlay depth-sort line |
+| `tests/tempest-directional.test.ts` | New: 30 assertions covering the whole task checklist |
+| `tests/assets.test.ts` | Format-aware; legacy expectations scoped to the six pose-atlas characters |
+
+The superseded `tempest_24x32_4x6.png` is **left on disk untouched** and simply
+no longer registered. The engine agent does not delete production artwork.
+
+## 15. Verification of the delivery
+
+Measured independently with `tools/inspect-assets.py`, not taken on trust:
+
+| Claim | Verified |
+| --- | --- |
+| Both sheets 144×160, 6×5 of 24×32, 30 frames | yes |
+| Content bottom on row 30, row 31 transparent, all 60 frames | yes |
+| Alpha binary (0 or 255 only) | yes — 0 partial-alpha pixels |
+| Palette within 24 colours | yes — 22 and 23 |
+| Heights constant 26px, widths constant per row | yes — so the figure cannot bob or pulse |
+| Distinct poses: idle 2, walk 6, aim 1, fire 3 | yes — by byte comparison; held slots are **identical** to slot 0 |
+| Down front, up back, all side rows +X | yes — 7× contact sheet |
+| Enclosed holes | 12 of 1–3px, the intentional between-leg voids the report declares |
+
+## 16. Animation mapping
+
+| Animation | Sheet | Row | Frames used | FPS | Loop |
+| --- | --- | --- | --- | --- | --- |
+| `idle_down` | A | 0 | 0, 1 | 3 | yes |
+| `idle_up` | A | 1 | 6, 7 | 3 | yes |
+| `idle_side` | A | 2 | 12, 13 | 3 | yes |
+| `walk_down` | A | 3 | 18–23 | 9 | yes |
+| `walk_up` | A | 4 | 24–29 | 9 | yes |
+| `walk_side` | B | 0 | 0–5 | 9 | yes |
+| `aim_side` | B | 1 | 6 | static | no |
+| `aim_down` | B | 2 | 12 | static | no |
+| `aim_up` | B | 3 | 18 | static | no |
+| `fire_side` | B | 4 | 24, 25, 26 | 18 | no |
+
+Only the distinct leading slots are animated. Animating all six slots of a
+two-pose idle row would hold the first pose for five frames out of six.
+
+Walk frame rate still tracks movement speed, as before: 80 ms/frame sprinting,
+110 walking, 150 crouching.
+
+State selection in `Player.updateAnimation`:
+
+```
+fireFlash > 0      -> fire   (0.12 s after each shot)
+moving             -> walk
+weaponReady > 0    -> aim    (1.2 s after firing or while the fire button is held)
+otherwise          -> idle
+```
+
+The 1.2 s weapon-ready window exists so the aim pose does not drop between
+shots at the pistol's 0.36 s cadence, which would flick the drawn pistol in and
+out.
+
+## 17. Directional aiming and the weapon rule
+
+**Facing.** Four body facings are selected from the exact aim angle by
+`facingFromAngle`. `down` is the authored front view, `up` the authored back
+view; the side rows are authored facing +X and mirrored for left. Front and back
+frames are never mirrored, and front-facing art is never used to represent
+facing away — both are asserted by tests.
+
+**Eight-direction aiming is unchanged.** `Player.aim` remains the exact mouse
+angle and is what drives hitscan, the aim origin and the tracer. Only the body
+pose quantises, to the nearest of the four authored facings:
+
+| Mouse angle | Body facing |
+| --- | --- |
+| 0° (right) | right |
+| 45°, 90° | down |
+| 135°, 180° | left |
+| 225°, 270° | up |
+| 315° | right |
+
+No hitscan mathematics were changed to compensate. A diagonal aim row is
+requested as **CHAR-006**.
+
+**Weapon rule — exactly one pistol, ever.** Each clip declares where its weapon
+comes from:
+
+| Clip | `weapon` | Rendering |
+| --- | --- | --- |
+| `aim_*`, `fire_*` | `in-frame` | the artwork contains the pistol; nothing is drawn over it |
+| `idle_*`, `walk_*` | `none` | the weapon is lowered in the pose; nothing is drawn |
+
+The separate 8-direction gun overlay was **deleted outright** —
+`GUN_KEY`, its generator, the `Player.gun` object and its depth-sort line are all
+gone. Two pistols therefore cannot be drawn simultaneously by construction, not
+merely by a visibility flag. A test asserts no clip ever requests `overlay`.
+
+**Muzzle flash** is placed on the barrel drawn inside the frame, using offsets
+measured from the delivered sheets rather than projected along the aim angle:
+
+| Facing | Offset from the feet anchor | Source |
+| --- | --- | --- |
+| right | (+11, −13) | rightmost weapon-metal pixel of `aim_side` / `fire_side`, frame (23, 17) |
+| left | (−11, −13) | mirror of the above |
+| down | (0, −10) | weapon pixels of `aim_down`, rows 20–26 |
+| up | (+3, −20) | weapon pixels of `aim_up`, rows 9–11 |
+
+The left offset is 1px inside the exact mirrored tip: flipping a 24-wide frame
+maps column *c* to 23−*c*, so an integer anchor at x=12 lands at x=11 when
+mirrored. 1px on a 16px flash at native resolution is not visible, and the
+symmetric relation is what the test pins.
+
+## 18. Gameplay alignment and crouch
+
+The delivered anchor (12, 30) with row 31 transparent is exactly the inset the
+engine already assumed, so **no world offset changed**: `CHAR_FEET_INSET` is
+still 1 and the sprite origin is still 31/32 vertically, an integer 31px. The
+movement collider, bullet hitbox, ground/aim origins, cover interaction,
+movement speeds and stealth detection rates are all untouched. Every delivered
+frame has a 26px silhouette ending on row 30 and no clip applies its own offset,
+so switching between idle, walk, aim and fire cannot make the feet jump.
+
+**Crouch** keeps the existing fallback: the standing art, unmodified. No squash,
+no scale, no distortion, and no reuse of an unrelated row. Crouch speed,
+detection rates, concealment and the HUD stance pip are unchanged. Art Task 03
+delivers the crouch row; Step 04 integrates it.
+
+**Backward compatibility.** The other six sheets, their metadata and their
+loaders are untouched, and a test asserts all six are still `pose-atlas-4x6`
+with 24 frames and clips pointing at their own single sheet. No save or
+serialisation format changed, so existing Valcendre checkpoints remain valid.

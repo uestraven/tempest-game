@@ -2,6 +2,10 @@
  * Generated placeholder art for the handful of gameplay objects the production
  * package does not cover.
  *
+ * The 8-direction gun overlay was removed in Task 02: Tempest's directional
+ * sheets carry the pistol inside the aim and fire frames, so an overlay would
+ * draw a second weapon. See Player.updateAnimation for the weapon rule.
+ *
  * Everything the package DOES provide - tiles, characters, props, FX, UI font,
  * panels, portraits - is loaded from disk via AssetRegistry/AssetLoader. What
  * remains here is drawn at true pixel size with no filtering, and is listed in
@@ -13,17 +17,12 @@
  *   prop_ammo     Pistol ammunition pickup.
  *   prop_radio    The market radio distraction.
  *   prop_doc      Transport log / torn hymn page.
- *   gun           8-direction weapon overlay. The ONLY directional art in the
- *                 game: the character sheets have no cardinal directions, so
- *                 this is what makes the player's facing legible.
  *   bullet        Enemy projectile.
  *   crosshair     Mouse crosshair.
  *   px            1x1 white pixel for bars and flat fills.
  */
 
 import Phaser from 'phaser';
-
-export const GUN_KEY = 'gun';
 
 const css = (hex: number, alpha = 1): string => {
   const r = (hex >> 16) & 0xff;
@@ -72,25 +71,6 @@ class PixelCanvas {
     this.tex.refresh();
     this.tex.setFilter(Phaser.Textures.FilterMode.NEAREST);
   }
-}
-
-/** 8-direction pixel-aligned weapon overlay, one 12x12 frame per octant. */
-function buildGunOverlay(scene: Phaser.Scene): void {
-  const size = 12;
-  const p = new PixelCanvas(scene, GUN_KEY, size * 8, size);
-  const steel = 0x2e323a;
-  const highlight = 0x565c68;
-  for (let i = 0; i < 8; i++) {
-    const a = (i / 8) * Math.PI * 2;
-    const cx = i * size + 6;
-    const cy = 6;
-    p.rect(cx - 1, cy - 1, 3, 3, steel);
-    for (let d = 1; d <= 5; d++) {
-      p.set(cx + Math.round(Math.cos(a) * d), cy + Math.round(Math.sin(a) * d), d >= 4 ? highlight : steel);
-    }
-  }
-  p.addFrames(size, size);
-  p.commit();
 }
 
 /**
@@ -179,14 +159,12 @@ export const PLACEHOLDER_KEYS = [
   'prop_ammo',
   'prop_radio',
   'prop_doc',
-  GUN_KEY,
   'bullet',
   'crosshair',
   'px',
 ] as const;
 
 export function buildPlaceholderArt(scene: Phaser.Scene): void {
-  buildGunOverlay(scene);
   buildVan(scene);
   buildPickupsAndProps(scene);
   buildCombatBits(scene);

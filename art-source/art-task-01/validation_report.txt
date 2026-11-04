@@ -1,0 +1,39 @@
+TEMPEST — ART PRODUCTION TASK 01
+Tempest directional replacement sheets
+
+Build: hand-placed pixels at native 24×32; no illustration downscaling.
+
+tempest_24x32_dir.png
+  Sheet size: 144×160; grid 6×5; cell 24×32
+  0 idle_down   : H=26–26 W=15–15  anchor y30  alpha binary
+  1 idle_up     : H=26–26 W=15–15  anchor y30  alpha binary
+  2 idle_side   : H=26–26 W=14–14  anchor y30  alpha binary
+  3 walk_down   : H=26–26 W=15–15  anchor y30  alpha binary
+  4 walk_up     : H=26–26 W=15–15  anchor y30  alpha binary
+
+tempest_24x32_dir_b.png
+  Sheet size: 144×160; grid 6×5; cell 24×32
+  0 walk_side   : H=26–26 W=14–14  anchor y30  alpha binary
+  1 aim_side    : H=26–26 W=18–18  anchor y30  alpha binary
+  2 aim_down    : H=26–26 W=15–15  anchor y30  alpha binary
+  3 aim_up      : H=26–26 W=15–15  anchor y30  alpha binary
+  4 fire_side   : H=26–26 W=17–18  anchor y30  alpha binary
+
+Opaque palette actually used: 23 colors; limit 24.
+Fixed root anchor: (12,30) in all frames; row 31 transparent.
+Direction contract: front for down, back for up, right-facing for all side rows.
+Original files: unchanged.
+Intentional narrow leg-separation voids identified: 29 frames; no interior hair/face/coat holes.
+No other characters, props, crouch, UI, or environments produced.
+
+PROGRAMMATIC VALIDATION: PASS
+ - Both files are RGBA PNG 144×160.
+ - 60 frames filled, every 24×32 at fixed grid origin.
+ - All sprites touch y=30; row y=31 entirely transparent.
+ - All alpha values are 0 or 255.
+ - No UNINTENDED transparent holes (4-neighbor flood fill; intentional between-leg gaps permitted).
+ - Height/width variation and horizontal bounding-box centroid tests passed.
+ - Entire shared opaque palette fits within 24 colors.
+ - Manual 7× contact review: down fronts, up backs, all side profiles face +X.
+ - Native pixel legibility: alternating pale limestone / dark garage backdrops checked; no baked background pixels.
+ - Remaining issues: none found in required format tests; in-engine animation timing still to be reviewed.

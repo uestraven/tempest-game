@@ -4,6 +4,7 @@ import {
   ASSETS,
   ASSETS_BY_KEY,
   CHARACTER_KEYS,
+  CHARACTER_SHEETS,
   MAP_FILES,
   PROP_AREAS,
   STAGE_KEYS,
@@ -74,10 +75,14 @@ describe('asset registry', () => {
     }
   });
 
-  it('registers all seven characters and their portraits', () => {
+  it('registers a sheet for all seven characters, and their portraits', () => {
     expect(CHARACTER_KEYS).toHaveLength(7);
     for (const name of CHARACTER_KEYS) {
-      expect(ASSETS_BY_KEY.has(textureKey.character(name))).toBe(true);
+      const sheets = CHARACTER_SHEETS[name];
+      expect(sheets.length, name).toBeGreaterThanOrEqual(1);
+      for (const sheet of sheets) {
+        expect(ASSETS_BY_KEY.has(sheet.key), sheet.key).toBe(true);
+      }
       expect(ASSETS_BY_KEY.has(textureKey.portrait(name))).toBe(true);
     }
   });
@@ -107,7 +112,9 @@ describe('character definitions against the package manifest', () => {
   const manifest = JSON.parse(readFileSync(artSource('manifest.json'), 'utf8'));
 
   it('matches the manifest layout: 4 columns x 6 rows of 24x32', () => {
-    for (const name of CHARACTER_KEYS) {
+    // Tempest moved to the Art Task 01 directional format and is covered by
+    // tests/tempest-directional.test.ts; the other six still use this manifest.
+    for (const name of CHARACTER_KEYS.filter((k) => k !== 'tempest')) {
       const entry = manifest.characters[name];
       expect(entry, name).toBeDefined();
       expect(entry.columns).toBe(CHAR_COLUMNS);
@@ -118,21 +125,21 @@ describe('character definitions against the package manifest', () => {
   });
 
   it('uses the manifest row order', () => {
-    const rows = manifest.characters.tempest.row_names;
+    const rows = manifest.characters.lookout_guard.row_names;
     expect(rows).toEqual(Object.keys(CHAR_ROW));
   });
 
-  it('keeps every clip frame inside the 24-frame sheet', () => {
+  it('keeps every clip frame inside its own sheet', () => {
     for (const def of Object.values(CHARACTERS)) {
       for (const state of CHAR_STATES) {
         for (const facing of FACINGS) {
           const clip = def.clips[state][facing];
           expect(clip.frames.length, `${def.key} ${state} ${facing}`).toBeGreaterThanOrEqual(1);
+          const entry = ASSETS_BY_KEY.get(clip.sheet);
+          expect(entry, `${def.key} ${state} ${facing} -> ${clip.sheet}`).toBeDefined();
           for (const frame of clip.frames) {
             expect(frame, `${def.key} ${state} ${facing}`).toBeGreaterThanOrEqual(0);
-            expect(frame, `${def.key} ${state} ${facing}`).toBeLessThan(
-              CHAR_COLUMNS * CHAR_ROWS
-            );
+            expect(frame, `${def.key} ${state} ${facing}`).toBeLessThan(entry!.frameCount!);
           }
         }
       }
@@ -158,34 +165,28 @@ describe('character definitions against the package manifest', () => {
     }
   });
 
-  it('never mixes tempest front and back views inside one clip', () => {
-    // Regression guard: the Phase B mapping picked idle columns [1, 2], which
-    // on tempest is one FRONT and one BACK frame, so the idle animation
-    // alternated between facing the camera and facing away.
-    const FRONT = [frameIndex('idle', 0), frameIndex('idle', 1)];
-    const BACK = [frameIndex('idle', 2), frameIndex('idle', 3)];
-    const down = clipFor('tempest', 'idle', 'down').frames;
-    const up = clipFor('tempest', 'idle', 'up').frames;
-    expect(down.every((f) => FRONT.includes(f))).toBe(true);
-    expect(up.every((f) => BACK.includes(f))).toBe(true);
-    for (const facing of FACINGS) {
-      const frames = clipFor('tempest', 'idle', facing).frames;
-      const hasFront = frames.some((f) => FRONT.includes(f));
-      const hasBack = frames.some((f) => BACK.includes(f));
-      expect(hasFront && hasBack, `tempest idle ${facing} mixes front and back`).toBe(false);
-    }
-  });
-
-  it('only mirrors or falls back where authored art is missing', () => {
-    // tempest's walk is drawn facing left, so the right-facing walk is the
-    // mirror and the left-facing one must NOT be flipped.
-    expect(clipFor('tempest', 'walk', 'left').flipX).toBe(false);
-    expect(clipFor('tempest', 'walk', 'left').source).toBe('authored');
-    expect(clipFor('tempest', 'walk', 'right').flipX).toBe(true);
-    // The lookout's walk is drawn facing right, so the mirroring is reversed.
+  it('mirrors relative to each sheet intrinsic facing, not the aim angle', () => {
+    // The lookout's pose-atlas walk is drawn facing right, so left is mirrored.
     expect(clipFor('lookout_guard', 'walk', 'right').flipX).toBe(false);
     expect(clipFor('lookout_guard', 'walk', 'right').source).toBe('authored');
     expect(clipFor('lookout_guard', 'walk', 'left').flipX).toBe(true);
+    // Tempest's directional side rows are also authored facing right.
+    // tests/tempest-directional.test.ts covers that sheet in full.
+    expect(clipFor('tempest', 'walk', 'right').flipX).toBe(false);
+    expect(clipFor('tempest', 'walk', 'left').flipX).toBe(true);
+  });
+
+  it('gives every clip a sheet that is actually registered', () => {
+    for (const def of Object.values(CHARACTERS)) {
+      for (const state of CHAR_STATES) {
+        for (const facing of FACINGS) {
+          expect(
+            ASSETS_BY_KEY.has(def.clips[state][facing].sheet),
+            `${def.key} ${state} ${facing}`
+          ).toBe(true);
+        }
+      }
+    }
   });
 
   it('documents a note on every non-authored clip of a verified character', () => {
@@ -204,7 +205,7 @@ describe('character definitions against the package manifest', () => {
     }
   });
 
-  it('verifies exactly the characters Valcendre instantiates', () => {
+  it('verifies the characters Valcendre instantiates', () => {
     expect(CHARACTERS.tempest.verified).toBe(true);
     expect(CHARACTERS.lookout_guard.verified).toBe(true);
   });

@@ -1,0 +1,916 @@
+{
+  "title": "TEMPEST \u2014 Tempest directional animation contract",
+  "version": "1.0",
+  "character": "Tempest",
+  "frame_size": {
+    "width": 24,
+    "height": 32
+  },
+  "sheet_size": {
+    "width": 144,
+    "height": 160
+  },
+  "grid": {
+    "columns": 6,
+    "rows": 5,
+    "origin": "top_left",
+    "order": "row_major",
+    "first_frame_index": 0
+  },
+  "feet_anchor": {
+    "x": 12,
+    "y": 30,
+    "coordinate_system": "per-frame, origin top-left"
+  },
+  "transparency": {
+    "mode": "RGBA",
+    "alpha_values": [
+      0,
+      255
+    ]
+  },
+  "palette": {
+    "opaque_color_count": 23,
+    "colors": {
+      "ink": "#24282B",
+      "ink2": "#393733",
+      "hair_dark": "#565B5C",
+      "hair_mid": "#8A9191",
+      "hair_light": "#C1C4B9",
+      "skin_dark": "#805D4C",
+      "skin_mid": "#B58B70",
+      "skin_light": "#D8B095",
+      "skin_shine": "#E4C7A6",
+      "coat_deep": "#493C34",
+      "coat_shadow": "#665340",
+      "coat_main": "#8D7355",
+      "coat_light": "#AC8F64",
+      "coat_edge": "#C3A375",
+      "collar": "#343E44",
+      "shirt": "#5B6465",
+      "pants_deep": "#27333D",
+      "pants_main": "#394B59",
+      "pants_light": "#576675",
+      "boot_dark": "#302C2A",
+      "boot_main": "#56463C",
+      "metal": "#727F80",
+      "metal_light": "#B5BDB3"
+    }
+  },
+  "directions": {
+    "down": "screen +Y, front visible",
+    "up": "screen -Y, back visible",
+    "side": "screen +X, right-facing; mirror horizontally for left"
+  },
+  "sheet_order": [
+    "tempest_24x32_dir.png",
+    "tempest_24x32_dir_b.png"
+  ],
+  "sheets": [
+    {
+      "file": "tempest_24x32_dir.png",
+      "dimensions": [
+        144,
+        160
+      ],
+      "rows": [
+        {
+          "row_index": 0,
+          "animation": "idle_down",
+          "action": "idle",
+          "facing": "down",
+          "facing_vector": [
+            0,
+            1
+          ],
+          "frame_order": [
+            {
+              "slot": 0,
+              "source_pose": 0,
+              "rect": [
+                0,
+                0,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 1,
+              "source_pose": 1,
+              "rect": [
+                24,
+                0,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 2,
+              "source_pose": 0,
+              "rect": [
+                48,
+                0,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 3,
+              "source_pose": 0,
+              "rect": [
+                72,
+                0,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 4,
+              "source_pose": 0,
+              "rect": [
+                96,
+                0,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 5,
+              "source_pose": 0,
+              "rect": [
+                120,
+                0,
+                24,
+                32
+              ]
+            }
+          ],
+          "animation_slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_pose_count": 2,
+          "notes": "Hold non-distinct slots as frame 0"
+        },
+        {
+          "row_index": 1,
+          "animation": "idle_up",
+          "action": "idle",
+          "facing": "up",
+          "facing_vector": [
+            0,
+            -1
+          ],
+          "frame_order": [
+            {
+              "slot": 0,
+              "source_pose": 0,
+              "rect": [
+                0,
+                32,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 1,
+              "source_pose": 1,
+              "rect": [
+                24,
+                32,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 2,
+              "source_pose": 0,
+              "rect": [
+                48,
+                32,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 3,
+              "source_pose": 0,
+              "rect": [
+                72,
+                32,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 4,
+              "source_pose": 0,
+              "rect": [
+                96,
+                32,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 5,
+              "source_pose": 0,
+              "rect": [
+                120,
+                32,
+                24,
+                32
+              ]
+            }
+          ],
+          "animation_slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_pose_count": 2,
+          "notes": "Hold non-distinct slots as frame 0"
+        },
+        {
+          "row_index": 2,
+          "animation": "idle_side",
+          "action": "idle",
+          "facing": "side",
+          "facing_vector": [
+            1,
+            0
+          ],
+          "frame_order": [
+            {
+              "slot": 0,
+              "source_pose": 0,
+              "rect": [
+                0,
+                64,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 1,
+              "source_pose": 1,
+              "rect": [
+                24,
+                64,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 2,
+              "source_pose": 0,
+              "rect": [
+                48,
+                64,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 3,
+              "source_pose": 0,
+              "rect": [
+                72,
+                64,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 4,
+              "source_pose": 0,
+              "rect": [
+                96,
+                64,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 5,
+              "source_pose": 0,
+              "rect": [
+                120,
+                64,
+                24,
+                32
+              ]
+            }
+          ],
+          "animation_slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_pose_count": 2,
+          "notes": "Hold non-distinct slots as frame 0"
+        },
+        {
+          "row_index": 3,
+          "animation": "walk_down",
+          "action": "walk",
+          "facing": "down",
+          "facing_vector": [
+            0,
+            1
+          ],
+          "frame_order": [
+            {
+              "slot": 0,
+              "source_pose": 0,
+              "rect": [
+                0,
+                96,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 1,
+              "source_pose": 1,
+              "rect": [
+                24,
+                96,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 2,
+              "source_pose": 2,
+              "rect": [
+                48,
+                96,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 3,
+              "source_pose": 3,
+              "rect": [
+                72,
+                96,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 4,
+              "source_pose": 4,
+              "rect": [
+                96,
+                96,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 5,
+              "source_pose": 5,
+              "rect": [
+                120,
+                96,
+                24,
+                32
+              ]
+            }
+          ],
+          "animation_slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_pose_count": 6,
+          "notes": "Six-phase loop"
+        },
+        {
+          "row_index": 4,
+          "animation": "walk_up",
+          "action": "walk",
+          "facing": "up",
+          "facing_vector": [
+            0,
+            -1
+          ],
+          "frame_order": [
+            {
+              "slot": 0,
+              "source_pose": 0,
+              "rect": [
+                0,
+                128,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 1,
+              "source_pose": 1,
+              "rect": [
+                24,
+                128,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 2,
+              "source_pose": 2,
+              "rect": [
+                48,
+                128,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 3,
+              "source_pose": 3,
+              "rect": [
+                72,
+                128,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 4,
+              "source_pose": 4,
+              "rect": [
+                96,
+                128,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 5,
+              "source_pose": 5,
+              "rect": [
+                120,
+                128,
+                24,
+                32
+              ]
+            }
+          ],
+          "animation_slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_pose_count": 6,
+          "notes": "Six-phase loop"
+        }
+      ]
+    },
+    {
+      "file": "tempest_24x32_dir_b.png",
+      "dimensions": [
+        144,
+        160
+      ],
+      "rows": [
+        {
+          "row_index": 0,
+          "animation": "walk_side",
+          "action": "walk",
+          "facing": "side",
+          "facing_vector": [
+            1,
+            0
+          ],
+          "frame_order": [
+            {
+              "slot": 0,
+              "source_pose": 0,
+              "rect": [
+                0,
+                0,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 1,
+              "source_pose": 1,
+              "rect": [
+                24,
+                0,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 2,
+              "source_pose": 2,
+              "rect": [
+                48,
+                0,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 3,
+              "source_pose": 3,
+              "rect": [
+                72,
+                0,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 4,
+              "source_pose": 4,
+              "rect": [
+                96,
+                0,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 5,
+              "source_pose": 5,
+              "rect": [
+                120,
+                0,
+                24,
+                32
+              ]
+            }
+          ],
+          "animation_slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_pose_count": 6,
+          "notes": "Six-phase loop"
+        },
+        {
+          "row_index": 1,
+          "animation": "aim_side",
+          "action": "aim",
+          "facing": "side",
+          "facing_vector": [
+            1,
+            0
+          ],
+          "frame_order": [
+            {
+              "slot": 0,
+              "source_pose": 0,
+              "rect": [
+                0,
+                32,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 1,
+              "source_pose": 0,
+              "rect": [
+                24,
+                32,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 2,
+              "source_pose": 0,
+              "rect": [
+                48,
+                32,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 3,
+              "source_pose": 0,
+              "rect": [
+                72,
+                32,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 4,
+              "source_pose": 0,
+              "rect": [
+                96,
+                32,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 5,
+              "source_pose": 0,
+              "rect": [
+                120,
+                32,
+                24,
+                32
+              ]
+            }
+          ],
+          "animation_slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_pose_count": 1,
+          "notes": "Hold non-distinct slots as frame 0"
+        },
+        {
+          "row_index": 2,
+          "animation": "aim_down",
+          "action": "aim",
+          "facing": "down",
+          "facing_vector": [
+            0,
+            1
+          ],
+          "frame_order": [
+            {
+              "slot": 0,
+              "source_pose": 0,
+              "rect": [
+                0,
+                64,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 1,
+              "source_pose": 0,
+              "rect": [
+                24,
+                64,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 2,
+              "source_pose": 0,
+              "rect": [
+                48,
+                64,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 3,
+              "source_pose": 0,
+              "rect": [
+                72,
+                64,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 4,
+              "source_pose": 0,
+              "rect": [
+                96,
+                64,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 5,
+              "source_pose": 0,
+              "rect": [
+                120,
+                64,
+                24,
+                32
+              ]
+            }
+          ],
+          "animation_slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_pose_count": 1,
+          "notes": "Hold non-distinct slots as frame 0"
+        },
+        {
+          "row_index": 3,
+          "animation": "aim_up",
+          "action": "aim",
+          "facing": "up",
+          "facing_vector": [
+            0,
+            -1
+          ],
+          "frame_order": [
+            {
+              "slot": 0,
+              "source_pose": 0,
+              "rect": [
+                0,
+                96,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 1,
+              "source_pose": 0,
+              "rect": [
+                24,
+                96,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 2,
+              "source_pose": 0,
+              "rect": [
+                48,
+                96,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 3,
+              "source_pose": 0,
+              "rect": [
+                72,
+                96,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 4,
+              "source_pose": 0,
+              "rect": [
+                96,
+                96,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 5,
+              "source_pose": 0,
+              "rect": [
+                120,
+                96,
+                24,
+                32
+              ]
+            }
+          ],
+          "animation_slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_pose_count": 1,
+          "notes": "Hold non-distinct slots as frame 0"
+        },
+        {
+          "row_index": 4,
+          "animation": "fire_side",
+          "action": "fire",
+          "facing": "side",
+          "facing_vector": [
+            1,
+            0
+          ],
+          "frame_order": [
+            {
+              "slot": 0,
+              "source_pose": 0,
+              "rect": [
+                0,
+                128,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 1,
+              "source_pose": 1,
+              "rect": [
+                24,
+                128,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 2,
+              "source_pose": 2,
+              "rect": [
+                48,
+                128,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 3,
+              "source_pose": 0,
+              "rect": [
+                72,
+                128,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 4,
+              "source_pose": 0,
+              "rect": [
+                96,
+                128,
+                24,
+                32
+              ]
+            },
+            {
+              "slot": 5,
+              "source_pose": 0,
+              "rect": [
+                120,
+                128,
+                24,
+                32
+              ]
+            }
+          ],
+          "animation_slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "distinct_pose_count": 3,
+          "notes": "Hold non-distinct slots as frame 0"
+        }
+      ]
+    }
+  ],
+  "implementation_notes": {
+    "weapon": "compact handgun; no muzzle flash baked into firing sprite",
+    "left_facing": "mirror the right-facing side frames around vertical frame axis",
+    "color_management": "exact 23-color non-transparent palette; no indexed dithering or antialiasing",
+    "draw_origin": "never offset individual frames; all sprites use the same 24x32 atlas grid",
+    "original_assets": "not modified"
+  }
+}
