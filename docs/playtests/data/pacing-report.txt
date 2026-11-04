@@ -1,0 +1,60 @@
+================ PLAYTHROUGH PACING ================
+
+checkpoint  [checkpoint]  complete=false  4/8 beats  game 35.9s  hp 52
+  time   traversal 0.0s 0% | observing 0.0s 0% | combat 0.0s 0% | dialogue 0.0s 0% | recovery 0.0s 0%
+  moved 0px  crouched 0.0s  in shadow 0.0s
+  combat shots 0 hits 0  kills 0  took 60 dmg over 5 hits  enemy shots 5  deaths 1
+  alerts shouts 1 rallies 0  checkpoints 0  pickups 0
+  beats  V1:-  V2:-  V3:-  V5:-  V4@16.5s  V6:-  V7:-  V8:-
+
+combat  [combat]  complete=false  3/8 beats  game 234.2s  hp 100
+  time   traversal 19.6s 8% | observing 39.0s 17% | combat 1.3s 1% | dialogue 172.7s 74% | recovery 0.0s 0%
+  moved 1811px  crouched 0.0s  in shadow 0.0s
+  combat shots 8 hits 8 (100%)  kills 4  took 0 dmg over 0 hits  enemy shots 117  deaths 0
+  alerts shouts 6 rallies 2  checkpoints 3  pickups 0
+  beats  V1@6.8s  V2@49.5s  V3@70.0s  V5:-  V4:-  V6:-  V7:-  V8:-
+
+garden-stealth  [stealth]  complete=false  0/8 beats  game 68.8s  hp 0
+  time   traversal 12.0s 18% | observing 46.5s 69% | combat 7.8s 11% | dialogue 0.0s 0% | recovery 1.2s 2%
+  moved 1013px  crouched 55.3s  in shadow 0.0s
+  combat shots 0 hits 0  kills 0  took 108 dmg over 9 hits  enemy shots 13  deaths 0
+  alerts shouts 12 rallies 4  checkpoints 0  pickups 0
+  beats  V1:-  V2:-  V3:-  V5:-  V4:-  V6:-  V7:-  V8:-
+
+main-stealth  [stealth]  complete=false  0/8 beats  game 25.3s  hp 0
+  time   traversal 7.2s 31% | observing 2.1s 9% | combat 14.1s 60% | dialogue 0.0s 0% | recovery 0.0s 0%
+  moved 754px  crouched 8.3s  in shadow 1.1s
+  combat shots 0 hits 0  kills 0  took 108 dmg over 9 hits  enemy shots 11  deaths 0
+  alerts shouts 5 rallies 1  checkpoints 0  pickups 0
+  beats  V1:-  V2:-  V3:-  V5:-  V4:-  V6:-  V7:-  V8:-
+
+sprint-0  [sprint]  complete=true  8/8 beats  game 53.7s  hp 52
+  time   traversal 34.1s 65% | observing 2.1s 4% | combat 7.9s 15% | dialogue 8.5s 16% | recovery 0.0s 0%
+  moved 3436px  crouched 0.0s  in shadow 0.0s
+  combat shots 0 hits 0  kills 1  took 48 dmg over 4 hits  enemy shots 9  deaths 0
+  alerts shouts 19 rallies 9  checkpoints 5  pickups 0
+  beats  V1@5.6s  V2@8.1s  V3@23.6s  V5@26.5s  V4@41.6s  V6@47.5s  V7@48.7s  V8@52.1s
+
+sprint-1  [sprint]  complete=true  8/8 beats  game 56.9s  hp 4
+  time   traversal 30.2s 59% | observing 1.0s 2% | combat 8.4s 16% | dialogue 11.9s 23% | recovery 0.0s 0%
+  moved 3495px  crouched 0.0s  in shadow 1.0s
+  combat shots 0 hits 0  kills 1  took 96 dmg over 8 hits  enemy shots 15  deaths 0
+  alerts shouts 17 rallies 5  checkpoints 5  pickups 0
+  beats  V1@9.8s  V2@12.3s  V3@24.7s  V5@31.6s  V4@44.8s  V6@50.8s  V7@52.0s  V8@55.4s
+
+sprint-2  [sprint]  complete=false  4/8 beats  game 49.4s  hp 0
+  time   traversal 15.5s 39% | observing 1.1s 3% | combat 9.3s 23% | dialogue 12.7s 32% | recovery 1.1s 3%
+  moved 2193px  crouched 0.0s  in shadow 0.0s
+  combat shots 0 hits 0  kills 0  took 108 dmg over 9 hits  enemy shots 20  deaths 0
+  alerts shouts 16 rallies 1  checkpoints 4  pickups 0
+  beats  V1@14.0s  V2@16.5s  V3@33.8s  V5@40.7s  V4:-  V6:-  V7:-  V8:-
+
+--- longest stretches with no meaningful decision ---
+  combat           39.0s idle, starting at t=10.8s
+  garden-stealth   46.5s idle, starting at t=8.0s
+  main-stealth     1.1s idle, starting at t=8.7s
+  sprint-0         1.1s idle, starting at t=39.4s
+  sprint-1         1.0s idle, starting at t=7.5s
+  sprint-2         1.1s idle, starting at t=11.7s
+
+wrote docs/playtests/data/pacing-summary.json
