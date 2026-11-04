@@ -1,0 +1,973 @@
+{
+ "map": {
+  "width": 104,
+  "height": 72,
+  "px": [
+   1664,
+   1152
+  ]
+ },
+ "visibleLayerOrder": [
+  "floor",
+  "decorBack",
+  "architecture",
+  "cover",
+  "decorFront"
+ ],
+ "tileNames": [
+  "floor_01",
+  "floor_02",
+  "floor_03",
+  "floor_04",
+  "floor_05",
+  "floor_06",
+  "floor_07",
+  "floor_08",
+  "wall_solid",
+  "wall_variant",
+  "wall_top",
+  "wall_bottom",
+  "wall_left",
+  "wall_right",
+  "wall_corner_tl",
+  "wall_corner_tr",
+  "wall_corner_bl",
+  "wall_corner_br",
+  "door_closed",
+  "door_open",
+  "threshold",
+  "window",
+  "stairs_up",
+  "stairs_down",
+  "trim",
+  "floor_inlay",
+  "floor_crack",
+  "ground_debris",
+  "floor_stain",
+  "deep_shadow",
+  "cover_low",
+  "cover_high",
+  "grass",
+  "hedge",
+  "flowerbed",
+  "roof",
+  "roof_edge",
+  "rubble",
+  "cobble",
+  "brick",
+  "checker",
+  "carpet",
+  "carpet_edge",
+  "metal",
+  "pillar",
+  "grate",
+  "accent",
+  "ritual_mark"
+ ],
+ "areas": {
+  "arrival alley": {
+   "walkableTiles": 120,
+   "layers": {
+    "floor": {
+     "cobble#38": 90,
+     "deep_shadow#29": 15,
+     "floor_crack#26": 7,
+     "floor_01#0": 5,
+     "floor_04#3": 3
+    }
+   },
+   "floorVariety": 5,
+   "floorTop": [
+    "cobble#38",
+    90
+   ],
+   "floorTopShare": 0.75
+  },
+  "market square": {
+   "walkableTiles": 528,
+   "layers": {
+    "floor": {
+     "floor_04#3": 398,
+     "deep_shadow#29": 95,
+     "floor_01#0": 35
+    },
+    "decorBack": {
+     "grass#32": 8,
+     "threshold#20": 4,
+     "checker#40": 4,
+     "flowerbed#34": 1
+    },
+    "cover": {
+     "cover_low#30": 24,
+     "pillar#44": 2
+    },
+    "architecture": {
+     "wall_top#10": 9,
+     "roof_edge#36": 7,
+     "wall_bottom#11": 7,
+     "wall_solid#8": 6,
+     "window#21": 2
+    }
+   },
+   "floorVariety": 3,
+   "floorTop": [
+    "floor_04#3",
+    398
+   ],
+   "floorTopShare": 0.754
+  },
+  "bakery + garden": {
+   "walkableTiles": 641,
+   "layers": {
+    "floor": {
+     "deep_shadow#29": 505,
+     "grass#32": 108,
+     "flowerbed#34": 24,
+     "cobble#38": 4
+    },
+    "decorBack": {
+     "grass#32": 31,
+     "hedge#33": 3,
+     "flowerbed#34": 2
+    }
+   },
+   "floorVariety": 4,
+   "floorTop": [
+    "deep_shadow#29",
+    505
+   ],
+   "floorTopShare": 0.788
+  },
+  "main street": {
+   "walkableTiles": 404,
+   "layers": {
+    "floor": {
+     "cobble#38": 323,
+     "deep_shadow#29": 36,
+     "floor_01#0": 19,
+     "floor_crack#26": 18,
+     "ground_debris#27": 8
+    },
+    "architecture": {
+     "roof_edge#36": 13,
+     "wall_solid#8": 12,
+     "wall_top#10": 5,
+     "wall_bottom#11": 3,
+     "roof#35": 2,
+     "window#21": 1
+    },
+    "cover": {
+     "cover_low#30": 12,
+     "cover_high#31": 8
+    }
+   },
+   "floorVariety": 5,
+   "floorTop": [
+    "cobble#38",
+    323
+   ],
+   "floorTopShare": 0.8
+  },
+  "depot courtyard": {
+   "walkableTiles": 693,
+   "layers": {
+    "floor": {
+     "ground_debris#27": 574,
+     "deep_shadow#29": 86,
+     "floor_crack#26": 33
+    },
+    "architecture": {
+     "wall_top#10": 19,
+     "wall_bottom#11": 16,
+     "roof_edge#36": 14,
+     "wall_solid#8": 12,
+     "window#21": 3
+    },
+    "cover": {
+     "cover_high#31": 16,
+     "cover_low#30": 11
+    },
+    "decorBack": {
+     "threshold#20": 2
+    }
+   },
+   "floorVariety": 3,
+   "floorTop": [
+    "ground_debris#27",
+    574
+   ],
+   "floorTopShare": 0.828
+  },
+  "depot office": {
+   "walkableTiles": 37,
+   "layers": {
+    "floor": {
+     "metal#43": 36,
+     "grate#45": 1
+    }
+   },
+   "floorVariety": 2,
+   "floorTop": [
+    "metal#43",
+    36
+   ],
+   "floorTopShare": 0.973
+  },
+  "garage interior": {
+   "walkableTiles": 354,
+   "layers": {
+    "floor": {
+     "metal#43": 286,
+     "deep_shadow#29": 42,
+     "grate#45": 26
+    },
+    "architecture": {
+     "wall_top#10": 6,
+     "wall_bottom#11": 6,
+     "wall_solid#8": 4,
+     "roof_edge#36": 2
+    },
+    "cover": {
+     "cover_high#31": 16
+    },
+    "decorBack": {
+     "floor_inlay#25": 2
+    }
+   },
+   "floorVariety": 3,
+   "floorTop": [
+    "metal#43",
+    286
+   ],
+   "floorTopShare": 0.808
+  },
+  "loading dock": {
+   "walkableTiles": 77,
+   "layers": {
+    "floor": {
+     "ground_debris#27": 44,
+     "deep_shadow#29": 30,
+     "metal#43": 3
+    },
+    "architecture": {
+     "wall_top#10": 2,
+     "wall_solid#8": 2,
+     "wall_bottom#11": 2
+    },
+    "cover": {
+     "cover_low#30": 3
+    }
+   },
+   "floorVariety": 3,
+   "floorTop": [
+    "ground_debris#27",
+    44
+   ],
+   "floorTopShare": 0.571
+  },
+  "north road": {
+   "walkableTiles": 30,
+   "layers": {
+    "floor": {
+     "cobble#38": 23,
+     "floor_crack#26": 4,
+     "ground_debris#27": 3
+    }
+   },
+   "floorVariety": 3,
+   "floorTop": [
+    "cobble#38",
+    23
+   ],
+   "floorTopShare": 0.767
+  }
+ },
+ "shadowByArea": {
+  "arrival alley": {
+   "shaded": 15,
+   "total": 120,
+   "share": 0.125
+  },
+  "market square": {
+   "shaded": 64,
+   "total": 528,
+   "share": 0.121
+  },
+  "bakery + garden": {
+   "shaded": 505,
+   "total": 641,
+   "share": 0.788
+  },
+  "main street": {
+   "shaded": 0,
+   "total": 404,
+   "share": 0
+  },
+  "depot courtyard": {
+   "shaded": 22,
+   "total": 693,
+   "share": 0.032
+  },
+  "depot office": {
+   "shaded": 0,
+   "total": 37,
+   "share": 0
+  },
+  "garage interior": {
+   "shaded": 24,
+   "total": 354,
+   "share": 0.068
+  },
+  "loading dock": {
+   "shaded": 24,
+   "total": 77,
+   "share": 0.312
+  },
+  "north road": {
+   "shaded": 0,
+   "total": 30,
+   "share": 0
+  }
+ },
+ "architecture": {
+  "outsideCorners": 78,
+  "cornersDrawnFlat": 78,
+  "cornerSamples": [
+   {
+    "tile": "29,5",
+    "drawn": "wall_bottom#11"
+   },
+   {
+    "tile": "59,5",
+    "drawn": "wall_bottom#11"
+   },
+   {
+    "tile": "65,5",
+    "drawn": "wall_bottom#11"
+   },
+   {
+    "tile": "12,7",
+    "drawn": "wall_top#10"
+   },
+   {
+    "tile": "25,7",
+    "drawn": "wall_top#10"
+   },
+   {
+    "tile": "85,9",
+    "drawn": "window#21"
+   },
+   {
+    "tile": "62,10",
+    "drawn": "wall_top#10"
+   },
+   {
+    "tile": "65,10",
+    "drawn": "wall_top#10"
+   },
+   {
+    "tile": "84,10",
+    "drawn": "wall_top#10"
+   },
+   {
+    "tile": "43,12",
+    "drawn": "wall_top#10"
+   },
+   {
+    "tile": "45,12",
+    "drawn": "wall_top#10"
+   },
+   {
+    "tile": "62,12",
+    "drawn": "wall_bottom#11"
+   }
+  ]
+ },
+ "disconnectedProps": [
+  {
+   "name": "prop_clothesline_26",
+   "type": "prop",
+   "x": 256,
+   "y": 352,
+   "w": 0,
+   "h": 0,
+   "tile": "16,22",
+   "props": {
+    "area": "valcendre",
+    "prop": "clothesline"
+   },
+   "solidTilesWithin2": 0
+  },
+  {
+   "name": "prop_clothesline_31",
+   "type": "prop",
+   "x": 640,
+   "y": 176,
+   "w": 0,
+   "h": 0,
+   "tile": "40,11",
+   "props": {
+    "area": "valcendre",
+    "prop": "clothesline"
+   },
+   "solidTilesWithin2": 0
+  }
+ ],
+ "market": {
+  "objects": [
+   {
+    "name": "wp_l1_0",
+    "type": "waypoint",
+    "x": 216,
+    "y": 872,
+    "w": 0,
+    "h": 0,
+    "tile": "13,54",
+    "props": {
+     "route": "l1",
+     "index": 0
+    }
+   },
+   {
+    "name": "wp_l1_1",
+    "type": "waypoint",
+    "x": 296,
+    "y": 856,
+    "w": 0,
+    "h": 0,
+    "tile": "18,53",
+    "props": {
+     "route": "l1",
+     "index": 1
+    }
+   },
+   {
+    "name": "wp_l2_0",
+    "type": "waypoint",
+    "x": 552,
+    "y": 776,
+    "w": 0,
+    "h": 0,
+    "tile": "34,48",
+    "props": {
+     "route": "l2",
+     "index": 0
+    }
+   },
+   {
+    "name": "wp_l2_1",
+    "type": "waypoint",
+    "x": 392,
+    "y": 808,
+    "w": 0,
+    "h": 0,
+    "tile": "24,50",
+    "props": {
+     "route": "l2",
+     "index": 1
+    }
+   },
+   {
+    "name": "wp_l2_2",
+    "type": "waypoint",
+    "x": 248,
+    "y": 776,
+    "w": 0,
+    "h": 0,
+    "tile": "15,48",
+    "props": {
+     "route": "l2",
+     "index": 2
+    }
+   },
+   {
+    "name": "wp_l2_3",
+    "type": "waypoint",
+    "x": 248,
+    "y": 664,
+    "w": 0,
+    "h": 0,
+    "tile": "15,41",
+    "props": {
+     "route": "l2",
+     "index": 3
+    }
+   },
+   {
+    "name": "wp_l2_4",
+    "type": "waypoint",
+    "x": 392,
+    "y": 648,
+    "w": 0,
+    "h": 0,
+    "tile": "24,40",
+    "props": {
+     "route": "l2",
+     "index": 4
+    }
+   },
+   {
+    "name": "wp_l2_5",
+    "type": "waypoint",
+    "x": 536,
+    "y": 712,
+    "w": 0,
+    "h": 0,
+    "tile": "33,44",
+    "props": {
+     "route": "l2",
+     "index": 5
+    }
+   },
+   {
+    "name": "wp_l3_0",
+    "type": "waypoint",
+    "x": 424,
+    "y": 552,
+    "w": 0,
+    "h": 0,
+    "tile": "26,34",
+    "props": {
+     "route": "l3",
+     "index": 0
+    }
+   },
+   {
+    "name": "wp_l3_1",
+    "type": "waypoint",
+    "x": 280,
+    "y": 520,
+    "w": 0,
+    "h": 0,
+    "tile": "17,32",
+    "props": {
+     "route": "l3",
+     "index": 1
+    }
+   },
+   {
+    "name": "enemy_l1",
+    "type": "enemy",
+    "x": 216,
+    "y": 872,
+    "w": 0,
+    "h": 0,
+    "tile": "13,54",
+    "props": {
+     "kind": "lookout",
+     "route": "l1",
+     "facing": 23
+    }
+   },
+   {
+    "name": "enemy_l2",
+    "type": "enemy",
+    "x": 552,
+    "y": 776,
+    "w": 0,
+    "h": 0,
+    "tile": "34,48",
+    "props": {
+     "kind": "lookout",
+     "route": "l2",
+     "facing": 315
+    }
+   },
+   {
+    "name": "enemy_l3",
+    "type": "enemy",
+    "x": 424,
+    "y": 552,
+    "w": 0,
+    "h": 0,
+    "tile": "26,34",
+    "props": {
+     "kind": "lookout",
+     "route": "l3",
+     "facing": 45
+    }
+   },
+   {
+    "name": "interact_radio",
+    "type": "interactable",
+    "x": 504,
+    "y": 552,
+    "w": 0,
+    "h": 0,
+    "tile": "31,34",
+    "props": {
+     "kind": "radio",
+     "prompt": "E - SWITCH ON RADIO",
+     "noise": 128,
+     "oneShot": true
+    }
+   },
+   {
+    "name": "item_medkit_market",
+    "type": "item",
+    "x": 168,
+    "y": 728,
+    "w": 0,
+    "h": 0,
+    "tile": "10,45",
+    "props": {
+     "kind": "medkit"
+    }
+   },
+   {
+    "name": "interact_tracks",
+    "type": "interactable",
+    "x": 392,
+    "y": 776,
+    "w": 0,
+    "h": 0,
+    "tile": "24,48",
+    "props": {
+     "kind": "tracks",
+     "prompt": "E - EXAMINE TRACKS",
+     "objective": "V1",
+     "glint": true
+    }
+   },
+   {
+    "name": "interact_stall",
+    "type": "interactable",
+    "x": 488,
+    "y": 760,
+    "w": 0,
+    "h": 0,
+    "tile": "30,47",
+    "props": {
+     "kind": "stall",
+     "prompt": "E - INVESTIGATE STALL",
+     "objective": "V1",
+     "glint": true
+    }
+   },
+   {
+    "name": "interact_waybill",
+    "type": "interactable",
+    "x": 488,
+    "y": 552,
+    "w": 0,
+    "h": 0,
+    "tile": "30,34",
+    "props": {
+     "kind": "waybill",
+     "prompt": "E - READ WAYBILL",
+     "objective": "V2",
+     "requires": "V1",
+     "glint": true
+    }
+   },
+   {
+    "name": "trigger_overheard",
+    "type": "trigger",
+    "x": 352,
+    "y": 512,
+    "w": 160,
+    "h": 96,
+    "tile": "22,32",
+    "props": {
+     "objective": "V2",
+     "requires": "V1",
+     "needsLivingGuardWithin": 220,
+     "dialogue": "village_overheard"
+    }
+   },
+   {
+    "name": "checkpoint_market",
+    "type": "checkpoint",
+    "x": 584,
+    "y": 776,
+    "w": 0,
+    "h": 0,
+    "tile": "36,48",
+    "props": {
+     "id": "cp_market"
+    }
+   },
+   {
+    "name": "prop_fountain_5",
+    "type": "prop",
+    "x": 384,
+    "y": 752,
+    "w": 0,
+    "h": 0,
+    "tile": "24,47",
+    "props": {
+     "area": "valcendre",
+     "prop": "fountain"
+    }
+   },
+   {
+    "name": "prop_hay_cart_6",
+    "type": "prop",
+    "x": 256,
+    "y": 816,
+    "w": 0,
+    "h": 0,
+    "tile": "16,51",
+    "props": {
+     "area": "valcendre",
+     "prop": "hay_cart"
+    }
+   },
+   {
+    "name": "prop_tree_7",
+    "type": "prop",
+    "x": 504,
+    "y": 672,
+    "w": 0,
+    "h": 0,
+    "tile": "31,42",
+    "props": {
+     "area": "valcendre",
+     "prop": "tree"
+    }
+   },
+   {
+    "name": "prop_tree_8",
+    "type": "prop",
+    "x": 328,
+    "y": 832,
+    "w": 0,
+    "h": 0,
+    "tile": "20,52",
+    "props": {
+     "area": "valcendre",
+     "prop": "tree"
+    }
+   },
+   {
+    "name": "prop_bench_9",
+    "type": "prop",
+    "x": 432,
+    "y": 784,
+    "w": 0,
+    "h": 0,
+    "tile": "27,49",
+    "props": {
+     "area": "valcendre",
+     "prop": "bench"
+    }
+   },
+   {
+    "name": "prop_bench_10",
+    "type": "prop",
+    "x": 304,
+    "y": 560,
+    "w": 0,
+    "h": 0,
+    "tile": "19,35",
+    "props": {
+     "area": "valcendre",
+     "prop": "bench"
+    }
+   },
+   {
+    "name": "prop_barrels_11",
+    "type": "prop",
+    "x": 544,
+    "y": 816,
+    "w": 0,
+    "h": 0,
+    "tile": "34,51",
+    "props": {
+     "area": "valcendre",
+     "prop": "barrels"
+    }
+   },
+   {
+    "name": "prop_flower_box_12",
+    "type": "prop",
+    "x": 464,
+    "y": 544,
+    "w": 0,
+    "h": 0,
+    "tile": "29,34",
+    "props": {
+     "area": "valcendre",
+     "prop": "flower_box"
+    }
+   },
+   {
+    "name": "prop_flower_pot_13",
+    "type": "prop",
+    "x": 392,
+    "y": 592,
+    "w": 0,
+    "h": 0,
+    "tile": "24,37",
+    "props": {
+     "area": "valcendre",
+     "prop": "flower_pot"
+    }
+   },
+   {
+    "name": "prop_lamppost_14",
+    "type": "prop",
+    "x": 360,
+    "y": 816,
+    "w": 0,
+    "h": 0,
+    "tile": "22,51",
+    "props": {
+     "area": "valcendre",
+     "prop": "lamppost"
+    }
+   },
+   {
+    "name": "prop_lamppost_15",
+    "type": "prop",
+    "x": 536,
+    "y": 736,
+    "w": 0,
+    "h": 0,
+    "tile": "33,46",
+    "props": {
+     "area": "valcendre",
+     "prop": "lamppost"
+    }
+   },
+   {
+    "name": "prop_clothesline_16",
+    "type": "prop",
+    "x": 288,
+    "y": 640,
+    "w": 0,
+    "h": 0,
+    "tile": "18,40",
+    "props": {
+     "area": "valcendre",
+     "prop": "clothesline"
+    }
+   },
+   {
+    "name": "prop_french_flag_17",
+    "type": "prop",
+    "x": 328,
+    "y": 544,
+    "w": 0,
+    "h": 0,
+    "tile": "20,34",
+    "props": {
+     "area": "valcendre",
+     "prop": "french_flag"
+    }
+   },
+   {
+    "name": "prop_village_cross_18",
+    "type": "prop",
+    "x": 184,
+    "y": 800,
+    "w": 0,
+    "h": 0,
+    "tile": "11,50",
+    "props": {
+     "area": "valcendre",
+     "prop": "village_cross"
+    }
+   },
+   {
+    "name": "prop_stone_cover_19",
+    "type": "prop",
+    "x": 496,
+    "y": 640,
+    "w": 0,
+    "h": 0,
+    "tile": "31,40",
+    "props": {
+     "area": "valcendre",
+     "prop": "stone_cover"
+    }
+   },
+   {
+    "name": "prop_tree_20",
+    "type": "prop",
+    "x": 136,
+    "y": 480,
+    "w": 0,
+    "h": 0,
+    "tile": "8,30",
+    "props": {
+     "area": "valcendre",
+     "prop": "tree"
+    }
+   },
+   {
+    "name": "prop_flower_box_22",
+    "type": "prop",
+    "x": 288,
+    "y": 480,
+    "w": 0,
+    "h": 0,
+    "tile": "18,30",
+    "props": {
+     "area": "valcendre",
+     "prop": "flower_box"
+    }
+   },
+   {
+    "name": "prop_tree_41",
+    "type": "prop",
+    "x": 712,
+    "y": 912,
+    "w": 0,
+    "h": 0,
+    "tile": "44,57",
+    "props": {
+     "area": "valcendre",
+     "prop": "tree"
+    }
+   }
+  ],
+  "coverLowCount": 24,
+  "coverHighCount": 2,
+  "coverLow": [
+   "16,36",
+   "17,36",
+   "18,36",
+   "19,36",
+   "20,36",
+   "21,36",
+   "25,36",
+   "26,36",
+   "27,36",
+   "28,36",
+   "29,36",
+   "30,36",
+   "22,42",
+   "23,42",
+   "24,42",
+   "25,42",
+   "14,46",
+   "15,46",
+   "16,46",
+   "29,49",
+   "30,49",
+   "31,49",
+   "32,49",
+   "33,49"
+  ],
+  "coverHigh": [
+   "12,42",
+   "12,46"
+  ],
+  "walkableTiles": 452
+ },
+ "objectCounts": {
+  "checkpoint": 4,
+  "decor": 1,
+  "door": 2,
+  "enemy": 7,
+  "exit": 1,
+  "interactable": 8,
+  "item": 4,
+  "prop": 61,
+  "spawn": 1,
+  "story": 1,
+  "trigger": 3,
+  "waypoint": 28
+ }
+}

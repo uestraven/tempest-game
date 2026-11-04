@@ -1,0 +1,133 @@
+{
+ "debugOverlayOff": true,
+ "shots": [
+  {
+   "file": "01-arrival-alley.png",
+   "area": "Arrival alley",
+   "kind": "staged camera capture",
+   "cameraTopLeftPx": {
+    "x": 0,
+    "y": 881
+   },
+   "visibleTiles": "0,55 to 30,71",
+   "playerTile": "10,63",
+   "guard": null,
+   "note": "The level opening. Narrow cobbled alley, east and west walls."
+  },
+  {
+   "file": "02-market-square.png",
+   "area": "Market square",
+   "kind": "staged camera capture",
+   "cameraTopLeftPx": {
+    "x": 152,
+    "y": 593
+   },
+   "visibleTiles": "9,37 to 39,54",
+   "playerTile": "22,47",
+   "guard": "enemy_l2",
+   "note": "Largest space. Tempest and a Lookout both in frame, with the fountain and market halls."
+  },
+  {
+   "file": "03-bakery-garden.png",
+   "area": "Bakery and garden route",
+   "kind": "staged camera capture",
+   "cameraTopLeftPx": {
+    "x": 0,
+    "y": 273
+   },
+   "visibleTiles": "0,17 to 30,33",
+   "playerTile": "13,26",
+   "guard": "enemy_l4",
+   "note": "The long stealth branch. Almost entirely authored shadow."
+  },
+  {
+   "file": "03b-garden-walk-shadow-corridor.png",
+   "area": "Garden wall walk (the shadowed corridor)",
+   "kind": "staged camera capture",
+   "cameraTopLeftPx": {
+    "x": 0,
+    "y": 65
+   },
+   "visibleTiles": "0,4 to 30,20",
+   "playerTile": "9,12",
+   "guard": null,
+   "note": "The authored stealth corridor. Floored with deep_shadow; this is the darkest space in the level."
+  },
+  {
+   "file": "03c-upper-lane.png",
+   "area": "Upper lane",
+   "kind": "staged camera capture",
+   "cameraTopLeftPx": {
+    "x": 88,
+    "y": 0
+   },
+   "visibleTiles": "5,0 to 35,16",
+   "playerTile": "20,5",
+   "guard": null,
+   "note": "The garden branch east leg, also deep_shadow floor, with serviceBrick elsewhere."
+  },
+  {
+   "file": "04-main-street.png",
+   "area": "Main street",
+   "kind": "staged camera capture",
+   "cameraTopLeftPx": {
+    "x": 728,
+    "y": 673
+   },
+   "visibleTiles": "45,42 to 75,58",
+   "playerTile": "60,50",
+   "guard": null,
+   "note": "The short route between market and depot. Dog-legged by two blocks."
+  },
+  {
+   "file": "05-depot-courtyard.png",
+   "area": "Depot courtyard",
+   "kind": "staged camera capture",
+   "cameraTopLeftPx": {
+    "x": 824,
+    "y": 401
+   },
+   "visibleTiles": "51,26 to 81,43",
+   "playerTile": "66,36",
+   "guard": "enemy_l6",
+   "note": "Largest open space, wider than one screen. Office block centre-left."
+  },
+  {
+   "file": "06-garage-exterior.png",
+   "area": "Garage exterior",
+   "kind": "staged camera capture",
+   "cameraTopLeftPx": {
+    "x": 1064,
+    "y": 225
+   },
+   "visibleTiles": "66,14 to 96,30",
+   "playerTile": "81,22",
+   "guard": null,
+   "note": "The courtyard apron and the garage door, seen from outside."
+  },
+  {
+   "file": "07-garage-interior.png",
+   "area": "Garage interior",
+   "kind": "staged camera capture",
+   "cameraTopLeftPx": {
+    "x": 920,
+    "y": 81
+   },
+   "visibleTiles": "57,5 to 87,21",
+   "playerTile": "72,14",
+   "guard": "enemy_l7",
+   "note": "Final story space: transport bay, cultist, BELIAL wall."
+  },
+  {
+   "file": "00-map-overview.png",
+   "area": "Whole level",
+   "kind": "staged camera capture, canvas resized to 1664x1152 at zoom 1",
+   "cameraTopLeftPx": {
+    "x": 0,
+    "y": 0
+   },
+   "visibleTiles": "0,0 to 103,71",
+   "note": "The entire level in one engine render, actors removed. HUD is drawn at screen scale so it appears small."
+  }
+ ]
+}

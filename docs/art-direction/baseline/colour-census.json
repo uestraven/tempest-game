@@ -1,0 +1,522 @@
+[
+ {
+  "file": "public/assets/props/ascension/altar_candles_16x16.png",
+  "w": 16,
+  "h": 16,
+  "opaque": 74,
+  "colors": 74,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/ascension/flame_brazier_16x24.png",
+  "w": 16,
+  "h": 24,
+  "opaque": 112,
+  "colors": 112,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/ascension/hanging_cage_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 111,
+  "colors": 111,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/shared/body_civilian_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 166,
+  "colors": 166,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/shared/body_guard_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 116,
+  "colors": 116,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/abbey/broken_column_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 128,
+  "colors": 128,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/abbey/candles_16x16.png",
+  "w": 16,
+  "h": 16,
+  "opaque": 44,
+  "colors": 44,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/abbey/chandelier_16x24.png",
+  "w": 16,
+  "h": 24,
+  "opaque": 77,
+  "colors": 77,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/abbey/church_pew_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 230,
+  "colors": 230,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/abbey/lectern_16x24.png",
+  "w": 16,
+  "h": 24,
+  "opaque": 87,
+  "colors": 87,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/abbey/rubble_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 167,
+  "colors": 167,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/valcendre/barrels_32x24.png",
+  "w": 32,
+  "h": 24,
+  "opaque": 233,
+  "colors": 233,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/valcendre/flower_pot_16x16.png",
+  "w": 16,
+  "h": 16,
+  "opaque": 76,
+  "colors": 76,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/valcendre/french_flag_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 159,
+  "colors": 159,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/valcendre/hay_cart_32x24.png",
+  "w": 32,
+  "h": 24,
+  "opaque": 354,
+  "colors": 354,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/valcendre/lamppost_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 90,
+  "colors": 90,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/valcendre/stone_cover_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 105,
+  "colors": 105,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/valcendre/village_cross_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 101,
+  "colors": 101,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/estate/banner_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 127,
+  "colors": 127,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/estate/candelabra_16x24.png",
+  "w": 16,
+  "h": 24,
+  "opaque": 192,
+  "colors": 192,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/estate/hedge_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 167,
+  "colors": 167,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/estate/topiary_32x32.png",
+  "w": 32,
+  "h": 32,
+  "opaque": 489,
+  "colors": 489,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/estate/wooden_crates_32x24.png",
+  "w": 32,
+  "h": 24,
+  "opaque": 208,
+  "colors": 208,
+  "colorsPerKpx": 1000.0
+ },
+ {
+  "file": "public/assets/props/valcendre/fountain_32x32.png",
+  "w": 32,
+  "h": 32,
+  "opaque": 451,
+  "colors": 450,
+  "colorsPerKpx": 997.8
+ },
+ {
+  "file": "public/assets/props/abbey/skulls_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 274,
+  "colors": 273,
+  "colorsPerKpx": 996.4
+ },
+ {
+  "file": "public/assets/props/valcendre/flower_box_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 255,
+  "colors": 254,
+  "colorsPerKpx": 996.1
+ },
+ {
+  "file": "public/assets/props/abbey/collapsed_pillar_32x24.png",
+  "w": 32,
+  "h": 24,
+  "opaque": 238,
+  "colors": 237,
+  "colorsPerKpx": 995.8
+ },
+ {
+  "file": "public/assets/props/estate/lantern_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 238,
+  "colors": 237,
+  "colorsPerKpx": 995.8
+ },
+ {
+  "file": "public/assets/props/abbey/banner_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 209,
+  "colors": 208,
+  "colorsPerKpx": 995.2
+ },
+ {
+  "file": "public/assets/props/estate/statue_32x32.png",
+  "w": 32,
+  "h": 32,
+  "opaque": 378,
+  "colors": 376,
+  "colorsPerKpx": 994.7
+ },
+ {
+  "file": "public/assets/props/ascension/stone_steps_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 184,
+  "colors": 183,
+  "colorsPerKpx": 994.6
+ },
+ {
+  "file": "public/assets/props/estate/iron_gate_32x32.png",
+  "w": 32,
+  "h": 32,
+  "opaque": 354,
+  "colors": 352,
+  "colorsPerKpx": 994.4
+ },
+ {
+  "file": "public/assets/props/abbey/broken_wall_32x32.png",
+  "w": 32,
+  "h": 32,
+  "opaque": 525,
+  "colors": 522,
+  "colorsPerKpx": 994.3
+ },
+ {
+  "file": "public/assets/props/shared/body_cultist_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 173,
+  "colors": 172,
+  "colorsPerKpx": 994.2
+ },
+ {
+  "file": "public/assets/props/ascension/ritual_banner_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 148,
+  "colors": 147,
+  "colorsPerKpx": 993.2
+ },
+ {
+  "file": "public/assets/props/ascension/black_column_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 140,
+  "colors": 139,
+  "colorsPerKpx": 992.9
+ },
+ {
+  "file": "public/assets/props/valcendre/bench_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 218,
+  "colors": 216,
+  "colorsPerKpx": 990.8
+ },
+ {
+  "file": "public/assets/props/ascension/skull_heap_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 204,
+  "colors": 202,
+  "colorsPerKpx": 990.2
+ },
+ {
+  "file": "public/assets/props/abbey/stone_sarcophagus_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 291,
+  "colors": 288,
+  "colorsPerKpx": 989.7
+ },
+ {
+  "file": "public/assets/props/ascension/black_pillar_16x32.png",
+  "w": 16,
+  "h": 32,
+  "opaque": 177,
+  "colors": 175,
+  "colorsPerKpx": 988.7
+ },
+ {
+  "file": "public/assets/props/estate/wardrobe_cover_32x32.png",
+  "w": 32,
+  "h": 32,
+  "opaque": 487,
+  "colors": 481,
+  "colorsPerKpx": 987.7
+ },
+ {
+  "file": "public/assets/props/estate/covered_table_32x24.png",
+  "w": 32,
+  "h": 24,
+  "opaque": 291,
+  "colors": 287,
+  "colorsPerKpx": 986.3
+ },
+ {
+  "file": "public/assets/characters/ascendant_cultist_24x32_4x6.png",
+  "w": 96,
+  "h": 192,
+  "opaque": 6764,
+  "colors": 6631,
+  "colorsPerKpx": 980.3
+ },
+ {
+  "file": "public/assets/characters/lookout_guard_24x32_4x6.png",
+  "w": 96,
+  "h": 192,
+  "opaque": 5827,
+  "colors": 5639,
+  "colorsPerKpx": 967.7
+ },
+ {
+  "file": "public/assets/characters/tempest_24x32_4x6.png",
+  "w": 96,
+  "h": 192,
+  "opaque": 6871,
+  "colors": 6635,
+  "colorsPerKpx": 965.7
+ },
+ {
+  "file": "public/assets/characters/enforcer_24x32_4x6.png",
+  "w": 96,
+  "h": 192,
+  "opaque": 6039,
+  "colors": 5785,
+  "colorsPerKpx": 957.9
+ },
+ {
+  "file": "public/assets/characters/zealot_cultist_24x32_4x6.png",
+  "w": 96,
+  "h": 192,
+  "opaque": 6647,
+  "colors": 6006,
+  "colorsPerKpx": 903.6
+ },
+ {
+  "file": "public/assets/characters/barnabe_24x32_4x6.png",
+  "w": 96,
+  "h": 192,
+  "opaque": 6109,
+  "colors": 5507,
+  "colorsPerKpx": 901.5
+ },
+ {
+  "file": "public/assets/characters/suzanne_24x32_4x6.png",
+  "w": 96,
+  "h": 192,
+  "opaque": 7115,
+  "colors": 6306,
+  "colorsPerKpx": 886.3
+ },
+ {
+  "file": "public/assets/props/valcendre/clothesline_32x16.png",
+  "w": 32,
+  "h": 16,
+  "opaque": 433,
+  "colors": 366,
+  "colorsPerKpx": 845.3
+ },
+ {
+  "file": "public/assets/props/ascension/infernal_altar_32x24.png",
+  "w": 32,
+  "h": 24,
+  "opaque": 484,
+  "colors": 397,
+  "colorsPerKpx": 820.2
+ },
+ {
+  "file": "public/assets/characters/portraits/ascendant_cultist_portrait.png",
+  "w": 62,
+  "h": 54,
+  "opaque": 3348,
+  "colors": 2702,
+  "colorsPerKpx": 807.0
+ },
+ {
+  "file": "public/assets/props/valcendre/tree_32x32.png",
+  "w": 32,
+  "h": 32,
+  "opaque": 743,
+  "colors": 578,
+  "colorsPerKpx": 777.9
+ },
+ {
+  "file": "public/assets/characters/portraits/tempest_portrait.png",
+  "w": 64,
+  "h": 54,
+  "opaque": 3456,
+  "colors": 2610,
+  "colorsPerKpx": 755.2
+ },
+ {
+  "file": "public/assets/characters/portraits/enforcer_portrait.png",
+  "w": 65,
+  "h": 53,
+  "opaque": 3445,
+  "colors": 2519,
+  "colorsPerKpx": 731.2
+ },
+ {
+  "file": "public/assets/characters/portraits/barnabe_portrait.png",
+  "w": 63,
+  "h": 55,
+  "opaque": 3465,
+  "colors": 2447,
+  "colorsPerKpx": 706.2
+ },
+ {
+  "file": "public/assets/characters/portraits/zealot_cultist_portrait.png",
+  "w": 61,
+  "h": 54,
+  "opaque": 3294,
+  "colors": 2321,
+  "colorsPerKpx": 704.6
+ },
+ {
+  "file": "public/assets/characters/portraits/suzanne_portrait.png",
+  "w": 65,
+  "h": 54,
+  "opaque": 3510,
+  "colors": 2416,
+  "colorsPerKpx": 688.3
+ },
+ {
+  "file": "public/assets/characters/portraits/lookout_guard_portrait.png",
+  "w": 64,
+  "h": 52,
+  "opaque": 3328,
+  "colors": 2234,
+  "colorsPerKpx": 671.3
+ },
+ {
+  "file": "public/assets/characters/tempest_24x32_dir_b.png",
+  "w": 144,
+  "h": 160,
+  "opaque": 8190,
+  "colors": 23,
+  "colorsPerKpx": 2.8
+ },
+ {
+  "file": "public/assets/characters/tempest_24x32_dir.png",
+  "w": 144,
+  "h": 160,
+  "opaque": 8450,
+  "colors": 22,
+  "colorsPerKpx": 2.6
+ },
+ {
+  "file": "public/assets/environments/abbey_tiles_16x16.png",
+  "w": 128,
+  "h": 96,
+  "opaque": 12288,
+  "colors": 12,
+  "colorsPerKpx": 1.0
+ },
+ {
+  "file": "public/assets/environments/ascension_tiles_16x16.png",
+  "w": 128,
+  "h": 96,
+  "opaque": 12288,
+  "colors": 12,
+  "colorsPerKpx": 1.0
+ },
+ {
+  "file": "public/assets/environments/estate_tiles_16x16.png",
+  "w": 128,
+  "h": 96,
+  "opaque": 12288,
+  "colors": 12,
+  "colorsPerKpx": 1.0
+ },
+ {
+  "file": "public/assets/environments/valcendre_tiles_16x16.png",
+  "w": 128,
+  "h": 96,
+  "opaque": 12288,
+  "colors": 12,
+  "colorsPerKpx": 1.0
+ }
+]
