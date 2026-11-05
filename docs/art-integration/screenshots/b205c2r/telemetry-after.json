@@ -1,0 +1,1649 @@
+{
+ "label": "after",
+ "state": {
+  "artV2": true,
+  "debugHitboxes": false,
+  "report": {
+   "pavingTiles": 1094,
+   "buildings": [
+    {
+     "name": "market_hall_west",
+     "tiles": 16
+    },
+    {
+     "name": "market_hall_east",
+     "tiles": 15
+    }
+   ],
+   "fountainSwapped": true,
+   "stallDrawn": true,
+   "stallPieces": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldY": 752,
+     "depth": 10.0752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_rear",
+     "worldY": 752,
+     "depth": 10.07525
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_valance",
+     "worldY": 769,
+     "depth": 10.0792
+    },
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "valcendre_stall_base_counter",
+     "worldY": 778,
+     "depth": 10.0799
+    }
+   ],
+   "ground": {
+    "daylightTiles": 899,
+    "shadedInteriorTiles": 154,
+    "boundaryTiles": 41,
+    "overlayTiles": 0,
+    "overlaysDrawn": 0,
+    "layers": 5,
+    "materials": {
+     "dirt": 30,
+     "cobblestone": 1094,
+     "brick": 372,
+     "industrial": 373,
+     "gravel": 703,
+     "grass": 147
+    }
+   },
+   "skippedSurfaces": {
+    "dirt": 30,
+    "brick": 372,
+    "industrial": 373,
+    "gravel": 703,
+    "grass": 147
+   }
+  },
+  "mapProperties": [
+   {
+    "name": "level",
+    "type": "string",
+    "value": "village"
+   },
+   {
+    "name": "displayName",
+    "type": "string",
+    "value": "Valcendre"
+   },
+   {
+    "name": "stage",
+    "type": "string",
+    "value": "valcendre"
+   },
+   {
+    "name": "groundMaterialKinds",
+    "type": "string",
+    "value": "brick,cobblestone,dirt,grass,gravel,industrial"
+   }
+  ],
+  "totals": {
+   "collides": 4950,
+   "shadow": 652,
+   "blocksSight": 4870,
+   "lowCover": 80
+  },
+  "conceal": [
+   {
+    "tile": [
+     8,
+     7
+    ],
+    "shadow": true
+   },
+   {
+    "tile": [
+     8,
+     13
+    ],
+    "shadow": true
+   },
+   {
+    "tile": [
+     8,
+     21
+    ],
+    "shadow": true
+   },
+   {
+    "tile": [
+     9,
+     24
+    ],
+    "shadow": true
+   },
+   {
+    "tile": [
+     11,
+     45
+    ],
+    "shadow": true
+   },
+   {
+    "tile": [
+     24,
+     44
+    ],
+    "shadow": false
+   },
+   {
+    "tile": [
+     13,
+     45
+    ],
+    "shadow": false
+   },
+   {
+    "tile": [
+     18,
+     35
+    ],
+    "shadow": true
+   },
+   {
+    "tile": [
+     7,
+     60
+    ],
+    "shadow": true
+   },
+   {
+    "tile": [
+     30,
+     47
+    ],
+    "shadow": false
+   },
+   {
+    "tile": [
+     62,
+     3
+    ],
+    "shadow": false
+   }
+  ],
+  "enemies": [
+   {
+    "name": "enemy_l1",
+    "tile": [
+     13,
+     54
+    ]
+   },
+   {
+    "name": "enemy_l2",
+    "tile": [
+     34,
+     48
+    ]
+   },
+   {
+    "name": "enemy_l3",
+    "tile": [
+     26,
+     34
+    ]
+   },
+   {
+    "name": "enemy_l4",
+    "tile": [
+     20,
+     20
+    ]
+   },
+   {
+    "name": "enemy_l5",
+    "tile": [
+     78,
+     45
+    ]
+   },
+   {
+    "name": "enemy_l6",
+    "tile": [
+     56,
+     42
+    ]
+   },
+   {
+    "name": "enemy_l7",
+    "tile": [
+     69,
+     16
+    ]
+   }
+  ],
+  "patrolPoints": [
+   [
+    [
+     216,
+     872
+    ],
+    [
+     296,
+     856
+    ]
+   ],
+   [
+    [
+     552,
+     776
+    ],
+    [
+     392,
+     808
+    ],
+    [
+     248,
+     776
+    ],
+    [
+     248,
+     664
+    ],
+    [
+     392,
+     648
+    ],
+    [
+     536,
+     712
+    ]
+   ],
+   [
+    [
+     424,
+     552
+    ],
+    [
+     280,
+     520
+    ]
+   ],
+   [
+    [
+     328,
+     328
+    ],
+    [
+     200,
+     360
+    ],
+    [
+     200,
+     472
+    ],
+    [
+     280,
+     440
+    ]
+   ],
+   [
+    [
+     1256,
+     728
+    ],
+    [
+     1144,
+     664
+    ]
+   ],
+   [
+    [
+     904,
+     680
+    ],
+    [
+     984,
+     648
+    ],
+    [
+     1256,
+     648
+    ],
+    [
+     1352,
+     328
+    ],
+    [
+     1048,
+     376
+    ],
+    [
+     840,
+     440
+    ],
+    [
+     824,
+     584
+    ]
+   ],
+   [
+    [
+     1112,
+     264
+    ],
+    [
+     1224,
+     216
+    ],
+    [
+     1064,
+     152
+    ],
+    [
+     1400,
+     184
+    ],
+    [
+     1416,
+     280
+    ]
+   ]
+  ],
+  "doors": null,
+  "objects": {
+   "radio": [
+    31,
+    34
+   ],
+   "tracks": [
+    24,
+    48
+   ],
+   "stall": [
+    30,
+    47
+   ],
+   "waybill": [
+    30,
+    34
+   ],
+   "ledger": [
+    55,
+    33
+   ],
+   "van": [
+    69,
+    11
+   ],
+   "inscription": [
+    75,
+    10
+   ],
+   "hymn": [
+    12,
+    25
+   ]
+  }
+ },
+ "scrolls": {
+  "garden-walk-north": {
+   "scrollX": 0,
+   "scrollY": 0
+  },
+  "garden-walk-mid": {
+   "scrollX": 0,
+   "scrollY": 81
+  },
+  "garden-walk-grass-edge": {
+   "scrollX": 0,
+   "scrollY": 209
+  },
+  "north-road": {
+   "scrollX": 760,
+   "scrollY": 0
+  },
+  "market-arcade": {
+   "scrollX": 0,
+   "scrollY": 593
+  },
+  "market-stall": {
+   "scrollX": 264,
+   "scrollY": 657
+  }
+ },
+ "played": {
+  "enteredWalkway": true,
+  "walkwayConcealed": true,
+  "crouchedOnWalkway": true,
+  "crouchConcealed": true,
+  "leftConcealment": true,
+  "finalInShadow": false
+ },
+ "enter": [
+  {
+   "x": 168,
+   "y": 1064,
+   "tile": [
+    10,
+    66
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 168,
+   "y": 1053.8666666666668,
+   "tile": [
+    10,
+    65
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 168,
+   "y": 1036.1333333333337,
+   "tile": [
+    10,
+    64
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 168,
+   "y": 1023.4666666666672,
+   "tile": [
+    10,
+    63
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 168,
+   "y": 1005.733333333334,
+   "tile": [
+    10,
+    62
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 168,
+   "y": 990.5333333333342,
+   "tile": [
+    10,
+    61
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 168,
+   "y": 977.8666666666677,
+   "tile": [
+    10,
+    61
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 168,
+   "y": 960.1333333333346,
+   "tile": [
+    10,
+    60
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 176.9566858950296,
+   "y": 943.5766474383049,
+   "tile": [
+    11,
+    58
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 187.70470896906514,
+   "y": 932.8286243642692,
+   "tile": [
+    11,
+    58
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 198.45273204310067,
+   "y": 922.0806012902335,
+   "tile": [
+    12,
+    57
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 209.2007551171362,
+   "y": 911.3325782161978,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 210.99209229614212,
+   "y": 906,
+   "tile": [
+    13,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 236.19209229614228,
+   "y": 906,
+   "tile": [
+    14,
+    56
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 241.5920922961423,
+   "y": 894.0666666666668,
+   "tile": [
+    15,
+    55
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 241.5920922961423,
+   "y": 876.3333333333337,
+   "tile": [
+    15,
+    54
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 241.5920922961423,
+   "y": 858.6000000000006,
+   "tile": [
+    15,
+    53
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 252.34011537017784,
+   "y": 840.251976925965,
+   "tile": [
+    15,
+    52
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 264.87947562321926,
+   "y": 827.7126166729233,
+   "tile": [
+    16,
+    51
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 282.92015382690374,
+   "y": 826,
+   "tile": [
+    17,
+    51
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 293.0534871602372,
+   "y": 813.3333333333335,
+   "tile": [
+    18,
+    50
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 293.0534871602372,
+   "y": 795.6000000000004,
+   "tile": [
+    18,
+    49
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 293.0534871602372,
+   "y": 772.8000000000006,
+   "tile": [
+    18,
+    48
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 302.01017305526665,
+   "y": 756.243314104971,
+   "tile": [
+    18,
+    47
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 314.5495333083079,
+   "y": 743.7039538519293,
+   "tile": [
+    19,
+    46
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 328.88023074035505,
+   "y": 730,
+   "tile": [
+    20,
+    45
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 346.17891278971206,
+   "y": 730,
+   "tile": [
+    21,
+    45
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 353.77891278971214,
+   "y": 717.3333333333335,
+   "tile": [
+    22,
+    44
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 344.8222268946827,
+   "y": 700.7766474383038,
+   "tile": [
+    21,
+    43
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 342,
+   "y": 680.9446320556135,
+   "tile": [
+    21,
+    42
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 342,
+   "y": 663.2112987222804,
+   "tile": [
+    21,
+    41
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 342,
+   "y": 642.944632055614,
+   "tile": [
+    21,
+    40
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 342,
+   "y": 625.2112987222808,
+   "tile": [
+    21,
+    39
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 349.1653487160236,
+   "y": 607.9126166729238,
+   "tile": [
+    21,
+    37
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 363.4960461480707,
+   "y": 594.8346512839762,
+   "tile": [
+    22,
+    37
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 368.8700576850884,
+   "y": 579.3273064136251,
+   "tile": [
+    23,
+    36
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 361.7047089690648,
+   "y": 562.0286243642681,
+   "tile": [
+    22,
+    35
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 349.1653487160236,
+   "y": 549.4892641112265,
+   "tile": [
+    21,
+    34
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 336.6259884629823,
+   "y": 536.9499038581848,
+   "tile": [
+    21,
+    33
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 318.58531025929784,
+   "y": 531.575892321167,
+   "tile": [
+    19,
+    33
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 303.8199615432742,
+   "y": 524.4105436051432,
+   "tile": [
+    18,
+    32
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 291.28060129023294,
+   "y": 511.8711833521016,
+   "tile": [
+    18,
+    31
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 278.7412410371917,
+   "y": 499.33182309906033,
+   "tile": [
+    17,
+    31
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 266.20188078415043,
+   "y": 490,
+   "tile": [
+    16,
+    30
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 253.662520531109,
+   "y": 477.46063974695875,
+   "tile": [
+    15,
+    29
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 242.91449745707348,
+   "y": 466.7126166729234,
+   "tile": [
+    15,
+    29
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 230.37513720403203,
+   "y": 458,
+   "tile": [
+    14,
+    28
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 212.3344590003476,
+   "y": 458,
+   "tile": [
+    13,
+    28
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 194.6011256670143,
+   "y": 458,
+   "tile": [
+    12,
+    28
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 178.04443977198468,
+   "y": 449.04331410497053,
+   "tile": [
+    11,
+    28
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 170.879091055961,
+   "y": 429.21129872228016,
+   "tile": [
+    10,
+    26
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 161.9224051609314,
+   "y": 410.12127949391726,
+   "tile": [
+    10,
+    25
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 149.38304490788994,
+   "y": 397.581919240876,
+   "tile": [
+    9,
+    24
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 142.7275783437423,
+   "y": 392.72645267672846,
+   "tile": [
+    8,
+    24
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 142.7275783437423,
+   "y": 382.593119343395,
+   "tile": [
+    8,
+    23
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 142.7275783437423,
+   "y": 364.8597860100615,
+   "tile": [
+    8,
+    22
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 142.7275783437423,
+   "y": 347.126452676728,
+   "tile": [
+    8,
+    21
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 142.7275783437423,
+   "y": 329.39311934339446,
+   "tile": [
+    8,
+    20
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  }
+ ],
+ "leave": [
+  {
+   "x": 142.7275783437423,
+   "y": 324.32645267672774,
+   "tile": [
+    8,
+    20
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 142.7275783437423,
+   "y": 336.99311934339454,
+   "tile": [
+    8,
+    21
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 142.7275783437423,
+   "y": 352.1931193433947,
+   "tile": [
+    8,
+    22
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 149.89292705976598,
+   "y": 364.425134726085,
+   "tile": [
+    9,
+    22
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 162.43228731280743,
+   "y": 376.96449497912624,
+   "tile": [
+    10,
+    23
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 173.18031038684296,
+   "y": 387.7125180531616,
+   "tile": [
+    10,
+    24
+   ],
+   "crouched": false,
+   "inShadow": true,
+   "objectives": []
+  },
+  {
+   "x": 183.9283334608785,
+   "y": 398.46054112719696,
+   "tile": [
+    11,
+    24
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 196.46769371391994,
+   "y": 410.9999013802382,
+   "tile": [
+    12,
+    25
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 205.42437960894955,
+   "y": 419.9565872752677,
+   "tile": [
+    12,
+    26
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 217.963739861991,
+   "y": 432,
+   "tile": [
+    13,
+    27
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 223.33775139900877,
+   "y": 410.39999999999986,
+   "tile": [
+    13,
+    25
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 223.33775139900877,
+   "y": 429.9333333333334,
+   "tile": [
+    13,
+    26
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  },
+  {
+   "x": 232.29443729403837,
+   "y": 432,
+   "tile": [
+    14,
+    27
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "objectives": []
+  }
+ ],
+ "walkSamples": [
+  {
+   "y": 200,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  },
+  {
+   "y": 192,
+   "anim": "anim.lookout_guard.idle.right",
+   "displayH": 32
+  }
+ ],
+ "shots": [
+  {
+   "file": "01-after-garden-walk-north.png",
+   "kind": "STAGED",
+   "note": "Garden walkway, north stretch (gardenWalk x6-11 y3-22).",
+   "camera": {
+    "x": 136,
+    "y": 120
+   },
+   "scroll": {
+    "scrollX": 0,
+    "scrollY": 0
+   }
+  },
+  {
+   "file": "01-after-garden-walk-mid.png",
+   "kind": "STAGED",
+   "note": "Garden walkway, middle stretch.",
+   "camera": {
+    "x": 136,
+    "y": 216
+   },
+   "scroll": {
+    "scrollX": 0,
+    "scrollY": 81
+   }
+  },
+  {
+   "file": "01-after-garden-walk-grass-edge.png",
+   "kind": "STAGED",
+   "note": "Garden walkway where it meets the bakery grass: no transition art may appear.",
+   "camera": {
+    "x": 152,
+    "y": 344
+   },
+   "scroll": {
+    "scrollX": 0,
+    "scrollY": 209
+   }
+  },
+  {
+   "file": "01-after-north-road.png",
+   "kind": "STAGED",
+   "note": "North road: authored dirt, must keep its legacy appearance.",
+   "camera": {
+    "x": 1000,
+    "y": 56
+   },
+   "scroll": {
+    "scrollX": 760,
+    "scrollY": 0
+   }
+  },
+  {
+   "file": "01-after-market-arcade.png",
+   "kind": "STAGED",
+   "note": "Market arcade, unchanged by this phase.",
+   "camera": {
+    "x": 216,
+    "y": 728
+   },
+   "scroll": {
+    "scrollX": 0,
+    "scrollY": 593
+   }
+  },
+  {
+   "file": "01-after-market-stall.png",
+   "kind": "STAGED",
+   "note": "Market stall: the B.2-05C-1 occlusion fix must still hold.",
+   "camera": {
+    "x": 504,
+    "y": 792
+   },
+   "scroll": {
+    "scrollX": 264,
+    "scrollY": 657
+   }
+  },
+  {
+   "file": "02-after-garden-walk-tempest-standing.png",
+   "kind": "STAGED",
+   "note": "Tempest standing on the garden walkway. inShadow=true"
+  },
+  {
+   "file": "03-after-garden-walk-tempest-crouching.png",
+   "kind": "STAGED",
+   "note": "Tempest crouching on the garden walkway. crouched=true inShadow=true"
+  },
+  {
+   "file": "04-after-garden-walk-lookout-near.png",
+   "kind": "STAGED",
+   "note": "A Lookout on the garden path near Tempest."
+  },
+  {
+   "file": "05-after-garden-walk-lookout-moving.png",
+   "kind": "STAGED",
+   "note": "Lookout mid-walk on the garden path; 21 samples, display height 32"
+  },
+  {
+   "file": "06-after-played-entered-garden-concealment.png",
+   "kind": "PLAYED",
+   "note": "Walked onto the garden walkway under real input. tile=8,20 engine inShadow=true"
+  },
+  {
+   "file": "07-after-played-crouched-on-walkway.png",
+   "kind": "PLAYED",
+   "note": "Crouched by a real C press: true; inShadow=true"
+  },
+  {
+   "file": "08-after-played-left-garden-concealment.png",
+   "kind": "PLAYED",
+   "note": "Walked out of the garden concealment. transitions seen=true final inShadow=false"
+  }
+ ],
+ "errors": [
+  "Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ],
+ "problems": [
+  "page errors: Failed to load resource: the server responded with a status of 404 (Not Found) | Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ]
+}

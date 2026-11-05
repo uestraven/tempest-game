@@ -18,10 +18,9 @@ import { TILE } from '../core/constants';
 import { TILE_NAMES } from './TilesetRegistry';
 import { CORNER_ORDER, composeRegion, summarise, type GroundReader } from './GroundShade';
 import {
-  COBBLE_MATERIAL_TILES,
+  COBBLE_MATERIAL_KIND,
+  MATERIAL_KINDS_PROPERTY,
   SHADED_FLOOR_TILE,
-  SHADE_EXCLUDED_REGIONS,
-  SHADE_GARDEN_PATH,
   V2_ARCH,
   V2_BUILDINGS,
   V2_DEPTH,
@@ -57,7 +56,8 @@ export interface V2Report {
     overlayTiles: number;
     overlaysDrawn: number;
     layers: number;
-    gardenWalkIncluded: boolean;
+    /** Authored material kinds found on the map, with their tile counts. */
+    materials: Record<string, number>;
   } | null;
   skippedSurfaces: Record<string, number>;
 }
@@ -146,41 +146,42 @@ export class ValcendreV2Presentation {
     }
 
     const legacyFirstGid = this.map.tilesets[0]?.firstgid ?? 1;
-    const nameAt = (layer: Phaser.Tilemaps.LayerData, tx: number, ty: number): string | null => {
-      const tile = layer.data[ty]?.[tx];
+    const floorName = (tx: number, ty: number): string | null => {
+      const tile = floor.data[ty]?.[tx];
       if (!tile || tile.index < 0) return null;
       return TILE_NAMES[tile.index - legacyFirstGid] ?? null;
     };
 
-    const cobble = new Set<string>(COBBLE_MATERIAL_TILES);
-    const excluded = SHADE_EXCLUDED_REGIONS;
-    const inExcludedRegion = (tx: number, ty: number) =>
-      !SHADE_GARDEN_PATH &&
-      tx >= excluded.x &&
-      tx < excluded.x + excluded.w &&
-      ty >= excluded.y &&
-      ty < excluded.y + excluded.h;
+    // The material layer stores `1 + index into the published kind list`, so
+    // the kind is resolved by NAME from the map's own properties. If the list
+    // is missing the presentation builds nothing rather than guessing an order.
+    const kinds = this.materialKinds();
+    if (!kinds.length) {
+      this.report.skippedSurfaces['(no groundMaterialKinds map property)'] = 1;
+      return;
+    }
+    const materialKind = (tx: number, ty: number): string | null => {
+      const tile = material.data[ty]?.[tx];
+      if (!tile || tile.index <= 0) return null;
+      return kinds[tile.index - 1] ?? null;
+    };
 
     const reader: GroundReader = {
       classify: (tx, ty) => {
         if (tx < 0 || ty < 0 || tx >= this.map.width || ty >= this.map.height) return 'other';
-        if (inExcludedRegion(tx, ty)) return 'other';
-        const mat = nameAt(material, tx, ty);
-        if (!mat || !cobble.has(mat)) return 'other';
-        return nameAt(floor, tx, ty) === SHADED_FLOOR_TILE ? 'cobbleShaded' : 'cobbleDaylight';
+        if (materialKind(tx, ty) !== COBBLE_MATERIAL_KIND) return 'other';
+        return floorName(tx, ty) === SHADED_FLOOR_TILE ? 'cobbleShaded' : 'cobbleDaylight';
       },
       variant: (tx, ty) => pavingVariant(tx, ty),
     };
 
-    // Count what is being left alone, by its real authored material rather than
-    // by the `deep_shadow` the shadow pass painted over it.
+    // Count what is being left alone, by its authored material rather than by
+    // the `deep_shadow` the shadow pass painted over it.
     for (let ty = 0; ty < this.map.height; ty++) {
       for (let tx = 0; tx < this.map.width; tx++) {
-        const mat = nameAt(material, tx, ty);
-        if (!mat) continue;
-        if (cobble.has(mat) && !inExcludedRegion(tx, ty)) continue;
-        const label = inExcludedRegion(tx, ty) ? `${mat} (garden walk, excluded)` : mat;
-        this.report.skippedSurfaces[label] = (this.report.skippedSurfaces[label] ?? 0) + 1;
+        const kind = materialKind(tx, ty);
+        if (!kind || kind === COBBLE_MATERIAL_KIND) continue;
+        this.report.skippedSurfaces[kind] = (this.report.skippedSurfaces[kind] ?? 0) + 1;
       }
     }
 
@@ -249,7 +250,7 @@ export class ValcendreV2Presentation {
       overlayTiles: summary.overlayCells,
       overlaysDrawn: summary.overlayTotal,
       layers: 1 + overlayLayers.length,
-      gardenWalkIncluded: SHADE_GARDEN_PATH,
+      materials: this.materialCensus(),
     };
 
     this.pavingMap = tm;
@@ -397,6 +398,35 @@ export class ValcendreV2Presentation {
     piece(V2_TEXTURES.stallBase, R.baseCounter.frame, R.baseCounter.rect[1], V2_STALL_SORT.counter);
 
     this.report.stallDrawn = true;
+  }
+
+  /**
+   * The published material kind list, in the order the `groundMaterial` layer's
+   * values index into. Read from the map's own properties so the renderer never
+   * hard-codes an ordering that the map generator could change.
+   */
+  /** Tile count per authored material, for the integration report. */
+  private materialCensus(): Record<string, number> {
+    const material = this.map.getLayer('groundMaterial');
+    const kinds = this.materialKinds();
+    const out: Record<string, number> = {};
+    if (!material) return out;
+    for (let ty = 0; ty < this.map.height; ty++)
+      for (let tx = 0; tx < this.map.width; tx++) {
+        const tile = material.data[ty]?.[tx];
+        if (!tile || tile.index <= 0) continue;
+        const kind = kinds[tile.index - 1];
+        if (kind) out[kind] = (out[kind] ?? 0) + 1;
+      }
+    return out;
+  }
+
+  private materialKinds(): string[] {
+    const props = this.map.properties as { name: string; value: unknown }[] | undefined;
+    const raw = Array.isArray(props)
+      ? props.find((p) => p.name === MATERIAL_KINDS_PROPERTY)?.value
+      : undefined;
+    return typeof raw === 'string' && raw.length ? raw.split(',') : [];
   }
 
   /**

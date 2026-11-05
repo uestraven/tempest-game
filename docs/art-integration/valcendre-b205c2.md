@@ -265,6 +265,15 @@ five static tilemap layers and 1008 `putTileAt` calls at construction.
 
 ## 8. The garden walk — an open decision, defaulted conservatively
 
+> **RESOLVED in Phase B.2-05C-2R.** The garden walkway is now treated (all 116
+> tiles), and the north road is correctly classified as dirt and keeps its
+> legacy appearance. Both came from one root cause — the material layer stored
+> a base *tile* rather than a semantic material label — fixed by adding explicit
+> `material` labels to the authored surfaces. `SHADE_GARDEN_PATH` and
+> `SHADE_EXCLUDED_REGIONS` no longer exist. See
+> [`valcendre-b205c2r.md`](valcendre-b205c2r.md). The original reasoning is kept
+> below for the record.
+
 `gardenPath` (116 tiles, x6–11 y3–22) is **named** a garden path but **paints**
 `cobble` — the same base tile as `alleyCobble`. §1 says the artwork is "for
 cobblestone surfaces only"; §4's table says "Grass / garden → preserve existing
@@ -433,7 +442,7 @@ assertion widened, none removed.
 2. **No diagonal overlay is drawn anywhere.** Same cause (§6). The path is
    implemented and tested, just not reachable from the current authoring.
 
-3. **The garden walk is untreated** — 116 shaded cobble-tiled tiles still on the
+3. **The garden walk is untreated** *(fixed in B.2-05C-2R)* — 116 shaded cobble-tiled tiles still on the
    flat `deep_shadow` fill, pending the §8 ruling. This is now the largest
    remaining visual inconsistency on any cobbled surface.
 
@@ -442,7 +451,7 @@ assertion widened, none removed.
    is the biggest remaining inconsistency in Valcendre overall — the whole upper
    lane garden branch is brick.
 
-5. **The north road gained daylight cobblestone.** `roadDirt` (northRoad,
+5. **The north road gained daylight cobblestone.** *(Fixed in B.2-05C-2R.)* `roadDirt` (northRoad,
    x60–64 y0–5, 30 daylight tiles) is authored as a dirt road but its base tile
    is `cobble`, so the material layer cannot distinguish it from `alleyCobble`.
    It now renders approved daylight cobble instead of legacy cobble — a
@@ -484,9 +493,9 @@ selection.
 | --- | --- |
 | **CODE-5** | **closed** — the material data is now exported as `groundMaterial`. |
 | **CODE-6** | **closed** — the renderer is wired and verified in-engine. |
-| **CODE-7** | **open** — rule on the garden walk (§8). One constant. |
+| **CODE-7** | **closed in B.2-05C-2R** — the garden walkway is treated. |
 | **CODE-8** | **closed** — the stale 496 figure is corrected in the B.2-04 report and the backlog. |
-| **CODE-9** | *new, low priority* — give `roadDirt` a base tile of its own so the north road can be excluded from cobblestone treatment (§13.5). |
+| **CODE-9** | **closed in B.2-05C-2R** — solved properly with semantic material labels rather than a second base tile. |
 
 ---
 

@@ -3,10 +3,9 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { ASSETS_BY_KEY } from '../src/art/AssetRegistry';
 import {
-  COBBLE_MATERIAL_TILES,
+  COBBLE_MATERIAL_KIND,
+  MATERIAL_KINDS_PROPERTY,
   SHADED_FLOOR_TILE,
-  SHADE_EXCLUDED_REGIONS,
-  SHADE_GARDEN_PATH,
   V2_DEPTH,
   V2_TEXTURES,
   pavingVariant,
@@ -86,7 +85,11 @@ const map = JSON.parse(readFileSync(`${ROOT}public/assets/maps/village.json`, 'u
   height: number;
   layers: { name: string; type: string; data?: number[] }[];
   tilesets: { firstgid: number }[];
+  properties: { name: string; value: string }[];
 };
+const MATERIAL_KINDS = (
+  map.properties.find((p) => p.name === MATERIAL_KINDS_PROPERTY)?.value ?? ''
+).split(',');
 const W = map.width;
 const firstgid = map.tilesets[0].firstgid;
 const layerData = (n: string) => map.layers.find((l) => l.name === n)?.data ?? null;
@@ -288,19 +291,14 @@ describe('3. atlas indexing matches the approved transition manifest', () => {
 // =====================================================================
 describe('4. material classification over the real map', () => {
   /** The same reader the scene builds, over the shipped map data. */
-  const cobble = new Set<string>(COBBLE_MATERIAL_TILES);
-  const inExcluded = (tx: number, ty: number) =>
-    !SHADE_GARDEN_PATH &&
-    tx >= SHADE_EXCLUDED_REGIONS.x &&
-    tx < SHADE_EXCLUDED_REGIONS.x + SHADE_EXCLUDED_REGIONS.w &&
-    ty >= SHADE_EXCLUDED_REGIONS.y &&
-    ty < SHADE_EXCLUDED_REGIONS.y + SHADE_EXCLUDED_REGIONS.h;
+  const materialKind = (tx: number, ty: number) => {
+    const v = materialLayer[ty * W + tx];
+    return v === 0 ? null : (MATERIAL_KINDS[v - 1] ?? null);
+  };
   const reader: GroundReader = {
     classify(tx, ty): GroundClass {
       if (tx < 0 || ty < 0 || tx >= map.width || ty >= map.height) return 'other';
-      if (inExcluded(tx, ty)) return 'other';
-      const mat = tileName(materialLayer, tx, ty);
-      if (!mat || !cobble.has(mat)) return 'other';
+      if (materialKind(tx, ty) !== COBBLE_MATERIAL_KIND) return 'other';
       return tileName(floorLayer, tx, ty) === SHADED_FLOOR_TILE ? 'cobbleShaded' : 'cobbleDaylight';
     },
     variant: (tx, ty) => pavingVariant(tx, ty),
@@ -308,78 +306,153 @@ describe('4. material classification over the real map', () => {
   const cells = composeRegion(reader, { x: 0, y: 0, w: map.width, h: map.height });
   const summary = summarise(cells);
 
-  it('has the groundMaterial layer, recording a surface base per walkable tile', () => {
-    expect(materialLayer, 'groundMaterial layer').toBeDefined();
+  it('publishes the material kind list in the map properties', () => {
+    expect(MATERIAL_KINDS, 'published kinds').toEqual([
+      'brick',
+      'cobblestone',
+      'dirt',
+      'grass',
+      'gravel',
+      'industrial',
+    ]);
+    // Resolved by NAME, so the generator may reorder the list without breaking
+    // the renderer.
+    expect(MATERIAL_KINDS).toContain(COBBLE_MATERIAL_KIND);
+  });
+
+  it('records a semantic material, not a tile id, for every walkable tile', () => {
     const nonZero = materialLayer.filter((v) => v !== 0).length;
     expect(nonZero, 'walkable tiles with a recorded material').toBe(2719);
-    // Base tiles only: a variant-rolled decorative tile must never appear, or a
-    // cracked cobble tile could not be told from a cracked brick tile.
-    const names = new Set(materialLayer.filter((v) => v !== 0).map((v) => TILE_NAMES[v - firstgid]));
-    expect(names, 'recorded material tiles').toEqual(
-      new Set(['cobble', 'brick', 'metal', 'ground_debris', 'grass', 'floor_04'])
-    );
-    expect(names.has('floor_crack'), 'decorative variant leaked into the material layer').toBe(false);
+    const census: Record<string, number> = {};
+    for (const v of materialLayer) if (v !== 0) {
+      const k = MATERIAL_KINDS[v - 1];
+      census[k] = (census[k] ?? 0) + 1;
+    }
+    expect(census).toEqual({
+      brick: 372,
+      cobblestone: 1094,
+      dirt: 30,
+      grass: 147,
+      gravel: 703,
+      industrial: 373,
+    });
   });
 
-  it('classifies exactly the audited cobblestone population', () => {
-    expect(summary.daylightCells, 'daylight cobblestone').toBe(929);
-    expect(summary.shadedInteriorCells + summary.boundaryCells, 'shaded cobblestone').toBe(79);
-    expect(cells.length, 'ground cells painted in total').toBe(1008);
+  it('separates dirt from cobblestone even though both are drawn with the same tile', () => {
+    // The whole point of the B.2-05C-2R correction. `alleyCobble` and
+    // `roadDirt` both base on the `cobble` TILE; only the material LABEL tells
+    // them apart, and the north road must stay dirt.
+    const roles = JSON.parse(
+      readFileSync(`${ROOT}src/art/data/tile-roles.json`, 'utf8')
+    ) as { surfaces: Record<string, { material?: string; base: string }> };
+    expect(roles.surfaces.alleyCobble.base, 'alleyCobble base tile').toBe('cobble');
+    expect(roles.surfaces.roadDirt.base, 'roadDirt base tile').toBe('cobble');
+    expect(roles.surfaces.alleyCobble.material).toBe('cobblestone');
+    expect(roles.surfaces.roadDirt.material).toBe('dirt');
+    // And in the shipped map:
+    for (let ty = 0; ty < 6; ty++)
+      for (let tx = 60; tx < 65; tx++) {
+        const kind = materialKind(tx, ty);
+        if (!kind) continue;
+        expect(kind, `north road tile ${tx},${ty}`).toBe('dirt');
+      }
   });
 
-  it('paints no grass, brick, gravel or garage tile', () => {
+  it('gives every ground surface an explicit material label', () => {
+    const roles = JSON.parse(
+      readFileSync(`${ROOT}src/art/data/tile-roles.json`, 'utf8')
+    ) as { surfaces: Record<string, { material?: string }> };
+    const OVERLAY_ONLY = ['shadowFloor', 'voidFill'];
+    for (const [name, def] of Object.entries(roles.surfaces)) {
+      if (name.startsWith('_') || OVERLAY_ONLY.includes(name)) continue;
+      expect(def.material, `surface "${name}" has no material label`).toBeTruthy();
+      expect(MATERIAL_KINDS, `surface "${name}" material is published`).toContain(def.material!);
+    }
+  });
+
+  it('classifies the whole cobblestone population, garden walk included', () => {
+    expect(summary.daylightCells, 'daylight cobblestone').toBe(899);
+    expect(summary.shadedInteriorCells + summary.boundaryCells, 'shaded cobblestone').toBe(195);
+    expect(cells.length, 'ground cells painted in total').toBe(1094);
+  });
+
+  it('treats all 116 garden walkway tiles', () => {
+    // gardenWalk, x6-11 y3-22: authored `gardenPath`, material cobblestone,
+    // entirely inside an authored shadow stamp.
+    let tiles = 0;
+    let shaded = 0;
+    const painted = new Set(cells.map((c) => `${c.tx},${c.ty}`));
+    for (let ty = 3; ty < 23; ty++)
+      for (let tx = 6; tx < 12; tx++) {
+        if (materialKind(tx, ty) !== COBBLE_MATERIAL_KIND) continue;
+        tiles++;
+        expect(painted.has(`${tx},${ty}`), `garden walk ${tx},${ty} unpainted`).toBe(true);
+        if (tileName(floorLayer, tx, ty) === SHADED_FLOOR_TILE) shaded++;
+      }
+    expect(tiles, 'garden walk cobblestone tiles').toBe(116);
+    expect(shaded, 'all of them shaded').toBe(116);
+  });
+
+  it('creates no transition where the garden walk meets grass or a wall', () => {
+    // Section 2: no artificial daylight-to-shade edge against a non-cobblestone
+    // neighbour. Every garden walk tile is a PLAIN shaded tile - mask 0 - so
+    // the grass and wall boundaries produce no transition art at all.
+    for (let ty = 3; ty < 23; ty++)
+      for (let tx = 6; tx < 12; tx++) {
+        if (materialKind(tx, ty) !== COBBLE_MATERIAL_KIND) continue;
+        const cell = cells.find((c) => c.tx === tx && c.ty === ty)!;
+        expect(cell.base, `garden walk ${tx},${ty}`).toBe('shaded');
+        expect(cell.mask, `garden walk ${tx},${ty} mask`).toBe(0);
+        expect(cell.overlays, `garden walk ${tx},${ty} overlays`).toEqual([]);
+      }
+    // The market's boundary count is therefore untouched by the garden work.
+    expect(summary.boundaryCells, 'cardinal boundary cells').toBe(41);
+  });
+
+  it('paints no grass, brick, gravel, industrial or dirt tile', () => {
     const painted = new Set(cells.map((c) => `${c.tx},${c.ty}`));
     let checked = 0;
     for (let ty = 0; ty < map.height; ty++)
       for (let tx = 0; tx < map.width; tx++) {
-        const mat = tileName(materialLayer, tx, ty);
-        if (!mat || cobble.has(mat)) continue;
+        const kind = materialKind(tx, ty);
+        if (!kind || kind === COBBLE_MATERIAL_KIND) continue;
         checked++;
-        expect(painted.has(`${tx},${ty}`), `${mat} at ${tx},${ty} was painted`).toBe(false);
+        expect(painted.has(`${tx},${ty}`), `${kind} at ${tx},${ty} was painted`).toBe(false);
       }
-    expect(checked, 'non-cobblestone tiles checked').toBeGreaterThan(1500);
-  });
-
-  it('honours the garden-walk exclusion while it is switched off', () => {
-    expect(SHADE_GARDEN_PATH, 'garden walk is excluded by default').toBe(false);
-    const painted = new Set(cells.map((c) => `${c.tx},${c.ty}`));
-    let excluded = 0;
-    for (let ty = SHADE_EXCLUDED_REGIONS.y; ty < SHADE_EXCLUDED_REGIONS.y + SHADE_EXCLUDED_REGIONS.h; ty++)
-      for (let tx = SHADE_EXCLUDED_REGIONS.x; tx < SHADE_EXCLUDED_REGIONS.x + SHADE_EXCLUDED_REGIONS.w; tx++) {
-        if (!tileName(materialLayer, tx, ty)) continue;
-        excluded++;
-        expect(painted.has(`${tx},${ty}`), `garden walk ${tx},${ty}`).toBe(false);
-      }
-    expect(excluded, 'garden walk tiles left alone').toBeGreaterThan(100);
+    expect(checked, 'non-cobblestone tiles checked').toBe(2719 - 1094);
   });
 
   it('exercises the masks the authored shade shapes actually produce', () => {
     const histogram = new Map<number, number>();
     for (const c of cells)
       if (c.base !== 'daylight') histogram.set(c.mask, (histogram.get(c.mask) ?? 0) + 1);
-    // Valcendre's shade is authored as axis-aligned rectangles, so eight of the
-    // sixteen masks appear and the rest do not. Recorded rather than asserted
-    // as ideal: the unexercised masks are covered synthetically in
-    // tests/ground-shade.test.ts.
     expect([...histogram.keys()].sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 6, 9, 12]);
-    expect(histogram.get(0), 'plain shaded interiors').toBe(38);
+    // 38 market interiors plus the 116 garden walk tiles.
+    expect(histogram.get(0), 'plain shaded interiors').toBe(154);
   });
 
   it('produces no diagonal overlay, because no authored shape needs one', () => {
     // An overlay needs a concave corner: both cardinals shaded with a lit
-    // diagonal. Axis-aligned rectangles never make one. This is a fact about
-    // the map, not a limit of the implementation - if a future layout adds an
-    // L or T union of shade stamps, this count rises and the art is ready.
+    // diagonal. Axis-aligned rectangles never make one, and the garden walk is
+    // bounded by grass and walls rather than by lit cobble. Zero is valid.
     expect(summary.overlayCells).toBe(0);
     expect(summary.overlayTotal).toBe(0);
+  });
+
+  it('leaves the 79 market shaded tiles exactly as they were', () => {
+    // Task 5: the market population must not move when the garden is added.
+    let market = 0;
+    for (const c of cells) {
+      if (c.base === 'daylight') continue;
+      const inGardenWalk = c.tx >= 6 && c.tx < 12 && c.ty >= 3 && c.ty < 23;
+      if (!inGardenWalk) market++;
+    }
+    expect(market, 'shaded cobblestone outside the garden walk').toBe(79);
   });
 
   it('is deterministic across reloads', () => {
     const again = composeRegion(reader, { x: 0, y: 0, w: map.width, h: map.height });
     expect(again).toEqual(cells);
-    // Variant choice is a pure function of tile coordinates, so a reload, a
-    // save restore and a browser refresh all reproduce it.
-    expect(pavingVariant(11, 45)).toBe(pavingVariant(11, 45));
     expect(cells.every((c) => c.variant === pavingVariant(c.tx, c.ty))).toBe(true);
   });
 });

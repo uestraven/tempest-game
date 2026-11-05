@@ -241,33 +241,60 @@ for (let y = 0; y < H; y++) {
 /**
  * groundMaterial: INVISIBLE, not a collider, not a gameplay layer.
  *
- * Records each walkable tile's authored surface as that surface's BASE tile,
- * taken before the shadow pass below overwrites the floor. Without it the
- * exported map cannot say what material lies under a shaded tile: `shadowFloor`
- * and `voidFill` are both `deep_shadow`, so a shaded cobble tile, a shaded
- * brick tile and the dark fill behind a building wall are indistinguishable in
- * `floor`.
+ * Records each walkable tile's authored SEMANTIC MATERIAL, taken before the
+ * shadow pass below overwrites the floor. Without it the exported map cannot
+ * say what material lies under a shaded tile: `shadowFloor` and `voidFill` are
+ * both `deep_shadow`, so a shaded cobble tile, a shaded brick tile and the dark
+ * fill behind a building wall are indistinguishable in `floor`.
  *
- * The BASE tile, not the variant-rolled tile, and that distinction matters.
- * `floor_crack` is a low-probability decorative variant of four different
- * surfaces - alleyCobble, serviceBrick, yardGravel and roadDirt - so recording
- * the rolled tile would make a cracked cobble tile indistinguishable from a
- * cracked brick tile, and any consumer keying off it would either leave holes
- * in the cobblestone or paint over the brick. Recording the base says what the
- * level author chose; the appearance variant is the floor layer's business.
+ * MATERIAL IDENTITY, NOT A TILE ID - and that distinction is the whole point.
+ * An earlier version stored the surface's base tile, which conflated two
+ * different materials that happen to be drawn with the same picture:
+ * `alleyCobble` and `roadDirt` both base on `cobble`, so the north dirt road
+ * was indistinguishable from the market cobbles and wrongly took cobblestone
+ * paving. Storing the author's own material label - `cobblestone`, `dirt`,
+ * `grass`, `brick`, `gravel`, `industrial` - separates what a surface IS from
+ * what it was drawn with, so adding or restyling a tile can never again change
+ * a material classification.
+ *
+ * The stored value is `1 + index into MATERIAL_KINDS`, and the kind list is
+ * exported in the map's own properties so a consumer resolves it by NAME and
+ * never by assuming an order.
  *
  * `MapLoader` merges gameplay flags only from its closed GAMEPLAY_LAYERS set
  * (collision, cover, propCollision, shadowZones), so this layer is inert for
  * movement, vision, cover and concealment by construction. It is read only by
- * the ground presentation, to decide which tiles are cobblestone.
+ * the ground presentation.
  */
+const MATERIAL_KINDS = [
+  ...new Set(
+    Object.values(SURFACES)
+      .map((s) => s.material)
+      .filter(Boolean)
+  ),
+].sort();
+for (const [name, raw] of Object.entries(SURFACES)) {
+  // Overlay surfaces (shadowFloor, voidFill) are not materials and never land
+  // in surfaceOf; every surface that CAN must carry a label.
+  if (!raw.material && !['shadowFloor', 'voidFill'].includes(name))
+    throw new Error(`surface "${name}" has no "material" label in tile-roles.json`);
+}
+const materialIndex = (surface) => {
+  const kind = SURFACES[surface]?.material;
+  if (!kind) throw new Error(`surface "${surface}" cannot appear as ground: it has no material`);
+  return MATERIAL_KINDS.indexOf(kind) + 1;
+};
+
 const groundMaterial = blank();
+const materialCounts = {};
 for (let y = 0; y < H; y++)
   for (let x = 0; x < W; x++) {
     if (!walkable[idx(x, y)]) continue;
     const surface = surfaceOf[idx(x, y)];
     if (!surface) continue;
-    groundMaterial[idx(x, y)] = tileId(SURFACES[surface].base) + 1;
+    groundMaterial[idx(x, y)] = materialIndex(surface);
+    const kind = SURFACES[surface].material;
+    materialCounts[kind] = (materialCounts[kind] ?? 0) + 1;
   }
 
 // ---- shadow zones: gameplay flag, plus a darker floor where they apply.
@@ -631,7 +658,15 @@ const map = {
   tileheight: TS,
   nextlayerid: layerId,
   nextobjectid: objectId,
-  properties: tiledProps({ level: 'village', displayName: 'Valcendre', stage: STAGE }),
+  properties: tiledProps({
+    level: 'village',
+    displayName: 'Valcendre',
+    stage: STAGE,
+    // Resolves the groundMaterial layer's values: a tile holding n names
+    // MATERIAL_KINDS[n - 1]. Published so a consumer looks the material up by
+    // name and never by assuming the order of this list.
+    groundMaterialKinds: MATERIAL_KINDS.join(','),
+  }),
   layers: [
     tileLayer('floor', floor),
     tileLayer('decorBack', decorBack),
@@ -685,6 +720,10 @@ console.log(
     Object.entries(areaCounts)
       .map(([a, n]) => `${a} ${n}`)
       .join(', ')
+);
+console.log(
+  '  ground materials: ' +
+    MATERIAL_KINDS.map((k) => `${k} ${materialCounts[k] ?? 0}`).join(', ')
 );
 for (const r of propCollisionRoles)
   if (r.claimed === 0)

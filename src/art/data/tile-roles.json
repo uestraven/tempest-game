@@ -75,6 +75,7 @@
       "dressing."
     ],
     "alleyCobble": {
+      "material": "cobblestone",
       "base": "cobble",
       "variants": [
         "floor_01",
@@ -83,6 +84,7 @@
       "variantChance": 12
     },
     "marketPaving": {
+      "material": "cobblestone",
       "base": "floor_04",
       "variants": [
         "floor_01"
@@ -90,6 +92,7 @@
       "variantChance": 8
     },
     "gardenGrass": {
+      "material": "grass",
       "base": "grass",
       "variants": [
         "flowerbed"
@@ -97,6 +100,7 @@
       "variantChance": 22
     },
     "gardenPath": {
+      "material": "cobblestone",
       "base": "cobble",
       "variants": [
         "floor_01"
@@ -104,6 +108,7 @@
       "variantChance": 10
     },
     "serviceBrick": {
+      "material": "brick",
       "base": "brick",
       "variants": [
         "floor_crack"
@@ -111,6 +116,7 @@
       "variantChance": 10
     },
     "yardGravel": {
+      "material": "gravel",
       "base": "ground_debris",
       "variants": [
         "floor_crack"
@@ -118,6 +124,7 @@
       "variantChance": 5
     },
     "garageFloor": {
+      "material": "industrial",
       "base": "metal",
       "variants": [
         "grate"
@@ -125,6 +132,7 @@
       "variantChance": 9
     },
     "roadDirt": {
+      "material": "dirt",
       "base": "cobble",
       "variants": [
         "ground_debris",
