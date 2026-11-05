@@ -113,6 +113,120 @@ describe('1. approved stall artwork is byte-identical', () => {
 });
 
 // =====================================================================
+// 1b. conformance to the B.2-05B art contract
+// =====================================================================
+describe('1b. conforms to the approved B.2-05B render contract', () => {
+  const contract = JSON.parse(
+    readFileSync(
+      `${ROOT}art-source/TEMPEST_VALCENDRE_ART_PACKAGE_v1/07_occlusion_b205b/valcendre_stall_occlusion_render_contract.json`,
+      'utf8'
+    )
+  ) as {
+    reference_asset: { source_sha256: Record<string, string> };
+    geometry_lock: Record<string, unknown>;
+    canopy_source_rect_contract: Record<string, { src_xywh: number[]; destination_offset_from_shared_origin_xy: number[]; draw_role: string }> &
+      Record<string, unknown>;
+    recommended_visual_draw_orders: Record<string, string[] | string | boolean>;
+  };
+
+  it('uses the contract checksums, so the art it describes is the art we ship', () => {
+    const want = contract.reference_asset.source_sha256;
+    expect(sha256(BASE_PNG)).toBe(want['valcendre_market_stall_base_80x48.png']);
+    expect(sha256(CANOPY_PNG)).toBe(want['valcendre_market_stall_canopy_80x48.png']);
+    // And the brief's restatement agrees with the contract file.
+    expect(APPROVED_SHA256.base).toBe(want['valcendre_market_stall_base_80x48.png']);
+    expect(APPROVED_SHA256.canopy).toBe(want['valcendre_market_stall_canopy_80x48.png']);
+  });
+
+  it('takes its source rectangles from the contract, not from a local copy', () => {
+    const c = contract.canopy_source_rect_contract;
+    const pairs: [string, { src_xywh: number[]; destination_offset_from_shared_origin_xy: number[] }][] = [
+      ['back_roof', c.back_roof as never],
+      ['front_valance', c.front_valance as never],
+      ['structural_base_lower_counter_foreground_read', c.structural_base_lower_counter_foreground_read as never],
+    ];
+    const mine = {
+      back_roof: V2_STALL_REGIONS.canopyRear.rect,
+      front_valance: V2_STALL_REGIONS.canopyValance.rect,
+      structural_base_lower_counter_foreground_read: V2_STALL_REGIONS.baseCounter.rect,
+    } as Record<string, readonly number[]>;
+    for (const [name, spec] of pairs) {
+      expect([...mine[name]], `${name} src_xywh`).toEqual(spec.src_xywh);
+      // The contract's destination offset is relative to the shared origin, and
+      // equals the region's own source y - the "do not offset twice" rule.
+      expect(spec.destination_offset_from_shared_origin_xy, `${name} dest offset`).toEqual([
+        spec.src_xywh[0],
+        spec.src_xywh[1],
+      ]);
+      const piece = DRAW_LIST.find((p) => {
+        const r = Object.values(V2_STALL_REGIONS).find((q) => q.frame === p.frame);
+        return r && r.rect === mine[name];
+      });
+      expect(piece?.localY, `${name} is drawn at the contract offset`).toBe(
+        spec.destination_offset_from_shared_origin_xy[1]
+      );
+    }
+  });
+
+  it('matches the contract geometry lock', () => {
+    const g = contract.geometry_lock as {
+      stall_visual_envelope_world_origin_px: number[];
+      stall_visual_envelope_world_size_px: number[];
+      cover_tile_rect: { x_start: number; x_end_inclusive: number; y: number };
+      v1_evidence_tile: number[];
+    };
+    expect([V2_STALL.worldX, V2_STALL.worldY]).toEqual(g.stall_visual_envelope_world_origin_px);
+    expect([...V2_STALL.sizePx]).toEqual(g.stall_visual_envelope_world_size_px);
+    expect(V2_STALL.coverTiles).toEqual({
+      x0: g.cover_tile_rect.x_start,
+      x1: g.cover_tile_rect.x_end_inclusive,
+      y: g.cover_tile_rect.y,
+    });
+    expect([V2_STALL.evidenceTile.x, V2_STALL.evidenceTile.y]).toEqual(g.v1_evidence_tile);
+  });
+
+  it('realises the contract draw order for the evidence approach', () => {
+    const order = contract.recommended_visual_draw_orders.evidence_approach as string[];
+    expect(order).toEqual([
+      'ground',
+      'stall_structural_base',
+      'back_roof_source_rect',
+      'actor',
+      'front_valance_source_rect',
+      'lower_counter_source_rect_redraw',
+    ]);
+    const feet = 48 * TILE + 8; // the approach band
+    const behind = DRAW_LIST.filter((p) => p.depth < sortedDepth(feet)).map((p) => p.id);
+    const front = over(feet);
+    expect(behind, 'behind the actor').toEqual(['base_full', 'canopy_rear']);
+    expect(front, 'in front of the actor').toEqual(['canopy_valance', 'base_counter']);
+    // The order among the behind pair matters: the contract wants the full base
+    // drawn BEFORE the roof so the posts stay under the front beam.
+    const baseIdx = DRAW_LIST.findIndex((p) => p.id === 'base_full');
+    const roofIdx = DRAW_LIST.findIndex((p) => p.id === 'canopy_rear');
+    expect(baseIdx).toBeLessThan(roofIdx);
+  });
+
+  it('honours the counter redraw qualifier the contract states but its own front scenario breaks', () => {
+    // The contract's draw_role for the counter is explicit: "front-of-actor
+    // ONLY when behind cover". Its own `front` studio scenario nevertheless
+    // measures 170/288 of the character occluded by base_foreground at feet
+    // (488,808) - which would put the counter over the legs of an actor
+    // standing SOUTH of the stall, contradicting both that qualifier and the
+    // B.2-05C-1 brief. Depth bands satisfy the qualifier automatically, and the
+    // real engine measures 0/289 there. This test pins that behaviour.
+    const role = (
+      contract.canopy_source_rect_contract
+        .structural_base_lower_counter_foreground_read as { draw_role: string }
+    ).draw_role;
+    expect(role).toContain('ONLY when behind cover');
+    const southFeet = V2_STALL_ACTOR_LIMITS.minFeetYSouth;
+    expect(over(southFeet), 'nothing may be in front of an actor south of the cover').toEqual([]);
+    expect(over(808), 'including the contract’s own front test position').toEqual([]);
+  });
+});
+
+// =====================================================================
 // 2. source regions and destination offsets
 // =====================================================================
 describe('2. source regions are inside the art and offset exactly once', () => {

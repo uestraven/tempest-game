@@ -6,30 +6,99 @@
 
 ---
 
-## 1. Missing handoff documents
+## 1. Required references
 
-§2 asks for four references that **do not exist in the repository**:
+The implementation was built first against §5 and §6 of the brief, which restate
+the contract. The three B.2-05B handoff documents were supplied afterwards and
+the implementation was then re-checked against them, line by line — see §1b.
+They are archived in-repo at
+`art-source/TEMPEST_VALCENDRE_ART_PACKAGE_v1/07_occlusion_b205b/`:
 
-- `valcendre_stall_occlusion_render_contract.json`
-- `valcendre_stall_occlusion_validation.md`
-- `CODING_AGENT_HANDOFF.md`
-- the B.2-05B occlusion review package
+| file | SHA-256 |
+| --- | --- |
+| `valcendre_stall_occlusion_render_contract.json` | `70bfce78…c30c08` |
+| `valcendre_stall_occlusion_validation.md` | `ec2ac001…8770ac` |
+| `CODING_AGENT_HANDOFF.md` | `daeafacb…67c961` |
 
-Nothing matching them is present anywhere in the tree or in
-`art-source/TEMPEST_VALCENDRE_ART_PACKAGE_v1/`. Work proceeded because the brief
-itself restates the contract they would carry — the three source rectangles in
-§5 and the four orderings in §6 — and because §1 makes validating that proposal
-against the real engine the coding agent's job rather than accepting it. **The
-assumption on record: §5 and §6 of the brief are the authoritative contract.**
-
-What *was* available and used:
+Also used:
 `art-source/TEMPEST_VALCENDRE_ART_PACKAGE_v1/03_props/market_stall/valcendre_market_stall_manifest.json`
-(B.2-03B-2), which supplies the shared envelope, the three layer orderings and
-the proposed world origin.
+(B.2-03B-2), for the shared envelope and the three layer orderings.
 
-Two stall PNGs had also been dropped at `public/assets/tmp/`. Both are
+Two stall PNGs were also dropped at `public/assets/tmp/`. Both are
 **byte-identical** to the already-imported approved files, so no revised art was
-present and none was imported. They are left untracked, not committed — see §11.
+present and none was imported. They are left untracked — see §11.
+
+---
+
+## 1b. Conformance to the B.2-05B contract
+
+Every structural clause is satisfied. The source rectangles, destination offsets
+and geometry lock are now **read out of the contract JSON by the test suite**
+rather than transcribed, so the two cannot drift apart.
+
+| contract clause | implementation |
+| --- | --- |
+| `decision: NO_REPAINT`, preserve both PNGs byte-for-byte | ✅ both checksums match the contract's own `source_sha256` |
+| `back_roof` src (0,0,80,17), dest offset (0,0), `behind_approaching_actors` | ✅ world y 752, depth 10.07525 |
+| `front_valance` src (0,17,80,31), dest offset (0,**+17**), `in_front_of_actors_in_approach_band` | ✅ world y **769**, depth 10.0792 |
+| handoff §2: "ensure the second source rectangle starts at world/local y+17, rather than y0" | ✅ 752 + 17 = 769 |
+| counter read src (0,26,80,22), dest offset (0,+26) | ✅ world y **778**, depth 10.0799 |
+| `source_rectangles_nonoverlapping` | ✅ 0–16 and 17–47, disjoint, contiguous |
+| union is RGBA-identical to the original canopy | ✅ 796 + 593 = 1389 opaque, pixel-for-pixel |
+| "draw the ORIGINAL full base first, before the canopy … preserves support/valance overlap" | ✅ `base_full` is drawn first and sorts below `canopy_rear` |
+| "the posts remain UNDER the front beam" | ✅ base below the valance at every row |
+| unoccupied composition pixel-identical to the approved assembly | ✅ **0 differing pixels** in a real 480×270 engine frame |
+| `geometry_lock`: origin (464,752), cover x29–33 y49, clue (30,47) | ✅ all three verified in the engine |
+| "confirm the actual integrated canopy's world top-left; the manifest *suggests* (464,752) only" | ✅ **confirmed (464,752)** from the live display list |
+| "apply the same spatial rule to all actors; never key art treatment to Tempest identity" | ✅ nothing reads an actor; two-actor frame proves it |
+| no change to collision, `shadowZones`, detection, range, mission, clue | ✅ tested |
+| glint and HUD prompt stay above the awning | ✅ 19 and 100+ vs a 10.0799 maximum |
+| `nearest-neighbor` native sampling | ✅ no scaling, filtering, tint or alpha on any piece |
+
+### The one deliberate divergence
+
+The contract's `draw_role` for the counter read is explicit:
+
+> `"front-of-actor ONLY when behind cover; base already drew once below canopy"`
+
+Its own `front` studio scenario nevertheless measures **170/288 (59%)** of the
+character occluded by `base_foreground` at feet (488,808) — which would put the
+counter over the legs of an actor standing *south* of the stall. That
+contradicts the qualifier above and §6.B of this brief ("Do not incorrectly
+place the counter over the player's legs").
+
+Depth bands satisfy the qualifier without needing a condition: the counter sits
+at 10.0799 and any actor south of the cover is at 10.081 or lower depth order,
+so **the real engine measures 0/289 there**. A test pins it. This is the only
+point where the implementation departs from the art side's measured scenario,
+and it departs toward the contract's own stated intent.
+
+### Convention note, no change needed
+
+The contract gives `actor_anchor_local_px: [12, 30]`; the engine anchors at
+`(12, 31)` (`CHAR_FEET_INSET = 1`, origin 31/32), measured as feet y 773.73 with
+sprite top 742.73. These describe the same ground-contact row under different
+conventions — row index 30 versus the boundary below it. Nothing was changed;
+recorded so the art side can align its model.
+
+### The contract's unresolved items, answered
+
+1. **Real 480×270 frame, feet coords, origin, depths** — §2 and §5 of this
+   document; captures in `screenshots/b205c1/`.
+2. **Does (464,752) match the integrated stall?** Yes, confirmed from the live
+   display list before any change.
+3. **Do actors pop between depth states?** No: 0 ordering changes across a
+   real-input walk and a driven Lookout walk; the one visible transition is
+   unreachable inside the art's x-span.
+4. **Do the glint and prompt stay distinguishable?** Yes; both draw above every
+   stall layer and V1 was taken by a real `E` press.
+5. **Same SHA-256 before and after?** Yes, both files.
+
+The validation doc's open question — *"the reported severe runtime occlusion
+depends on the player's actual position … it cannot be fully localized without
+the real B.2-04 screenshot"* — is resolved in §5b: the real interaction position
+is **(492.73, 773.73)**, between the art side's `south_approach` and `near_cover`
+cases, where the pre-fix occlusion measured **66.4%**.
 
 ---
 
@@ -205,6 +274,42 @@ At the real-input interaction position, unoccluded sprite rows went from
 shoulders, torso and thighs now read; the shins and feet sit behind the valance
 and counter, which is the intended "standing under an awning" overlap.
 
+## 5b. Measured occlusion, real engine vs the art side's model
+
+The art review quantified occlusion as "how many of Tempest's 288 opaque sprite
+pixels fall beneath a later-drawn opaque production pixel". The same quantity
+was measured **in the running game**, at the art side's own feet coordinates, by
+`tools/b205c-occlusion-measure.mjs`.
+
+Method: four real frames per position — actor present/absent × stall
+visible/hidden — restricted to the sprite's own 24×32 screen rect read from the
+engine. The actor's pixels are those that change when only the actor moves; an
+occluded pixel is one where the stall-visible frame is indistinguishable from
+the no-actor frame. No compositing, no inference from the PNGs.
+
+| art test case | feet (world) | **before** | **after** | art model: whole canopy | art model: split |
+| --- | --- | --- | --- | --- | --- |
+| `evidence_center` | (488, 760) | 28/289 (9.7%) | **0/289 (0%)** | 36 | 0 |
+| `south_approach` | (488, 776) | 231/299 (77.3%) | **67/299 (22.4%)** | 234 | 76 |
+| `near_cover` | (488, 780) | 252/289 (87.2%) | **112/289 (38.8%)** | 235 | 127 |
+| `front` | (488, 808) | 0/289 | **0/289** | 0 | **170** |
+| `beside` | (450, 776) | 0/286 | **0/286** | 0 | 0 |
+| **real interaction position** | **(492.73, 773.73)** | **202/304 (66.4%)** | **36/304 (11.8%)** | — | — |
+
+The art side's pixel model was accurate: it predicted 234 and the engine
+measured 231 for the whole canopy at `south_approach`, and predicted 76 against
+a measured 67 for the split. `near_cover` lands within 17 pixels on both. The
+model is vindicated as a planning tool — and the one case where it disagrees is
+`front`, where it predicted 170 occluded and the engine measures **0**, for the
+reason given in §1b.
+
+Isolating the behind layers — hiding only the valance and counter — gives
+**0/299** and **0/304** occluded. The whole base and the rear roof never cover
+the actor at the approach positions, which is exactly the
+`behind_approaching_actors` role the contract assigns them.
+
+Raw data: `occlusion-measurements-before.json`, `occlusion-measurements.json`.
+
 ### No popping
 
 | check | result |
@@ -345,6 +450,8 @@ Added:
 | `tests/support/png.ts` | dependency-free PNG decode / crop / composite for pixel assertions |
 | `tools/b205c-stall-capture.mjs` | before/after captures, telemetry, live frame audit |
 | `tools/pngkit.py` | stdlib-only crop / zoom / diff / side-by-side for inspecting captures |
+| `tools/b205c-occlusion-measure.mjs` | four-frame real-engine occlusion measurement (§5b) |
+| `art-source/.../07_occlusion_b205b/` | the three B.2-05B handoff documents, archived |
 | `docs/art-integration/screenshots/b205c1/` | 19 captures per pass + `telemetry-{before,after}.json` |
 
 **No art file, map file, collision layer, mission file, save module, enemy,
@@ -375,6 +482,7 @@ actors through a debug handle and are labelled as such in
 | `06-{before,after}-crossing-row{44..51}.png` | STAGED | ordered boundary crossing |
 | `07-{before,after}-played-after-boundary-walk.png` | PLAYED | after the real-input walk south |
 | `09-after-staged-lookout-walking-under-canopy.png` | STAGED | a Lookout mid-walk (after pass only — the harness gained this block after the baseline run; the baseline Lookout behaviour is in `04-before-staged-tempest-and-lookout.png`) |
+| `10-measure-*-as-seen.png` / `-stall-hidden.png` | STAGED | the frame pair behind the §5b measurement |
 | `08-compare-*-before-after.png` | — | side-by-side pairs, 3× |
 
 ---
@@ -402,4 +510,6 @@ them is a one-line `rm`; say the word and I will.
 | V1 still reachable and interactable | ✅ real `E` press, both passes |
 | Collision / cover / mission / constants unchanged | ✅ |
 | tsc, vitest, build | ✅ 371 tests |
-| Real browser captures | ✅ 19 per pass |
+| Real browser captures | ✅ 19 per pass + 4 measurement frames |
+| Conformance to the B.2-05B contract | ✅ §1b, asserted against the contract JSON |
+| Occlusion quantified in the art side's own units | ✅ §5b, 66.4% → 11.8% at the real interaction position |

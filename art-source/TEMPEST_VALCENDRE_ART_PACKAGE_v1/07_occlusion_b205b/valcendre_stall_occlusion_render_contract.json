@@ -1,0 +1,233 @@
+{
+  "schema_version": "1.0.0",
+  "task": "B.2-05B",
+  "status": "ART_SIDE_NO_PRODUCTION_PIXEL_CHANGES; PHASER_RUNTIME_UNVERIFIED",
+  "decision": "NO_REPAINT. Preserve both approved 80x48 PNGs byte-for-byte. Render two source rectangles of the SAME canopy PNG in separate depth bands when actor approaches the clue.",
+  "reference_asset": {
+    "base": "valcendre_market_stall_base_80x48.png",
+    "canopy": "valcendre_market_stall_canopy_80x48.png",
+    "tempest": "tempest_24x32_dir.png",
+    "dimensions_px": [
+      80,
+      48
+    ],
+    "shared_local_origin_px": [
+      0,
+      0
+    ],
+    "source_sha256": {
+      "valcendre_market_stall_base_80x48.png": "40299ffca78f01a294d8690ae273fd9f3296b4c78eb145f2ed611ce47e4c8346",
+      "valcendre_market_stall_canopy_80x48.png": "3f878cd5582d66ecf28ba14a63a5c1b26e8d7a0a03f966af806cd364cc576493",
+      "tempest_24x32_dir.png": "10da3b44d66948d618146ce5c539e3a7e38c23695222aafe8b0f459ac127c7e7",
+      "valcendre_proof_cobble_16x16.png": "14e9b5c58301f037b87573dbb77487f0ea906b952b015adc8255aeef3b4349ee",
+      "valcendre_palette.json": "971bb420afe6f0a92988de752d7aa04baa704720155ea1d2fc6d573d0d3fc7e8"
+    },
+    "source_integrity": "immutable source; no modified production PNG in this package"
+  },
+  "geometry_lock": {
+    "stall_visual_envelope_world_origin_px": [
+      464,
+      752
+    ],
+    "stall_visual_envelope_world_size_px": [
+      80,
+      48
+    ],
+    "world_origin_provenance": "B.2-03B-2 manifest RECOMMENDED (not verified in B.2-04 engine)",
+    "cover_tile_rect": {
+      "x_start": 29,
+      "x_end_inclusive": 33,
+      "y": 49
+    },
+    "cover_world_rect_px": [
+      464,
+      784,
+      80,
+      16
+    ],
+    "v1_evidence_tile": [
+      30,
+      47
+    ],
+    "evidence_world_rect_px": [
+      480,
+      752,
+      16,
+      16
+    ],
+    "actor_anchor_local_px": [
+      12,
+      30
+    ]
+  },
+  "canopy_source_rect_contract": {
+    "source_file": "valcendre_market_stall_canopy_80x48.png",
+    "back_roof": {
+      "src_xywh": [
+        0,
+        0,
+        80,
+        17
+      ],
+      "destination_offset_from_shared_origin_xy": [
+        0,
+        0
+      ],
+      "draw_role": "behind_approaching_actors"
+    },
+    "front_valance": {
+      "src_xywh": [
+        0,
+        17,
+        80,
+        31
+      ],
+      "destination_offset_from_shared_origin_xy": [
+        0,
+        17
+      ],
+      "draw_role": "in_front_of_actors_in_approach_band"
+    },
+    "source_rectangles_nonoverlapping": true,
+    "structural_base_lower_counter_foreground_read": {
+      "source_file": "valcendre_market_stall_base_80x48.png",
+      "src_xywh": [
+        0,
+        26,
+        80,
+        22
+      ],
+      "destination_offset_from_shared_origin_xy": [
+        0,
+        26
+      ],
+      "draw_role": "front-of-actor ONLY when behind cover; base already drew once below canopy"
+    },
+    "original_assembled_stall_rgba_preserved": true,
+    "composed_pixel_identical_to_original_canopy": true,
+    "no_texture_modification_or_recoloring": true,
+    "important": "If the engine crops an 80x48 image rather than using source rectangles, maintain the 80x48 local origin for BOTH regions; do not offset the cropped pixels twice."
+  },
+  "recommended_visual_draw_orders": {
+    "evidence_approach": [
+      "ground",
+      "stall_structural_base",
+      "back_roof_source_rect",
+      "actor",
+      "front_valance_source_rect",
+      "lower_counter_source_rect_redraw"
+    ],
+    "front_of_stall": [
+      "ground",
+      "stall_structural_base",
+      "whole_canopy",
+      "actor"
+    ],
+    "beside_stall": [
+      "ground",
+      "stall_structural_base",
+      "whole_canopy",
+      "actor_when_nonoverlapping"
+    ],
+    "far_behind_stall": [
+      "ground",
+      "actor",
+      "stall_structural_base",
+      "whole_canopy"
+    ],
+    "consistency": "Apply the same spatial rule to all actors; never key special art treatment to Tempest identity alone.",
+    "selection_recommendation": "For actors whose feet enter the awning projection while remaining north of cover row y49, use split roof/valance ordering. Art-review example: local feet (24,24), world (488,776). Confirm engine origin and exact actor feet coordinates before selecting thresholds.",
+    "visual_policy_only": true,
+    "critical": "No change to shadowZones, concealment, visibility, collision, interaction distance or objective state. Mandatory evidence glint and HUD prompt should remain in an existing clearly visible overlay."
+  },
+  "measured_pixel_occlusion_studio_scenarios": {
+    "evidence_center": {
+      "character_opaque": 288,
+      "whole_canopy_foreground_occluded": 36,
+      "valance_foreground_occluded": 0,
+      "base_foreground_occluded": 0,
+      "split_proposed_occluded_union": 0,
+      "whole_canopy_percent": 12.5,
+      "split_proposed_percent": 0.0
+    },
+    "south_approach": {
+      "character_opaque": 288,
+      "whole_canopy_foreground_occluded": 234,
+      "valance_foreground_occluded": 76,
+      "base_foreground_occluded": 0,
+      "split_proposed_occluded_union": 76,
+      "whole_canopy_percent": 81.2,
+      "split_proposed_percent": 26.4
+    },
+    "near_cover": {
+      "character_opaque": 288,
+      "whole_canopy_foreground_occluded": 235,
+      "valance_foreground_occluded": 101,
+      "base_foreground_occluded": 26,
+      "split_proposed_occluded_union": 127,
+      "whole_canopy_percent": 81.6,
+      "split_proposed_percent": 44.1
+    },
+    "front": {
+      "character_opaque": 288,
+      "whole_canopy_foreground_occluded": 0,
+      "valance_foreground_occluded": 0,
+      "base_foreground_occluded": 170,
+      "split_proposed_occluded_union": 170,
+      "whole_canopy_percent": 0.0,
+      "split_proposed_percent": 59.0
+    },
+    "beside": {
+      "character_opaque": 288,
+      "whole_canopy_foreground_occluded": 0,
+      "valance_foreground_occluded": 0,
+      "base_foreground_occluded": 0,
+      "split_proposed_occluded_union": 0,
+      "whole_canopy_percent": 0.0,
+      "split_proposed_percent": 0.0
+    },
+    "behind": {
+      "character_opaque": 288,
+      "whole_canopy_foreground_occluded": 0,
+      "valance_foreground_occluded": 0,
+      "base_foreground_occluded": 0,
+      "split_proposed_occluded_union": 0,
+      "whole_canopy_percent": 0.0,
+      "split_proposed_percent": 0.0
+    }
+  },
+  "body_region_occlusion_south_approach": {
+    "cap_and_head": {
+      "total_opaque": 57,
+      "canopy_above": 9,
+      "proposed_split": 0
+    },
+    "shoulders_and_arms": {
+      "total_opaque": 89,
+      "canopy_above": 89,
+      "proposed_split": 0
+    },
+    "torso": {
+      "total_opaque": 75,
+      "canopy_above": 75,
+      "proposed_split": 15
+    },
+    "legs_and_boots": {
+      "total_opaque": 67,
+      "canopy_above": 61,
+      "proposed_split": 61
+    }
+  },
+  "limitations": [
+    "B.2-04 real Phaser evidence interaction screenshot unavailable; proposed studio placements are not engine positions",
+    "Original world image origin [464,752] is recommended metadata, not independently confirmed in Phaser",
+    "Source-rectangle draw ordering requires coding-agent implementation and runtime screenshots",
+    "An overhead cutaway is a rendering convention; need test walking animations and NPCs at adjacent positions",
+    "No code, maps, collision or game production files changed"
+  ],
+  "previews": {
+    "valcendre_stall_occlusion_before_after.png": "ART REVIEW \u2014 NOT ENGINE",
+    "valcendre_stall_depth_study.png": "ART REVIEW \u2014 NOT ENGINE",
+    "valcendre_stall_evidence_visibility.png": "ART REVIEW \u2014 NOT ENGINE"
+  }
+}

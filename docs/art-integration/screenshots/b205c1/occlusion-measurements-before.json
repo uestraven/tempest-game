@@ -1,0 +1,136 @@
+{
+ "camera": [
+  504,
+  792
+ ],
+ "park": [
+  328,
+  824
+ ],
+ "results": [
+  {
+   "id": "evidence_center",
+   "feet": {
+    "x": 488,
+    "y": 760
+   },
+   "playerDepth": 10.0824,
+   "actorOpaquePixels": 289,
+   "occludedPixels": 28,
+   "occludedPercent": 9.7,
+   "artStudioWholeCanopy": 36,
+   "artStudioSplit": 0,
+   "occludedBbox": {
+    "x0": 220,
+    "x1": 230,
+    "y0": 100,
+    "y1": 102
+   }
+  },
+  {
+   "id": "south_approach",
+   "feet": {
+    "x": 488,
+    "y": 776
+   },
+   "playerDepth": 10.0824,
+   "actorOpaquePixels": 299,
+   "occludedPixels": 231,
+   "occludedPercent": 77.3,
+   "artStudioWholeCanopy": 234,
+   "artStudioSplit": 76,
+   "occludedBbox": {
+    "x0": 217,
+    "x1": 231,
+    "y0": 100,
+    "y1": 118
+   }
+  },
+  {
+   "id": "near_cover",
+   "feet": {
+    "x": 488,
+    "y": 780
+   },
+   "playerDepth": 10.0824,
+   "actorOpaquePixels": 289,
+   "occludedPixels": 252,
+   "occludedPercent": 87.2,
+   "artStudioWholeCanopy": 235,
+   "artStudioSplit": 127,
+   "occludedBbox": {
+    "x0": 217,
+    "x1": 231,
+    "y0": 100,
+    "y1": 122
+   }
+  },
+  {
+   "id": "front",
+   "feet": {
+    "x": 488,
+    "y": 808
+   },
+   "playerDepth": 10.0824,
+   "actorOpaquePixels": 289,
+   "occludedPixels": 0,
+   "occludedPercent": 0,
+   "artStudioWholeCanopy": 0,
+   "artStudioSplit": 170,
+   "occludedBbox": null
+  },
+  {
+   "id": "beside",
+   "feet": {
+    "x": 450,
+    "y": 776
+   },
+   "playerDepth": 10.0824,
+   "actorOpaquePixels": 286,
+   "occludedPixels": 0,
+   "occludedPercent": 0,
+   "artStudioWholeCanopy": 0,
+   "artStudioSplit": 0,
+   "occludedBbox": null
+  },
+  {
+   "id": "real_interaction_position",
+   "feet": {
+    "x": 492.7333333333337,
+    "y": 773.7333333333336
+   },
+   "playerDepth": 10.0824,
+   "actorOpaquePixels": 304,
+   "occludedPixels": 202,
+   "occludedPercent": 66.4,
+   "artStudioWholeCanopy": null,
+   "artStudioSplit": null,
+   "occludedBbox": {
+    "x0": 221,
+    "x1": 235,
+    "y0": 100,
+    "y1": 115
+   }
+  }
+ ],
+ "rearLayersOnly": [
+  {
+   "id": "south_approach",
+   "feet": {
+    "x": 488,
+    "y": 776
+   },
+   "actorPixels": 299,
+   "occludedByRearLayersOnly": 231
+  },
+  {
+   "id": "real_interaction_position",
+   "feet": {
+    "x": 492.7333333333337,
+    "y": 773.7333333333336
+   },
+   "actorPixels": 304,
+   "occludedByRearLayersOnly": 202
+  }
+ ]
+}
