@@ -14,6 +14,15 @@ Screenshots: `docs/art-integration/screenshots/b204/`.
 
 ### ART-1 — Shaded paving variants (highest impact)
 
+> **RE-SCOPED by the B.2-05C-2 material audit — this request overstated the need.**
+> The 496 figure below counts `deep_shadow` *floor tiles*, but `voidFill` and
+> `shadowFloor` both paint `deep_shadow`, so **432 of those 496 are non-walkable
+> building interiors**, not paving. Only **64** are walkable shaded ground inside
+> the market region, and map-wide the genuinely cobblestone shaded ground is
+> **79 tiles**. A further 372 shaded tiles are `serviceBrick`, which needs its
+> own artwork (ART-11) rather than cobblestone. Superseded by ART-7/8/9 in
+> [`../art-integration/valcendre-b205c2.md`](../art-integration/valcendre-b205c2.md).
+
 | | |
 | --- | --- |
 | Asset | new companion sheet to `valcendre_proof_cobble_16x16.png` |

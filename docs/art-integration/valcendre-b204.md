@@ -111,7 +111,7 @@ in every run, so a screenshot is reproducible and a seam would be a real defect.
 
 | Legacy surface | Tiles | Reason |
 | --- | --- | --- |
-| `deep_shadow` | **496** | The west arcade and the plaza shadow bands use it as their *floor*. The package has no shaded paving variant, so substituting the lit cobble would erase the concealment read. **This is the single largest gap** — see follow-up ART-1. |
+| `deep_shadow` | **496** | The west arcade and the plaza shadow bands use it as their *floor*. The package has no shaded paving variant, so substituting the lit cobble would erase the concealment read. **Corrected by the B.2-05C-2 audit: only 64 of these 496 are walkable shaded ground; the other 432 are non-walkable `voidFill` behind building walls, which is also painted `deep_shadow` and is not paving at all.** See [`valcendre-b205c2.md`](valcendre-b205c2.md). |
 | `grass` | 12 | No approved grass. |
 | `floor_crack` | 1 | No approved equivalent. |
 
@@ -376,7 +376,7 @@ camera and actor placement, one build, two URLs.
 | `architecture` tiles | **353** | only 31 replaced by the two halls; the rest are the region's other walls, roofs and roof edges |
 | `cover_low` / `pillar` | 24 / 2 | drawn *and* collided; the package has no cover-piece art |
 | `decorBack` tiles | 17 | incl. a 4-tile `checker` inlay at (23–24, 44–45) that draws over the new paving — correct ordering, legacy art |
-| `deep_shadow` floor | 496 | the west arcade and plaza bands, left legacy |
+| `deep_shadow` floor | 496 | the west arcade and plaza bands, left legacy — but see the correction above: 432 of these are non-walkable void fill, not ground |
 | legacy props | **16** | `hay_cart`, `tree` ×2, `bench` ×2, `lamppost` ×2, `barrels`, `flower_box` ×2, `flower_pot`, `clothesline`, `french_flag`, `village_cross`, `stone_cover`, and the legacy `fountain` object (texture swapped) |
 
 Per §13 these are recorded, not quietly edited. No colour grading or contrast
@@ -411,7 +411,7 @@ in-engine.
 | # | Item | Status |
 | --- | --- | --- |
 | 1 | New art loads correctly in the real game | ✅ all 7 v2 textures + both Lookout sheets confirmed in-engine |
-| 2 | Controlled slice uses approved paving | ✅ 443 tiles; 509 skipped for want of shaded/grass art |
+| 2 | Controlled slice uses approved paving | ✅ 443 tiles; 509 skipped for want of shaded/grass art (of which 432 turned out to be non-walkable void fill — B.2-05C-2 audit) |
 | 3 | ≥1 footprint demonstrates the modular art without collision changes | ✅ **two** footprints, collision asserted unchanged |
 | 4 | Fountain correctly positioned | ✅ existing tile (24,47), exactly one instance |
 | 5 | Stall base/canopy layering functional | ✅ all three manifest orderings reproduced |
@@ -424,7 +424,8 @@ in-engine.
 | 12 | Real browser screenshots document the result | ✅ 24 engine captures |
 
 Item 9 is the one qualified pass. Item 2 is complete for the surfaces the
-package covers and explicitly incomplete for the 496 `deep_shadow` tiles, which
-is an art gap rather than an integration failure.
+package covers and explicitly incomplete for the `deep_shadow` tiles, which is
+an art gap rather than an integration failure — though the B.2-05C-2 audit later
+showed that gap to be 64 tiles of real shaded ground here, not 496.
 
 Follow-ups: [`../art-requests/valcendre-b204-followups.md`](../art-requests/valcendre-b204-followups.md).

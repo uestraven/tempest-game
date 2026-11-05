@@ -1,0 +1,240 @@
+{
+ "map": {
+  "width": 104,
+  "height": 72
+ },
+ "crossChecks": {
+  "carvedWalkabilityMismatches": 0,
+  "shadeMismatches": 0,
+  "carvedGroundAlsoSolidViaCoverOrProps": 175,
+  "note": "zero mismatches means the recomputed authored data agrees with the shipped village.json; cover and prop tiles sit ON carved ground and are counted separately"
+ },
+ "b204Figure": {
+  "region": {
+   "x": 9,
+   "y": 30,
+   "w": 34,
+   "h": 28
+  },
+  "deepShadowFloorTiles": 496,
+  "onWalkableGround": 64,
+  "onNonWalkableVoidFill": 432,
+  "note": "voidFill and shadowFloor both paint deep_shadow, so the B.2-04 count mixed real shaded ground with building interiors"
+ },
+ "shadedWalkableTotal": 652,
+ "byClass": {
+  "brick": 372,
+  "cobblestone_garden_path": 116,
+  "cobblestone": 79,
+  "gravel": 46,
+  "garage_industrial": 24,
+  "grass_garden": 15
+ },
+ "bySurface": {
+  "serviceBrick": 372,
+  "gardenPath": 116,
+  "alleyCobble": 55,
+  "yardGravel": 46,
+  "garageFloor": 24,
+  "marketPaving": 24,
+  "gardenGrass": 15
+ },
+ "byRegion": [
+  {
+   "region": "gardenWalk",
+   "area": "bakeryGarden",
+   "surface": "gardenPath",
+   "class": "cobblestone_garden_path",
+   "tiles": 116,
+   "bbox": {
+    "x0": 6,
+    "x1": 11,
+    "y0": 3,
+    "y1": 22
+   }
+  },
+  {
+   "region": "laneDescent",
+   "area": "bakeryGarden",
+   "surface": "serviceBrick",
+   "class": "brick",
+   "tiles": 94,
+   "bbox": {
+    "x0": 46,
+    "x1": 51,
+    "y0": 11,
+    "y1": 26
+   }
+  },
+  {
+   "region": "upperLaneJog",
+   "area": "bakeryGarden",
+   "surface": "serviceBrick",
+   "class": "brick",
+   "tiles": 88,
+   "bbox": {
+    "x0": 26,
+    "x1": 31,
+    "y0": 6,
+    "y1": 21
+   }
+  },
+  {
+   "region": "upperLaneWest",
+   "area": "bakeryGarden",
+   "surface": "serviceBrick",
+   "class": "brick",
+   "tiles": 69,
+   "bbox": {
+    "x0": 11,
+    "x1": 28,
+    "y0": 3,
+    "y1": 6
+   }
+  },
+  {
+   "region": "upperLaneNorth",
+   "area": "bakeryGarden",
+   "surface": "serviceBrick",
+   "class": "brick",
+   "tiles": 50,
+   "bbox": {
+    "x0": 37,
+    "x1": 42,
+    "y0": 8,
+    "y1": 16
+   }
+  },
+  {
+   "region": "marketArcade",
+   "area": "marketSquare",
+   "surface": "alleyCobble",
+   "class": "cobblestone",
+   "tiles": 40,
+   "bbox": {
+    "x0": 9,
+    "x1": 12,
+    "y0": 40,
+    "y1": 49
+   }
+  },
+  {
+   "region": "upperLaneEast",
+   "area": "bakeryGarden",
+   "surface": "serviceBrick",
+   "class": "brick",
+   "tiles": 37,
+   "bbox": {
+    "x0": 30,
+    "x1": 39,
+    "y0": 16,
+    "y1": 19
+   }
+  },
+  {
+   "region": "upperLaneFinal",
+   "area": "bakeryGarden",
+   "surface": "serviceBrick",
+   "class": "brick",
+   "tiles": 34,
+   "bbox": {
+    "x0": 42,
+    "x1": 51,
+    "y0": 8,
+    "y1": 11
+   }
+  },
+  {
+   "region": "garage",
+   "area": "garageInterior",
+   "surface": "garageFloor",
+   "class": "garage_industrial",
+   "tiles": 24,
+   "bbox": {
+    "x0": 58,
+    "x1": 61,
+    "y0": 6,
+    "y1": 11
+   }
+  },
+  {
+   "region": "loadingDock",
+   "area": "loadingDock",
+   "surface": "yardGravel",
+   "class": "gravel",
+   "tiles": 24,
+   "bbox": {
+    "x0": 85,
+    "x1": 90,
+    "y0": 10,
+    "y1": 13
+   }
+  },
+  {
+   "region": "marketPlaza",
+   "area": "marketSquare",
+   "surface": "marketPaving",
+   "class": "cobblestone",
+   "tiles": 24,
+   "bbox": {
+    "x0": 16,
+    "x1": 30,
+    "y0": 35,
+    "y1": 36
+   }
+  },
+  {
+   "region": "courtyardNorth",
+   "area": "depotCourtyard",
+   "surface": "yardGravel",
+   "class": "gravel",
+   "tiles": 20,
+   "bbox": {
+    "x0": 56,
+    "x1": 65,
+    "y0": 20,
+    "y1": 21
+   }
+  },
+  {
+   "region": "bakeryYard",
+   "area": "bakeryGarden",
+   "surface": "gardenGrass",
+   "class": "grass_garden",
+   "tiles": 15,
+   "bbox": {
+    "x0": 6,
+    "x1": 10,
+    "y0": 23,
+    "y1": 25
+   }
+  },
+  {
+   "region": "alley",
+   "area": "arrivalAlley",
+   "surface": "alleyCobble",
+   "class": "cobblestone",
+   "tiles": 15,
+   "bbox": {
+    "x0": 6,
+    "x1": 8,
+    "y0": 58,
+    "y1": 62
+   }
+  },
+  {
+   "region": "courtyardMid",
+   "area": "depotCourtyard",
+   "surface": "yardGravel",
+   "class": "gravel",
+   "tiles": 2,
+   "bbox": {
+    "x0": 50,
+    "x1": 51,
+    "y0": 26,
+    "y1": 26
+   }
+  }
+ ],
+ "problems": []
+}
