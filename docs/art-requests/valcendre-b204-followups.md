@@ -53,6 +53,14 @@ moving collision, both forbidden.
 
 ### ART-3 — Market stall canopy occludes Tempest on the evidence tile
 
+> **RESOLVED in Phase B.2-05C-1 — no art change was needed.** The canopy is now
+> drawn as two source regions at different depths, so an actor beneath it is in
+> front of the awning's rear slope and behind its front valance. Unoccluded
+> sprite rows at the interaction position went from 14/32 to 26/32, and the
+> unoccupied stall renders pixel-identically. See
+> [`../art-integration/valcendre-b205c1.md`](../art-integration/valcendre-b205c1.md).
+> The original report is kept below for the record.
+
 | | |
 | --- | --- |
 | Asset | `valcendre_market_stall_canopy_80x48.png` |

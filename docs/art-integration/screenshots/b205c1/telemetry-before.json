@@ -1,0 +1,1124 @@
+{
+ "label": "before",
+ "geometry": {
+  "pieces": [
+   {
+    "texture": "prop.valcendre.market_stall_base",
+    "frame": "__BASE",
+    "sourceRect": {
+     "x": 0,
+     "y": 0,
+     "w": 80,
+     "h": 48
+    },
+    "worldX": 464,
+    "worldY": 752,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 48,
+    "depth": 10.08,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   },
+   {
+    "texture": "prop.valcendre.market_stall_canopy",
+    "frame": "__BASE",
+    "sourceRect": {
+     "x": 0,
+     "y": 0,
+     "w": 80,
+     "h": 48
+    },
+    "worldX": 464,
+    "worldY": 752,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 48,
+    "depth": 10.08005,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   }
+  ],
+  "count": 2
+ },
+ "walkability": [
+  {
+   "tile": [
+    30,
+    47
+   ],
+   "walkable": true
+  },
+  {
+   "tile": [
+    30,
+    48
+   ],
+   "walkable": true
+  },
+  {
+   "tile": [
+    33,
+    48
+   ],
+   "walkable": true
+  },
+  {
+   "tile": [
+    31,
+    51
+   ],
+   "walkable": true
+  },
+  {
+   "tile": [
+    35,
+    49
+   ],
+   "walkable": true
+  },
+  {
+   "tile": [
+    32,
+    46
+   ],
+   "walkable": true
+  }
+ ],
+ "played": {
+  "interactionPosition": {
+   "tag": "played-interaction-position",
+   "player": {
+    "feetX": 487.65800384567285,
+    "feetY": 770.5853102592978,
+    "tile": {
+     "x": 30,
+     "y": 48
+    },
+    "depth": 10.07705853102593,
+    "anim": "anim.tempest.idle.up",
+    "frame": 6,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 481.65800384567285,
+     "y": 746.5853102592978,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 487.65800384567285,
+     "y": 755.5853102592978
+    },
+    "spriteTopWorldY": 739.5853102592978,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 205,
+    "scrollY": 651,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08005,
+     "artTopWorldY": 752
+    }
+   ],
+   "interaction": {
+    "prompt": "E - INVESTIGATE STALL"
+   },
+   "evidence": null,
+   "objectives": [],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  "afterE": {
+   "tag": "played-after-E",
+   "player": {
+    "feetX": 487.65800384567285,
+    "feetY": 770.5853102592978,
+    "tile": {
+     "x": 30,
+     "y": 48
+    },
+    "depth": 10.07705853102593,
+    "anim": "anim.tempest.idle.up",
+    "frame": 6,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 481.65800384567285,
+     "y": 746.5853102592978,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 487.65800384567285,
+     "y": 755.5853102592978
+    },
+    "spriteTopWorldY": 739.5853102592978,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 214,
+    "scrollY": 651,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08005,
+     "artTopWorldY": 752
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  "prompt": "E - INVESTIGATE STALL",
+  "v1Granted": true
+ },
+ "frameAudit": [
+  {
+   "expected": {
+    "texture": "prop.valcendre.market_stall_base",
+    "frame": "__BASE",
+    "src": [
+     0,
+     0,
+     80,
+     48
+    ],
+    "worldY": 752
+   },
+   "actual": {
+    "texture": "prop.valcendre.market_stall_base",
+    "frame": "__BASE",
+    "sourceRect": {
+     "x": 0,
+     "y": 0,
+     "w": 80,
+     "h": 48
+    },
+    "worldX": 464,
+    "worldY": 752,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 48,
+    "depth": 10.08,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   },
+   "ok": true
+  },
+  {
+   "expected": {
+    "texture": "prop.valcendre.market_stall_canopy",
+    "frame": "valcendre_stall_canopy_rear",
+    "src": [
+     0,
+     0,
+     80,
+     17
+    ],
+    "worldY": 752
+   },
+   "actual": null,
+   "ok": false
+  },
+  {
+   "expected": {
+    "texture": "prop.valcendre.market_stall_canopy",
+    "frame": "valcendre_stall_canopy_valance",
+    "src": [
+     0,
+     17,
+     80,
+     31
+    ],
+    "worldY": 769
+   },
+   "actual": null,
+   "ok": false
+  },
+  {
+   "expected": {
+    "texture": "prop.valcendre.market_stall_base",
+    "frame": "valcendre_stall_base_counter",
+    "src": [
+     0,
+     26,
+     80,
+     22
+    ],
+    "worldY": 778
+   },
+   "actual": null,
+   "ok": false
+  }
+ ],
+ "staged": [
+  {
+   "tag": "staged-evidence-tile",
+   "player": {
+    "feetX": 488,
+    "feetY": 760,
+    "tile": {
+     "x": 30,
+     "y": 47
+    },
+    "depth": 10.076,
+    "anim": "anim.tempest.idle.up",
+    "frame": 7,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 482,
+     "y": 736,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 488,
+     "y": 745
+    },
+    "spriteTopWorldY": 729,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08005,
+     "artTopWorldY": 752
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  {
+   "tag": "staged-south-approach",
+   "player": {
+    "feetX": 488,
+    "feetY": 776,
+    "tile": {
+     "x": 30,
+     "y": 48
+    },
+    "depth": 10.0776,
+    "anim": "anim.tempest.idle.up",
+    "frame": 6,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 482,
+     "y": 752,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 488,
+     "y": 761
+    },
+    "spriteTopWorldY": 745,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08005,
+     "artTopWorldY": 752
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  {
+   "tag": "staged-under-canopy-east",
+   "player": {
+    "feetX": 536,
+    "feetY": 776,
+    "tile": {
+     "x": 33,
+     "y": 48
+    },
+    "depth": 10.0776,
+    "anim": "anim.tempest.idle.up",
+    "frame": 6,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 530,
+     "y": 752,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 536,
+     "y": 761
+    },
+    "spriteTopWorldY": 745,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08005,
+     "artTopWorldY": 752
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  {
+   "tag": "staged-in-front",
+   "player": {
+    "feetX": 504,
+    "feetY": 824,
+    "tile": {
+     "x": 31,
+     "y": 51
+    },
+    "depth": 10.0824,
+    "anim": "anim.tempest.idle.up",
+    "frame": 7,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 498,
+     "y": 800,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 504,
+     "y": 809
+    },
+    "spriteTopWorldY": 793,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08005,
+     "artTopWorldY": 752
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  {
+   "tag": "staged-beside",
+   "player": {
+    "feetX": 568,
+    "feetY": 792,
+    "tile": {
+     "x": 35,
+     "y": 49
+    },
+    "depth": 10.0792,
+    "anim": "anim.tempest.idle.up",
+    "frame": 7,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 562,
+     "y": 768,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 568,
+     "y": 777
+    },
+    "spriteTopWorldY": 761,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08005,
+     "artTopWorldY": 752
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  {
+   "tag": "staged-behind",
+   "player": {
+    "feetX": 520,
+    "feetY": 744,
+    "tile": {
+     "x": 32,
+     "y": 46
+    },
+    "depth": 10.0744,
+    "anim": "anim.tempest.idle.up",
+    "frame": 7,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 514,
+     "y": 720,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 520,
+     "y": 729
+    },
+    "spriteTopWorldY": 713,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.08005,
+     "artTopWorldY": 752
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  }
+ ],
+ "pair": {
+  "player": {
+   "x": 488,
+   "y": 776,
+   "depth": 10.0776
+  },
+  "guard": {
+   "x": 495.6568261087545,
+   "y": 810,
+   "depth": 10.081
+  }
+ },
+ "crossing": [
+  {
+   "tile": [
+    32,
+    44
+   ],
+   "walkable": true,
+   "feetY": 712,
+   "depth": 10.0712
+  },
+  {
+   "tile": [
+    32,
+    45
+   ],
+   "walkable": true,
+   "feetY": 728,
+   "depth": 10.0728
+  },
+  {
+   "tile": [
+    32,
+    46
+   ],
+   "walkable": true,
+   "feetY": 744,
+   "depth": 10.0744
+  },
+  {
+   "tile": [
+    32,
+    47
+   ],
+   "walkable": true,
+   "feetY": 760,
+   "depth": 10.076
+  },
+  {
+   "tile": [
+    32,
+    48
+   ],
+   "walkable": true,
+   "feetY": 776,
+   "depth": 10.0776
+  },
+  {
+   "tile": [
+    32,
+    49
+   ],
+   "walkable": false
+  },
+  {
+   "tile": [
+    32,
+    50
+   ],
+   "walkable": true,
+   "feetY": 808,
+   "depth": 10.0808
+  },
+  {
+   "tile": [
+    32,
+    51
+   ],
+   "walkable": true,
+   "feetY": 824,
+   "depth": 10.0824
+  }
+ ],
+ "walkSamples": [
+  {
+   "t": 15154,
+   "feetY": 762.43,
+   "depth": 10.076242862436427,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15218,
+   "feetY": 767.83,
+   "depth": 10.076602862436427,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15285,
+   "feetY": 775.03,
+   "depth": 10.077322862436427,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15352,
+   "feetY": 782.23,
+   "depth": 10.078042862436426,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15418,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15485,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15551,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15618,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15685,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15754,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15818,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15884,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15954,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16018,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16085,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16151,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16218,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16285,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16352,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16418,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16485,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16551,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16620,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16688,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16758,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16841,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16916,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16982,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17057,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17119,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17185,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17252,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17319,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17385,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17452,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17518,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17585,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17652,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17718,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  }
+ ],
+ "shots": [
+  {
+   "file": "01-before-played-v1-interaction-position.png",
+   "kind": "PLAYED",
+   "note": "Real-input stop at the V1 interaction position. Prompt: E - INVESTIGATE STALL",
+   "prompt": "E - INVESTIGATE STALL",
+   "feet": {
+    "x": 487.65800384567285,
+    "y": 770.5853102592978
+   }
+  },
+  {
+   "file": "02-before-played-v1-granted.png",
+   "kind": "PLAYED",
+   "note": "V1 granted by a real E press: true; objectives V1"
+  },
+  {
+   "file": "03-before-staged-evidence-tile.png",
+   "kind": "STAGED",
+   "note": "On the V1 evidence tile, beneath the canopy. feet=(488,760) depth=10.076"
+  },
+  {
+   "file": "03-before-staged-south-approach.png",
+   "kind": "STAGED",
+   "note": "South approach tile (30,48), beneath the canopy. feet=(488,776) depth=10.0776"
+  },
+  {
+   "file": "03-before-staged-under-canopy-east.png",
+   "kind": "STAGED",
+   "note": "Beneath the canopy at its east end. feet=(536,776) depth=10.0776"
+  },
+  {
+   "file": "03-before-staged-in-front.png",
+   "kind": "STAGED",
+   "note": "South of the counter: the whole stall is behind the actor. feet=(504,824) depth=10.0824"
+  },
+  {
+   "file": "03-before-staged-beside.png",
+   "kind": "STAGED",
+   "note": "Level with the counter but outside the 80px visual span. feet=(568,792) depth=10.0792"
+  },
+  {
+   "file": "03-before-staged-behind.png",
+   "kind": "STAGED",
+   "note": "North of the stall: the structure should occlude the actor. feet=(520,744) depth=10.0744"
+  },
+  {
+   "file": "04-before-staged-tempest-and-lookout.png",
+   "kind": "STAGED",
+   "note": "Tempest beneath the canopy, a Lookout south of the counter, same frame. player depth=10.0776 guard depth=10.081"
+  },
+  {
+   "file": "05-before-staged-empty-stall.png",
+   "kind": "STAGED",
+   "note": "No actor overlaps the stall. Must be pixel-identical between passes."
+  },
+  {
+   "file": "06-before-crossing-row44.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 44. feetY=712 depth=10.0712"
+  },
+  {
+   "file": "06-before-crossing-row45.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 45. feetY=728 depth=10.0728"
+  },
+  {
+   "file": "06-before-crossing-row46.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 46. feetY=744 depth=10.0744"
+  },
+  {
+   "file": "06-before-crossing-row47.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 47. feetY=760 depth=10.076"
+  },
+  {
+   "file": "06-before-crossing-row48.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 48. feetY=776 depth=10.0776"
+  },
+  {
+   "file": "06-before-crossing-row50.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 50. feetY=808 depth=10.0808"
+  },
+  {
+   "file": "06-before-crossing-row51.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 51. feetY=824 depth=10.0824"
+  },
+  {
+   "file": "07-before-played-after-boundary-walk.png",
+   "kind": "PLAYED",
+   "note": "Real-input walk south across the stall boundary; 39 samples, display height 32"
+  }
+ ],
+ "pageErrors": [
+  "Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ],
+ "problems": [
+  "frame mismatch for valcendre_stall_canopy_rear: null",
+  "frame mismatch for valcendre_stall_canopy_valance: null",
+  "frame mismatch for valcendre_stall_base_counter: null"
+ ]
+}

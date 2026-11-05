@@ -24,17 +24,28 @@ import {
   V2_DEPTH,
   V2_FOUNTAIN,
   V2_STALL,
+  V2_STALL_REGIONS,
+  V2_STALL_SORT,
   V2_TEXTURES,
   pavingVariant,
   sortedDepth,
   type V2ArchTile,
 } from './ValcendreV2';
 
+/**
+ * Phaser's name for the frame covering a whole single-image texture. It must be
+ * passed explicitly once any cropped frame has been registered on the same
+ * texture - see the note in `buildStall`.
+ */
+export const WHOLE_IMAGE_FRAME = '__BASE';
+
 export interface V2Report {
   pavingTiles: number;
   buildings: { name: string; tiles: number }[];
   fountainSwapped: boolean;
   stallDrawn: boolean;
+  /** One entry per stall draw layer, in creation order. Read by the captures. */
+  stallPieces: { texture: string; frame: string | null; worldY: number; depth: number }[];
   skippedSurfaces: Record<string, number>;
 }
 
@@ -47,6 +58,7 @@ export class ValcendreV2Presentation {
     buildings: [],
     fountainSwapped: false,
     stallDrawn: false,
+    stallPieces: [],
     skippedSurfaces: {},
   };
 
@@ -176,40 +188,105 @@ export class ValcendreV2Presentation {
 
   // ---------------------------------------------------------- the stall
   /**
-   * Two images sharing one world origin, as the art manifest specifies.
+   * The stall, drawn as four layers off two approved PNGs.
    *
-   * DEPTH IS THE WHOLE POINT OF THIS PIECE. The manifest asks for three
-   * orderings depending on where the actor is, which a fixed depth per image
-   * cannot give. Instead each layer is y-sorted by the world row it visually
-   * occupies:
+   * Phase B.2-04 drew the base and canopy as single images sharing one depth
+   * just above the counter row. That is correct for an actor south of the stall
+   * and wrong for the one position the mission requires: standing at the
+   * ransacked-stall clue, the player was behind both layers and all but
+   * invisible, because the canopy's art projects over the two walkable rows the
+   * clue is reachable from.
    *
-   *   base   sorts at its counter row (the existing cover run at y49), so an
-   *          actor south of the counter draws in front and an actor behind it
-   *          is occluded, exactly like any other cover prop.
-   *   canopy sorts at the SAME row as the base rather than at its own top edge.
-   *          Sorting it by its own y would put it behind everything, because
-   *          its art sits 30px higher than the structure holding it up.
+   * The correction is to stop treating each FILE as one draw layer. The awning's
+   * rear slope and the counter's front face describe different depths in the
+   * world even though they ship in the same images, so they are drawn as
+   * separate source regions at separate depths, with the actor's own y-sorted
+   * depth falling between them:
    *
-   * The result is the manifest's three cases falling out of one rule: in front
-   * of the counter the actor is over both layers; behind it the actor is under
-   * both; level with it the actor interleaves.
+   *   base (whole)   behind   - the structure, under the actor
+   *   canopy rear    behind   - the awning's far slope, under the actor
+   *   ~ actors sort here by their feet, exactly as they always have ~
+   *   canopy valance front    - front beam and hanging fabric, over the actor
+   *   base counter   front    - the counter's front face, over the actor's legs
    *
-   * NEITHER LAYER CREATES COLLISION, COVER OR CONCEALMENT. The 80x48 art
-   * decorates the pre-existing 5x1 cover run and nothing else.
+   * Every depth is a CONSTANT. Nothing here reads the player, an enemy, or any
+   * actor position, so a Lookout and Tempest standing on opposite sides of the
+   * stall resolve correctly in the same frame, and there is no scene-wide mode
+   * to switch. The two front thresholds sit inside the solid counter row where
+   * no actor can stand, so no character can straddle them and none can pop.
+   *
+   * NO ARTWORK IS MODIFIED, no alpha is applied and no pixel is discarded: the
+   * regions tile the canopy exactly, and the counter is an extra copy of base
+   * pixels drawn at their own destination, which is idempotent because the files
+   * are binary-alpha.
+   *
+   * STILL NO COLLISION, COVER OR CONCEALMENT. The art decorates the pre-existing
+   * 5x1 cover run and nothing else.
    */
   private buildStall(): void {
-    const sortRow = (V2_STALL.coverTiles.y + 1) * TILE;
-    const base = this.scene.add.image(V2_STALL.worldX, V2_STALL.worldY, V2_TEXTURES.stallBase);
-    base.setOrigin(0, 0).setDepth(sortedDepth(sortRow));
-    this.owned.push(base);
+    if (!this.registerStallRegions()) return;
 
-    const canopy = this.scene.add.image(V2_STALL.worldX, V2_STALL.worldY, V2_TEXTURES.stallCanopy);
-    canopy.setOrigin(0, 0);
-    // A hair above the base so the two never z-fight, but the same world row so
-    // both resolve against an actor together.
-    canopy.setDepth(sortedDepth(sortRow) + 0.00005);
-    this.owned.push(canopy);
+    const piece = (
+      textureKey: string,
+      frame: string,
+      localY: number,
+      sortRow: number,
+      epsilon = 0
+    ): void => {
+      // The frame is ALWAYS named explicitly, including the whole-image
+      // `__BASE`. Phaser promotes the first frame added to a single-image
+      // texture to be that texture's default, so once a crop is registered an
+      // unqualified `add.image(key)` silently resolves to the crop instead of
+      // the full picture - which drew the counter band alone, 26px too high,
+      // with the rest of the structure missing.
+      const img = this.scene.add.image(
+        V2_STALL.worldX,
+        V2_STALL.worldY + localY,
+        textureKey,
+        frame
+      );
+      // Destination offset applied exactly ONCE, here: a cropped frame carries
+      // no implicit offset of its own, so the region's source y is added to the
+      // envelope origin and nowhere else.
+      img.setOrigin(0, 0).setDepth(sortedDepth(sortRow) + epsilon);
+      this.owned.push(img);
+      this.report.stallPieces.push({
+        texture: textureKey,
+        frame,
+        worldY: V2_STALL.worldY + localY,
+        depth: img.depth,
+      });
+    };
+
+    const R = V2_STALL_REGIONS;
+    // Behind the actor. The full base keeps the structure intact; the epsilon
+    // only stops it z-fighting with the rear roof above it.
+    piece(V2_TEXTURES.stallBase, WHOLE_IMAGE_FRAME, 0, V2_STALL_SORT.behind);
+    piece(V2_TEXTURES.stallCanopy, R.canopyRear.frame, R.canopyRear.rect[1], V2_STALL_SORT.behind, 0.00005);
+    // In front of the actor.
+    piece(V2_TEXTURES.stallCanopy, R.canopyValance.frame, R.canopyValance.rect[1], V2_STALL_SORT.valance);
+    piece(V2_TEXTURES.stallBase, R.baseCounter.frame, R.baseCounter.rect[1], V2_STALL_SORT.counter);
+
     this.report.stallDrawn = true;
+  }
+
+  /**
+   * Adds the three cropped frames to the already-loaded approved textures.
+   *
+   * In-memory only: `Texture.add` records a rectangle into the existing image,
+   * so no file is read, written or altered. Guarded against a second scene
+   * start re-adding the same frame names.
+   */
+  private registerStallRegions(): boolean {
+    for (const region of Object.values(V2_STALL_REGIONS)) {
+      const texture = this.scene.textures.get(V2_TEXTURES[region.texture]);
+      if (!texture || texture.key === '__MISSING') return false;
+      if (!texture.has(region.frame)) {
+        const [x, y, w, h] = region.rect;
+        texture.add(region.frame, 0, x, y, w, h);
+      }
+    }
+    return true;
   }
 
   /**

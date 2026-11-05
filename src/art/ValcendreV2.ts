@@ -267,6 +267,91 @@ export const V2_STALL = {
   evidenceTile: { x: 30, y: 47 },
 } as const;
 
+// ------------------------------------------- stall occlusion (Phase B.2-05C-1)
+/**
+ * Source regions of the two approved stall PNGs, as separate draw layers.
+ *
+ * NO ARTWORK IS MODIFIED. These are windows onto the approved files, registered
+ * as extra Phaser texture frames in memory at scene build time. The PNGs stay
+ * byte-identical, nothing is repainted, no pixel is deleted, no hole is punched
+ * and no opacity is applied. `tests/stall-occlusion.test.ts` asserts the files'
+ * checksums and that the two canopy windows reconstruct the canopy exactly.
+ *
+ * The canopy splits at local y=17. Above it is the awning's rear slope, which
+ * an actor beneath the stall should appear IN FRONT of; below it is the front
+ * beam and hanging valance, which should stay in front of that actor so the
+ * overlap still reads as standing under an awning rather than on top of it.
+ *
+ * `baseCounter` is the counter's front face, redrawn from the ORIGINAL base in
+ * front of an actor standing north of it. The full base is still drawn behind,
+ * so this is a second copy of the same pixels at the same destination, not a
+ * replacement. Both files have strictly binary alpha (verified in the test), so
+ * drawing those pixels twice is idempotent and the unoccupied stall is
+ * unchanged.
+ */
+export const V2_STALL_REGIONS = {
+  canopyRear: {
+    texture: 'stallCanopy',
+    frame: 'valcendre_stall_canopy_rear',
+    /** [x, y, w, h] in the source PNG. */
+    rect: [0, 0, 80, 17],
+  },
+  canopyValance: {
+    texture: 'stallCanopy',
+    frame: 'valcendre_stall_canopy_valance',
+    rect: [0, 17, 80, 31],
+  },
+  baseCounter: {
+    texture: 'stallBase',
+    frame: 'valcendre_stall_base_counter',
+    rect: [0, 26, 80, 22],
+  },
+} as const satisfies Record<
+  string,
+  { texture: 'stallBase' | 'stallCanopy'; frame: string; rect: readonly [number, number, number, number] }
+>;
+
+export type V2StallRegion = keyof typeof V2_STALL_REGIONS;
+
+/**
+ * World rows the stall's layers sort at. Fixed values, not functions of any
+ * actor's position: the pieces have constant depth and the ACTORS move through
+ * them, which is what makes the result identical for Tempest, for a Lookout,
+ * and for several of them on different sides of the stall at once.
+ *
+ * Why these three numbers and not others - the player's feet box is 10px tall
+ * with its bottom edge exactly on `sprite.y`, so against the solid counter row
+ * (world y 784..799):
+ *
+ *   an actor NORTH of the counter can reach at most feet y 784
+ *   an actor SOUTH of the counter can reach at best feet y 810
+ *
+ * Both front thresholds therefore sit inside the 784..799 band, where no actor
+ * can ever stand. An actor cannot straddle them, so the ordering can never flip
+ * underneath a moving character and there is nothing to pop. The test asserts
+ * this containment rather than trusting the comment.
+ */
+export const V2_STALL_SORT = {
+  /** The envelope's north edge: everything that must fall behind an actor. */
+  behind: 752,
+  /** Centre of the solid counter row. */
+  valance: 792,
+  /** Last row of the solid counter row. */
+  counter: 799,
+} as const;
+
+/**
+ * The standable band limits either side of the counter, derived from the body
+ * box rather than guessed. Used by the regression test that proves the sort
+ * rows are unreachable.
+ */
+export const V2_STALL_ACTOR_LIMITS = {
+  /** Greatest feet y an actor north of the counter can reach. */
+  maxFeetYNorth: 784,
+  /** Least feet y an actor south of the counter can reach. */
+  minFeetYSouth: 810,
+} as const;
+
 // -------------------------------------------------------------- depth bands
 /**
  * Depth rules for the proof, chosen to sit inside the existing scheme rather

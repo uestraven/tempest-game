@@ -1,0 +1,1581 @@
+{
+ "label": "after",
+ "geometry": {
+  "pieces": [
+   {
+    "texture": "prop.valcendre.market_stall_base",
+    "frame": "__BASE",
+    "sourceRect": {
+     "x": 0,
+     "y": 0,
+     "w": 80,
+     "h": 48
+    },
+    "worldX": 464,
+    "worldY": 752,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 48,
+    "depth": 10.0752,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   },
+   {
+    "texture": "prop.valcendre.market_stall_canopy",
+    "frame": "valcendre_stall_canopy_rear",
+    "sourceRect": {
+     "x": 0,
+     "y": 0,
+     "w": 80,
+     "h": 17
+    },
+    "worldX": 464,
+    "worldY": 752,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 17,
+    "depth": 10.07525,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   },
+   {
+    "texture": "prop.valcendre.market_stall_canopy",
+    "frame": "valcendre_stall_canopy_valance",
+    "sourceRect": {
+     "x": 0,
+     "y": 17,
+     "w": 80,
+     "h": 31
+    },
+    "worldX": 464,
+    "worldY": 769,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 31,
+    "depth": 10.0792,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   },
+   {
+    "texture": "prop.valcendre.market_stall_base",
+    "frame": "valcendre_stall_base_counter",
+    "sourceRect": {
+     "x": 0,
+     "y": 26,
+     "w": 80,
+     "h": 22
+    },
+    "worldX": 464,
+    "worldY": 778,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 22,
+    "depth": 10.0799,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   }
+  ],
+  "count": 4
+ },
+ "walkability": [
+  {
+   "tile": [
+    30,
+    47
+   ],
+   "walkable": true
+  },
+  {
+   "tile": [
+    30,
+    48
+   ],
+   "walkable": true
+  },
+  {
+   "tile": [
+    33,
+    48
+   ],
+   "walkable": true
+  },
+  {
+   "tile": [
+    31,
+    51
+   ],
+   "walkable": true
+  },
+  {
+   "tile": [
+    35,
+    49
+   ],
+   "walkable": true
+  },
+  {
+   "tile": [
+    32,
+    46
+   ],
+   "walkable": true
+  }
+ ],
+ "played": {
+  "interactionPosition": {
+   "tag": "played-interaction-position",
+   "player": {
+    "feetX": 480.2237371289545,
+    "feetY": 778.8000000000002,
+    "tile": {
+     "x": 30,
+     "y": 48
+    },
+    "depth": 10.07788,
+    "anim": "anim.tempest.walk.up",
+    "frame": 27,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 474.2237371289545,
+     "y": 754.8000000000002,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 480.2237371289545,
+     "y": 763.8000000000002
+    },
+    "spriteTopWorldY": 747.8000000000002,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 198,
+    "scrollY": 659,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.0752,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_rear",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.07525,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_valance",
+     "worldX": 464,
+     "worldY": 769,
+     "depth": 10.0792,
+     "artTopWorldY": 786
+    },
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "valcendre_stall_base_counter",
+     "worldX": 464,
+     "worldY": 778,
+     "depth": 10.0799,
+     "artTopWorldY": 804
+    }
+   ],
+   "interaction": {
+    "prompt": "E - INVESTIGATE STALL"
+   },
+   "evidence": null,
+   "objectives": [],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  "afterE": {
+   "tag": "played-after-E",
+   "player": {
+    "feetX": 482.75707046228786,
+    "feetY": 778.8000000000002,
+    "tile": {
+     "x": 30,
+     "y": 48
+    },
+    "depth": 10.07788,
+    "anim": "anim.tempest.idle.up",
+    "frame": 6,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 476.75707046228786,
+     "y": 754.8000000000002,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 482.75707046228786,
+     "y": 763.8000000000002
+    },
+    "spriteTopWorldY": 747.8000000000002,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 209,
+    "scrollY": 659,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.0752,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_rear",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.07525,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_valance",
+     "worldX": 464,
+     "worldY": 769,
+     "depth": 10.0792,
+     "artTopWorldY": 786
+    },
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "valcendre_stall_base_counter",
+     "worldX": 464,
+     "worldY": 778,
+     "depth": 10.0799,
+     "artTopWorldY": 804
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  "prompt": "E - INVESTIGATE STALL",
+  "v1Granted": true
+ },
+ "frameAudit": [
+  {
+   "expected": {
+    "texture": "prop.valcendre.market_stall_base",
+    "frame": "__BASE",
+    "src": [
+     0,
+     0,
+     80,
+     48
+    ],
+    "worldY": 752
+   },
+   "actual": {
+    "texture": "prop.valcendre.market_stall_base",
+    "frame": "__BASE",
+    "sourceRect": {
+     "x": 0,
+     "y": 0,
+     "w": 80,
+     "h": 48
+    },
+    "worldX": 464,
+    "worldY": 752,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 48,
+    "depth": 10.0752,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   },
+   "ok": true
+  },
+  {
+   "expected": {
+    "texture": "prop.valcendre.market_stall_canopy",
+    "frame": "valcendre_stall_canopy_rear",
+    "src": [
+     0,
+     0,
+     80,
+     17
+    ],
+    "worldY": 752
+   },
+   "actual": {
+    "texture": "prop.valcendre.market_stall_canopy",
+    "frame": "valcendre_stall_canopy_rear",
+    "sourceRect": {
+     "x": 0,
+     "y": 0,
+     "w": 80,
+     "h": 17
+    },
+    "worldX": 464,
+    "worldY": 752,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 17,
+    "depth": 10.07525,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   },
+   "ok": true
+  },
+  {
+   "expected": {
+    "texture": "prop.valcendre.market_stall_canopy",
+    "frame": "valcendre_stall_canopy_valance",
+    "src": [
+     0,
+     17,
+     80,
+     31
+    ],
+    "worldY": 769
+   },
+   "actual": {
+    "texture": "prop.valcendre.market_stall_canopy",
+    "frame": "valcendre_stall_canopy_valance",
+    "sourceRect": {
+     "x": 0,
+     "y": 17,
+     "w": 80,
+     "h": 31
+    },
+    "worldX": 464,
+    "worldY": 769,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 31,
+    "depth": 10.0792,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   },
+   "ok": true
+  },
+  {
+   "expected": {
+    "texture": "prop.valcendre.market_stall_base",
+    "frame": "valcendre_stall_base_counter",
+    "src": [
+     0,
+     26,
+     80,
+     22
+    ],
+    "worldY": 778
+   },
+   "actual": {
+    "texture": "prop.valcendre.market_stall_base",
+    "frame": "valcendre_stall_base_counter",
+    "sourceRect": {
+     "x": 0,
+     "y": 26,
+     "w": 80,
+     "h": 22
+    },
+    "worldX": 464,
+    "worldY": 778,
+    "originX": 0,
+    "originY": 0,
+    "displayW": 80,
+    "displayH": 22,
+    "depth": 10.0799,
+    "visible": true,
+    "alpha": 1,
+    "tint": null,
+    "blendMode": 0
+   },
+   "ok": true
+  }
+ ],
+ "staged": [
+  {
+   "tag": "staged-evidence-tile",
+   "player": {
+    "feetX": 488,
+    "feetY": 760,
+    "tile": {
+     "x": 30,
+     "y": 47
+    },
+    "depth": 10.076,
+    "anim": "anim.tempest.idle.up",
+    "frame": 7,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 482,
+     "y": 736,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 488,
+     "y": 745
+    },
+    "spriteTopWorldY": 729,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.0752,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_rear",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.07525,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_valance",
+     "worldX": 464,
+     "worldY": 769,
+     "depth": 10.0792,
+     "artTopWorldY": 786
+    },
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "valcendre_stall_base_counter",
+     "worldX": 464,
+     "worldY": 778,
+     "depth": 10.0799,
+     "artTopWorldY": 804
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  {
+   "tag": "staged-south-approach",
+   "player": {
+    "feetX": 488,
+    "feetY": 776,
+    "tile": {
+     "x": 30,
+     "y": 48
+    },
+    "depth": 10.0776,
+    "anim": "anim.tempest.idle.up",
+    "frame": 6,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 482,
+     "y": 752,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 488,
+     "y": 761
+    },
+    "spriteTopWorldY": 745,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.0752,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_rear",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.07525,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_valance",
+     "worldX": 464,
+     "worldY": 769,
+     "depth": 10.0792,
+     "artTopWorldY": 786
+    },
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "valcendre_stall_base_counter",
+     "worldX": 464,
+     "worldY": 778,
+     "depth": 10.0799,
+     "artTopWorldY": 804
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  {
+   "tag": "staged-under-canopy-east",
+   "player": {
+    "feetX": 536,
+    "feetY": 776,
+    "tile": {
+     "x": 33,
+     "y": 48
+    },
+    "depth": 10.0776,
+    "anim": "anim.tempest.idle.up",
+    "frame": 6,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 530,
+     "y": 752,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 536,
+     "y": 761
+    },
+    "spriteTopWorldY": 745,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.0752,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_rear",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.07525,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_valance",
+     "worldX": 464,
+     "worldY": 769,
+     "depth": 10.0792,
+     "artTopWorldY": 786
+    },
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "valcendre_stall_base_counter",
+     "worldX": 464,
+     "worldY": 778,
+     "depth": 10.0799,
+     "artTopWorldY": 804
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  {
+   "tag": "staged-in-front",
+   "player": {
+    "feetX": 504,
+    "feetY": 824,
+    "tile": {
+     "x": 31,
+     "y": 51
+    },
+    "depth": 10.0824,
+    "anim": "anim.tempest.idle.up",
+    "frame": 6,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 498,
+     "y": 800,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 504,
+     "y": 809
+    },
+    "spriteTopWorldY": 793,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.0752,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_rear",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.07525,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_valance",
+     "worldX": 464,
+     "worldY": 769,
+     "depth": 10.0792,
+     "artTopWorldY": 786
+    },
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "valcendre_stall_base_counter",
+     "worldX": 464,
+     "worldY": 778,
+     "depth": 10.0799,
+     "artTopWorldY": 804
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  {
+   "tag": "staged-beside",
+   "player": {
+    "feetX": 568,
+    "feetY": 792,
+    "tile": {
+     "x": 35,
+     "y": 49
+    },
+    "depth": 10.0792,
+    "anim": "anim.tempest.idle.up",
+    "frame": 7,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 562,
+     "y": 768,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 568,
+     "y": 777
+    },
+    "spriteTopWorldY": 761,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.0752,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_rear",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.07525,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_valance",
+     "worldX": 464,
+     "worldY": 769,
+     "depth": 10.0792,
+     "artTopWorldY": 786
+    },
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "valcendre_stall_base_counter",
+     "worldX": 464,
+     "worldY": 778,
+     "depth": 10.0799,
+     "artTopWorldY": 804
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  },
+  {
+   "tag": "staged-behind",
+   "player": {
+    "feetX": 520,
+    "feetY": 744,
+    "tile": {
+     "x": 32,
+     "y": 46
+    },
+    "depth": 10.0744,
+    "anim": "anim.tempest.idle.up",
+    "frame": 7,
+    "flipX": false,
+    "drawnTorso": {
+     "x": 514,
+     "y": 720,
+     "width": 12,
+     "height": 18
+    },
+    "aimOrigin": {
+     "x": 520,
+     "y": 729
+    },
+    "spriteTopWorldY": 713,
+    "hp": 88
+   },
+   "camera": {
+    "scrollX": 264,
+    "scrollY": 657,
+    "zoom": 1
+   },
+   "stall": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.0752,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_rear",
+     "worldX": 464,
+     "worldY": 752,
+     "depth": 10.07525,
+     "artTopWorldY": 752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_valance",
+     "worldX": 464,
+     "worldY": 769,
+     "depth": 10.0792,
+     "artTopWorldY": 786
+    },
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "valcendre_stall_base_counter",
+     "worldX": 464,
+     "worldY": 778,
+     "depth": 10.0799,
+     "artTopWorldY": 804
+    }
+   ],
+   "interaction": {
+    "prompt": null,
+    "id": null
+   },
+   "evidence": null,
+   "objectives": [
+    "V1"
+   ],
+   "debugHitboxes": false,
+   "artV2": true
+  }
+ ],
+ "pair": {
+  "player": {
+   "x": 488,
+   "y": 776,
+   "depth": 10.0776
+  },
+  "guard": {
+   "x": 495.6568261087545,
+   "y": 810,
+   "depth": 10.081
+  }
+ },
+ "crossing": [
+  {
+   "tile": [
+    32,
+    44
+   ],
+   "walkable": true,
+   "feetY": 712,
+   "depth": 10.0712
+  },
+  {
+   "tile": [
+    32,
+    45
+   ],
+   "walkable": true,
+   "feetY": 728,
+   "depth": 10.0728
+  },
+  {
+   "tile": [
+    32,
+    46
+   ],
+   "walkable": true,
+   "feetY": 744,
+   "depth": 10.0744
+  },
+  {
+   "tile": [
+    32,
+    47
+   ],
+   "walkable": true,
+   "feetY": 760,
+   "depth": 10.076
+  },
+  {
+   "tile": [
+    32,
+    48
+   ],
+   "walkable": true,
+   "feetY": 776,
+   "depth": 10.0776
+  },
+  {
+   "tile": [
+    32,
+    49
+   ],
+   "walkable": false
+  },
+  {
+   "tile": [
+    32,
+    50
+   ],
+   "walkable": true,
+   "feetY": 808,
+   "depth": 10.0808
+  },
+  {
+   "tile": [
+    32,
+    51
+   ],
+   "walkable": true,
+   "feetY": 824,
+   "depth": 10.0824
+  }
+ ],
+ "walkSamples": [
+  {
+   "t": 15007,
+   "feetY": 762.43,
+   "depth": 10.076242862436427,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15069,
+   "feetY": 767.83,
+   "depth": 10.076602862436427,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15134,
+   "feetY": 775.03,
+   "depth": 10.077322862436427,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15200,
+   "feetY": 782.23,
+   "depth": 10.078042862436426,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15267,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15335,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15400,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15467,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15534,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15600,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15669,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15736,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15803,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15871,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 15934,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16000,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16070,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16135,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16203,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16275,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16338,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16402,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16467,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16534,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16600,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16667,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16734,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16801,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16869,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 16935,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17008,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17071,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17134,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17200,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17267,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17334,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17401,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17467,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17534,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  },
+  {
+   "t": 17601,
+   "feetY": 784,
+   "depth": 10.0784,
+   "anim": "anim.tempest.walk.up",
+   "displayH": 32
+  }
+ ],
+ "lookoutSamples": [
+  {
+   "x": 472,
+   "y": 776,
+   "depth": 10,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 474.32,
+   "y": 779.3,
+   "depth": 10.077864176702722,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 476.58,
+   "y": 782.64,
+   "depth": 10.078197150882652,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 478.74,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 480.68,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 482.37,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 483.83,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 485.09,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 486.16,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 487.08,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 487.86,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 488.52,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 489.09,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 489.58,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 489.99,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 490.35,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 490.65,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 490.91,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 491.13,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 491.32,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 491.49,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 491.63,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 491.75,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 491.85,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 491.94,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 492.02,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 492.08,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 492.14,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 492.19,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 492.23,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  },
+  {
+   "x": 492.26,
+   "y": 784,
+   "depth": 10.0784,
+   "anim": "anim.lookout_guard.walk.down",
+   "displayH": 32
+  }
+ ],
+ "shots": [
+  {
+   "file": "01-after-played-v1-interaction-position.png",
+   "kind": "PLAYED",
+   "note": "Real-input stop at the V1 interaction position. Prompt: E - INVESTIGATE STALL",
+   "prompt": "E - INVESTIGATE STALL",
+   "feet": {
+    "x": 480.2237371289545,
+    "y": 778.8000000000002
+   }
+  },
+  {
+   "file": "02-after-played-v1-granted.png",
+   "kind": "PLAYED",
+   "note": "V1 granted by a real E press: true; objectives V1"
+  },
+  {
+   "file": "03-after-staged-evidence-tile.png",
+   "kind": "STAGED",
+   "note": "On the V1 evidence tile, beneath the canopy. feet=(488,760) depth=10.076"
+  },
+  {
+   "file": "03-after-staged-south-approach.png",
+   "kind": "STAGED",
+   "note": "South approach tile (30,48), beneath the canopy. feet=(488,776) depth=10.0776"
+  },
+  {
+   "file": "03-after-staged-under-canopy-east.png",
+   "kind": "STAGED",
+   "note": "Beneath the canopy at its east end. feet=(536,776) depth=10.0776"
+  },
+  {
+   "file": "03-after-staged-in-front.png",
+   "kind": "STAGED",
+   "note": "South of the counter: the whole stall is behind the actor. feet=(504,824) depth=10.0824"
+  },
+  {
+   "file": "03-after-staged-beside.png",
+   "kind": "STAGED",
+   "note": "Level with the counter but outside the 80px visual span. feet=(568,792) depth=10.0792"
+  },
+  {
+   "file": "03-after-staged-behind.png",
+   "kind": "STAGED",
+   "note": "North of the stall: the structure should occlude the actor. feet=(520,744) depth=10.0744"
+  },
+  {
+   "file": "04-after-staged-tempest-and-lookout.png",
+   "kind": "STAGED",
+   "note": "Tempest beneath the canopy, a Lookout south of the counter, same frame. player depth=10.0776 guard depth=10.081"
+  },
+  {
+   "file": "05-after-staged-empty-stall.png",
+   "kind": "STAGED",
+   "note": "No actor overlaps the stall. Must be pixel-identical between passes."
+  },
+  {
+   "file": "06-after-crossing-row44.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 44. feetY=712 depth=10.0712"
+  },
+  {
+   "file": "06-after-crossing-row45.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 45. feetY=728 depth=10.0728"
+  },
+  {
+   "file": "06-after-crossing-row46.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 46. feetY=744 depth=10.0744"
+  },
+  {
+   "file": "06-after-crossing-row47.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 47. feetY=760 depth=10.076"
+  },
+  {
+   "file": "06-after-crossing-row48.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 48. feetY=776 depth=10.0776"
+  },
+  {
+   "file": "06-after-crossing-row50.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 50. feetY=808 depth=10.0808"
+  },
+  {
+   "file": "06-after-crossing-row51.png",
+   "kind": "STAGED",
+   "note": "Depth boundary crossing, column 32, row 51. feetY=824 depth=10.0824"
+  },
+  {
+   "file": "07-after-played-after-boundary-walk.png",
+   "kind": "PLAYED",
+   "note": "Real-input walk south across the stall boundary; 40 samples, display height 32"
+  },
+  {
+   "file": "09-after-staged-lookout-walking-under-canopy.png",
+   "kind": "STAGED",
+   "note": "Lookout mid-walk beneath the canopy; 31 samples, display height 32"
+  }
+ ],
+ "pageErrors": [
+  "Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ],
+ "problems": []
+}
