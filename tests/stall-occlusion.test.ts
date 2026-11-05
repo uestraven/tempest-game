@@ -642,9 +642,12 @@ describe('10-12. nothing else moved', () => {
     for (const mutator of ['setDoor(', 'setCollides', '.collides =', 'blocksSight =', 'lowCover =']) {
       expect(scene, `presentation calls ${mutator}`).not.toContain(mutator);
     }
-    // The only tilemap write is the paving layer's own blank tiles.
-    const writes = scene.match(/putTileAt|removeTileAt|fill\(/g) ?? [];
-    expect(writes, 'tilemap writes').toEqual(['putTileAt']);
+    // The only tilemap writes are the presentation's OWN blank layers: the
+    // ground layer and the four corner-overlay layers. Nothing is written back
+    // to a shipped layer, and no bulk fill or erase is used.
+    const writes = scene.match(/putTileAt|removeTileAt|fill\(|replaceByIndex|randomize/g) ?? [];
+    expect(new Set(writes), 'tilemap write kinds').toEqual(new Set(['putTileAt']));
+    expect(writes.length, 'putTileAt call sites').toBeLessThanOrEqual(3);
   });
 
   it('changes no enemy, patrol, mission or save module', () => {

@@ -1,28 +1,12 @@
 # Valcendre shaded cobblestone and boundary integration — Phase B.2-05C-2
 
-**Baseline commit:** `7554cd6` — *B.2-05C-1 follow-up: verify against the B.2-05B contract, measure the real occlusion*
+**Baseline commit:** `54c088c` — *Phase B.2-05C-2 (partial): ground material audit and shaded-boundary selection*
 **Date:** 2026-11-05
+**Status:** complete. The approved B.2-05A-1 and B.2-05A-2 artwork renders in the engine.
 
-> ## Status: PARTIALLY BLOCKED — the approved artwork is not in the repository
->
-> Three of the four source files §3 names do not exist on this machine. Nothing
-> was painted, generated or substituted. What could be completed without them
-> was completed; what depends on them is listed in §9 and left undone.
->
-> | §3 asset | expected | present |
-> | --- | --- | --- |
-> | `valcendre_proof_cobble_16x16.png` (B.2-03A, daylight) | 64×16, 4 tiles | **yes** — `14e9b5c5…4349ee` |
-> | `valcendre_shaded_cobble_16x16.png` (B.2-05A-1) | 64×16, 4 tiles | **no** |
-> | `valcendre_shade_boundaries_16x16.png` (B.2-05A-2) | 128×128, 8×8 = 64 | **no** |
-> | `valcendre_shade_diagonal_corners_16x16.png` (B.2-05A-2) | 128×32, 8×2 = 16 | **no** |
->
-> Searched: the whole repository, `art-source/` (including the
-> `TEMPEST_VALCENDRE_ART_PACKAGE_v1` tree and its `07_occlusion_b205b` folder),
-> `public/assets/tmp/`, `~/Downloads`, `$HOME` and `/tmp` to depth 3, plus any
-> archive modified since 2026-11-04. No B.2-05A-1 or B.2-05A-2 manifest or
-> validation report either, so the checksums §3 and §15 require could not be
-> verified and the §6 "mask 0 is pixel-identical to the shaded tile" check could
-> not be run against real pixels.
+This supersedes the earlier partial report, which recorded the phase as blocked
+on missing artwork. The artwork arrived; everything below is the finished
+integration.
 
 ---
 
@@ -30,350 +14,531 @@
 
 | check | result |
 | --- | --- |
-| current main commit | `7554cd6` |
-| B.2-05C-1 stall correction present | yes — `1de335a` and `7554cd6` |
-| stall rendering tests still pass | **39/39** in `tests/stall-occlusion.test.ts` |
-| B.2-04 texture registration inspected | `src/art/AssetRegistry.ts` → `VALCENDRE_V2`; cobble registered as `tiles.valcendre.v2.cobble`, 64×16, 4 frames |
-| map rendering inspected | `src/art/ValcendreV2Scene.ts` → `buildPaving()`, a programmatic blank tilemap layer at depth 0.5 |
-| approved shaded manifests read | **not possible — absent** |
+| baseline commit | `54c088c` |
+| B.2-05C-1 stall correction present | yes — `1de335a`, `7554cd6` |
+| stall rendering tests pass **before** any change | **39/39** |
+| stall rendering tests pass **after** | **39/39** (one assertion widened — §9) |
+| B.2-04 texture registration inspected | `AssetRegistry.VALCENDRE_V2`, cobble as `tiles.valcendre.v2.cobble` 64×16/4 |
+| map rendering inspected | `ValcendreV2Scene.buildPaving()`, a programmatic blank tilemap layer at depth 0.5 |
+| approved manifests read | `valcendre_shaded_cobble_manifest.json`, `valcendre_shade_transition_manifest.json`, `CODING_AGENT_HANDOFF` lineage |
 
-The stall correction was not modified. Its tests are re-run as part of the full
-suite below and still pass.
+The stall correction's logic was not touched.
 
 ---
 
-## 2. Material audit (§4)
+## 2. Approved source artwork (§3)
 
-`tools/b205c2-ground-audit.mjs`, output in `b205c2-ground-audit.json`.
+Verified before use, then archived at
+`art-source/TEMPEST_VALCENDRE_ART_PACKAGE_v1/08_shade_b205a/`.
 
-### Why `shadowZones` and the floor layer are both the wrong source
+| file | dimensions | tiles | SHA-256 | matches manifest |
+| --- | --- | --- | --- | --- |
+| `valcendre_proof_cobble_16x16.png` (B.2-03A, daylight) | 64×16 | 4 | `14e9b5c5…4349ee` | ✅ both packages name it as their source |
+| `valcendre_shaded_cobble_16x16.png` (B.2-05A-1) | 64×16 | 4 | `1747da6a…d15b8` | ✅ |
+| `valcendre_shade_boundaries_16x16.png` (B.2-05A-2) | 128×128 | 8×8 = 64 | `c88d2432…96bb0` | ✅ |
+| `valcendre_shade_diagonal_corners_16x16.png` (B.2-05A-2) | 128×32 | 8×2 = 16 | `653d7542…f96be` | ✅ |
 
-`tools/build-map.mjs` holds the authored material per tile in `surfaceOf`,
-paints the floor from it, and **then** stamps the shadow pass, which overwrites
-the floor tile with `shadowFloor`. `shadowFloor` and `voidFill` are **both**
-`deep_shadow`. So in the shipped `village.json`:
+Nothing was redrawn, recoloured, resized, quantised or regenerated. The
+packages' own build script was **not executed**; only the PNGs and manifests
+were read.
 
-- a shaded tile no longer records what material is under it, and
-- every **non-walkable** tile carries the same `deep_shadow` floor tile as a
-  genuine shadow zone.
+### Pixel verification
 
-The authored data in `tools/map-data-valcendre.mjs` is therefore the only source
-of truth for material. The audit recomputes `surfaceOf` with the same precedence
-the build uses (regions → obstructions clear → doors backfill → overrides) and
-cross-checks every conclusion against the shipped map:
-
-| cross-check | result |
+| check | result |
 | --- | --- |
-| recomputed carved walkability vs the `collision` layer | **0 mismatches** |
-| recomputed shade vs the `shadowZones` layer | **0 mismatches** |
-| carved ground that is *also* solid via `cover`/`propCollision` | 175 tiles (expected; stamped on top of carved floor, still renders ground beneath) |
+| shaded strip opacity | 1024 / 1024 opaque, **0 partial-alpha** |
+| cardinal atlas opacity | 16384 / 16384 opaque, **0 partial-alpha** |
+| corner overlays | 448 opaque, 3648 transparent, **0 partial-alpha** — binary alpha as declared |
+| palette | every opaque colour is in the approved 53-colour `valcendre_palette.json`; **0 new colours** |
+| **mask 0 vs the plain shaded tile** | **0 differing pixels, all four variants** — the manifest's `mask_0_is_byte_identical_to_approved_shade` confirmed against the pixels |
+| shaded variant ↔ daylight variant pairing | variant *n* maps to source variant *n* for all four |
 
-### The "~496 tiles" figure is not 496 tiles of shaded ground
+---
+
+## 3. Material audit (§4) — final
+
+`tools/b205c2-ground-audit.mjs`. Cross-checked against the shipped map: **0**
+carved-walkability mismatches, **0** shade mismatches.
+
+### Why neither `shadowZones` nor the floor layer was usable as a material source
+
+`build-map.mjs` held the authored material in `surfaceOf`, painted the floor
+from it, then let the shadow pass overwrite the floor with `shadowFloor`. Both
+`shadowFloor` and `voidFill` are `deep_shadow`, so in the shipped map a shaded
+cobble tile, a shaded brick tile, and the dark fill behind a building wall were
+indistinguishable.
+
+**Fixed by exporting the material explicitly** — §5.
+
+### The "~496 tiles" figure, corrected
 
 | | tiles |
 | --- | --- |
-| `deep_shadow` floor tiles inside the B.2-04 market region | 496 |
-| …of those, on **walkable ground** (real shaded ground) | **64** |
-| …of those, on **non-walkable `voidFill`** (building interiors, not ground at all) | **432** |
+| `deep_shadow` floor tiles in the B.2-04 market region | 496 |
+| …on **walkable ground** | **64** |
+| …on **non-walkable `voidFill`** (building interiors, not ground) | **432** |
 
-B.2-04's own limitation note — mine — counted `deep_shadow` floor tiles and
-reported them as unconverted ground. 87% of that number is the dark fill behind
-building walls. It is not paving, it is not walkable, and it must never receive
-cobblestone artwork.
+87% of the number this phase was scoped around was never paving. That was my
+error in the B.2-04 report; it is corrected in place there and in the backlog.
 
-### Classification of all authored shaded ground, map-wide
+### Classification of all authored shaded ground — 652 tiles map-wide
 
-**652** tiles of authored shaded walkable ground exist in Valcendre.
-
-| Material class | Authored surface | Tiles | Required handling |
-| --- | --- | --- | --- |
-| **Cobblestone** | `marketPaving`, `alleyCobble` | **79** | **eligible** for approved shaded treatment |
-| Cobble-tiled garden path | `gardenPath` | **116** | **decision required** — see below |
-| Brick | `serviceBrick` | **372** | preserve; no matching artwork exists |
-| Gravel | `yardGravel` | 46 | preserve; no matching artwork exists |
-| Garage / industrial | `garageFloor` | 24 | preserve; no matching artwork exists |
-| Grass / garden | `gardenGrass` | 15 | preserve existing treatment |
-
-### Eligible cobblestone locations
-
-| Region | Area | Surface | Tiles | Extent |
+| Material class | Authored surface | Base tile | Tiles | Handling |
 | --- | --- | --- | --- | --- |
-| `marketArcade` | marketSquare | `alleyCobble` | 40 | x9–12, y40–49 |
-| `marketPlaza` | marketSquare | `marketPaving` | 24 | x16–30, y35–36 (the two covered market rows) |
-| `alley` | arrivalAlley | `alleyCobble` | 15 | x6–8, y58–62 |
-| | | **total** | **79** | |
+| **Cobblestone** | `marketPaving`, `alleyCobble` | `floor_04`, `cobble` | **79** | **treated** |
+| Cobble-tiled garden path | `gardenPath` | `cobble` | **116** | **excluded** — §8 |
+| Brick | `serviceBrick` | `brick` | 372 | preserved; no artwork exists |
+| Gravel | `yardGravel` | `ground_debris` | 46 | preserved; no artwork exists |
+| Garage / industrial | `garageFloor` | `metal` | 24 | preserved; no artwork exists |
+| Grass / garden | `gardenGrass` | `grass` | 15 | preserved |
 
-The market arcade is the §9 controlled-integration region: 40 tiles of shaded
-cobble directly abutting lit `marketPaving` across a pillar line, with straight
-edges, two outside corners and a narrow colonnade — every boundary shape the
-brief asks to verify, in one place.
+### Treated cobblestone locations (§10)
 
-### The one open decision
+| Region | Area | Shaded tiles | Extent |
+| --- | --- | --- | --- |
+| `marketArcade` | marketSquare | 40 | x9–12, y40–49 |
+| `marketPlaza` (the two covered rows) | marketSquare | 24 | x16–21 and x25–30, y35–36 |
+| `alley` | arrivalAlley | 15 | x6–8, y58–62 |
+| | | **79** | |
 
-`gardenPath` (116 tiles, x6–11 y3–22, the garden walk) is **named** a garden
-path but **paints** `cobble` and `floor_01` — the same tiles as `alleyCobble`.
-§1 says the artwork is "for cobblestone surfaces only"; §4's table says
-"Grass / garden → preserve existing treatment". Those point opposite ways here.
+Daylight cobblestone is now treated map-wide as well: **929 tiles**, up from
+B.2-04's 443, because the treatment is no longer clipped to the market region.
 
-Not decided unilaterally, because it is 116 tiles — 59% more than all the
-unambiguous cobblestone put together — and it is the stealth route the design
-notes call "the safer route, and reads that way". Treated as **not eligible**
-pending a ruling, so the conservative reading wins by default.
+---
 
-Recommendation: include it. Its rendered material is cobblestone, and excluding
-it would leave the garden walk the only cobbled surface in Valcendre still using
-the flat `deep_shadow` fill.
+## 4. New texture registration (§5)
+
+Registered **alongside** the daylight strip; nothing was replaced.
+
+| key | file | frames |
+| --- | --- | --- |
+| `tiles.valcendre.v2.cobbleShaded` | `valcendre_shaded_cobble_16x16.png` | 4 |
+| `tiles.valcendre.v2.shadeBoundaries` | `valcendre_shade_boundaries_16x16.png` | 64 |
+| `tiles.valcendre.v2.shadeCorners` | `valcendre_shade_diagonal_corners_16x16.png` | 16 |
+
+Confirmed loaded in-engine at 64×16, 128×128 and 128×32.
+
+### The material layer
+
+`build-map.mjs` now emits `groundMaterial`: an **invisible appearance layer**
+recording each walkable tile's authored surface **base** tile. 2719 tiles, six
+distinct values (`cobble`, `brick`, `metal`, `ground_debris`, `grass`,
+`floor_04`).
+
+The base tile and not the variant-rolled tile, which matters: `floor_crack` is a
+low-probability decorative variant of **four** different surfaces, so recording
+the rolled tile made a cracked cobble tile indistinguishable from a cracked
+brick tile. §9 describes the visible defect that caused and how it was fixed.
+
+`MapLoader` merges tile flags only from its closed set — `collision`, `cover`,
+`propCollision`, `shadowZones` — so the new layer is inert for movement, vision,
+cover and concealment by construction. A test asserts it is absent from that
+set. Regenerating the map changed **nothing else**: every pre-existing layer is
+byte-identical, the object layer is identical, and the dimensions are unchanged.
 
 ### The visual / gameplay separation (§4 "Critical separation")
 
-Honoured structurally, not just by intention: the selection module
-(`src/art/GroundShade.ts`) imports nothing, mentions no gameplay concept, and a
-test greps it for `shadowZones`, `suspicion`, `conceal`, `detect`, `vision`,
-`player`, `enemy`, `crouch` and `Phaser` and fails if any appears. Concealment
-continues to come from the `shadowZones` layer alone, and nothing reads the new
-artwork or its palette to decide stealth.
+The two states are read from **two different layers on purpose**:
+
+- **material** ← `groundMaterial`
+- **visual shade** ← `floor` being `deep_shadow`
+- **gameplay concealment** ← `shadowZones`, consulted by nothing in the
+  presentation
+
+Tests strip comments from `GroundShade.ts` and `ValcendreV2Scene.ts` and assert
+neither mentions `shadowZones`. `GroundShade.ts` imports nothing at all and
+mentions no gameplay concept.
 
 ---
 
-## 3. Boundary selection implementation (§6, §7, §8)
+## 5. Cardinal mask implementation (§6)
 
-`src/art/GroundShade.ts` — **Phaser-independent**, as §8 prefers, which is what
-makes the exhaustive tests below possible. It decides which approved atlas tile
-belongs on which cell and nothing else: no texture, no display object, no scene,
-no actor, no per-frame work.
+`src/art/GroundShade.ts`, Phaser-free, composed once during scene construction.
 
-### Cardinal masks
+Bits as the manifest specifies — **N 1, E 2, S 4, W 8** — set when and only when
+the neighbour is **daylight cobblestone**. Index `variant * 16 + mask`. The
+tests re-derive all sixteen of the manifest's own direction sets and check they
+equal their mask numbers, and pin the single-direction masks to literal 1/2/4/8
+so a swapped bit assignment cannot pass.
 
-Bits exactly as specified — north 1, east 2, south 4, west 8 — set when, and
-only when, the neighbour in that direction is **daylight cobblestone**.
+**Neighbour eligibility.** A wall, grass, brick, gravel, garage plate, void
+fill, the garden walk while excluded, or any coordinate off the map classifies
+as `other` and **leaves its bit clear**. A shaded cobble tile against a wall is
+therefore drawn as plain shaded cobble, never as a transition implying paving
+that is not there.
 
-```
-tileIndex = sourceVariant * 16 + boundaryMask      (8×8 atlas = 4 × 16)
-```
+**Mask 0 routing.** A shaded cell with mask 0 is drawn from the plain shaded
+strip rather than the atlas, so a shaded interior never touches the transition
+atlas. Safe because mask 0 is byte-identical to that tile — verified, not
+assumed.
 
-`cardinalMask()` returns 0 for any cell that is not itself shaded cobblestone,
-because the mask is meaningless there.
+### Masks the authored map actually produces
 
-### Neighbour eligibility (§6)
-
-A wall, grass tile, brick, gravel, garage plate, void fill, or any coordinate
-off the edge of the map classifies as `other` and **leaves its bit clear**. So
-a shaded cobble tile against a wall is drawn as plain shaded cobble, not as a
-transition implying paving that is not there. Tested against each unsupported
-material individually and at map edges and corners.
-
-### Diagonal overlays
-
-```
-tileIndex = sourceVariant * 4 + cornerIndex        (8×2 atlas = 4 × 4)
-cornerIndex: NW 0, NE 1, SE 2, SW 3
-```
-
-An overlay is emitted only when all three conditions hold: the centre is shaded
-cobble, **both** cardinals adjoining that corner are shaded cobble, and the
-diagonal is daylight cobble. Mere existence of a diagonal neighbour is never
-sufficient — tested across all eight combinations of the three conditions, for
-all four corners (32 cases). Several corners may qualify on one cell and each is
-an independent overlay; the all-four case is tested.
-
-### Mask 0 routing
-
-§6 asks that mask 0 be pixel-identical to the B.2-05A-1 shaded tile. Rather than
-rely on that, a shaded cell with mask 0 is routed to the **plain shaded strip**
-at `frame = variant`, so the interior of a shaded region never touches the
-transition atlas at all. If the approved mask-0 tiles do differ from the plain
-strip, the interior is unaffected. The pixel comparison itself is in §9's
-blocked list — it needs the files.
-
-### Variant preservation (§5)
-
-Each cell keeps its authored variant: the daylight frame, the shaded frame and
-both atlas indices are all derived from the same `variant(tx,ty)`. Variant 0
-maps to shaded variant 0 and so on, by construction. An out-of-range variant
-throws rather than wrapping to the wrong tile. Overlay frames resolve on the
-**centre** cell's variant, not the diagonal's.
-
-Determinism: the existing `pavingVariant(tx,ty) = (tx*3 + ty*5) % 4` is a pure
-function of tile coordinates, so it is already stable across save, load and
-refresh; `composeRegion` is likewise pure and returns identical output on
-repeated runs (tested).
-
-### Composition cost (§14)
-
-`composeRegion()` walks a region once and returns one record per owned cell, for
-writing straight into a tilemap layer during construction — no neighbour
-relationship is recomputed per frame. `summarise()` reports the counts the
-performance budget needs: daylight cells, plain shaded cells, cells needing the
-cardinal atlas, and overlay cells. On the 79 eligible tiles the boundary and
-overlay populations are small enough that the existing tilemap-layer approach
-used for B.2-04 paving is sufficient; no new sprite-per-tile scheme is needed.
-Measured frame-time figures are in §9's blocked list — they need the renderer,
-which needs the art.
-
----
-
-## 4. Tests
-
-`tests/ground-shade.test.ts`, **41 assertions**, all passing:
-
-| §12 item | covered |
-| --- | --- |
-| 3. cardinal mask calculation | all **16** masks, each verified to equal its own value; single-direction masks pinned to literal 1/2/4/8 so a swapped bit assignment cannot pass |
-| 4. diagonal overlay conditions | all 4 corners × all 8 condition combinations; plus "diagonal exists but a cardinal is daylight" negative cases |
-| 5. source variant preservation | every cell on its own variant; overlays on the centre's variant; out-of-range variant throws |
-| 6. mask 0 parity | mask-0 cells routed to the plain shaded strip at `frame = variant`, so parity is structural |
-| 7. map-edge boundary handling | out-of-bounds classified `other`; lone tile, map corner, off-map diagonal |
-| 8. no shading on non-cobblestone | each unsupported material individually; `composeCell` returns `null`; `composeRegion` omits them |
-| — authored shapes from §10 | long straight edge, L-knee, T-pinch, narrow passage, stair-step, daylight island, mask-15 island |
-| — §4 separation | module names no gameplay concept and imports nothing |
-
-Mutation-checked rather than assumed: swapping the east and west bits fails
-three tests; the earlier version failed only one, and was strengthened.
-
-§12 items 1, 2, 13 and 14 and the remaining regression items are in §9 — they
-need registered textures or a running scene.
-
-Full suite: **417 tests passing** across 16 files (376 before, 41 added, 0
-changed). `npx tsc --noEmit` clean. `npm run build` succeeds.
-
----
-
-## 5. What was deliberately not changed
-
-No texture was registered, no scene was touched, no map was regenerated, and
-`src/art/ValcendreV2Scene.ts` is byte-identical to its B.2-05C-1 state.
-
-Registering a texture whose file is absent would 404 at load and leave a missing
-texture in the scene, and §9 requires the controlled region to be verified in
-the engine before any wider application. Both gates need the artwork, so the
-renderer is left for the change that can actually pass them.
-
-| Preserved per §11 | status |
-| --- | --- |
-| player speed, crouch, sprint | untouched |
-| detection, suspicion, vision occlusion | untouched |
-| guard patrol routes, cover, bullet collision | untouched |
-| mission objectives, garage key, doors, checkpoints, saves | untouched |
-| market stall rendering | untouched — 39/39 tests pass |
-| fountain and architecture placement | untouched |
-| `shadowZones` | untouched — audit confirms 0 mismatches |
-| map dimensions, encounter geometry, tile coordinates | untouched |
-
----
-
-## 6. An architectural prerequisite found by the audit
-
-Before the renderer can select shaded cobblestone at runtime it needs to know
-each tile's **material**, and the shipped map no longer carries it: the shadow
-pass overwrites the floor tile, so a shaded cobble tile and a shaded brick tile
-are indistinguishable in `village.json`.
-
-Two ways forward, for the reviewer to pick:
-
-1. **Emit the authored material as an extra appearance layer** (recommended).
-   `build-map.mjs` already has `surfaceOf`; writing it out as e.g.
-   `groundMaterial` is additive. `MapLoader` merges gameplay flags only from
-   `GAMEPLAY_LAYERS` (`collision`, `cover`, `propCollision`, `shadowZones`), so a
-   new appearance layer is inert for gameplay by construction. Costs one
-   regenerated map.
-2. **Stop destroying the data**: have the shadow pass keep the material tile and
-   let the renderer apply shade, rather than replacing the floor tile with
-   `deep_shadow`. Cleaner long-term, but it changes what the legacy build looks
-   like in `?art=legacy`, so it is a bigger behavioural change than this phase
-   should make.
-
-Either is a small change, but both touch generated map output, so neither was
-done speculatively while the artwork that justifies them is absent.
-
----
-
-## 7. Screenshots
-
-**None taken, and none should be inferred.** §9 and §13 both require captures of
-the new shaded paving in the real engine; with no artwork there is nothing new
-to capture, and a before/after pair where both halves are the current build
-would be misleading. The existing B.2-04 and B.2-05C-1 captures already document
-the current market appearance.
-
----
-
-## 8. Issue categorisation (§15)
-
-### ART AGENT — missing source artwork, blocking
-
-| id | asset | expected | note |
-| --- | --- | --- | --- |
-| **ART-7** | `valcendre_shaded_cobble_16x16.png` | 64×16, four 16×16 tiles, variant order matching B.2-03A | B.2-05A-1. Without it there is no shaded paving to draw. |
-| **ART-8** | `valcendre_shade_boundaries_16x16.png` | 128×128, 8×8 atlas, 64 tiles, `variant*16 + mask` | B.2-05A-2 cardinal transitions. |
-| **ART-9** | `valcendre_shade_diagonal_corners_16x16.png` | 128×32, 8×2 atlas, 16 transparent overlays, binary alpha, `variant*4 + corner` | B.2-05A-2 diagonal corners. |
-| **ART-10** | B.2-05A-1 / B.2-05A-2 manifests + validation reports with SHA-256 | — | §3 and §15 require checksum verification; §6 requires the mask-0 parity check. Neither is possible without them. |
-
-Also still open from B.2-04, and now **re-scoped by this audit** — the earlier
-request overstated the need by a wide margin:
-
-| id | revised |
-| --- | --- |
-| **ART-1** (shaded paving) | superseded by ART-7/8/9. The real eligible population is **79 tiles**, not ~496 — and 372 further shaded tiles are **brick**, which is a separate request if it is wanted at all. |
-
-### ART AGENT — material coverage, not blocking this phase
-
-| id | gap | tiles |
+| mask | directions lit | tiles |
 | --- | --- | --- |
-| **ART-11** | shaded **brick** treatment for `serviceBrick` | 372 |
-| **ART-12** | shaded **gravel** for `yardGravel` | 46 |
-| **ART-13** | shaded **garage plate** for `garageFloor` | 24 |
+| 0 | — (plain shaded interior) | 38 |
+| 1 | N | 9 |
+| 2 | E | 14 |
+| 3 | N+E | 2 |
+| 4 | S | 11 |
+| 6 | E+S | 3 |
+| 9 | N+W | 1 |
+| 12 | S+W | 1 |
+| | **total** | **79** |
 
-These are the largest remaining visual inconsistency in Valcendre by area — the
-whole upper-lane garden branch is brick. Left untouched per §1 and §10.
+Eight of sixteen masks appear, because Valcendre's shade is authored as
+axis-aligned rectangles. The other eight are covered synthetically in
+`tests/ground-shade.test.ts`, and the art for them is in place if a future
+layout needs them.
 
-### CODING AGENT — this repository's own work
+---
+
+## 6. Diagonal overlay implementation (§7)
+
+Index `variant * 4 + corner`, corners NW 0, NE 1, SE 2, SW 3 — the manifest's
+own order. An overlay is emitted only when all three conditions hold: the centre
+is shaded cobble, **both** cardinals adjoining that corner are shaded cobble,
+and the diagonal is daylight cobble. Mere existence of a diagonal neighbour is
+never sufficient; all four corners are tested across all eight combinations of
+the three conditions.
+
+Each corner gets its own tilemap layer, so several independent overlays can land
+on one cell. Depths 0.55–0.58: above the ground tiles, below the architecture's
+cast shade, so a corner relief is part of the ground and can never cover a
+building. Alignment is exact — the overlay is written to the same tile cell as
+its base, by the same loop.
+
+**Zero overlays are drawn in Valcendre today, and that is correct, not a bug.**
+An overlay needs a concave corner, and axis-aligned rectangles never produce
+one: at a rectangle's corner two cardinals are lit, and one step inward the
+diagonal is shaded. Verified independently with a standalone computation over
+the map as well as in-engine. A test records the zero with that reasoning, so if
+a future layout unions two shade stamps into an L or T the count rises and the
+expectation fails loudly rather than silently.
+
+---
+
+## 7. Renderer architecture (§8, §14)
+
+One programmatic tilemap, four tilesets at disjoint global-id bases, **five
+static layers**:
+
+| layer | depth | contents |
+| --- | --- | --- |
+| `valcendre_v2_paving` | 0.5 | daylight (gid 0–3), shaded (4–7), cardinal transitions (8–71) |
+| `valcendre_v2_shade_corner_northwest` | 0.55 | corner overlays (gid 72–87) |
+| …`_northeast` | 0.56 | |
+| …`_southeast` | 0.57 | |
+| …`_southwest` | 0.58 | |
+
+Mixing three tilesets in the ground layer means daylight, shaded and transition
+tiles coexist without a second pass. Composition runs once in `build()`; no
+neighbour relationship is recomputed per frame, and there is no per-tile sprite.
+
+### Measured performance
+
+Camera driven across the arcade boundary at 1.5 px/frame for 5 seconds,
+`tools/b205c2-perf-probe.mjs`:
+
+| | |
+| --- | --- |
+| frames sampled | 301 |
+| mean / median frame time | 16.66 ms / 16.66 ms |
+| p95 / max frame time | 16.67 ms / **16.68 ms** |
+| actual FPS | **59.9** |
+| display-list objects | 195 |
+| textures loaded | 126 |
+
+Flat 60 fps with 0.02 ms spread across the whole scroll — vsync-capped, so this
+shows the absence of hitching rather than headroom. Structurally the cost is
+five static tilemap layers and 1008 `putTileAt` calls at construction.
+
+| ground composition | count |
+| --- | --- |
+| daylight cells | 929 |
+| plain shaded cells | 38 |
+| cardinal boundary cells | 41 |
+| overlay cells / overlays drawn | 0 / 0 |
+| **total ground tiles painted** | **1008** |
+
+---
+
+## 8. The garden walk — an open decision, defaulted conservatively
+
+`gardenPath` (116 tiles, x6–11 y3–22) is **named** a garden path but **paints**
+`cobble` — the same base tile as `alleyCobble`. §1 says the artwork is "for
+cobblestone surfaces only"; §4's table says "Grass / garden → preserve existing
+treatment". Those point opposite ways.
+
+**Left excluded** (`SHADE_GARDEN_PATH = false`), the conservative reading,
+because it is 116 tiles — more than all the treated cobblestone put together —
+and it is the route the level notes call "the safer route, and reads that way".
+`01-after-bakery-garden.png` shows it unchanged.
+
+My recommendation is still to include it: its rendered material is cobblestone,
+and excluding it leaves the garden walk the only cobbled surface in Valcendre
+still on the flat `deep_shadow` fill. Flipping the constant and regenerating
+nothing else is the whole change. A test asserts the exclusion holds while the
+flag is false.
+
+---
+
+## 9. Two defects found and fixed during integration
+
+### 9a. Five flat dark holes in the arcade
+
+The first working build left five tiles of flat `deep_shadow` in the middle of
+the new shaded paving, at **(12,42), (11,43), (11,45), (11,47), (9,48)** —
+clearly visible as textureless brown squares. Cause: `groundMaterial` initially
+recorded the *variant-rolled* floor tile, and those five had rolled
+`floor_crack`, which is not one of the four approved cobble variants.
+
+Including `floor_crack` in the cobblestone set would have been wrong — it is
+also a variant of `serviceBrick`, `yardGravel` and `roadDirt`, so cobblestone
+would have been painted over brick and gravel. Fixed at the root instead:
+`groundMaterial` now records the surface's **base** tile, so all `alleyCobble`
+tiles read `cobble` whatever variant the floor rolled, and all `serviceBrick`
+tiles read `brick`. The holes are gone and no unsupported material is touched.
+A test asserts `floor_crack` never appears in the material layer.
+
+### 9b. Harness faults, not game faults
+
+The capture harness initially reported three false problems — it compared
+Phaser's `frameTotal` (which counts the implicit `__BASE` frame) against the
+tile count, and it tried to cross the arcade boundary by pushing east, which the
+arcade's stone pillars block. Both fixed in the tool. A third flake, the V1
+beat failing after two minutes of crouching and wandering, was fixed by running
+that beat from a fresh load.
+
+---
+
+## 10. Before-and-after captures (§9, §13)
+
+`docs/art-integration/screenshots/b205c2/` — 22 captures per pass at native
+480×270, debug overlays off (`debugHitboxes: false` recorded), **identical
+camera coordinates in both passes** (asserted: the scroll table is equal across
+telemetry files).
+
+| file | kind | shows |
+| --- | --- | --- |
+| `01-{before,after}-market-daylight.png` | STAGED | lit paving away from a boundary |
+| `01-{before,after}-arcade-transition.png` | STAGED | the long straight light-to-shade edge at x12\|x13 |
+| `01-{before,after}-arcade-north-end.png` / `-south-end` | STAGED | the two outside corners |
+| `01-{before,after}-covered-rows.png` / `-east` | STAGED | shaded bands inside lit paving — N and S masks |
+| `01-{before,after}-alley-shade.png` | STAGED | shaded cobble in an L against lit cobble |
+| `01-{before,after}-bakery-garden.png` | STAGED | must be **unchanged** — grass and the garden walk are both excluded |
+| `01-{before,after}-full-market.png` | STAGED | wide market view |
+| `02-{before,after}-tempest-in-shade-lookout-in-light.png` | STAGED | both actors, opposite sides of one boundary |
+| `03-{before,after}-actors-either-side-of-the-edge.png` | STAGED | last shaded tile / first lit tile |
+| `04-{before,after}-played-walked-into-arcade-shade.png` | PLAYED | real input into the shade |
+| `05-{before,after}-played-crouched-in-shade.png` | PLAYED | crouched by a real `C` press |
+| `06-{before,after}-played-crossed-into-light.png` | PLAYED | real-input crossing out of the shade |
+| `07-{before,after}-played-mission-progress.png` | PLAYED | **V1 taken by a real `E` press** |
+| `08-{before,after}-scroll-00..06.png` | STAGED | camera moved across the edge at sub-tile offsets |
+| `09-compare-*.png` | — | six side-by-side before/after pairs |
+
+### What the captures show
+
+| §9 / §13 check | result |
+| --- | --- |
+| no missing tiles | ✅ the arcade, both covered rows and the alley are fully covered |
+| no texture-index errors | ✅ every atlas frame resolves; the engine frame audit passes |
+| **no visible 16-pixel grid at the boundary** | ✅ the transition is the artwork's own 2–4 px inner band; stone coursing continues unbroken across it |
+| no diagonal overlay misalignment | n/a — no overlay is eligible anywhere in this map (§6) |
+| no animation or camera-scrolling artifacts | ✅ seven sub-tile scroll frames plus the 301-frame probe |
+| no change to collision or concealment | ✅ measured, §11 |
+| Tempest and Lookouts readable | ✅ `02-after-…` — both read clearly on shaded and lit cobble |
+| bakery/garden unchanged | ✅ by design, the exclusion |
+
+The clearest pair is `09-compare-arcade-transition.png`: the arcade goes from a
+flat untextured brown band to shaded cobblestone whose coursing runs continuously
+into the lit square.
+
+---
+
+## 11. Gameplay regression findings (§11)
+
+Measured in-engine in **both** passes, from the same probes:
+
+| | before | after |
+| --- | --- | --- |
+| grid tiles with `collides` | 4950 | **4950** |
+| grid tiles with `shadow` | 652 | **652** |
+| grid tiles with `blocksSight` | 4870 | **4870** |
+| grid tiles with `lowCover` | 80 | **80** |
+| enemies | 7 | 7 |
+
+Concealment at ten representative positions — **all ten identical**:
+
+| tile | before | after |
+| --- | --- | --- |
+| (11,45) arcade interior | shadow | shadow |
+| (11,40) arcade north | shadow | shadow |
+| (24,44) lit market | — | — |
+| (13,45) first lit tile east of the arcade | — | — |
+| (18,35) covered row | shadow | shadow |
+| (18,34) lit, north of the covered row | — | — |
+| (7,60) alley | shadow | shadow |
+| (14,60) alley, lit | — | — |
+| (8,10) garden walk (shaded, excluded from the artwork) | shadow | shadow |
+| (30,47) V1 evidence tile | — | — |
+
+The last two matter most: the garden walk is still concealing while being
+visually untreated, and the evidence tile is still non-concealing while sitting
+on new paving — the visual and gameplay states are demonstrably independent.
+
+Driven by real input in both passes: walked into the arcade shade (engine agrees
+`inShadow=true`), **crouched there with a real `C` press** and stayed concealed,
+walked out into the light with the shadow flag flipping, and **took V1 with a
+real `E` press**.
+
+Unchanged and asserted: player speeds, body box, detection and suspicion
+constants, vision occlusion, patrol routes, cover, bullet collision, mission
+objectives, garage key and doors, saves, market stall rendering (39/39), and
+fountain and architecture placement.
+
+---
+
+## 12. Tests (§12)
+
+`tests/shaded-cobble-integration.test.ts` (27) and `tests/ground-shade.test.ts`
+(41). Full suite **444 passing** across 17 files, up from 417; one pre-existing
+assertion widened, none removed.
+
+| §12 item | where |
+| --- | --- |
+| 1. texture paths and dimensions | registry entries, PNG headers on disk, and checksums against both manifests |
+| 2. atlas registration | frame counts 4 / 64 / 16; disjoint tileset gid bases |
+| 3. cardinal mask calculation | all 16 masks; manifest's own direction sets re-derived; literal bit pins |
+| 4. diagonal overlay conditions | 4 corners × 8 condition combinations |
+| 5. source variant preservation | shaded variant *n* ↔ daylight variant *n*; every cell on `pavingVariant` |
+| 6. mask 0 parity | **pixel comparison**, 0 differing pixels × 4 variants |
+| 7. boundary handling at map edges | out-of-bounds is `other`; lone tile, map corner, off-map diagonal |
+| 8. no shading on non-cobblestone | every non-cobble tile on the real map asserted unpainted (1500+ checked) |
+| 9. no tile-coordinate changes | map dimensions and the evidence object position |
+| 10. no collision changes | collision 4769, cover 92, propCollision 83 |
+| 11. no `shadowZones` changes | 652 tiles; presentation code asserted never to read it |
+| 12. no mission or patrol changes | existing mission/patrol/encounter suites unchanged and passing |
+| 13. reconstruction after reload | `composeRegion` pure and equal on re-run; variant a pure function of coordinates |
+| 14. no B.2-05C-1 regression | `tests/stall-occlusion.test.ts` 39/39 |
+
+---
+
+## 13. Remaining limitations
+
+1. **Eight of sixteen cardinal masks are unexercised** by this map, because the
+   shade is authored as axis-aligned rectangles. Not a defect; recorded so the
+   coverage claim is honest.
+
+2. **No diagonal overlay is drawn anywhere.** Same cause (§6). The path is
+   implemented and tested, just not reachable from the current authoring.
+
+3. **The garden walk is untreated** — 116 shaded cobble-tiled tiles still on the
+   flat `deep_shadow` fill, pending the §8 ruling. This is now the largest
+   remaining visual inconsistency on any cobbled surface.
+
+4. **372 shaded brick tiles, 46 gravel, 24 garage plate, 15 grass** keep their
+   existing treatment, because no approved artwork exists for them. By area this
+   is the biggest remaining inconsistency in Valcendre overall — the whole upper
+   lane garden branch is brick.
+
+5. **The north road gained daylight cobblestone.** `roadDirt` (northRoad,
+   x60–64 y0–5, 30 daylight tiles) is authored as a dirt road but its base tile
+   is `cobble`, so the material layer cannot distinguish it from `alleyCobble`.
+   It now renders approved daylight cobble instead of legacy cobble — a
+   like-for-like material upgrade on 30 tiles outside the mission route, flagged
+   rather than hidden. Giving `roadDirt` its own base tile would separate it.
+
+6. **The decorative `floor_crack` motif is lost on treated cobble.** The
+   approved strip has four variants and no cracked variant, so a tile that
+   rolled `floor_crack` now draws a plain approved variant. 5 such tiles were in
+   the shaded arcade (§9a) and more are in the daylight areas. The alternative
+   was leaving holes.
+
+7. **A single console 404 in both passes.** Previously traced to the favicon,
+   not an asset; every registered texture was confirmed present in-engine.
+
+---
+
+## 14. Issue categorisation (§15)
+
+### ART AGENT — genuine missing source artwork
+
+| id | gap | tiles | note |
+| --- | --- | --- | --- |
+| **ART-11** | shaded **brick** treatment for `serviceBrick` | 372 | the largest remaining gap by area |
+| **ART-12** | shaded **gravel** for `yardGravel` | 46 | |
+| **ART-13** | shaded **garage plate** for `garageFloor` | 24 | |
+| **ART-14** | a cracked-paving variant for the daylight and shaded cobble strips | ~40 map-wide | would restore the `floor_crack` motif on treated cobble (§13.6). Low priority: a few pixels at native scale. |
+
+ART-7, ART-8, ART-9 and ART-10 from the earlier report are **closed** — the
+artwork and its manifests arrived and are integrated.
+
+No approved artwork is suspected of being wrong. No authored-map composition
+problem was found: every shade shape in the level resolves to a correct atlas
+selection.
+
+### CODING AGENT
 
 | id | item |
 | --- | --- |
-| **CODE-5** | the material data is destroyed by the shadow pass; §6 above, with two concrete options. Prerequisite for the renderer. |
-| **CODE-6** | wire `GroundShade` into `ValcendreV2Scene` behind the existing `ART_MODE` switch, write the composed cells into a tilemap layer, and run the §9 controlled verification in the market arcade. Blocked on ART-7/8/9. |
-| **CODE-7** | decide `gardenPath` eligibility (§2) — a one-line classification change either way. |
-| **CODE-8** | B.2-04's limitation note should be corrected in place: it reports 496 unconverted shaded tiles, of which 432 are non-walkable void fill. Done in this document; the older file still carries the original figure. |
-
-No authored-map composition problem was found. No approved artwork is suspected
-of being wrong — none of it could be inspected.
+| **CODE-5** | **closed** — the material data is now exported as `groundMaterial`. |
+| **CODE-6** | **closed** — the renderer is wired and verified in-engine. |
+| **CODE-7** | **open** — rule on the garden walk (§8). One constant. |
+| **CODE-8** | **closed** — the stale 496 figure is corrected in the B.2-04 report and the backlog. |
+| **CODE-9** | *new, low priority* — give `roadDirt` a base tile of its own so the north road can be excluded from cobblestone treatment (§13.5). |
 
 ---
 
-## 9. Blocked on the missing artwork
+## 15. Files changed
 
-Everything below is untouched, not attempted, and not claimed:
-
-| § | requirement |
+| file | change |
 | --- | --- |
-| 3 | verify source checksums |
-| 5 | register the shaded strip; apply it to eligible areas |
-| 6 | verify mask 0 is pixel-identical to the approved shaded tile |
-| 9 | controlled first integration in the market arcade, and its 7 captures |
-| 10 | extend across the remaining eligible areas; inspect the special review locations |
-| 11 | before/after concealment comparison at representative positions **in the engine** (the static invariants are covered; the runtime comparison is not) |
-| 12 | items 1, 2, 13, 14 — texture paths and dimensions, atlas registration, reconstruction after scene reload, in-engine stall regression |
-| 13 | all 10 browser captures |
-| 14 | measured ground-composition cost, boundary/overlay cell counts in the real map, texture count, scrolling stability |
-| 15 | approved art source checksums; before/after screenshots |
-| 17 | "approved shaded paving renders in the engine" and every item that follows from it |
+| `tools/build-map.mjs` | emits the invisible `groundMaterial` appearance layer, recording each walkable tile's authored surface base |
+| `public/assets/maps/village.json` | regenerated — one new layer; every other layer, the objects and the dimensions byte-identical |
+| `src/art/AssetRegistry.ts` | three new texture entries, alongside the daylight strip |
+| `src/art/ValcendreV2.ts` | texture keys, `COBBLE_MATERIAL_TILES`, `SHADED_FLOOR_TILE`, `SHADE_GARDEN_PATH`, `SHADE_EXCLUDED_REGIONS`, corner depths |
+| `src/art/ValcendreV2Scene.ts` | `buildPaving` composes the ground through `GroundShade` into five static layers; teardown releases them |
+| `tests/stall-occlusion.test.ts` | one assertion widened: the presentation now has two `putTileAt` sites, not one |
 
-When ART-7/8/9/10 land, the remaining work is: resolve CODE-5, register three
-textures, wire the composed cells into a tilemap layer, run the §9 arcade
-verification, then extend to the other eligible regions. The selection logic
-they will use is already written and exhaustively tested.
+Added: `public/assets/environments/valcendre_{shaded_cobble,shade_boundaries,shade_diagonal_corners}_16x16.png`,
+`art-source/…/08_shade_b205a/` (the archived package),
+`tests/shaded-cobble-integration.test.ts`,
+`tools/b205c2-shade-capture.mjs`, `tools/b205c2-perf-probe.mjs`,
+`docs/art-integration/screenshots/b205c2/`.
+
+`src/art/GroundShade.ts` is unchanged from the baseline commit — the selection
+logic written against the manifests before the art arrived needed no correction
+once it did.
 
 ---
 
-## 10. Verification
+## 16. Verification (§16)
 
 ```
 npx tsc --noEmit        clean
-npx vitest run          16 files, 417 passed, 0 failed
+npx vitest run          17 files, 444 passed, 0 failed
 npm run build           succeeds
-node tools/build-map.mjs  green, map unchanged
+node tools/build-map.mjs  green; all areas reachable, locked-door check passes
 ```
 
-`tests/stall-occlusion.test.ts` 39/39 — the B.2-05C-1 correction is intact.
+Production build verified in a real browser (Chromium, SwiftShader, native
+480×270): textures load at their declared sizes, the ground composes to 1008
+tiles, 60 fps across the boundary, and the mission beat completes on real input.
 
-No browser verification was performed, because nothing user-visible changed.
+## 17. Completion requirements (§17)
+
+| requirement | status |
+| --- | --- |
+| approved shaded paving renders in the engine | ✅ |
+| all eligible cobblestone areas use appropriate materials | ✅ 79 shaded + 929 daylight |
+| cardinal boundaries work correctly | ✅ 8 masks exercised, 16 tested |
+| diagonal overlays work correctly | ✅ implemented and tested; 0 eligible in this map (§6) |
+| narrow and irregular shade areas visually coherent | ✅ arcade, both covered rows, alley L |
+| no unsupported material overwritten | ✅ asserted over the whole map |
+| Tempest and Lookouts remain readable | ✅ |
+| all gameplay concealment values unchanged | ✅ 4 grid totals and 10 probes identical |
+| market stall correction intact | ✅ 39/39 |
+| automated tests and production build pass | ✅ 444 tests |
+| real engine captures document the result | ✅ 22 per pass + 6 comparisons |
+| remaining issues categorised | ✅ §13, §14 |

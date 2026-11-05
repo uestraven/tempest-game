@@ -1,0 +1,183 @@
+{
+  "schema": "tempest.valcendre.shaded_cobble.v1",
+  "task": "B.2-05A-1",
+  "asset": "valcendre_shaded_cobble_16x16.png",
+  "status": "PRODUCTION PROOF — four interior shaded-paving variants only; transitions NOT included",
+  "dimensions_px": [
+    64,
+    16
+  ],
+  "tile_px": [
+    16,
+    16
+  ],
+  "atlas": {
+    "columns": 4,
+    "rows": 1,
+    "tile_count": 4
+  },
+  "source": {
+    "asset": "valcendre_proof_cobble_16x16.png",
+    "task": "B.2-03A",
+    "package": "TEMPEST_B2-03A_Architecture_Proof",
+    "sha256": "14e9b5c58301f037b87573dbb77487f0ea906b952b015adc8255aeef3b4349ee",
+    "original_file_modified": false,
+    "provenance": "Exact approved B.2-03A PNG recovered from user Library, not reconstructed from B.2-02 study",
+    "source_manifest": "valcendre_proof_manifest.json",
+    "source_validation": "valcendre_proof_validation.md"
+  },
+  "sha256": "1747da6acbecaf9ca38f3dd9f438362c5b030681ec2457311b028afb248d15b8",
+  "palette_source": "valcendre_palette.json",
+  "palette_schema_version": "2.0",
+  "approved_environment_palette_size": 53,
+  "palette_transforms": [
+    {
+      "source_id": "paving_0",
+      "source_hex": "#857F73",
+      "shaded_id": "cast_neutral",
+      "shaded_hex": "#686A66",
+      "purpose": "deep crack accent, rare"
+    },
+    {
+      "source_id": "paving_1",
+      "source_hex": "#A79C89",
+      "shaded_id": "paving_0",
+      "shaded_hex": "#857F73",
+      "purpose": "quiet mortar"
+    },
+    {
+      "source_id": "paving_2",
+      "source_hex": "#BFB09A",
+      "shaded_id": "limestone_1",
+      "shaded_hex": "#918A7B",
+      "purpose": "main weathered stone body"
+    },
+    {
+      "source_id": "paving_3",
+      "source_hex": "#D1C0A5",
+      "shaded_id": "paving_1",
+      "shaded_hex": "#A79C89",
+      "purpose": "NW lit stone face"
+    }
+  ],
+  "shade_palette_ids": [
+    "cast_neutral",
+    "paving_0",
+    "limestone_1",
+    "paving_1"
+  ],
+  "opacity": {
+    "mode": "RGBA",
+    "alpha_values": [
+      255
+    ],
+    "fully_opaque": true,
+    "no_background": true
+  },
+  "tile_index": [
+    {
+      "index": 0,
+      "name": "shaded_cobble_0",
+      "source_index": 0,
+      "source_name": "cobble_0",
+      "identity": "same per-pixel stone and grout class geometry as original; 1:1 color remap"
+    },
+    {
+      "index": 1,
+      "name": "shaded_cobble_1",
+      "source_index": 1,
+      "source_name": "cobble_1",
+      "identity": "same per-pixel stone and grout class geometry as original; 1:1 color remap"
+    },
+    {
+      "index": 2,
+      "name": "shaded_cobble_2",
+      "source_index": 2,
+      "source_name": "cobble_2",
+      "identity": "same per-pixel stone and grout class geometry as original; 1:1 color remap"
+    },
+    {
+      "index": 3,
+      "name": "shaded_cobble_3",
+      "source_index": 3,
+      "source_name": "cobble_3",
+      "identity": "same per-pixel stone and grout class geometry as original; 1:1 color remap"
+    }
+  ],
+  "render_layer": "floor / ground; coding agent chooses placement in map; does not modify shadowZones",
+  "seam_rules": {
+    "horizontal_pairs_tested": 16,
+    "vertical_pairs_tested": 16,
+    "tile_edge_no_new_grout_except_authored_courses": true,
+    "spatial_source_map_preserved": true,
+    "all_variant_orderings_supported": true,
+    "boundary_transition_atlas_required": true,
+    "authored_joint_rows": [
+      2,
+      8,
+      13
+    ],
+    "wrap_course_vertical_joint_columns": [
+      6,
+      13
+    ],
+    "tested_repetitions": [
+      "cycle",
+      "mixed",
+      "heavy0_87pct",
+      "uniform_variant2"
+    ]
+  },
+  "lighting": "Upper-left/NW; stone highlights preserved geometrically; lower-value cooler neutral ramp",
+  "visual_shade_is_not_gameplay_concealment": true,
+  "shadowZones_owned_by": "CODING AGENT",
+  "reference_uses": {
+    "art_bible": "TEMPEST_ART_BIBLE_v2.md",
+    "architecture_assembly": "valcendre_proof_building_assembly.png",
+    "characters": "approved Tempest directional and Lookout C-1/C-2R files"
+  },
+  "previews": [
+    {
+      "file": "valcendre_shaded_cobble_comparison.png",
+      "classification": "art-review composite; not engine screenshot"
+    },
+    {
+      "file": "valcendre_shaded_cobble_character_test.png",
+      "classification": "art-review composite; not engine screenshot"
+    },
+    {
+      "file": "valcendre_shaded_cobble_context_480x270.png",
+      "classification": "art-review composite; not engine screenshot"
+    },
+    {
+      "file": "valcendre_shaded_cobble_seam_tests.png",
+      "classification": "art-review repeat study; not engine screenshot"
+    }
+  ],
+  "known_limitations": [
+    "No boundary or corner transition tiles in this proof",
+    "Shading alone does not set or infer gameplay concealment state",
+    "No approved Tempest crouch sheet was available to test",
+    "No B.2-04 post-integration capture was found in accessible files; context is a B.2-03A assembly-based art-review composite",
+    "No in-engine readability or map coverage test"
+  ],
+  "compatibility": {
+    "architecture_proof": "approved 480x270 B.2-03A assembly visually referenced",
+    "tempest": "source sprite not modified",
+    "lookout": "source sprite not modified",
+    "stalled_proof": "B.2-03B-2 approved layers reused in art-review composite",
+    "fountain": "B.2-03B-1 approved sprite reused in art-review composite"
+  },
+  "texture_metrics": {
+    "source_unique_colors": 4,
+    "shade_unique_colors": 4,
+    "source_tile_pair_differences": {
+      "0-1": 67,
+      "0-2": 57,
+      "0-3": 60,
+      "1-2": 61,
+      "1-3": 61,
+      "2-3": 67
+    }
+  }
+}

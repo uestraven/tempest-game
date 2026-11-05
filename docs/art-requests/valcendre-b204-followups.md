@@ -20,7 +20,13 @@ Screenshots: `docs/art-integration/screenshots/b204/`.
 > building interiors**, not paving. Only **64** are walkable shaded ground inside
 > the market region, and map-wide the genuinely cobblestone shaded ground is
 > **79 tiles**. A further 372 shaded tiles are `serviceBrick`, which needs its
-> own artwork (ART-11) rather than cobblestone. Superseded by ART-7/8/9 in
+> own artwork (ART-11) rather than cobblestone.
+>
+> **CLOSED in Phase B.2-05C-2.** The approved B.2-05A-1 shaded strip and
+> B.2-05A-2 transition atlases are integrated: 79 shaded and 929 daylight
+> cobblestone tiles now render approved art, with concealment measurably
+> unchanged. The remaining gaps are brick (372), gravel (46), garage plate (24)
+> and a cracked-paving variant — see ART-11..14 in
 > [`../art-integration/valcendre-b205c2.md`](../art-integration/valcendre-b205c2.md).
 
 | | |

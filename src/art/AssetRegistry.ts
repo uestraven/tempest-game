@@ -375,6 +375,42 @@ const VALCENDRE_V2: AssetEntry[] = [
     frameHeight: 16,
     frameCount: 4,
   },
+  // Phase B.2-05A-1: the shaded counterparts of the four daylight variants.
+  // Registered ALONGSIDE the daylight strip, never replacing it.
+  {
+    key: 'tiles.valcendre.v2.cobbleShaded',
+    path: 'assets/environments/valcendre_shaded_cobble_16x16.png',
+    kind: 'spritesheet',
+    width: 64,
+    height: 16,
+    frameWidth: 16,
+    frameHeight: 16,
+    frameCount: 4,
+  },
+  // Phase B.2-05A-2: cardinal light-to-shade transitions, 4 variants x 16
+  // masks, row-major, addressed as `variant * 16 + mask`.
+  {
+    key: 'tiles.valcendre.v2.shadeBoundaries',
+    path: 'assets/environments/valcendre_shade_boundaries_16x16.png',
+    kind: 'spritesheet',
+    width: 128,
+    height: 128,
+    frameWidth: 16,
+    frameHeight: 16,
+    frameCount: 64,
+  },
+  // Phase B.2-05A-2: diagonal corner overlays, 4 variants x 4 corners,
+  // addressed as `variant * 4 + corner`. Binary alpha; drawn over the ground.
+  {
+    key: 'tiles.valcendre.v2.shadeCorners',
+    path: 'assets/environments/valcendre_shade_diagonal_corners_16x16.png',
+    kind: 'spritesheet',
+    width: 128,
+    height: 32,
+    frameWidth: 16,
+    frameHeight: 16,
+    frameCount: 16,
+  },
   {
     key: 'tiles.valcendre.v2.architecture',
     path: 'assets/environments/valcendre_proof_architecture_16x16.png',

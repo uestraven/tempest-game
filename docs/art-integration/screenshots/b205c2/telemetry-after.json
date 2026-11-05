@@ -1,0 +1,484 @@
+{
+ "label": "after",
+ "state": {
+  "artV2": true,
+  "debugHitboxes": false,
+  "report": {
+   "pavingTiles": 1008,
+   "buildings": [
+    {
+     "name": "market_hall_west",
+     "tiles": 16
+    },
+    {
+     "name": "market_hall_east",
+     "tiles": 15
+    }
+   ],
+   "fountainSwapped": true,
+   "stallDrawn": true,
+   "stallPieces": [
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "__BASE",
+     "worldY": 752,
+     "depth": 10.0752
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_rear",
+     "worldY": 752,
+     "depth": 10.07525
+    },
+    {
+     "texture": "prop.valcendre.market_stall_canopy",
+     "frame": "valcendre_stall_canopy_valance",
+     "worldY": 769,
+     "depth": 10.0792
+    },
+    {
+     "texture": "prop.valcendre.market_stall_base",
+     "frame": "valcendre_stall_base_counter",
+     "worldY": 778,
+     "depth": 10.0799
+    }
+   ],
+   "ground": {
+    "daylightTiles": 929,
+    "shadedInteriorTiles": 38,
+    "boundaryTiles": 41,
+    "overlayTiles": 0,
+    "overlaysDrawn": 0,
+    "layers": 5,
+    "gardenWalkIncluded": false
+   },
+   "skippedSurfaces": {
+    "cobble (garden walk, excluded)": 116,
+    "brick (garden walk, excluded)": 4,
+    "brick": 368,
+    "metal": 373,
+    "ground_debris": 703,
+    "grass": 147
+   }
+  },
+  "textures": [
+   {
+    "key": "tiles.valcendre.v2.cobble",
+    "loaded": true,
+    "width": 64,
+    "height": 16,
+    "frameTotal": 5
+   },
+   {
+    "key": "tiles.valcendre.v2.cobbleShaded",
+    "loaded": true,
+    "width": 64,
+    "height": 16,
+    "frameTotal": 5
+   },
+   {
+    "key": "tiles.valcendre.v2.shadeBoundaries",
+    "loaded": true,
+    "width": 128,
+    "height": 128,
+    "frameTotal": 65
+   },
+   {
+    "key": "tiles.valcendre.v2.shadeCorners",
+    "loaded": true,
+    "width": 128,
+    "height": 32,
+    "frameTotal": 17
+   }
+  ],
+  "mapLayerNames": [
+   "floor",
+   "decorBack",
+   "architecture",
+   "collision",
+   "cover",
+   "propCollision",
+   "shadowZones",
+   "groundMaterial",
+   "decorFront"
+  ],
+  "programmaticGroundLayers": []
+ },
+ "invariants": {
+  "totals": {
+   "collides": 4950,
+   "shadow": 652,
+   "blocksSight": 4870,
+   "lowCover": 80
+  },
+  "conceal": [
+   {
+    "tile": [
+     11,
+     45
+    ],
+    "shadow": true,
+    "collides": false
+   },
+   {
+    "tile": [
+     11,
+     40
+    ],
+    "shadow": true,
+    "collides": false
+   },
+   {
+    "tile": [
+     24,
+     44
+    ],
+    "shadow": false,
+    "collides": false
+   },
+   {
+    "tile": [
+     13,
+     45
+    ],
+    "shadow": false,
+    "collides": false
+   },
+   {
+    "tile": [
+     18,
+     35
+    ],
+    "shadow": true,
+    "collides": false
+   },
+   {
+    "tile": [
+     18,
+     34
+    ],
+    "shadow": false,
+    "collides": true
+   },
+   {
+    "tile": [
+     7,
+     60
+    ],
+    "shadow": true,
+    "collides": false
+   },
+   {
+    "tile": [
+     14,
+     60
+    ],
+    "shadow": false,
+    "collides": true
+   },
+   {
+    "tile": [
+     8,
+     10
+    ],
+    "shadow": true,
+    "collides": false
+   },
+   {
+    "tile": [
+     30,
+     47
+    ],
+    "shadow": false,
+    "collides": false
+   }
+  ],
+  "enemies": 7,
+  "objectives": [],
+  "speeds": {
+   "walk": "cn"
+  }
+ },
+ "scrolls": {
+  "market-daylight": {
+   "scrollX": 152,
+   "scrollY": 577
+  },
+  "arcade-transition": {
+   "scrollX": 0,
+   "scrollY": 593
+  },
+  "arcade-north-end": {
+   "scrollX": 0,
+   "scrollY": 529
+  },
+  "arcade-south-end": {
+   "scrollX": 0,
+   "scrollY": 657
+  },
+  "covered-rows": {
+   "scrollX": 72,
+   "scrollY": 449
+  },
+  "covered-rows-east": {
+   "scrollX": 216,
+   "scrollY": 449
+  },
+  "alley-shade": {
+   "scrollX": 0,
+   "scrollY": 833
+  },
+  "bakery-garden": {
+   "scrollX": 0,
+   "scrollY": 257
+  },
+  "full-market": {
+   "scrollX": 152,
+   "scrollY": 545
+  }
+ },
+ "played": {
+  "reachedArcade": true,
+  "arcadeInShadow": true,
+  "crouchedInShade": true,
+  "crouchStillInShadow": true,
+  "crossedIntoLight": true,
+  "v1Prompt": "E - INVESTIGATE STALL",
+  "v1Granted": true,
+  "v1FinalState": {
+   "x": 481.896430715329,
+   "y": 770.5853102592978,
+   "tile": [
+    30,
+    48
+   ],
+   "crouched": false,
+   "inShadow": false,
+   "prompt": null,
+   "objectives": [
+    "V1"
+   ]
+  }
+ },
+ "scrollFrames": [
+  {
+   "step": 0,
+   "cameraX": 152
+  },
+  {
+   "step": 1,
+   "cameraX": 163
+  },
+  {
+   "step": 2,
+   "cameraX": 174
+  },
+  {
+   "step": 3,
+   "cameraX": 185
+  },
+  {
+   "step": 4,
+   "cameraX": 196
+  },
+  {
+   "step": 5,
+   "cameraX": 207
+  },
+  {
+   "step": 6,
+   "cameraX": 218
+  }
+ ],
+ "shots": [
+  {
+   "file": "01-after-market-daylight.png",
+   "kind": "STAGED",
+   "note": "Lit market paving, away from any boundary.",
+   "camera": {
+    "x": 392,
+    "y": 712
+   },
+   "scroll": {
+    "scrollX": 152,
+    "scrollY": 577
+   }
+  },
+  {
+   "file": "01-after-arcade-transition.png",
+   "kind": "STAGED",
+   "note": "West arcade: the long straight light-to-shade edge at x12|x13.",
+   "camera": {
+    "x": 216,
+    "y": 728
+   },
+   "scroll": {
+    "scrollX": 0,
+    "scrollY": 593
+   }
+  },
+  {
+   "file": "01-after-arcade-north-end.png",
+   "kind": "STAGED",
+   "note": "Arcade north end: the outside corner where the shade stops.",
+   "camera": {
+    "x": 184,
+    "y": 664
+   },
+   "scroll": {
+    "scrollX": 0,
+    "scrollY": 529
+   }
+  },
+  {
+   "file": "01-after-arcade-south-end.png",
+   "kind": "STAGED",
+   "note": "Arcade south end: the other outside corner.",
+   "camera": {
+    "x": 184,
+    "y": 792
+   },
+   "scroll": {
+    "scrollX": 0,
+    "scrollY": 657
+   }
+  },
+  {
+   "file": "01-after-covered-rows.png",
+   "kind": "STAGED",
+   "note": "Covered market row: a shaded band inside lit paving on all sides.",
+   "camera": {
+    "x": 312,
+    "y": 584
+   },
+   "scroll": {
+    "scrollX": 72,
+    "scrollY": 449
+   }
+  },
+  {
+   "file": "01-after-covered-rows-east.png",
+   "kind": "STAGED",
+   "note": "The second covered row, for the T and corner cases.",
+   "camera": {
+    "x": 456,
+    "y": 584
+   },
+   "scroll": {
+    "scrollX": 216,
+    "scrollY": 449
+   }
+  },
+  {
+   "file": "01-after-alley-shade.png",
+   "kind": "STAGED",
+   "note": "Arrival alley: shaded cobble in an L against lit cobble.",
+   "camera": {
+    "x": 120,
+    "y": 968
+   },
+   "scroll": {
+    "scrollX": 0,
+    "scrollY": 833
+   }
+  },
+  {
+   "file": "01-after-bakery-garden.png",
+   "kind": "STAGED",
+   "note": "Bakery/garden route. Grass and the garden walk are both excluded, so this must be UNCHANGED.",
+   "camera": {
+    "x": 168,
+    "y": 392
+   },
+   "scroll": {
+    "scrollX": 0,
+    "scrollY": 257
+   }
+  },
+  {
+   "file": "01-after-full-market.png",
+   "kind": "STAGED",
+   "note": "Wide market view after integration.",
+   "camera": {
+    "x": 392,
+    "y": 680
+   },
+   "scroll": {
+    "scrollX": 152,
+    "scrollY": 545
+   }
+  },
+  {
+   "file": "02-after-tempest-in-shade-lookout-in-light.png",
+   "kind": "STAGED",
+   "note": "Tempest on shaded arcade cobble, a Lookout on lit paving, same frame across the boundary."
+  },
+  {
+   "file": "03-after-actors-either-side-of-the-edge.png",
+   "kind": "STAGED",
+   "note": "Tempest on the last shaded tile, the Lookout on the first lit tile."
+  },
+  {
+   "file": "04-after-played-walked-into-arcade-shade.png",
+   "kind": "PLAYED",
+   "note": "Walked into the arcade shade. tile=11,46 engine reports inShadow=true"
+  },
+  {
+   "file": "05-after-played-crouched-in-shade.png",
+   "kind": "PLAYED",
+   "note": "Crouched by a real C press: true; inShadow=true"
+  },
+  {
+   "file": "06-after-played-crossed-into-light.png",
+   "kind": "PLAYED",
+   "note": "Walked east out of the shade under real input. shadow transitions seen: true"
+  },
+  {
+   "file": "07-after-played-mission-progress.png",
+   "kind": "PLAYED",
+   "note": "V1 granted by a real E press: true; objectives V1"
+  },
+  {
+   "file": "08-after-scroll-00.png",
+   "kind": "STAGED",
+   "note": "Camera scrolled across the arcade edge, step 0 (cameraX=152)."
+  },
+  {
+   "file": "08-after-scroll-01.png",
+   "kind": "STAGED",
+   "note": "Camera scrolled across the arcade edge, step 1 (cameraX=163)."
+  },
+  {
+   "file": "08-after-scroll-02.png",
+   "kind": "STAGED",
+   "note": "Camera scrolled across the arcade edge, step 2 (cameraX=174)."
+  },
+  {
+   "file": "08-after-scroll-03.png",
+   "kind": "STAGED",
+   "note": "Camera scrolled across the arcade edge, step 3 (cameraX=185)."
+  },
+  {
+   "file": "08-after-scroll-04.png",
+   "kind": "STAGED",
+   "note": "Camera scrolled across the arcade edge, step 4 (cameraX=196)."
+  },
+  {
+   "file": "08-after-scroll-05.png",
+   "kind": "STAGED",
+   "note": "Camera scrolled across the arcade edge, step 5 (cameraX=207)."
+  },
+  {
+   "file": "08-after-scroll-06.png",
+   "kind": "STAGED",
+   "note": "Camera scrolled across the arcade edge, step 6 (cameraX=218)."
+  }
+ ],
+ "errors": [
+  "Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ],
+ "problems": [
+  "page errors: Failed to load resource: the server responded with a status of 404 (Not Found) | Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ]
+}

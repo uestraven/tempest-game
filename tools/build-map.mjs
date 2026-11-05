@@ -238,6 +238,38 @@ for (let y = 0; y < H; y++) {
   }
 }
 
+/**
+ * groundMaterial: INVISIBLE, not a collider, not a gameplay layer.
+ *
+ * Records each walkable tile's authored surface as that surface's BASE tile,
+ * taken before the shadow pass below overwrites the floor. Without it the
+ * exported map cannot say what material lies under a shaded tile: `shadowFloor`
+ * and `voidFill` are both `deep_shadow`, so a shaded cobble tile, a shaded
+ * brick tile and the dark fill behind a building wall are indistinguishable in
+ * `floor`.
+ *
+ * The BASE tile, not the variant-rolled tile, and that distinction matters.
+ * `floor_crack` is a low-probability decorative variant of four different
+ * surfaces - alleyCobble, serviceBrick, yardGravel and roadDirt - so recording
+ * the rolled tile would make a cracked cobble tile indistinguishable from a
+ * cracked brick tile, and any consumer keying off it would either leave holes
+ * in the cobblestone or paint over the brick. Recording the base says what the
+ * level author chose; the appearance variant is the floor layer's business.
+ *
+ * `MapLoader` merges gameplay flags only from its closed GAMEPLAY_LAYERS set
+ * (collision, cover, propCollision, shadowZones), so this layer is inert for
+ * movement, vision, cover and concealment by construction. It is read only by
+ * the ground presentation, to decide which tiles are cobblestone.
+ */
+const groundMaterial = blank();
+for (let y = 0; y < H; y++)
+  for (let x = 0; x < W; x++) {
+    if (!walkable[idx(x, y)]) continue;
+    const surface = surfaceOf[idx(x, y)];
+    if (!surface) continue;
+    groundMaterial[idx(x, y)] = tileId(SURFACES[surface].base) + 1;
+  }
+
 // ---- shadow zones: gameplay flag, plus a darker floor where they apply.
 const shadowZones = blank();
 for (const s of SHADOWS) {
@@ -608,6 +640,7 @@ const map = {
     tileLayer('cover', cover),
     tileLayer('propCollision', propCollision, false),
     tileLayer('shadowZones', shadowZones, false),
+    tileLayer('groundMaterial', groundMaterial, false),
     tileLayer('decorFront', decorFront),
     objectLayer,
   ],

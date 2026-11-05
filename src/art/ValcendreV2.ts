@@ -55,6 +55,9 @@ export const ART_MODE: ArtMode = resolveArtMode();
 // --------------------------------------------------------------- texture keys
 export const V2_TEXTURES = {
   cobble: 'tiles.valcendre.v2.cobble',
+  cobbleShaded: 'tiles.valcendre.v2.cobbleShaded',
+  shadeBoundaries: 'tiles.valcendre.v2.shadeBoundaries',
+  shadeCorners: 'tiles.valcendre.v2.shadeCorners',
   architecture: 'tiles.valcendre.v2.architecture',
   window: 'tiles.valcendre.v2.window',
   door: 'tiles.valcendre.v2.door',
@@ -141,6 +144,59 @@ export const MARKET_REGION = { x: 9, y: 30, w: 34, h: 28 } as const;
  * would be exactly the fabrication this task forbids.
  */
 export const PAVED_LEGACY_TILES = ['floor_01', 'floor_02', 'floor_03', 'floor_04', 'floor_05', 'floor_06', 'floor_07', 'floor_08', 'cobble', 'brick'] as const;
+
+// ----------------------------------------------- shaded cobble (B.2-05C-2)
+/**
+ * Legacy tiles that count as COBBLESTONE for the shaded-paving treatment.
+ *
+ * Read from the map's `groundMaterial` layer, which records the authored
+ * surface tile before the shadow pass overwrote the floor. `brick` is
+ * deliberately absent: the B.2-05A packages are cobblestone only, and the
+ * material audit found 372 shaded brick tiles that must keep their existing
+ * treatment until matching artwork exists.
+ */
+export const COBBLE_MATERIAL_TILES = [
+  'cobble',
+  'floor_01',
+  'floor_02',
+  'floor_03',
+  'floor_04',
+  'floor_05',
+  'floor_06',
+  'floor_07',
+  'floor_08',
+] as const;
+
+/**
+ * The surface tile the shadow pass paints over shaded walkable ground. A tile
+ * whose `floor` is this and whose `groundMaterial` is cobblestone is shaded
+ * cobblestone; the same material with any other floor tile is daylight.
+ *
+ * Note the two concepts are read from two different layers on purpose:
+ * `shadowZones` is never consulted here. Concealment stays the sole property of
+ * that layer and the visual state is the floor/material pair, so neither can
+ * drift into the other.
+ */
+export const SHADED_FLOOR_TILE = 'deep_shadow';
+
+/**
+ * Whether the garden walk takes the shaded cobblestone treatment.
+ *
+ * `gardenPath` (116 tiles, x6-11 y3-22) is NAMED a garden path but PAINTS
+ * `cobble` and `floor_01` - the same tiles as `alleyCobble`. The B.2-05C-2
+ * brief points both ways on it: section 1 says the artwork is "for cobblestone
+ * surfaces only", while section 4's table says "Grass / garden -> preserve
+ * existing treatment".
+ *
+ * Left FALSE, the conservative reading, because it is 116 tiles - more than all
+ * the unambiguous cobblestone put together - and it is the route the level
+ * notes call "the safer route, and reads that way". Flipping this constant is
+ * the whole change if the ruling goes the other way.
+ */
+export const SHADE_GARDEN_PATH = false;
+
+/** Regions excluded from the treatment while SHADE_GARDEN_PATH is false. */
+export const SHADE_EXCLUDED_REGIONS = { x: 6, y: 3, w: 6, h: 20 } as const;
 
 /**
  * Deterministic paving variant for a world tile.
@@ -370,6 +426,12 @@ export const V2_STALL_ACTOR_LIMITS = {
 export const V2_DEPTH = {
   /** Above legacy `floor` (0), below legacy `decorBack` (1). */
   paving: 0.5,
+  /**
+   * Diagonal corner overlays, one depth per corner so the four never contend.
+   * All sit above the ground tiles and below the architecture's cast shade, so
+   * a corner relief is part of the ground and can never cover a building.
+   */
+  shadeCorners: [0.55, 0.56, 0.57, 0.58] as const,
   /** Shadow overlays sit on the paving, under anything vertical. */
   groundShade: 0.75,
   /** Shared y-sort base, matching the existing sorted props. */

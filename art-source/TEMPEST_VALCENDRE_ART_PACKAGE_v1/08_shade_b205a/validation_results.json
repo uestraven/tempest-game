@@ -1,0 +1,68 @@
+{
+  "source_hashes_match": true,
+  "dimensions": {
+    "cardinal": [
+      128,
+      128
+    ],
+    "diagonal": [
+      128,
+      32
+    ]
+  },
+  "expected_dimensions_pass": true,
+  "cardinal_opaque": true,
+  "diagonal_binary_alpha": true,
+  "cardinal_approved_color_ids": [
+    "cast_neutral",
+    "limestone_0",
+    "limestone_1",
+    "paving_0",
+    "paving_1",
+    "paving_2",
+    "plaster_1"
+  ],
+  "diagonal_approved_color_ids": [
+    "limestone_0",
+    "limestone_1",
+    "limestone_2",
+    "plaster_1"
+  ],
+  "cardinal_all_approved": true,
+  "diagonal_all_approved": true,
+  "cardinal_cells": 64,
+  "diagonal_cells": 16,
+  "cardinal_every_cell_occupied": true,
+  "diagonal_every_cell_occupied": true,
+  "all_mask_zero_exact_source": true,
+  "mask15_central_shade_preserved": true,
+  "cardinal_role_preserved": true,
+  "diagonal_role_preserved": true,
+  "no_new_mortar_or_crack": true,
+  "edge_normal_compatibility": true,
+  "shaded_side_middle_compatibility": true,
+  "every_corner_subset_overlay_pass": true,
+  "no_empty_or_duplicate_required_cells": true,
+  "distinct_cardinal_cells": 64,
+  "distinct_diagonal_cells": 16,
+  "border_role_preservation": true,
+  "seam_pair_tests": {
+    "normal_to_shaded_horizontal": 16,
+    "normal_to_shaded_vertical": 16,
+    "shade_to_shade_horizontal": 16,
+    "shade_to_shade_vertical": 16
+  },
+  "all_variant_pair_mortar_seams": {
+    "horizontal_pairs": 16,
+    "vertical_pairs": 16,
+    "mismatches": 0
+  },
+  "eight_neighbor_topologies_checked": 1024,
+  "eight_neighbor_topologies_pass": true,
+  "twelve_composed_stress_patterns": 12,
+  "all_12_patterns_composite_valid": true,
+  "production_checksums": {
+    "valcendre_shade_boundaries_16x16.png": "c88d2432d974e65441944e659452e941dec2a2e1d7a8aab0909bdd95a7296bb0",
+    "valcendre_shade_diagonal_corners_16x16.png": "653d75427703ee0efb4b9c8d0a2ad3f1d5c90369992eee73ad03242cec2f96be"
+  }
+}

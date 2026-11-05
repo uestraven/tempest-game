@@ -16,9 +16,12 @@
 import Phaser from 'phaser';
 import { TILE } from '../core/constants';
 import { TILE_NAMES } from './TilesetRegistry';
+import { CORNER_ORDER, composeRegion, summarise, type GroundReader } from './GroundShade';
 import {
-  MARKET_REGION,
-  PAVED_LEGACY_TILES,
+  COBBLE_MATERIAL_TILES,
+  SHADED_FLOOR_TILE,
+  SHADE_EXCLUDED_REGIONS,
+  SHADE_GARDEN_PATH,
   V2_ARCH,
   V2_BUILDINGS,
   V2_DEPTH,
@@ -46,19 +49,44 @@ export interface V2Report {
   stallDrawn: boolean;
   /** One entry per stall draw layer, in creation order. Read by the captures. */
   stallPieces: { texture: string; frame: string | null; worldY: number; depth: number }[];
+  /** Ground composition counts, for the performance budget. */
+  ground: {
+    daylightTiles: number;
+    shadedInteriorTiles: number;
+    boundaryTiles: number;
+    overlayTiles: number;
+    overlaysDrawn: number;
+    layers: number;
+    gardenWalkIncluded: boolean;
+  } | null;
   skippedSurfaces: Record<string, number>;
 }
+
+/**
+ * Disjoint tileset bases for the one ground tilemap, so a single layer can mix
+ * the daylight strip, the shaded strip and the cardinal transition atlas. Each
+ * value is the first global id of that tileset; a tile's gid is the base plus
+ * its frame index.
+ */
+export const GID = {
+  daylight: 0,
+  shaded: 4,
+  boundary: 8,
+  corner: 72,
+} as const;
 
 export class ValcendreV2Presentation {
   private readonly owned: { destroy(): void }[] = [];
   private pavingLayer: Phaser.Tilemaps.TilemapLayer | null = null;
   private pavingMap: Phaser.Tilemaps.Tilemap | null = null;
+  private overlayLayers: Phaser.Tilemaps.TilemapLayer[] = [];
   readonly report: V2Report = {
     pavingTiles: 0,
     buildings: [],
     fountainSwapped: false,
     stallDrawn: false,
     stallPieces: [],
+    ground: null,
     skippedSurfaces: {},
   };
 
@@ -76,56 +104,157 @@ export class ValcendreV2Presentation {
 
   // ------------------------------------------------------------- paving
   /**
-   * A second, programmatic tilemap layer carrying the four approved paving
-   * variants over the market region.
+   * The approved ground, composed ONCE and written into static tilemap layers.
    *
-   * A separate blank layer is used rather than rewriting the shipped `floor`
-   * layer, so the legacy ground stays intact underneath and removing the proof
-   * is a single `destroy()`. The layer sits above `floor` (depth 0) and below
-   * `decorBack` (depth 1), and never sorts with actors because it is ground.
+   * Phase B.2-04 painted the four daylight paving variants over the market
+   * region and skipped everything else, which left every shaded cobblestone
+   * tile on the flat legacy `deep_shadow` fill. With the B.2-05A packages
+   * approved there is now a shaded strip, 64 cardinal transitions and 16
+   * diagonal corner overlays, so the ground is composed properly:
    *
-   * Only legacy cobbled/paved surfaces are replaced. Grass, garden path and
-   * interior floors are skipped and counted, because the approved package has
-   * no art for them and substituting something else would be fabrication.
+   *   daylight cobblestone  -> the B.2-03A strip, frame = variant
+   *   shaded, no lit edge   -> the B.2-05A-1 strip, frame = variant
+   *   shaded with a lit edge-> the B.2-05A-2 cardinal atlas, variant*16 + mask
+   *   inside corners        -> the B.2-05A-2 overlay atlas, variant*4 + corner
+   *
+   * All of it is decided by `GroundShade`, which is Phaser-free and exhaustively
+   * unit tested; this method only turns its output into tiles. One pass at
+   * build time, no neighbour relationship re-derived per frame, and no sprite
+   * per tile: five static layers on one programmatic tilemap.
+   *
+   * THE TWO STATES COME FROM TWO DIFFERENT LAYERS ON PURPOSE. Material is read
+   * from `groundMaterial`, which records the authored surface tile before the
+   * shadow pass overwrote the floor; visual shade is read from `floor` being
+   * `deep_shadow`. `shadowZones` is never consulted, so gameplay concealment
+   * and the artwork cannot drift into one another - concealment remains that
+   * layer's sole property, and nothing here reads or writes it.
+   *
+   * Still additive: the legacy `floor` stays intact underneath, every object
+   * created here is released by `destroy()`, and `?art=legacy` builds none of
+   * it.
    */
   private buildPaving(): void {
     const floor = this.map.getLayer('floor');
+    const material = this.map.getLayer('groundMaterial');
     if (!floor) return;
+    if (!material) {
+      // An older map without the material layer: fall back to nothing rather
+      // than guessing cobblestone from the shade flag, which is exactly the
+      // inference the contract forbids.
+      this.report.skippedSurfaces['(no groundMaterial layer)'] = 1;
+      return;
+    }
 
-    const paved = new Set<string>(PAVED_LEGACY_TILES);
+    const legacyFirstGid = this.map.tilesets[0]?.firstgid ?? 1;
+    const nameAt = (layer: Phaser.Tilemaps.LayerData, tx: number, ty: number): string | null => {
+      const tile = layer.data[ty]?.[tx];
+      if (!tile || tile.index < 0) return null;
+      return TILE_NAMES[tile.index - legacyFirstGid] ?? null;
+    };
+
+    const cobble = new Set<string>(COBBLE_MATERIAL_TILES);
+    const excluded = SHADE_EXCLUDED_REGIONS;
+    const inExcludedRegion = (tx: number, ty: number) =>
+      !SHADE_GARDEN_PATH &&
+      tx >= excluded.x &&
+      tx < excluded.x + excluded.w &&
+      ty >= excluded.y &&
+      ty < excluded.y + excluded.h;
+
+    const reader: GroundReader = {
+      classify: (tx, ty) => {
+        if (tx < 0 || ty < 0 || tx >= this.map.width || ty >= this.map.height) return 'other';
+        if (inExcludedRegion(tx, ty)) return 'other';
+        const mat = nameAt(material, tx, ty);
+        if (!mat || !cobble.has(mat)) return 'other';
+        return nameAt(floor, tx, ty) === SHADED_FLOOR_TILE ? 'cobbleShaded' : 'cobbleDaylight';
+      },
+      variant: (tx, ty) => pavingVariant(tx, ty),
+    };
+
+    // Count what is being left alone, by its real authored material rather than
+    // by the `deep_shadow` the shadow pass painted over it.
+    for (let ty = 0; ty < this.map.height; ty++) {
+      for (let tx = 0; tx < this.map.width; tx++) {
+        const mat = nameAt(material, tx, ty);
+        if (!mat) continue;
+        if (cobble.has(mat) && !inExcludedRegion(tx, ty)) continue;
+        const label = inExcludedRegion(tx, ty) ? `${mat} (garden walk, excluded)` : mat;
+        this.report.skippedSurfaces[label] = (this.report.skippedSurfaces[label] ?? 0) + 1;
+      }
+    }
+
     const tm = this.scene.make.tilemap({
       tileWidth: TILE,
       tileHeight: TILE,
       width: this.map.width,
       height: this.map.height,
     });
-    // firstgid 0 so the atlas's own frame indices are the tile indices.
-    const ts = tm.addTilesetImage('valcendre_v2_cobble', V2_TEXTURES.cobble, TILE, TILE, 0, 0, 0);
-    if (!ts) return;
-    const layer = tm.createBlankLayer('valcendre_v2_paving', ts, 0, 0, this.map.width, this.map.height);
-    if (!layer) return;
-    layer.setDepth(V2_DEPTH.paving);
+    // One tilemap, four tilesets at disjoint firstgids, so a single ground
+    // layer can hold daylight, shaded and transition tiles without a second
+    // pass. The gids are the frame index plus the tileset's own base.
+    const daylight = tm.addTilesetImage('v2_cobble', V2_TEXTURES.cobble, TILE, TILE, 0, 0, GID.daylight);
+    const shaded = tm.addTilesetImage('v2_cobble_shaded', V2_TEXTURES.cobbleShaded, TILE, TILE, 0, 0, GID.shaded);
+    const boundaries = tm.addTilesetImage('v2_shade_boundaries', V2_TEXTURES.shadeBoundaries, TILE, TILE, 0, 0, GID.boundary);
+    const corners = tm.addTilesetImage('v2_shade_corners', V2_TEXTURES.shadeCorners, TILE, TILE, 0, 0, GID.corner);
+    if (!daylight || !shaded || !boundaries || !corners) return;
 
-    const { x, y, w, h } = MARKET_REGION;
-    for (let ty = y; ty < y + h; ty++) {
-      for (let tx = x; tx < x + w; tx++) {
-        const tile = floor.data[ty]?.[tx];
-        if (!tile || tile.index < 0) continue;
-        // The layer stores global ids; the tile's own name comes from the
-        // legacy tileset's local index.
-        const localIndex = tile.index - (this.map.tilesets[0]?.firstgid ?? 1);
-        const legacyName = TILE_NAMES[localIndex] ?? `#${localIndex}`;
-        if (!paved.has(legacyName)) {
-          this.report.skippedSurfaces[legacyName] =
-            (this.report.skippedSurfaces[legacyName] ?? 0) + 1;
-          continue;
-        }
-        layer.putTileAt(pavingVariant(tx, ty), tx, ty);
-        this.report.pavingTiles++;
+    const ground = tm.createBlankLayer(
+      'valcendre_v2_paving',
+      [daylight, shaded, boundaries],
+      0,
+      0,
+      this.map.width,
+      this.map.height
+    );
+    if (!ground) return;
+    ground.setDepth(V2_DEPTH.paving);
+
+    const overlayLayers: Phaser.Tilemaps.TilemapLayer[] = [];
+    for (let i = 0; i < CORNER_ORDER.length; i++) {
+      const l = tm.createBlankLayer(
+        `valcendre_v2_shade_corner_${CORNER_ORDER[i]}`,
+        corners,
+        0,
+        0,
+        this.map.width,
+        this.map.height
+      );
+      if (!l) return;
+      l.setDepth(V2_DEPTH.shadeCorners[i]);
+      overlayLayers.push(l);
+    }
+
+    const cells = composeRegion(reader, { x: 0, y: 0, w: this.map.width, h: this.map.height });
+    for (const cell of cells) {
+      const gid =
+        cell.base === 'daylight'
+          ? GID.daylight + cell.frame
+          : cell.base === 'shaded'
+            ? GID.shaded + cell.frame
+            : GID.boundary + cell.frame;
+      ground.putTileAt(gid, cell.tx, cell.ty);
+      for (const overlay of cell.overlays) {
+        const slot = CORNER_ORDER.indexOf(overlay.corner);
+        overlayLayers[slot].putTileAt(GID.corner + overlay.frame, cell.tx, cell.ty);
       }
     }
+
+    const summary = summarise(cells);
+    this.report.pavingTiles = cells.length;
+    this.report.ground = {
+      daylightTiles: summary.daylightCells,
+      shadedInteriorTiles: summary.shadedInteriorCells,
+      boundaryTiles: summary.boundaryCells,
+      overlayTiles: summary.overlayCells,
+      overlaysDrawn: summary.overlayTotal,
+      layers: 1 + overlayLayers.length,
+      gardenWalkIncluded: SHADE_GARDEN_PATH,
+    };
+
     this.pavingMap = tm;
-    this.pavingLayer = layer;
+    this.pavingLayer = ground;
+    this.overlayLayers = overlayLayers;
   }
 
   // -------------------------------------------------------- architecture
@@ -306,6 +435,8 @@ export class ValcendreV2Presentation {
   destroy(): void {
     for (const o of this.owned) o.destroy();
     this.owned.length = 0;
+    for (const l of this.overlayLayers) l.destroy();
+    this.overlayLayers = [];
     this.pavingLayer?.destroy();
     this.pavingLayer = null;
     this.pavingMap?.destroy();
